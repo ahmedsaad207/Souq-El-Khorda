@@ -1,6 +1,5 @@
-package com.delighted2wins.souqelkhorda.ui.theme
+package com.delighted2wins.souqelkhorda.app.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

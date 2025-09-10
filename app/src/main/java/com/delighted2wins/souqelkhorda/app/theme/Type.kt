@@ -1,4 +1,4 @@
-package com.delighted2wins.souqelkhorda.ui.theme
+package com.delighted2wins.souqelkhorda.app.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
