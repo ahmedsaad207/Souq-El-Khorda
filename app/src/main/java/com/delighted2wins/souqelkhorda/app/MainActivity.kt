@@ -4,16 +4,22 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.navigation.compose.rememberNavController
-import com.delighted2wins.souqelkhorda.core.components.CustomBottomNavBar
+import androidx.compose.ui.Modifier
 import com.delighted2wins.souqelkhorda.core.components.CustomTopAppBar
-import com.delighted2wins.souqelkhorda.navigation.Routes
-import com.delighted2wins.souqelkhorda.navigation.SetupNavHost
+import com.delighted2wins.souqelkhorda.navigation.NavigationRoot
+import com.delighted2wins.souqelkhorda.navigation.bottomNavigationItemsList
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,22 +28,51 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val navController = rememberNavController()
-            var selectedRoute by remember { mutableStateOf(Routes.Direct_Sale) }
+            val isSplashScreen = remember { mutableStateOf(true) }
+            var selectedItem by rememberSaveable {
+                mutableIntStateOf(0)
+            }
             Scaffold(
                 topBar = {
-                    CustomTopAppBar(
-                        pageTitle = "Page Title",
-                        userName = "username"
-                    ) {}
+                    if (!isSplashScreen.value) {
+                        CustomTopAppBar(
+                            pageTitle = "Page Title",
+                            userName = "username"
+                        ) {}
+                    } else {
+                        null
+                    }
                 },
                 bottomBar = {
-                    CustomBottomNavBar(selectedRoute, navController)
+                    if (!isSplashScreen.value) {
+                        NavigationBar {
+                            bottomNavigationItemsList.forEachIndexed { index, item ->
+                                NavigationBarItem(
+                                    selected = selectedItem == index,
+                                    onClick = {
+                                        selectedItem = index
+                                    },
+                                    icon = {
+                                        Icon(
+                                            imageVector = if (index == selectedItem) {
+                                                item.selectedIcon
+                                            } else item.unSelectedIcon,
+                                            contentDescription = item.title
+                                        )
+                                    },
+                                )
+                            }
+                        }
+                    } else {
+                        null
+                    }
                 }
             ) { innerPadding ->
-
-                SetupNavHost(
-                    navController = navController
+                NavigationRoot(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                    isSplashScreen = isSplashScreen
                 )
             }
         }
