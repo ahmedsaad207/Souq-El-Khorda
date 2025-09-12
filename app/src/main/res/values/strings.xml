@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Souq El Khorda</string>
+
+    <string name="sell_screen_title">Sell</string>
+    <string name="shop_screen_title">Shop</string>
+    <string name="nearest_screen_title">Nearest</string>
+
 </resources>

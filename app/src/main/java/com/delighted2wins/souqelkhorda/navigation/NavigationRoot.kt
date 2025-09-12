@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
+import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavEntry
-import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
@@ -15,9 +15,11 @@ import com.delighted2wins.souqelkhorda.features.sale.presentation.screen.DirectS
 import com.delighted2wins.souqelkhorda.features.splash.SplashScreen
 
 @Composable
-fun NavigationRoot(modifier: Modifier = Modifier, isSplashScreen: MutableState<Boolean>) {
-    val backStack = rememberNavBackStack(SplashScreen)
-
+fun NavigationRoot(
+    modifier: Modifier = Modifier,
+    isSplashScreen: MutableState<Boolean>,
+    backStack: NavBackStack
+) {
     NavDisplay(
         modifier = modifier,
         backStack = backStack,
@@ -26,6 +28,11 @@ fun NavigationRoot(modifier: Modifier = Modifier, isSplashScreen: MutableState<B
             rememberViewModelStoreNavEntryDecorator(),
             rememberSceneSetupNavEntryDecorator()
         ),
+        onBack ={
+            if (backStack.size > 1) {
+                backStack.removeLastOrNull()
+            }
+        },
         entryProvider = { key ->
             when (key) {
                 DirectSaleScreen -> {

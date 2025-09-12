@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">سوق الخردة</string>
+
+    <string name="sell_screen_title">بيع</string>
+    <string name="shop_screen_title">تسوق</string>
+    <string name="nearest_screen_title">الأقرب</string>
+
+</resources>
