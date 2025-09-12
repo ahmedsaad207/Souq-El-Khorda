@@ -24,7 +24,7 @@ fun SplashScreen(modifier: Modifier = Modifier, navToHome: () -> Unit) {
     }
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
@@ -32,7 +32,7 @@ fun SplashScreen(modifier: Modifier = Modifier, navToHome: () -> Unit) {
             painter = painterResource(id = R.drawable.team),
             contentDescription = "",
             alignment = Alignment.Center,
-            modifier = Modifier
+            modifier = modifier
                 .size(120.dp)
                 .clip(CircleShape),
             contentScale = ContentScale.FillBounds
