@@ -1,12 +1,34 @@
 package com.delighted2wins.souqelkhorda.navigation
 
-data class BottomNavItem(
-    val label: String,
-    val route: String
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.ThumbUp
+import androidx.compose.material.icons.outlined.Build
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.ThumbUp
+import androidx.compose.ui.graphics.vector.ImageVector
+
+data class BottomNavigationItem(
+    val title: String,
+    val selectedIcon: ImageVector,
+    val unSelectedIcon: ImageVector
 )
 
-val bottomNavItem = listOf(
-    BottomNavItem("Direct Sale", Routes.Direct_Sale),
-    BottomNavItem("Market", Routes.Market),
-    BottomNavItem("Nearest Buyers", Routes.Nearest_Buyers)
+val bottomNavigationItemsList = listOf(
+    BottomNavigationItem(
+        title = "Direct Sale",
+        selectedIcon = Icons.Filled.Build,
+        unSelectedIcon = Icons.Outlined.Build
+    ),
+    BottomNavigationItem(
+        title = "Market",
+        selectedIcon = Icons.Filled.Settings,
+        unSelectedIcon = Icons.Outlined.Settings
+    ),
+    BottomNavigationItem(
+        title = "Nearest Buyers",
+        selectedIcon = Icons.Filled.ThumbUp,
+        unSelectedIcon = Icons.Outlined.ThumbUp
+    )
 )

@@ -1,6 +1,5 @@
 package com.delighted2wins.souqelkhorda.app
 
-import CustomBottomNavBar
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,6 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.navigation.compose.rememberNavController
+import com.delighted2wins.souqelkhorda.core.components.CustomBottomNavBar
 import com.delighted2wins.souqelkhorda.core.components.CustomTopAppBar
 import com.delighted2wins.souqelkhorda.navigation.Routes
 import com.delighted2wins.souqelkhorda.navigation.SetupNavHost
@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
                     ) {}
                 },
                 bottomBar = {
-                    CustomBottomNavBar()
+                    CustomBottomNavBar(selectedRoute, navController)
                 }
             ) { innerPadding ->
 
