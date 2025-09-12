@@ -68,6 +68,9 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
     implementation(libs.kotlinx.serialization.core)
 
+    //icon
+    implementation ("androidx.compose.material:material-icons-extended")
+
 
     // hilt
     implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
