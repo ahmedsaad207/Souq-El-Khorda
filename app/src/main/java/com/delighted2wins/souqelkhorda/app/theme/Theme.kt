@@ -8,28 +8,63 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+val LightColorScheme = lightColorScheme(
+    primary = Til,
+    onPrimary = Color.White,
+    primaryContainer = Til,
+    onPrimaryContainer = Color.Black,
+
+    secondary = LightFirstBottomNavColor,
+    onSecondary = Color.White,
+    secondaryContainer = LightSecondBottomNavColor,
+    onSecondaryContainer = Color.White,
+
+    background = LightBackground,
+    onBackground = Color.Black,
+    surface = LightBackground,
+    onSurface = Color.Black,
+    surfaceVariant = LightTextField,
+    onSurfaceVariant = LightTextHint,
+
+    error = ErrorLight,
+    onError = Color.White,
+    errorContainer = Color(0xFFFFDAD6),
+    onErrorContainer = Color(0xFF410001),
+
+    outline = OutlineLight,
+    inverseSurface = DarkBackground,
+    inverseOnSurface = Color.White
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
+val DarkColorScheme = darkColorScheme(
+    primary = DarkTil,
     onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    primaryContainer = DarkTil,
+    onPrimaryContainer = Color.Black,
+
+    secondary = DarkFirstBottomNavColor,
+    onSecondary = Color.Black,
+    secondaryContainer = DarkSecondBottomNavColor,
+    onSecondaryContainer = Color.Black,
+
+    background = DarkBackground,
+    onBackground = Color.White,
+    surface = DarkTextField,
+    onSurface = Color.White,
+    surfaceVariant = Color(0xFF2A2A2A),
+    onSurfaceVariant = DarkTextHint,
+
+    error = ErrorDark,
+    onError = Color.Black,
+    errorContainer = Color(0xFF8B1D2E),
+    onErrorContainer = Color.White,
+
+    outline = OutlineDark,
+    inverseSurface = LightBackground,
+    inverseOnSurface = Color.Black
 )
 
 @Composable
@@ -51,7 +86,7 @@ fun SouqElKhordaTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = AppTypography,
         content = content
     )
 }
