@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
+    alias(libs.plugins.jetbrains.kotlin.serialization)
+
 }
 
 android {
@@ -59,8 +61,16 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    // navigation
-    implementation("androidx.navigation:navigation-compose:2.9.3")
+    //navigation3
+
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+    implementation(libs.kotlinx.serialization.core)
+
+    //icon
+    implementation ("androidx.compose.material:material-icons-extended")
+
 
     // hilt
     implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
@@ -69,4 +79,10 @@ dependencies {
 
     // firebase
     implementation(platform("com.google.firebase:firebase-bom:34.2.0"))
+
+    //extended icons
+    implementation (libs.androidx.compose.material.icons.extended)
+
+    // coil
+    implementation("io.coil-kt:coil-compose:2.7.0")
 }

@@ -1,12 +1,24 @@
 package com.delighted2wins.souqelkhorda.navigation
 
-data class BottomNavItem(
-    val label: String,
-    val route: String
+import androidx.annotation.StringRes
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Sell
+import androidx.compose.material.icons.filled.Storefront
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation3.runtime.NavKey
+import com.delighted2wins.souqelkhorda.R
+
+data class NavItem(
+    val key: NavKey,
+    @StringRes val labelRes: Int,
+    val icon: ImageVector
 )
 
-val bottomNavItem = listOf(
-    BottomNavItem("Direct Sale", Routes.Direct_Sale),
-    BottomNavItem("Market", Routes.Market),
-    BottomNavItem("Nearest Buyers", Routes.Nearest_Buyers)
+val navItems = listOf(
+    NavItem(DirectSaleScreen, R.string.sell_screen_title, Icons.Default.Sell),
+    NavItem(MarketScreen, R.string.shop_screen_title, Icons.Default.Storefront),
+    NavItem(NearestBuyersScreen, R.string.nearest_screen_title, Icons.Default.LocationOn)
 )
+
+
