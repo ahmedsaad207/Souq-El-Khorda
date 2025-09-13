@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
+import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
@@ -20,35 +21,40 @@ import com.delighted2wins.souqelkhorda.login.presentation.screen.LoginScreen
 @Composable
 fun NavigationRoot(
     modifier: Modifier = Modifier,
-    isSplashScreen: MutableState<Boolean>,
+    bottomBarState: MutableState<Boolean>,
     snackBarState: SnackbarHostState,
+    backStack: NavBackStack
 ) {
-    val backStack = rememberNavBackStack(SplashScreen)
-
     NavDisplay(
         modifier = modifier, backStack = backStack, entryDecorators = listOf(
             rememberSavedStateNavEntryDecorator(),
             rememberViewModelStoreNavEntryDecorator(),
             rememberSceneSetupNavEntryDecorator()
-        ), entryProvider = { key ->
+        ),
+        onBack ={
+            if (backStack.size > 1) {
+                backStack.removeLastOrNull()
+            }
+        },
+        entryProvider = { key ->
             when (key) {
                 DirectSaleScreen -> {
                     NavEntry(key) {
-                        isSplashScreen.value = true
+                        bottomBarState.value = true
                         DirectSaleScreen()
                     }
                 }
 
                 MarketScreen -> {
                     NavEntry(key) {
-                        isSplashScreen.value = true
+                        bottomBarState.value = true
                         MarketScreen()
                     }
                 }
 
                 NearestBuyersScreen -> {
                     NavEntry(key) {
-                        isSplashScreen.value = true
+                        bottomBarState.value = true
                         NearestBuyersScreen()
                     }
                 }
@@ -56,7 +62,7 @@ fun NavigationRoot(
                 SplashScreen -> {
                     NavEntry(key) {
                         SplashScreen {
-                            isSplashScreen.value = false
+                            bottomBarState.value = false
                             backStack.set(
                                 element = LoginScreen, index = 0
                             )
@@ -66,7 +72,7 @@ fun NavigationRoot(
 
                 LoginScreen -> {
                     NavEntry(key) {
-                        isSplashScreen.value = false
+                        bottomBarState.value = false
                         LoginScreen(
                             onLoginClick = {
                                 backStack.set(
@@ -84,7 +90,7 @@ fun NavigationRoot(
 
                 SignUpScreen -> {
                     NavEntry(key) {
-                        isSplashScreen.value = false
+                        bottomBarState.value = false
                         SignUpScreen(onBackClick = {
                             backStack.remove(SignUpScreen)
                             backStack.add(LoginScreen)

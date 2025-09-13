@@ -1,34 +1,24 @@
 package com.delighted2wins.souqelkhorda.navigation
 
+import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Build
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.ThumbUp
-import androidx.compose.material.icons.outlined.Build
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.ThumbUp
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Sell
+import androidx.compose.material.icons.filled.Storefront
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation3.runtime.NavKey
+import com.delighted2wins.souqelkhorda.R
 
-data class BottomNavigationItem(
-    val title: String,
-    val selectedIcon: ImageVector,
-    val unSelectedIcon: ImageVector
+data class NavItem(
+    val key: NavKey,
+    @StringRes val labelRes: Int,
+    val icon: ImageVector
 )
 
-val bottomNavigationItemsList = listOf(
-    BottomNavigationItem(
-        title = "Direct Sale",
-        selectedIcon = Icons.Filled.Build,
-        unSelectedIcon = Icons.Outlined.Build
-    ),
-    BottomNavigationItem(
-        title = "Market",
-        selectedIcon = Icons.Filled.Settings,
-        unSelectedIcon = Icons.Outlined.Settings
-    ),
-    BottomNavigationItem(
-        title = "Nearest Buyers",
-        selectedIcon = Icons.Filled.ThumbUp,
-        unSelectedIcon = Icons.Outlined.ThumbUp
-    )
+val navItems = listOf(
+    NavItem(DirectSaleScreen, R.string.sell_screen_title, Icons.Default.Sell),
+    NavItem(MarketScreen, R.string.shop_screen_title, Icons.Default.Storefront),
+    NavItem(NearestBuyersScreen, R.string.nearest_screen_title, Icons.Default.LocationOn)
 )
+
+

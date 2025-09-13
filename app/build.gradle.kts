@@ -76,4 +76,7 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
     implementation("com.google.dagger:hilt-android:2.56.2")
     ksp("com.google.dagger:hilt-android-compiler:2.56.2")
+
+    //extended icons
+    implementation (libs.androidx.compose.material.icons.extended)
 }

@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Souq El Khorda</string>
+    <string name="app_name">سوق الخردة</string>
 
     <string name="forgot_password">هل نسيت كلمة المرور؟</string>
     <string name="login">تسجيل الدخول</string>
@@ -13,6 +12,9 @@
     <string name="home_screen">الصفحه الرئيسية</string>
     <string name="register_new_account">تسجيل حساب جديد</string>
 
+    <string name="sell_screen_title">بيع</string>
+    <string name="shop_screen_title">تسوق</string>
+    <string name="nearest_screen_title">الأقرب</string>
     <string name="username">اسم المستخدم</string>
     <string name="enter_your_username">ادخل اسم المستخدم</string>
 

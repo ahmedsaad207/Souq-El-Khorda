@@ -4,40 +4,41 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.rememberNavBackStack
+import com.delighted2wins.souqelkhorda.core.components.AppBottomNavBar
 import com.delighted2wins.souqelkhorda.core.components.CustomTopAppBar
+import com.delighted2wins.souqelkhorda.core.extensions.configureSystemUI
 import com.delighted2wins.souqelkhorda.navigation.NavigationRoot
-import com.delighted2wins.souqelkhorda.navigation.bottomNavigationItemsList
+import com.delighted2wins.souqelkhorda.navigation.SplashScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     lateinit var snackBarHostState: SnackbarHostState
+    lateinit var bottomBarState: MutableState<Boolean>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            configureSystemUI(isSystemInDarkTheme())
+
             snackBarHostState = remember { SnackbarHostState() }
-            val isSplashScreen = remember { mutableStateOf(false) }
-            var selectedItem by rememberSaveable {
-                mutableIntStateOf(0)
-            }
+            bottomBarState = remember { mutableStateOf(false) }
+
+            val backStack = rememberNavBackStack(SplashScreen)
             Scaffold(
                 snackbarHost = {
                     SnackbarHost(
@@ -46,7 +47,7 @@ class MainActivity : ComponentActivity() {
                     )
                 },
                 topBar = {
-                    if (isSplashScreen.value) {
+                    if (bottomBarState.value) {
                         CustomTopAppBar(
                             pageTitle = "Page Title",
                             userName = "username"
@@ -56,25 +57,8 @@ class MainActivity : ComponentActivity() {
                     }
                 },
                 bottomBar = {
-                    if (isSplashScreen.value) {
-                        NavigationBar {
-                            bottomNavigationItemsList.forEachIndexed { index, item ->
-                                NavigationBarItem(
-                                    selected = selectedItem == index,
-                                    onClick = {
-                                        selectedItem = index
-                                    },
-                                    icon = {
-                                        Icon(
-                                            imageVector = if (index == selectedItem) {
-                                                item.selectedIcon
-                                            } else item.unSelectedIcon,
-                                            contentDescription = item.title
-                                        )
-                                    },
-                                )
-                            }
-                        }
+                    if (bottomBarState.value) {
+                        AppBottomNavBar(backStack)
                     } else {
                         null
                     }
@@ -84,13 +68,14 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(innerPadding),
-                    isSplashScreen = isSplashScreen,
+                    bottomBarState = bottomBarState,
                     snackBarState = snackBarHostState,
-
-                    )
+                    backStack = backStack
+                )
             }
         }
     }
-
 }
+
+
 
