@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "631415192414",
+    "project_id": "souq-el-khorda",
+    "storage_bucket": "souq-el-khorda.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:631415192414:android:2caad8fe5b6c71a2a8edcf",
+        "android_client_info": {
+          "package_name": "com.delighted2wins.souqelkhorda"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3W7CVgVbY99CulxovJQ4B4iPWgtyWz2Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
