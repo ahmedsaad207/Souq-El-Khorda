@@ -1,33 +1,26 @@
 package com.delighted2wins.souqelkhorda.core.components
 
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavBackStack
-import com.delighted2wins.souqelkhorda.app.theme.LightFirstBottomNavColor
-import com.delighted2wins.souqelkhorda.app.theme.LightSecondBottomNavColor
 import com.delighted2wins.souqelkhorda.navigation.navItems
 
 @Composable
@@ -75,7 +68,7 @@ fun AppBottomNavBar(backStack: NavBackStack) {
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() },
                             onClick = {
-                                if(!isSelected) {
+                                if (!isSelected) {
                                     backStack.set(element = navItem.key, index = 0)
                                 }
                             }
@@ -106,7 +99,7 @@ fun AppBottomNavBar(backStack: NavBackStack) {
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text =  stringResource(id = navItem.labelRes),
+                            text = stringResource(id = navItem.labelRes),
                             color = Color.White,
                             style = if (isSelected) MaterialTheme.typography.titleMedium else MaterialTheme.typography.bodyMedium
                         )

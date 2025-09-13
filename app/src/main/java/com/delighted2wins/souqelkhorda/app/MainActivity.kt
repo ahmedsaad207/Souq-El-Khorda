@@ -70,7 +70,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier
                             .fillMaxSize()
 //                            .padding(innerPadding),
-                                ,
+                        ,
                         bottomBarState = bottomBarState,
                         snackBarState = snackBarHostState,
                         backStack = backStack
