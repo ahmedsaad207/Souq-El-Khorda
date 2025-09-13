@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">سوق الخردة</string>
-    <string name="app_name">Souq El Khorda</string>
 
     <string name="forgot_password">هل نسيت كلمة المرور؟</string>
     <string name="login">تسجيل الدخول</string>

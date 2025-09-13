@@ -21,22 +21,15 @@ import com.delighted2wins.souqelkhorda.login.presentation.screen.LoginScreen
 @Composable
 fun NavigationRoot(
     modifier: Modifier = Modifier,
-    isSplashScreen: MutableState<Boolean>,
+    bottomBarState: MutableState<Boolean>,
+    snackBarState: SnackbarHostState,
     backStack: NavBackStack
 ) {
-fun NavigationRoot(
-    modifier: Modifier = Modifier,
-    isSplashScreen: MutableState<Boolean>,
-    snackBarState: SnackbarHostState,
-) {
-    val backStack = rememberNavBackStack(SplashScreen)
-
     NavDisplay(
         modifier = modifier, backStack = backStack, entryDecorators = listOf(
             rememberSavedStateNavEntryDecorator(),
             rememberViewModelStoreNavEntryDecorator(),
             rememberSceneSetupNavEntryDecorator()
-        ), entryProvider = { key ->
         ),
         onBack ={
             if (backStack.size > 1) {
@@ -47,21 +40,21 @@ fun NavigationRoot(
             when (key) {
                 DirectSaleScreen -> {
                     NavEntry(key) {
-                        isSplashScreen.value = true
+                        bottomBarState.value = true
                         DirectSaleScreen()
                     }
                 }
 
                 MarketScreen -> {
                     NavEntry(key) {
-                        isSplashScreen.value = true
+                        bottomBarState.value = true
                         MarketScreen()
                     }
                 }
 
                 NearestBuyersScreen -> {
                     NavEntry(key) {
-                        isSplashScreen.value = true
+                        bottomBarState.value = true
                         NearestBuyersScreen()
                     }
                 }
@@ -69,7 +62,7 @@ fun NavigationRoot(
                 SplashScreen -> {
                     NavEntry(key) {
                         SplashScreen {
-                            isSplashScreen.value = false
+                            bottomBarState.value = false
                             backStack.set(
                                 element = LoginScreen, index = 0
                             )
@@ -79,7 +72,7 @@ fun NavigationRoot(
 
                 LoginScreen -> {
                     NavEntry(key) {
-                        isSplashScreen.value = false
+                        bottomBarState.value = false
                         LoginScreen(
                             onLoginClick = {
                                 backStack.set(
@@ -97,7 +90,7 @@ fun NavigationRoot(
 
                 SignUpScreen -> {
                     NavEntry(key) {
-                        isSplashScreen.value = false
+                        bottomBarState.value = false
                         SignUpScreen(onBackClick = {
                             backStack.remove(SignUpScreen)
                             backStack.add(LoginScreen)
