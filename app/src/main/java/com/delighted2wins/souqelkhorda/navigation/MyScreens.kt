@@ -12,3 +12,9 @@ data object NearestBuyersScreen:NavKey
 data object MarketScreen:NavKey
 @Serializable
 data object SplashScreen:NavKey
+
+@Serializable
+data object LoginScreen:NavKey
+
+@Serializable
+data object SignUpScreen:NavKey

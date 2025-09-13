@@ -1,18 +1,22 @@
 package com.delighted2wins.souqelkhorda.navigation
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavEntry
+import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
 import com.delighted2wins.souqelkhorda.features.buyers.presentation.screen.NearestBuyersScreen
 import com.delighted2wins.souqelkhorda.features.market.presentation.screen.MarketScreen
 import com.delighted2wins.souqelkhorda.features.sale.presentation.screen.DirectSaleScreen
+import com.delighted2wins.souqelkhorda.features.sign_up.presentation.screen.SignUpScreen
 import com.delighted2wins.souqelkhorda.features.splash.SplashScreen
+import com.delighted2wins.souqelkhorda.login.presentation.screen.LoginScreen
 
 @Composable
 fun NavigationRoot(
@@ -20,13 +24,19 @@ fun NavigationRoot(
     isSplashScreen: MutableState<Boolean>,
     backStack: NavBackStack
 ) {
+fun NavigationRoot(
+    modifier: Modifier = Modifier,
+    isSplashScreen: MutableState<Boolean>,
+    snackBarState: SnackbarHostState,
+) {
+    val backStack = rememberNavBackStack(SplashScreen)
+
     NavDisplay(
-        modifier = modifier,
-        backStack = backStack,
-        entryDecorators = listOf(
+        modifier = modifier, backStack = backStack, entryDecorators = listOf(
             rememberSavedStateNavEntryDecorator(),
             rememberViewModelStoreNavEntryDecorator(),
             rememberSceneSetupNavEntryDecorator()
+        ), entryProvider = { key ->
         ),
         onBack ={
             if (backStack.size > 1) {
@@ -37,34 +47,70 @@ fun NavigationRoot(
             when (key) {
                 DirectSaleScreen -> {
                     NavEntry(key) {
+                        isSplashScreen.value = true
                         DirectSaleScreen()
                     }
                 }
+
                 MarketScreen -> {
                     NavEntry(key) {
+                        isSplashScreen.value = true
                         MarketScreen()
                     }
                 }
 
                 NearestBuyersScreen -> {
                     NavEntry(key) {
+                        isSplashScreen.value = true
                         NearestBuyersScreen()
                     }
                 }
+
                 SplashScreen -> {
                     NavEntry(key) {
                         SplashScreen {
                             isSplashScreen.value = false
                             backStack.set(
-                                element = DirectSaleScreen,
-                                index = 0
+                                element = LoginScreen, index = 0
                             )
                         }
                     }
                 }
+
+                LoginScreen -> {
+                    NavEntry(key) {
+                        isSplashScreen.value = false
+                        LoginScreen(
+                            onLoginClick = {
+                                backStack.set(
+                                    element = DirectSaleScreen, index = 0
+                                )
+                            },
+                            onRegisterClick = {
+                                backStack.add(SignUpScreen)
+                            },
+                            snackBarHostState = snackBarState,
+                        )
+
+                    }
+                }
+
+                SignUpScreen -> {
+                    NavEntry(key) {
+                        isSplashScreen.value = false
+                        SignUpScreen(onBackClick = {
+                            backStack.remove(SignUpScreen)
+                            backStack.add(LoginScreen)
+                        }, snackBarHostState = snackBarState, onRegisterClick = {
+                            backStack.remove(SignUpScreen)
+                            backStack.add(LoginScreen)
+                        })
+
+                    }
+                }
+
                 else -> error("Unknown screen $key")
             }
 
-        }
-    )
+        })
 }

@@ -8,10 +8,18 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -25,16 +33,29 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    lateinit var snackBarHostState: SnackbarHostState
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            snackBarHostState = remember { SnackbarHostState() }
+            val isSplashScreen = remember { mutableStateOf(false) }
+            var selectedItem by rememberSaveable {
+                mutableIntStateOf(0)
+            }
             configureSystemUI(isSystemInDarkTheme())
 
             val backStack = rememberNavBackStack(SplashScreen)
             val isSplashScreen = remember { mutableStateOf(true) }
             //HideSystemUI()
             Scaffold(
+                snackbarHost = {
+                    SnackbarHost(
+                        hostState = snackBarHostState,
+                        modifier = Modifier.padding(bottom = 50.dp)
+                    )
+                },
                 topBar = {
                     if (!isSplashScreen.value) {
                         CustomTopAppBar(
@@ -60,6 +81,10 @@ class MainActivity : ComponentActivity() {
                     isSplashScreen = isSplashScreen,
                     backStack = backStack
                 )
+                    isSplashScreen = isSplashScreen,
+                    snackBarState = snackBarHostState,
+
+                    )
             }
         }
     }
@@ -82,3 +107,4 @@ fun Activity.configureSystemUI(darkTheme: Boolean) {
     controller.hide(WindowInsetsCompat.Type.navigationBars())
     controller.show(WindowInsetsCompat.Type.statusBars())
 }
+

@@ -1,8 +1,35 @@
 <resources>
     <string name="app_name">سوق الخردة</string>
+    <string name="app_name">Souq El Khorda</string>
+
+    <string name="forgot_password">هل نسيت كلمة المرور؟</string>
+    <string name="login">تسجيل الدخول</string>
+    <string name="don_t_have_an_account_yet">لا تملك حسابًا بعد؟</string>
+    <string name="register_here">سجّل هنا</string>
+    <string name="welcome_back">مرحبا بك !</string>
+    <string name="to_continue_login_now">قم بتسجيل الدخول للاستمرار</string>
+    <string name="password">كلمة المرور</string>
+    <string name="email">البريد الإلكتروني</string>
+    <string name="home_screen">الصفحه الرئيسية</string>
+    <string name="register_new_account">تسجيل حساب جديد</string>
 
     <string name="sell_screen_title">بيع</string>
     <string name="shop_screen_title">تسوق</string>
     <string name="nearest_screen_title">الأقرب</string>
+    <string name="username">اسم المستخدم</string>
+    <string name="enter_your_username">ادخل اسم المستخدم</string>
+
+    <string name="email_signup">البريد الإلكتروني</string>
+    <string name="enter_your_email">ادخل بريدك الإلكتروني</string>
+
+    <string name="phone">رقم الهاتف</string>
+    <string name="enter_phone_number">ادخل رقم الهاتف</string>
+    <string name="governorate">المحافظة</string>
+
+    <string name="address_details">تفاصيل العنوان</string>
+    <string name="enter_full_address_details">ادخل تفاصيل العنوان بالكامل</string>
+
+    <string name="register">تسجيل</string>
+    <string name="confirm_password">تأكيد كلمة المرور</string>
 
 </resources>
