@@ -69,7 +69,8 @@ class MainActivity : ComponentActivity() {
                     NavigationRoot(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(innerPadding),
+//                            .padding(innerPadding),
+                                ,
                         bottomBarState = bottomBarState,
                         snackBarState = snackBarHostState,
                         backStack = backStack

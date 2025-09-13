@@ -6,6 +6,7 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.CircleShape
@@ -70,11 +71,16 @@ fun AppBottomNavBar(backStack: NavBackStack) {
                         .scale(scale)
                         .padding(start = 4.dp, end = 4.dp)
                         .clip(RoundedCornerShape(16.dp))
-                        .clickable {
-                            if(!isSelected) {
-                                backStack.set(element = navItem.key, index = 0)
+                        .clickable(
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() },
+                            onClick = {
+                                if(!isSelected) {
+                                    backStack.set(element = navItem.key, index = 0)
+                                }
                             }
-                        },
+                        ),
+
                     contentAlignment = Alignment.Center
                 ) {
                     if (isSelected) {
