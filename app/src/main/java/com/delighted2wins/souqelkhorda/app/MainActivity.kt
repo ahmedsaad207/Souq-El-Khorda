@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.rememberNavBackStack
+import com.delighted2wins.souqelkhorda.app.theme.SouqElKhordaTheme
 import com.delighted2wins.souqelkhorda.core.components.AppBottomNavBar
 import com.delighted2wins.souqelkhorda.core.components.CustomTopAppBar
 import com.delighted2wins.souqelkhorda.core.extensions.configureSystemUI
@@ -39,40 +40,43 @@ class MainActivity : ComponentActivity() {
             bottomBarState = remember { mutableStateOf(false) }
 
             val backStack = rememberNavBackStack(SplashScreen)
-            Scaffold(
-                snackbarHost = {
-                    SnackbarHost(
-                        hostState = snackBarHostState,
-                        modifier = Modifier.padding(bottom = 50.dp)
+            SouqElKhordaTheme(darkTheme = isSystemInDarkTheme(), dynamicColor = false) {
+                Scaffold(
+                    snackbarHost = {
+                        SnackbarHost(
+                            hostState = snackBarHostState,
+                            modifier = Modifier.padding(bottom = 50.dp)
+                        )
+                    },
+                    topBar = {
+                        if (bottomBarState.value) {
+                            CustomTopAppBar(
+                                pageTitle = "Page Title",
+                                userName = "username"
+                            ) {}
+                        } else {
+                            null
+                        }
+                    },
+                    bottomBar = {
+                        if (bottomBarState.value) {
+                            AppBottomNavBar(backStack)
+                        } else {
+                            null
+                        }
+                    }
+                ) { innerPadding ->
+                    NavigationRoot(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding),
+                        bottomBarState = bottomBarState,
+                        snackBarState = snackBarHostState,
+                        backStack = backStack
                     )
-                },
-                topBar = {
-                    if (bottomBarState.value) {
-                        CustomTopAppBar(
-                            pageTitle = "Page Title",
-                            userName = "username"
-                        ) {}
-                    } else {
-                        null
-                    }
-                },
-                bottomBar = {
-                    if (bottomBarState.value) {
-                        AppBottomNavBar(backStack)
-                    } else {
-                        null
-                    }
                 }
-            ) { innerPadding ->
-                NavigationRoot(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
-                    bottomBarState = bottomBarState,
-                    snackBarState = snackBarHostState,
-                    backStack = backStack
-                )
             }
+
         }
     }
 }

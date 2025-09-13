@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,10 +25,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavBackStack
+import com.delighted2wins.souqelkhorda.app.theme.LightFirstBottomNavColor
+import com.delighted2wins.souqelkhorda.app.theme.LightSecondBottomNavColor
 import com.delighted2wins.souqelkhorda.navigation.navItems
 
 @Composable
 fun AppBottomNavBar(backStack: NavBackStack) {
+    val colorScheme = MaterialTheme.colorScheme
     val selectedItem = backStack.lastOrNull()
 
     Box(
@@ -42,7 +46,7 @@ fun AppBottomNavBar(backStack: NavBackStack) {
                 .height(100.dp)
                 .background(
                     brush = Brush.linearGradient(
-                        listOf(Color(0xFF32C781), Color(0xFF24B36B))
+                        listOf(colorScheme.secondary, colorScheme.secondaryContainer)
                     ),
                     shape = RoundedCornerShape(20.dp)
                 ),
@@ -98,8 +102,7 @@ fun AppBottomNavBar(backStack: NavBackStack) {
                         Text(
                             text =  stringResource(id = navItem.labelRes),
                             color = Color.White,
-                            fontSize = 14.sp,
-                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
+                            style = if (isSelected) MaterialTheme.typography.titleMedium else MaterialTheme.typography.bodyMedium
                         )
 
                         if (isSelected) {
