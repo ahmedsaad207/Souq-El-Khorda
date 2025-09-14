@@ -11,6 +11,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -21,7 +23,7 @@ import com.delighted2wins.souqelkhorda.features.market.data.User
 fun ScrapUserSection(
     userData : User,
     status: ScrapStatus,
-    isRtl: Boolean
+    isRtl: Boolean = false
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -29,19 +31,25 @@ fun ScrapUserSection(
         modifier = Modifier.fillMaxWidth().padding(8.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            AsyncImage(
-                model = userData.imageUrl,
-                contentDescription = "User profile image",
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
-            )
+            CachedUserImage(imageUrl = userData.imageUrl)
 
             Spacer(modifier = Modifier.width(8.dp))
 
             Column {
-                Text(text = userData.name, style = MaterialTheme.typography.bodyMedium)
-                Text(text = userData.location, style = MaterialTheme.typography.bodySmall, color = Color.Gray)
+                Text(
+                    text = userData.name,
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    text = userData.location,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color.DarkGray,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
         }
 
