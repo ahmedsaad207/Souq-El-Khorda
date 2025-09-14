@@ -71,6 +71,9 @@ dependencies {
     //icon
     implementation ("androidx.compose.material:material-icons-extended")
 
+    //scoped api
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose-android:2.8.7")
+
 
     // hilt
     implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")

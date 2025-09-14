@@ -1,4 +1,4 @@
-package com.delighted2wins.souqelkhorda.login.presentation.component
+package com.delighted2wins.souqelkhorda.features.login.presentation.component
 
 
 import androidx.compose.foundation.layout.Column

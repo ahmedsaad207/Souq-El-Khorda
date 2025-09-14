@@ -1,4 +1,4 @@
-package com.delighted2wins.souqelkhorda.login.presentation.screen
+package com.delighted2wins.souqelkhorda.features.login.presentation.screen
 
 
 import android.annotation.SuppressLint
@@ -37,8 +37,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.delighted2wins.souqelkhorda.R
-import com.delighted2wins.souqelkhorda.login.presentation.component.LoginPasswordTF
-import com.delighted2wins.souqelkhorda.login.presentation.component.LoginTF
+import com.delighted2wins.souqelkhorda.features.login.presentation.component.LoginPasswordTF
+import com.delighted2wins.souqelkhorda.features.login.presentation.component.LoginTF
 
 
 @SuppressLint("ConfigurationScreenWidthHeight")

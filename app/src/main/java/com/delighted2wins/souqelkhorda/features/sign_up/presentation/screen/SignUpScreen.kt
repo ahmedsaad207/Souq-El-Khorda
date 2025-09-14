@@ -31,7 +31,7 @@ import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.components.OneIconCard
 import com.delighted2wins.souqelkhorda.features.sign_up.presentation.component.CustomDropdownMenu
 import com.delighted2wins.souqelkhorda.features.sign_up.presentation.component.CustomTextField
-import com.delighted2wins.souqelkhorda.login.presentation.component.LoginPasswordTF
+import com.delighted2wins.souqelkhorda.features.login.presentation.component.LoginPasswordTF
 
 @Composable
 fun SignUpScreen(
@@ -114,7 +114,7 @@ fun SignUpScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             LoginPasswordTF(
-                txt = stringResource(R.string.email_signup),
+                txt = stringResource(R.string.confirm_password),
                 onValueChange = {
                     password = it
                 },
