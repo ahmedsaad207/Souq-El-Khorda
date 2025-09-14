@@ -1,4 +1,4 @@
-package com.delighted2wins.souqelkhorda.features.sign_up.presentation.component
+package com.delighted2wins.souqelkhorda.features.authentication.presentation.component
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
