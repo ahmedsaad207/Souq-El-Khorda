@@ -6,6 +6,7 @@ data class ScrapItem(
     val description: String,
     val location: String,
     val weight: Int,
+    val quantity: Int? = null,
     val status: ScrapStatus,
     val date: String,
     val userId: Int

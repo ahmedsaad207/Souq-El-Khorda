@@ -58,7 +58,7 @@ fun MarketScreen(
         item {
             Text(
                 text = if (isRtl) "العروض المتاحة" else "Available Offers",
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.titleLarge,
                 color = Til,
                 modifier = Modifier.padding(vertical = 16.dp)
             )
@@ -76,7 +76,7 @@ fun MarketScreen(
                 scrapData,
                 onBuyClick = { /* Handle buy action */ },
                 onDetailsClick = { /* Handle details action */ },
-                isRtl = isRtl,
+                systemIsRtl  = isRtl,
             )
         }
     }
@@ -84,20 +84,20 @@ fun MarketScreen(
 
 
 fun sampleData() = listOf(
-    ScrapItem(1, "بلاستيك وألومنيوم", "مجموعة متنوعة...", "القاهرة - المعادي", 25,status = ScrapStatus.Available, date = "2025-09-10", userId = 100),
-    ScrapItem(2, "ورق وكرتون مكتبي", "أوراق مكتبية...", "الجيزة - الدقي", 30,status = ScrapStatus.Sold, date = "2025-09-5", userId = 101),
-    ScrapItem(3, "حديد خردة", "قطع حديد...", "الإسكندرية", 50,status = ScrapStatus.Waiting, date = "2025-09-12", userId = 102),
-    ScrapItem(4, "نحاس وأسلاك", "أسلاك نحاس...", "طنطا", 15,status = ScrapStatus.Available, date = "2025-09-1", userId = 103),
-    ScrapItem(5, "زجاج مستعمل", "زجاج معاد...", "المنصورة", 20,status = ScrapStatus.Reserved, date = "2025-09-2", userId = 104)
+    ScrapItem(1, "Plastic & Aluminum", "Mixed scrap materials...", "Cairo - Maadi", 25, quantity = 5,status = ScrapStatus.Available, date = "2025-09-10", userId = 100),
+    ScrapItem(2, "ورق وكرتون مكتبي", "أوراق مكتبية متنوعة...", "Giza - Dokki", 30, quantity = 3, status = ScrapStatus.Sold, date = "2025-09-05", userId = 101),
+    ScrapItem(3, "Iron Scrap", "Pieces of old iron...", "الإسكندرية", 50, quantity = 5, status = ScrapStatus.Waiting, date = "2025-09-12", userId = 102),
+    ScrapItem(4, "Copper & Wires", "Used copper wires...", "طنطا", 15, status = ScrapStatus.Available, date = "2025-09-01", userId = 103),
+    ScrapItem(5, "زجاج مستعمل", "زجاج معاد التدوير...", "Mansoura", 20, status = ScrapStatus.Reserved, date = "2025-09-02", userId = 104)
 )
 
 fun sampleUser() = listOf(
-    User(100, "أحمد محمد", "القاهرة - المعادي", "https://avatar.iran.liara.run/public/boy?username=Scott"),
-    User(101, "فاطمة أحمد", "الجيزة - الدقي", "https://avatar.iran.liara.run/public/girl?username=Maria"),
-    User(102, "محمد علي", "الإسكندرية", "https://avatar.iran.liara.run/public/boy?username=Scott"),
+    User(100, "Ahmed Mohamed", "Cairo - Maadi", "https://avatar.iran.liara.run/public/boy?username=Scott"),
+    User(101, "فاطمة أحمد", "Giza - Dokki", "https://avatar.iran.liara.run/public/girl?username=Maria"),
+    User(102, "Mohamed Ali", "Alexandria", "https://avatar.iran.liara.run/public/boy?username=Scott"),
     User(103, "سارة محمود", "طنطا", "https://avatar.iran.liara.run/public/girl?username=Maria"),
-    User(104, " محمد محمود", "طنطا"),
-    )
+    User(104, "Mohamed Mahmoud", "طنطا") // No image URL
+)
 
 
 @Preview(showBackground = true, showSystemUi = true)
