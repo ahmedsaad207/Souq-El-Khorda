@@ -7,7 +7,6 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavEntry
-import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
@@ -17,6 +16,7 @@ import com.delighted2wins.souqelkhorda.features.sale.presentation.screen.DirectS
 import com.delighted2wins.souqelkhorda.features.sign_up.presentation.screen.SignUpScreen
 import com.delighted2wins.souqelkhorda.features.splash.SplashScreen
 import com.delighted2wins.souqelkhorda.login.presentation.screen.LoginScreen
+import com.delighted2wins.souqelkhorda.features.market.presentation.screen.ProductDetailsScreen
 
 @Composable
 fun NavigationRoot(
@@ -48,7 +48,24 @@ fun NavigationRoot(
                 MarketScreen -> {
                     NavEntry(key) {
                         bottomBarState.value = true
-                        MarketScreen()
+                        MarketScreen(
+                            onBuyClick = {
+                                // Navigate to Buying Screen
+                            },
+                            onDetailsClick = { orderId ->
+                                backStack.add(ProductDetailsKey(orderId))
+                            }
+                        )
+                    }
+                }
+
+                is ProductDetailsKey -> {
+                    NavEntry(key) {
+                        bottomBarState.value = false
+                        ProductDetailsScreen(
+                            productId = key.productId,
+                            onBackClick = { backStack.remove(key) }
+                        )
                     }
                 }
 

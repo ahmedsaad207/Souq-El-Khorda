@@ -23,7 +23,7 @@ fun ScrapCard(
     user: User,
     scrap: ScrapItem,
     onBuyClick: () -> Unit = {},
-    onDetailsClick: () -> Unit = {},
+    onDetailsClick: (id:Int) -> Unit = {},
     systemIsRtl: Boolean = false
 ) {
     Card(
@@ -112,7 +112,7 @@ fun ScrapCard(
                     modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
                 ) {
                     OutlinedButton(
-                        onClick = onDetailsClick,
+                        onClick = { onDetailsClick(scrap.id) },
                         shape = RoundedCornerShape(8.dp),
                         modifier = Modifier.weight(1f)
                     ) {
