@@ -10,12 +10,12 @@ import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
+import com.delighted2wins.souqelkhorda.features.authentication.presentation.screen.SignUpScreen
 import com.delighted2wins.souqelkhorda.features.buyers.presentation.screen.NearestBuyersScreen
+import com.delighted2wins.souqelkhorda.features.login.presentation.screen.LoginScreen
 import com.delighted2wins.souqelkhorda.features.market.presentation.screen.MarketScreen
 import com.delighted2wins.souqelkhorda.features.sale.presentation.screen.DirectSaleScreen
-import com.delighted2wins.souqelkhorda.features.authentication.presentation.screen.SignUpScreen
 import com.delighted2wins.souqelkhorda.features.splash.SplashScreen
-import com.delighted2wins.souqelkhorda.features.login.presentation.screen.LoginScreen
 
 @Composable
 fun NavigationRoot(
