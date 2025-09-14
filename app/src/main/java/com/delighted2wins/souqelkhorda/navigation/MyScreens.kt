@@ -18,3 +18,7 @@ data object LoginScreen:NavKey
 
 @Serializable
 data object SignUpScreen:NavKey
+
+@Serializable
+data class ProductDetailsKey(val productId: Int) : NavKey
+

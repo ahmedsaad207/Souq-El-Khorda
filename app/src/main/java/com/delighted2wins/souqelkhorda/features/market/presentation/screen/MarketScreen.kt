@@ -30,7 +30,7 @@ import com.delighted2wins.souqelkhorda.features.market.presentation.component.Se
 @Composable
 fun MarketScreen(
     onBuyClick: () -> Unit = {},
-    onDetailsClick: () -> Unit = {}
+    onDetailsClick: (Int) -> Unit = {}
 ) {
     var query by remember { mutableStateOf("") }
     val isRtl: Boolean = LocalLayoutDirection.current == LayoutDirection.Rtl
@@ -76,7 +76,9 @@ fun MarketScreen(
                 user = user ?: User(0, "مستخدم مجهول", "غير معروف"),
                 scrapData,
                 onBuyClick = { /* Handle buy action */ },
-                onDetailsClick = { /* Handle details action */ },
+                onDetailsClick = {
+                    onDetailsClick(scrapData.id)
+                },
                 systemIsRtl  = isRtl,
             )
         }
