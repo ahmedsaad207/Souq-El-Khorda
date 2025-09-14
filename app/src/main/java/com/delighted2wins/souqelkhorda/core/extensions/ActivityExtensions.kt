@@ -11,7 +11,7 @@ fun Activity.configureSystemUI(darkTheme: Boolean) {
 
     val controller = WindowInsetsControllerCompat(window, window.decorView)
 
-    window.statusBarColor = if (darkTheme) 0xFF121212.toInt() else 0xFFFFFFFF.toInt()
+    window.statusBarColor = if (darkTheme) Color(0xFF1B8A59).value.toInt() else Color(0xFF24B36B).value.toInt()
     controller.isAppearanceLightStatusBars = !darkTheme
 
     window.navigationBarColor = Color.Transparent.value.toInt()
