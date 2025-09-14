@@ -12,6 +12,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import com.delighted2wins.souqelkhorda.core.components.DirectionalText
 import com.delighted2wins.souqelkhorda.core.utils.getTimeAgo
 import com.delighted2wins.souqelkhorda.core.utils.isArabic
 import com.delighted2wins.souqelkhorda.features.market.data.ScrapItem
@@ -25,8 +26,6 @@ fun ScrapCard(
     onDetailsClick: () -> Unit = {},
     systemIsRtl: Boolean = false
 ) {
-    val contentIsRtl = isArabic(scrap.title)
-
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
@@ -42,66 +41,68 @@ fun ScrapCard(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            CompositionLocalProvider(
-                LocalLayoutDirection provides if (contentIsRtl) LayoutDirection.Rtl else LayoutDirection.Ltr
-            ) {
-                Column(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.fillMaxWidth()) {
 
-                    Text(
-                        text = scrap.title ?: "",
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
+                DirectionalText(
+                    text = scrap.title,
+                    contentIsRtl = isArabic(scrap.title),
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Start,
+                    softWrap = true
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                DirectionalText(
+                    text = scrap.description,
+                    contentIsRtl = isArabic(scrap.description),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Start
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    DirectionalText(
+                        text = if (systemIsRtl) "الوزن: ${scrap.weight} كجم" else "Weight: ${scrap.weight} Kg",
+                        contentIsRtl = systemIsRtl,
+                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+                        color = MaterialTheme.colorScheme.primary,
                         textAlign = TextAlign.Start,
-                        softWrap = true
+                        modifier = Modifier.weight(1f)
                     )
 
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    Text(
-                        text = scrap.description ?: "",
-                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 3,
-                        overflow = TextOverflow.Ellipsis,
-                        textAlign = TextAlign.Start
-                    )
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = if (contentIsRtl) "الوزن: ${scrap.weight} كجم" else "Weight: ${scrap.weight} Kg",
+                    scrap.quantity?.let {
+                        DirectionalText(
+                            text = if (systemIsRtl) "العدد: $it" else "Quantity: $it",
+                            contentIsRtl = systemIsRtl,
                             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
                             color = MaterialTheme.colorScheme.primary,
                             textAlign = TextAlign.Start,
                             modifier = Modifier.weight(1f)
                         )
-
-                        scrap.quantity?.let {
-                            Text(
-                                text = if (contentIsRtl) "العدد: $it" else "Quantity: $it",
-                                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-                                color = MaterialTheme.colorScheme.primary,
-                                textAlign = TextAlign.Start,
-                                modifier = Modifier.weight(1f)
-                            )
-                        }
-
-                        Text(
-                            text = getTimeAgo(scrap.date, contentIsRtl),
-                            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-                            color = MaterialTheme.colorScheme.secondary.copy(alpha = 2f),
-                            textAlign = TextAlign.End,
-                            modifier = Modifier.weight(1f)
-                        )
                     }
+
+                    DirectionalText(
+                        text = getTimeAgo(scrap.date, systemIsRtl),
+                        contentIsRtl = systemIsRtl,
+                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+                        color = MaterialTheme.colorScheme.secondary.copy(alpha = 2f),
+                        textAlign = TextAlign.End,
+                        modifier = Modifier.weight(1f)
+                    )
                 }
             }
+
 
             CompositionLocalProvider(
                 LocalLayoutDirection provides if (systemIsRtl) LayoutDirection.Rtl else LayoutDirection.Ltr

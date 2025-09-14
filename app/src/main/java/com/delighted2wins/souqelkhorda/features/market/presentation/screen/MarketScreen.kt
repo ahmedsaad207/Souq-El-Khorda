@@ -40,7 +40,7 @@ fun MarketScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item {
             Row(
@@ -50,7 +50,8 @@ fun MarketScreen(
                 SearchBar(
                     query = query,
                     onQueryChange = { query = it },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    isRtl = isRtl
                 )
             }
         }

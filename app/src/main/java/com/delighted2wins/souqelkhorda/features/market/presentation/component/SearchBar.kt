@@ -27,7 +27,7 @@ fun SearchBar(
     query: String,
     onQueryChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    isRtl: Boolean = LocalLayoutDirection.current == LayoutDirection.Rtl
+    isRtl: Boolean
 ) {
     TextField(
         value = query,
