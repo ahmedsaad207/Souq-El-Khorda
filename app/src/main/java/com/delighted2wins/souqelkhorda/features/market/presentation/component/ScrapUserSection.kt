@@ -29,13 +29,7 @@ fun ScrapUserSection(
         modifier = Modifier.fillMaxWidth().padding(8.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            AsyncImage(
-                model = userData.imageUrl,
-                contentDescription = "User profile image",
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
-            )
+            CachedUserImage(imageUrl = userData.imageUrl)
 
             Spacer(modifier = Modifier.width(8.dp))
 

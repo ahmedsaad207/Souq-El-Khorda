@@ -88,15 +88,16 @@ fun sampleData() = listOf(
     ScrapItem(2, "ورق وكرتون مكتبي", "أوراق مكتبية...", "الجيزة - الدقي", 30,status = ScrapStatus.Sold, date = "2025-09-5", userId = 101),
     ScrapItem(3, "حديد خردة", "قطع حديد...", "الإسكندرية", 50,status = ScrapStatus.Waiting, date = "2025-09-12", userId = 102),
     ScrapItem(4, "نحاس وأسلاك", "أسلاك نحاس...", "طنطا", 15,status = ScrapStatus.Available, date = "2025-09-1", userId = 103),
-    ScrapItem(5, "زجاج مستعمل", "زجاج معاد...", "المنصورة", 20,status = ScrapStatus.Reserved, date = "2025-09-2", userId = 100)
+    ScrapItem(5, "زجاج مستعمل", "زجاج معاد...", "المنصورة", 20,status = ScrapStatus.Reserved, date = "2025-09-2", userId = 104)
 )
 
 fun sampleUser() = listOf(
     User(100, "أحمد محمد", "القاهرة - المعادي", "https://avatar.iran.liara.run/public/boy?username=Scott"),
     User(101, "فاطمة أحمد", "الجيزة - الدقي", "https://avatar.iran.liara.run/public/girl?username=Maria"),
     User(102, "محمد علي", "الإسكندرية", "https://avatar.iran.liara.run/public/boy?username=Scott"),
-    User(103, "سارة محمود", "طنطا", "https://avatar.iran.liara.run/public/girl?username=Maria")
-)
+    User(103, "سارة محمود", "طنطا", "https://avatar.iran.liara.run/public/girl?username=Maria"),
+    User(104, " محمد محمود", "طنطا"),
+    )
 
 
 @Preview(showBackground = true, showSystemUi = true)
