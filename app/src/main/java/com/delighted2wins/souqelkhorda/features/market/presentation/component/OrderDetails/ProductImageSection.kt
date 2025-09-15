@@ -1,4 +1,4 @@
-package com.delighted2wins.souqelkhorda.features.market.presentation.component.ProductDetails
+package com.delighted2wins.souqelkhorda.features.market.presentation.component.OrderDetails
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,14 +54,14 @@ fun ProductImageSection(
             Icon(
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = "Back",
-                tint = Color.Black,
+                tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.clickable { onBackClick() }
             )
 
             Icon(
                 imageVector = Icons.Default.Share,
                 contentDescription = "Share",
-                tint = Color.Black
+                tint = MaterialTheme.colorScheme.primary
             )
         }
 

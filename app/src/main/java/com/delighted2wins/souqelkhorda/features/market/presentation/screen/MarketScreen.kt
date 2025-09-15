@@ -23,17 +23,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.app.theme.Til
-import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapItem
-import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapStatus
+import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapOrder
+import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapOrderItem
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.User
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.Market.ScrapCard
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.Market.SearchBar
+import kotlin.collections.listOf
 
 @Composable
 fun MarketScreen(
     innerPadding: PaddingValues = PaddingValues(),
     onBuyClick: () -> Unit = {},
-    onDetailsClick: (Int) -> Unit = {}
+    onDetailsClick: (ScrapOrder) -> Unit
 ) {
     var query by remember { mutableStateOf("") }
     val isRtl: Boolean = LocalLayoutDirection.current == LayoutDirection.Rtl
@@ -65,7 +66,7 @@ fun MarketScreen(
                 text = if (isRtl) "العروض المتاحة" else "Available Offers",
                 style = MaterialTheme.typography.titleLarge,
                 color = Til,
-                modifier = Modifier.padding(vertical = 16.dp)
+                modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
             )
         }
 
@@ -81,7 +82,7 @@ fun MarketScreen(
                 scrapData,
                 onBuyClick = { /* Handle buy action */ },
                 onDetailsClick = {
-                    onDetailsClick(scrapData.id)
+                    onDetailsClick(scrapData)
                 },
                 systemIsRtl  = isRtl,
             )
@@ -94,123 +95,305 @@ fun MarketScreen(
 
 
 fun sampleData() = listOf(
-    ScrapItem(
+    ScrapOrder(
         id = 1,
         title = "Plastic & Aluminum",
-        description = "Mixed scrap materials...",
+        description = "Mixed scrap materials collected from households." +
+                " Includes plastic bottles and aluminum cans." +
+                " Ready for recycling." +
+                " Contact for pickup arrangements." +
+                " Thank you for supporting recycling efforts!" +
+                " Let's make a greener planet together." +
+                " Every bit counts!" +
+                " Reduce, Reuse, Recycle!" +
+                " Join us in our mission to promote sustainability.",
         location = "Cairo - Maadi",
         price = 25.0,
-        weight = 12,
-        quantity = 5,
-        status = ScrapStatus.Available,
         date = "2025-09-10",
-        userId = 100
+        userId = 100,
+        items = listOf(
+            ScrapOrderItem(
+                id = 101,
+                name = "Plastic Bottles",
+                weight = 7,
+                quantity = 3,
+                images = listOf(
+                    "https://picsum.photos/600/400?random=1",
+                    "https://picsum.photos/600/400?random=2",
+                    "https://picsum.photos/600/400?random=22",
+                    "https://picsum.photos/600/400?random=23"
+                )
+            ),
+            ScrapOrderItem(
+                id = 102,
+                name = "Aluminum Cans",
+                weight = 5,
+                quantity = 2,
+                images = listOf(
+                    "https://picsum.photos/600/400?random=3",
+                    "https://picsum.photos/600/400?random=4"
+                )
+            ),
+            ScrapOrderItem(
+                id = 103,
+                name = "Plastic Bags",
+                weight = 2,
+                quantity = null,
+                images = emptyList()
+            ),
+            ScrapOrderItem(
+                id = 104,
+                name = "Plastic Containers",
+                weight = 4,
+                quantity = 4,
+                images = listOf(
+                    "https://picsum.photos/600/400?random=24"
+                )
+            ),
+            ScrapOrderItem(
+                id = 105,
+                name = "Aluminum Foil",
+                weight = 1,
+                quantity = null,
+                images = emptyList()
+            )
+        )
     ),
-    ScrapItem(
+    ScrapOrder(
         id = 2,
         title = "ورق وكرتون مكتبي",
-        description = "أوراق مكتبية متنوعة...",
+        description = "أوراق مكتبية وكرتون جاهزة لإعادة التدوير.",
         location = "Giza - Dokki",
         price = 30.0,
-        weight = 8,
-        quantity = 3,
-        status = ScrapStatus.Sold,
         date = "2025-09-05",
-        userId = 101
+        userId = 101,
+        items = listOf(
+            ScrapOrderItem(
+                id = 201,
+                name = "Office Paper",
+                weight = 5,
+                quantity = null,
+                images = listOf(
+                    "https://picsum.photos/600/400?random=5",
+                    "https://picsum.photos/600/400?random=6"
+                )
+            ),
+            ScrapOrderItem(
+                id = 202,
+                name = "Cardboard",
+                weight = 3,
+                quantity = 3,
+                images = listOf(
+                    "https://picsum.photos/600/400?random=7"
+                )
+            )
+        )
     ),
-    ScrapItem(
+    ScrapOrder(
         id = 3,
         title = "Iron Scrap",
-        description = "Pieces of old iron...",
-        location = "الإسكندرية",
+        description = "Heavy iron scrap collected from construction sites.",
+        location = "Alexandria",
         price = 50.0,
-        weight = 20,
-        quantity = 5,
-        status = ScrapStatus.Waiting,
         date = "2025-09-12",
-        userId = 102
+        userId = 102,
+        items = listOf(
+            ScrapOrderItem(
+                id = 301,
+                name = "Iron Bars",
+                weight = 20,
+                quantity = 5,
+                images = listOf(
+                    "https://picsum.photos/600/400?random=8",
+                    "https://picsum.photos/600/400?random=9"
+                )
+            )
+        )
     ),
-    ScrapItem(
+    ScrapOrder(
         id = 4,
-        title = "Copper & Wires",
-        description = "Used copper wires...",
-        location = "طنطا",
-        price = 15.0,
-        weight = 10,
-        status = ScrapStatus.Available,
-        date = "2025-09-01",
-        userId = 103
-    ),
-    ScrapItem(
-        id = 5,
-        title = "زجاج مستعمل",
-        description = "زجاج معاد التدوير...",
-        location = "Mansoura",
-        price = 20.0,
-        weight = 7,
-        status = ScrapStatus.Reserved,
-        date = "2025-09-02",
-        userId = 104
-    ),
-    ScrapItem(
-        id = 6,
-        title = "Wood Pieces",
-        description = "Old wooden furniture parts...",
+        title = "Copper Wires",
+        description = "Electric copper wires removed from old installations.",
         location = "Cairo - Nasr City",
-        price = 18.0,
-        weight = 15,
-        quantity = 4,
-        status = ScrapStatus.Available,
-        date = "2025-09-08",
-        userId = 105
+        price = 80.0,
+        date = "2025-09-13",
+        userId = 103,
+        items = listOf(
+            ScrapOrderItem(
+                id = 401,
+                name = "Thick Copper Wire",
+                weight = 10,
+                quantity = 2,
+                images = listOf(
+                    "https://picsum.photos/600/400?random=10"
+                )
+            ),
+            ScrapOrderItem(
+                id = 402,
+                name = "Thin Copper Wire",
+                weight = 15,
+                quantity = null,
+                images = listOf(
+                    "https://picsum.photos/600/400?random=11"
+                )
+            )
+        )
     ),
-    ScrapItem(
-        id = 7,
-        title = "Electronic Boards",
-        description = "Broken circuit boards...",
-        location = "Giza - Haram",
-        price = 40.0,
-        weight = 6,
-        quantity = 2,
-        status = ScrapStatus.Waiting,
-        date = "2025-09-11",
-        userId = 106
+    ScrapOrder(
+        id = 5,
+        title = "Mixed Glass",
+        description = "Colored and transparent glass bottles.",
+        location = "Mansoura",
+        price = 15.0,
+        date = "2025-09-01",
+        userId = 104,
+        items = listOf(
+            ScrapOrderItem(
+                id = 501,
+                name = "Green Glass Bottles",
+                weight = 6,
+                quantity = 2,
+                images = listOf(
+                    "https://picsum.photos/600/400?random=12"
+                )
+            ),
+            ScrapOrderItem(
+                id = 502,
+                name = "Transparent Glass Bottles",
+                weight = 8,
+                quantity = 4,
+                images = listOf(
+                    "https://picsum.photos/600/400?random=13"
+                )
+            )
+        )
     ),
-    ScrapItem(
-        id = 8,
-        title = "Car Batteries",
-        description = "Used car batteries for recycling...",
+    ScrapOrder(
+        id = 6,
+        title = "Wooden Pallets",
+        description = "Old wooden pallets from warehouses.",
         location = "Cairo - Shubra",
-        price = 60.0,
-        weight = 25,
-        quantity = 3,
-        status = ScrapStatus.Sold,
-        date = "2025-09-03",
-        userId = 107
+        price = 40.0,
+        date = "2025-08-28",
+        userId = 105,
+        items = listOf(
+            ScrapOrderItem(
+                id = 601,
+                name = "Pallets",
+                weight = 12,
+                quantity = 10,
+                images = listOf(
+                    "https://picsum.photos/600/400?random=14"
+                )
+            )
+        )
     ),
-    ScrapItem(
-        id = 9,
+    ScrapOrder(
+        id = 7,
+        title = "Old Electronics",
+        description = "E-waste collection of computers and phones.",
+        location = "Cairo - Downtown",
+        price = 120.0,
+        date = "2025-09-11",
+        userId = 106,
+        items = listOf(
+            ScrapOrderItem(
+                id = 701,
+                name = "Old Laptops",
+                weight = 4,
+                quantity = 6,
+                images = listOf(
+                    "https://picsum.photos/600/400?random=15"
+                )
+            ),
+            ScrapOrderItem(
+                id = 702,
+                name = "Mobile Phones",
+                weight = 2,
+                quantity = 10,
+                images = listOf(
+                    "https://picsum.photos/600/400?random=16"
+                )
+            )
+        )
+    ),
+    ScrapOrder(
+        id = 8,
         title = "Textile Waste",
-        description = "Fabric and textile leftovers...",
-        location = "Alexandria - Sidi Gaber",
-        price = 12.0,
-        weight = 9,
-        quantity = 6,
-        status = ScrapStatus.Reserved,
-        date = "2025-09-04",
-        userId = 108
+        description = "Fabric scraps from tailoring shops.",
+        location = "Cairo - Helwan",
+        price = 10.0,
+        date = "2025-09-03",
+        userId = 107,
+        items = listOf(
+            ScrapOrderItem(
+                id = 801,
+                name = "Cotton Fabric",
+                weight = 5,
+                quantity = 7,
+                images = listOf(
+                    "https://picsum.photos/600/400?random=17"
+                )
+            ),
+            ScrapOrderItem(
+                id = 802,
+                name = "Wool Fabric",
+                weight = 3,
+                quantity = 4,
+                images = listOf(
+                    "https://picsum.photos/600/400?random=18"
+                )
+            )
+        )
     ),
-    ScrapItem(
+    ScrapOrder(
+        id = 9,
+        title = "Plastic Crates",
+        description = "Used crates from vegetable markets.",
+        location = "Beni Suef",
+        price = 18.0,
+        date = "2025-09-08",
+        userId = 108,
+        items = listOf(
+            ScrapOrderItem(
+                id = 901,
+                name = "Large Plastic Crates",
+                weight = 9,
+                quantity = 5,
+                images = listOf(
+                    "https://picsum.photos/600/400?random=19"
+                )
+            )
+        )
+    ),
+    ScrapOrder(
         id = 10,
         title = "Mixed Metals",
-        description = "Combination of various metals...",
-        location = "Cairo - Helwan",
-        price = 55.0,
-        weight = 18,
-        quantity = 5,
-        status = ScrapStatus.Available,
-        date = "2025-09-09",
-        userId = 109
+        description = "Brass and steel mixed scrap.",
+        location = "Cairo - Obour",
+        price = 90.0,
+        date = "2025-09-14",
+        userId = 109,
+        items = listOf(
+            ScrapOrderItem(
+                id = 1001,
+                name = "Brass Scrap",
+                weight = 7,
+                quantity = 3,
+                images = listOf(
+                    "https://picsum.photos/600/400?random=20"
+                )
+            ),
+            ScrapOrderItem(
+                id = 1002,
+                name = "Steel Scrap",
+                weight = 15,
+                quantity = 6,
+                images = listOf(
+                    "https://picsum.photos/600/400?random=21"
+                )
+            )
+        )
     )
 )
 
@@ -280,5 +463,7 @@ fun sampleUser() = listOf(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun MarketScreenPreview() {
-    MarketScreen()
+    MarketScreen(
+        onDetailsClick = {}
+    )
 }

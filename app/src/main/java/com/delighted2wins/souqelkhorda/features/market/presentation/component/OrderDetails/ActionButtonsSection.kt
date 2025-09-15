@@ -1,4 +1,4 @@
-package com.delighted2wins.souqelkhorda.features.market.presentation.component.ProductDetails
+package com.delighted2wins.souqelkhorda.features.market.presentation.component.OrderDetails
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -14,7 +14,7 @@ fun ActionButtonsSection() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = 4.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         OutlinedButton(

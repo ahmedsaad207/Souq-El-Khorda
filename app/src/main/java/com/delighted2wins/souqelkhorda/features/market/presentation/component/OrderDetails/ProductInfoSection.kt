@@ -1,4 +1,4 @@
-package com.delighted2wins.souqelkhorda.features.market.presentation.component.ProductDetails
+package com.delighted2wins.souqelkhorda.features.market.presentation.component.OrderDetails
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
