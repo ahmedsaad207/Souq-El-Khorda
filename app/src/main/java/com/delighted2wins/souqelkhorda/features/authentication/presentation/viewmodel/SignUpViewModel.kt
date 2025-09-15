@@ -9,7 +9,7 @@ import com.delighted2wins.souqelkhorda.core.extensions.isPhoneNumber
 import com.delighted2wins.souqelkhorda.core.extensions.isUserName
 import com.delighted2wins.souqelkhorda.features.authentication.data.model.AuthMsg
 import com.delighted2wins.souqelkhorda.features.authentication.data.model.SignUpRequestDto
-import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.LoginUseCase
+import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.LogoutUseCase
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.SignUpUseCase
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.state.AuthenticationState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,18 +25,12 @@ import javax.inject.Inject
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val signUpUseCase: SignUpUseCase,
-    private val loginUseCase: LoginUseCase
+    private val logOutUseCase: LogoutUseCase
 ) : ViewModel() {
     private val _registerState = MutableStateFlow<AuthenticationState>(AuthenticationState.Idle)
     val registerState = _registerState.asStateFlow()
-
-
     private val _message = MutableSharedFlow<String>()
     val message = _message.asSharedFlow()
-
-
-
-
     fun signUp(signUpRequestDto: SignUpRequestDto) {
         viewModelScope.launch(Dispatchers.IO) {
             if (!signUpRequestDto.name.isUserName()) {
@@ -72,14 +66,22 @@ class SignUpViewModel @Inject constructor(
                     .catch { emitError(AuthMsg.SIGNUPFAIL.getMsg()) }
                     .collect { state ->
                         _registerState.emit(state)
-                        _message.emit(AuthMsg.SIGNUPSUCCESS.getMsg())
+                        when (state) {
+                            is AuthenticationState.Success -> {
+//                                logOutUseCase()
+                                val user = state.userAuth
+                                _message.emit(AuthMsg.SIGNUPSUCCESS.getMsg() )
+                            }
+                            is AuthenticationState.Error -> {
+                                _message.emit(AuthMsg.SIGNUPFAIL.getMsg())
+                            }
+                            else -> Unit
+                        }
                     }
             } catch (e: Exception) {
                 emitError(AuthMsg.SIGNUPFAIL.getMsg())
             }
-
         }
-
     }
     private suspend fun emitError(msg: String) {
         _message.emit(msg)

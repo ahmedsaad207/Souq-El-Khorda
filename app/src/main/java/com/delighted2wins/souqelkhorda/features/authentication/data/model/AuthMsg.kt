@@ -22,7 +22,8 @@ enum class AuthMsg(val message: String, val arabicMessage: String) {
     SIGNUPSUCCESS("Registered successfully, welcome ", "تم التسجيل بنجاح، مرحبًا "),
     LOGINSUCCESS("Login successfully, welcome back ", "تسجيل الدخول بنجاح، مرحبًا بعودتك "),
     SIGNUPFAIL("Registration failed", "فشل التسجيل"),
-    UNKNOWN("Unknown error", "خطأ غير معروف");
+    UNKNOWN("Unknown error", "خطأ غير معروف"),
+    EMPTYFILDES("Please fill all fields", "يرجى ملء جميع الحقول");
 
     fun getMsg(): String {
         val currentLanguage = Locale.getDefault().language

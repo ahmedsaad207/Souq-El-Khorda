@@ -22,6 +22,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,7 +37,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.delighted2wins.souqelkhorda.R
+import com.delighted2wins.souqelkhorda.features.authentication.presentation.component.DotLoadingIndicator
+import com.delighted2wins.souqelkhorda.features.authentication.presentation.state.AuthenticationState
+import com.delighted2wins.souqelkhorda.features.authentication.presentation.viewmodel.LoginViewModel
 import com.delighted2wins.souqelkhorda.features.login.presentation.component.LoginPasswordTF
 import com.delighted2wins.souqelkhorda.features.login.presentation.component.LoginTF
 
@@ -47,7 +53,7 @@ fun LoginScreen(
     onRegisterClick: () -> Unit,
     onLoginClick: () -> Unit,
     snackBarHostState: SnackbarHostState,
-//    viewModel: LoginViewModel = koinViewModel()
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp
@@ -55,20 +61,26 @@ fun LoginScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val colors = MaterialTheme.colorScheme
+    val loginState by viewModel.loginState.collectAsStateWithLifecycle()
+    val isLoading = loginState is AuthenticationState.Loading
 
-//    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
-//
-//    LaunchedEffect(Unit) {
-//        viewModel.loginSuccess.collect {
-//            onLoginClick()
-//        }
-//    }
 
-//    LaunchedEffect(Unit) {
-//        viewModel.message.collect { message ->
-//            snackBarHostState.showSnackbar(message)
-//        }
-//    }
+    LaunchedEffect(Unit) {
+        viewModel.message.collect { message ->
+            snackBarHostState.showSnackbar(message)
+        }
+    }
+
+    LaunchedEffect(loginState) {
+        when (loginState) {
+            is AuthenticationState.Success -> {
+                onLoginClick()
+            }
+            is AuthenticationState.Error -> {
+            }
+            else -> Unit
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -119,8 +131,8 @@ fun LoginScreen(
         Button(
             shape = RoundedCornerShape(8.dp),
             onClick = {
-               // viewModel.login(email, password)
-                onLoginClick()
+                viewModel.login(email, password)
+//                onLoginClick()
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -130,16 +142,16 @@ fun LoginScreen(
                 containerColor = Color(0xFF179C92),
                 contentColor = Color.White
             ),
-           // enabled = !isLoading
+            enabled = !isLoading
         ) {
-//            if (isLoading) {
-//                DotLoadingIndicator()
-//            }else {
+            if (isLoading) {
+                DotLoadingIndicator()
+            } else {
                 Text(
                     text = stringResource(R.string.login),
                     fontSize = 14.sp
                 )
-//            }
+            }
         }
         Spacer(
             Modifier.height((screenHeight * 0.01).dp)

@@ -92,10 +92,10 @@ fun NavigationRoot(
                         bottomBarState.value = false
                         SignUpScreen(onBackClick = {
                             backStack.remove(SignUpScreen)
-                            backStack.add(LoginScreen)
+                            backStack.set(element =LoginScreen, index = 0)
                         }, snackBarHostState = snackBarState, onRegisterClick = {
                             backStack.remove(SignUpScreen)
-                            backStack.add(LoginScreen)
+                            backStack.set(element =LoginScreen, index = 0)
                         })
 
                     }
