@@ -6,6 +6,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -36,8 +37,8 @@ fun ScrapCard(
 
             ScrapUserSection(
                 userData = user,
-                status = scrap.status,
-                isRtl = systemIsRtl
+                date = scrap.date,
+                systemIsRtl = systemIsRtl
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -67,7 +68,7 @@ fun ScrapCard(
                     textAlign = TextAlign.Start
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -79,7 +80,7 @@ fun ScrapCard(
                         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
                         color = MaterialTheme.colorScheme.primary,
                         textAlign = TextAlign.Start,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(.6f)
                     )
 
                     scrap.quantity?.let {
@@ -89,17 +90,23 @@ fun ScrapCard(
                             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
                             color = MaterialTheme.colorScheme.primary,
                             textAlign = TextAlign.Start,
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(.6f)
                         )
+                    }
+                    if (scrap.quantity == null) {
+                        Spacer(modifier = Modifier.weight(.6f))
                     }
 
                     DirectionalText(
-                        text = getTimeAgo(scrap.date, systemIsRtl),
+                        text = if (systemIsRtl) "السعر: ${scrap.price} ج.م" else "Price: ${scrap.price} EGP",
                         contentIsRtl = systemIsRtl,
-                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-                        color = MaterialTheme.colorScheme.secondary.copy(alpha = 2f),
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight.Bold,
+                            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                        ),
+                        color = Color.Red,
                         textAlign = TextAlign.End,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(.8f)
                     )
                 }
             }

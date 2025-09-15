@@ -17,37 +17,37 @@ fun getTimeAgo(dateString: String, isArabic: Boolean = true): String {
         if (isArabic) {
             when {
                 daysBetween == 0L -> "اليوم"
-                daysBetween == 1L -> "منذ يوم واحد"
+                daysBetween == 1L -> "منذ يوم"
                 daysBetween < 7 -> "منذ $daysBetween أيام"
                 daysBetween < 30 -> {
                     val weeks = daysBetween / 7
-                    "منذ $weeks أسبوع${if (weeks > 1) "ان" else ""}"
+                    if (weeks == 1L) "منذ أسبوع" else "منذ $weeks أسابيع"
                 }
                 daysBetween < 365 -> {
                     val months = daysBetween / 30
-                    "منذ $months شهر${if (months > 1) "ًا" else ""}"
+                    if (months == 1L) "منذ شهر" else "منذ $months أشهر"
                 }
                 else -> {
                     val years = daysBetween / 365
-                    "منذ $years سنة${if (years > 1) "ً" else ""}"
+                    if (years == 1L) "منذ سنة" else "منذ $years سنوات"
                 }
             }
         } else {
             when {
                 daysBetween == 0L -> "Today"
-                daysBetween == 1L -> "1 day ago"
+                daysBetween == 1L -> "day ago"
                 daysBetween < 7 -> "$daysBetween days ago"
                 daysBetween < 30 -> {
                     val weeks = daysBetween / 7
-                    "$weeks week${if (weeks > 1) "s" else ""} ago"
+                    if (weeks == 1L) "week ago" else "$weeks weeks ago"
                 }
                 daysBetween < 365 -> {
                     val months = daysBetween / 30
-                    "$months month${if (months > 1) "s" else ""} ago"
+                    if (months == 1L) "month ago" else "$months months ago"
                 }
                 else -> {
                     val years = daysBetween / 365
-                    "$years year${if (years > 1) "s" else ""} ago"
+                    if (years == 1L) "year ago" else "$years years ago"
                 }
             }
         }

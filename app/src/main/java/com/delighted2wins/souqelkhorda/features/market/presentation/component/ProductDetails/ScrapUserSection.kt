@@ -10,18 +10,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.core.components.CachedUserImage
+import com.delighted2wins.souqelkhorda.core.components.DirectionalText
+import com.delighted2wins.souqelkhorda.core.utils.getTimeAgo
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapStatus
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.User
 
 @Composable
 fun ScrapUserSection(
     userData : User,
-    status: ScrapStatus,
-    isRtl: Boolean = false
+    date: String,
+    systemIsRtl: Boolean = false
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -51,19 +54,29 @@ fun ScrapUserSection(
             }
         }
 
-        Surface(
-            color = status.color,
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier.padding(start = 8.dp)
-        ) {
-            Text(
-                text = if (isRtl) status.labelAr else status.labelEn,
-                style = MaterialTheme.typography.titleMedium,
-                color = Color.White,
-                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-            )
+        DirectionalText(
+            text = getTimeAgo(date, systemIsRtl),
+            contentIsRtl = systemIsRtl,
+            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+            color = MaterialTheme.colorScheme.scrim.copy(alpha = .4f),
+            textAlign = TextAlign.End,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+//        Surface(
+//            color = status.color,
+//            shape = RoundedCornerShape(8.dp),
+//            modifier = Modifier.padding(start = 8.dp)
+//        ) {
+//            Text(
+//                text = if (isRtl) status.labelAr else status.labelEn,
+//                style = MaterialTheme.typography.titleMedium,
+//                color = Color.White,
+//                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+//            )
+//         {
+
         }
-    }
 }
 
 
@@ -76,5 +89,5 @@ fun ScrapUserSectionPreview() {
         location = "الجيزة - الدقي",
         imageUrl = "https://avatar.iran.liara.run/public/boy?username=Scott"
     )
-    ScrapUserSection(user,ScrapStatus.Waiting, isRtl = false)
+    ScrapUserSection(user,"9/9/2009", systemIsRtl = false)
 }

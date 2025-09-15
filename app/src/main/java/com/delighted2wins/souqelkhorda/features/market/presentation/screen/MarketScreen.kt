@@ -42,10 +42,7 @@ fun MarketScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(
-                top = innerPadding.calculateTopPadding(),
-              //  bottom = innerPadding.calculateBottomPadding()
-            ),
+            .padding(top = innerPadding.calculateTopPadding()),
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
@@ -97,20 +94,187 @@ fun MarketScreen(
 
 
 fun sampleData() = listOf(
-    ScrapItem(1, "Plastic & Aluminum", "Mixed scrap materials...", "Cairo - Maadi", 25, quantity = 5,status = ScrapStatus.Available, date = "2025-09-10", userId = 100),
-    ScrapItem(2, "ورق وكرتون مكتبي", "أوراق مكتبية متنوعة...", "Giza - Dokki", 30, quantity = 3, status = ScrapStatus.Sold, date = "2025-09-05", userId = 101),
-    ScrapItem(3, "Iron Scrap", "Pieces of old iron...", "الإسكندرية", 50, quantity = 5, status = ScrapStatus.Waiting, date = "2025-09-12", userId = 102),
-    ScrapItem(4, "Copper & Wires", "Used copper wires...", "طنطا", 15, status = ScrapStatus.Available, date = "2025-09-01", userId = 103),
-    ScrapItem(5, "زجاج مستعمل", "زجاج معاد التدوير...", "Mansoura", 20, status = ScrapStatus.Reserved, date = "2025-09-02", userId = 104)
+    ScrapItem(
+        id = 1,
+        title = "Plastic & Aluminum",
+        description = "Mixed scrap materials...",
+        location = "Cairo - Maadi",
+        price = 25.0,
+        weight = 12,
+        quantity = 5,
+        status = ScrapStatus.Available,
+        date = "2025-09-10",
+        userId = 100
+    ),
+    ScrapItem(
+        id = 2,
+        title = "ورق وكرتون مكتبي",
+        description = "أوراق مكتبية متنوعة...",
+        location = "Giza - Dokki",
+        price = 30.0,
+        weight = 8,
+        quantity = 3,
+        status = ScrapStatus.Sold,
+        date = "2025-09-05",
+        userId = 101
+    ),
+    ScrapItem(
+        id = 3,
+        title = "Iron Scrap",
+        description = "Pieces of old iron...",
+        location = "الإسكندرية",
+        price = 50.0,
+        weight = 20,
+        quantity = 5,
+        status = ScrapStatus.Waiting,
+        date = "2025-09-12",
+        userId = 102
+    ),
+    ScrapItem(
+        id = 4,
+        title = "Copper & Wires",
+        description = "Used copper wires...",
+        location = "طنطا",
+        price = 15.0,
+        weight = 10,
+        status = ScrapStatus.Available,
+        date = "2025-09-01",
+        userId = 103
+    ),
+    ScrapItem(
+        id = 5,
+        title = "زجاج مستعمل",
+        description = "زجاج معاد التدوير...",
+        location = "Mansoura",
+        price = 20.0,
+        weight = 7,
+        status = ScrapStatus.Reserved,
+        date = "2025-09-02",
+        userId = 104
+    ),
+    ScrapItem(
+        id = 6,
+        title = "Wood Pieces",
+        description = "Old wooden furniture parts...",
+        location = "Cairo - Nasr City",
+        price = 18.0,
+        weight = 15,
+        quantity = 4,
+        status = ScrapStatus.Available,
+        date = "2025-09-08",
+        userId = 105
+    ),
+    ScrapItem(
+        id = 7,
+        title = "Electronic Boards",
+        description = "Broken circuit boards...",
+        location = "Giza - Haram",
+        price = 40.0,
+        weight = 6,
+        quantity = 2,
+        status = ScrapStatus.Waiting,
+        date = "2025-09-11",
+        userId = 106
+    ),
+    ScrapItem(
+        id = 8,
+        title = "Car Batteries",
+        description = "Used car batteries for recycling...",
+        location = "Cairo - Shubra",
+        price = 60.0,
+        weight = 25,
+        quantity = 3,
+        status = ScrapStatus.Sold,
+        date = "2025-09-03",
+        userId = 107
+    ),
+    ScrapItem(
+        id = 9,
+        title = "Textile Waste",
+        description = "Fabric and textile leftovers...",
+        location = "Alexandria - Sidi Gaber",
+        price = 12.0,
+        weight = 9,
+        quantity = 6,
+        status = ScrapStatus.Reserved,
+        date = "2025-09-04",
+        userId = 108
+    ),
+    ScrapItem(
+        id = 10,
+        title = "Mixed Metals",
+        description = "Combination of various metals...",
+        location = "Cairo - Helwan",
+        price = 55.0,
+        weight = 18,
+        quantity = 5,
+        status = ScrapStatus.Available,
+        date = "2025-09-09",
+        userId = 109
+    )
 )
 
 fun sampleUser() = listOf(
-    User(100, "Ahmed Mohamed", "Cairo - Maadi", "https://avatar.iran.liara.run/public/boy?username=Scott"),
-    User(101, "فاطمة أحمد", "Giza - Dokki", "https://avatar.iran.liara.run/public/girl?username=Maria"),
-    User(102, "Mohamed Ali", "Alexandria", "https://avatar.iran.liara.run/public/boy?username=Scott"),
-    User(103, "سارة محمود", "طنطا", "https://avatar.iran.liara.run/public/girl?username=Maria"),
-    User(104, "Mohamed Mahmoud", "طنطا") // No image URL
+    User(
+        id = 100,
+        name = "Ahmed Mohamed",
+        location = "Cairo - Maadi",
+        imageUrl = "https://avatar.iran.liara.run/public/boy?username=Ahmed"
+    ),
+    User(
+        id = 101,
+        name = "فاطمة أحمد",
+        location = "Giza - Dokki",
+        imageUrl = "https://avatar.iran.liara.run/public/girl?username=Fatma"
+    ),
+    User(
+        id = 102,
+        name = "Mohamed Ali",
+        location = "Alexandria",
+        imageUrl = "https://avatar.iran.liara.run/public/boy?username=Mohamed"
+    ),
+    User(
+        id = 103,
+        name = "سارة محمود",
+        location = "Tanta",
+        imageUrl = "https://avatar.iran.liara.run/public/girl?username=Sara"
+    ),
+    User(
+        id = 104,
+        name = "Mohamed Mahmoud",
+        location = "Mansoura" // No image URL
+    ),
+    User(
+        id = 105,
+        name = "Youssef Adel",
+        location = "Cairo - Nasr City",
+        imageUrl = "https://avatar.iran.liara.run/public/boy?username=Youssef"
+    ),
+    User(
+        id = 106,
+        name = "Mona Hassan",
+        location = "Giza - Haram",
+        imageUrl = "https://avatar.iran.liara.run/public/girl?username=Mona"
+    ),
+    User(
+        id = 107,
+        name = "Omar Khaled",
+        location = "Cairo - Shubra",
+        imageUrl = "https://avatar.iran.liara.run/public/boy?username=Omar"
+    ),
+    User(
+        id = 108,
+        name = "Layla Ibrahim",
+        location = "Alexandria - Sidi Gaber",
+        imageUrl = "https://avatar.iran.liara.run/public/girl?username=Layla"
+    ),
+    User(
+        id = 109,
+        name = "Hassan Tarek",
+        location = "Cairo - Helwan" // No image URL
+    )
 )
+
 
 
 @Preview(showBackground = true, showSystemUi = true)
