@@ -20,5 +20,8 @@ data object LoginScreen:NavKey
 data object SignUpScreen:NavKey
 
 @Serializable
+data class AddItemKey(val category: String):NavKey
+
+@Serializable
 data class ProductDetailsKey(val productId: Int) : NavKey
 

@@ -21,9 +21,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.app.theme.Til
-import com.delighted2wins.souqelkhorda.features.market.data.ScrapItem
-import com.delighted2wins.souqelkhorda.features.market.data.ScrapStatus
-import com.delighted2wins.souqelkhorda.features.market.data.User
+import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapItem
+import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapStatus
+import com.delighted2wins.souqelkhorda.features.market.domain.entities.User
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.ScrapCard
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.SearchBar
 
@@ -92,6 +92,11 @@ fun sampleData() = listOf(
     ScrapItem(3, "Iron Scrap", "Pieces of old iron...", "الإسكندرية", 50, quantity = 5, status = ScrapStatus.Waiting, date = "2025-09-12", userId = 102),
     ScrapItem(4, "Copper & Wires", "Used copper wires...", "طنطا", 15, status = ScrapStatus.Available, date = "2025-09-01", userId = 103),
     ScrapItem(5, "زجاج مستعمل", "زجاج معاد التدوير...", "Mansoura", 20, status = ScrapStatus.Reserved, date = "2025-09-02", userId = 104)
+)
+
+fun dummyTags() = listOf(
+    "A",
+    "P",
 )
 
 fun sampleUser() = listOf(

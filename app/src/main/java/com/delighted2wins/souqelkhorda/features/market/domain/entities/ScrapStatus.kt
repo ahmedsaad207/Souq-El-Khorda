@@ -1,4 +1,4 @@
-package com.delighted2wins.souqelkhorda.features.market.data
+package com.delighted2wins.souqelkhorda.features.market.domain.entities
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,4 +1,4 @@
-package com.delighted2wins.souqelkhorda.features.market.data
+package com.delighted2wins.souqelkhorda.features.market.domain.entities
 
 data class User(
     val id: Int,

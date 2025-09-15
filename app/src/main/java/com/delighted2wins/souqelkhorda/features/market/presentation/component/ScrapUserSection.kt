@@ -16,8 +16,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.delighted2wins.souqelkhorda.features.market.data.ScrapStatus
-import com.delighted2wins.souqelkhorda.features.market.data.User
+import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapStatus
+import com.delighted2wins.souqelkhorda.features.market.domain.entities.User
 
 @Composable
 fun ScrapUserSection(

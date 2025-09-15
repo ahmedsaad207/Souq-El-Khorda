@@ -1,4 +1,6 @@
-package com.delighted2wins.souqelkhorda.features.market.data
+package com.delighted2wins.souqelkhorda.features.market.domain.entities
+
+import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapStatus
 
 data class ScrapItem(
     val id: Int,
@@ -9,5 +11,5 @@ data class ScrapItem(
     val quantity: Int? = null,
     val status: ScrapStatus,
     val date: String,
-    val userId: Int
+    val userId: Int,
 )

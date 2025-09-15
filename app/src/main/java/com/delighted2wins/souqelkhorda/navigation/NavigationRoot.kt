@@ -1,5 +1,6 @@
 package com.delighted2wins.souqelkhorda.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -10,6 +11,7 @@ import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
+import com.delighted2wins.souqelkhorda.features.additem.presentation.screen.AddItemScreen
 import com.delighted2wins.souqelkhorda.features.buyers.presentation.screen.NearestBuyersScreen
 import com.delighted2wins.souqelkhorda.features.market.presentation.screen.MarketScreen
 import com.delighted2wins.souqelkhorda.features.sale.presentation.screen.DirectSaleScreen
@@ -23,7 +25,8 @@ fun NavigationRoot(
     modifier: Modifier = Modifier,
     bottomBarState: MutableState<Boolean>,
     snackBarState: SnackbarHostState,
-    backStack: NavBackStack
+    backStack: NavBackStack,
+    innerPadding: PaddingValues
 ) {
     NavDisplay(
         modifier = modifier, backStack = backStack, entryDecorators = listOf(
@@ -38,10 +41,19 @@ fun NavigationRoot(
         },
         entryProvider = { key ->
             when (key) {
-                DirectSaleScreen -> {
+                is DirectSaleScreen -> {
                     NavEntry(key) {
                         bottomBarState.value = true
-                        DirectSaleScreen()
+                        DirectSaleScreen(innerPadding) {
+                            backStack.add(element = AddItemKey(it))
+                        }
+                    }
+                }
+
+                is AddItemKey -> {
+                    NavEntry(key) {
+                        bottomBarState.value = false
+                        AddItemScreen(key.category)
                     }
                 }
 
@@ -119,8 +131,9 @@ fun NavigationRoot(
                     }
                 }
 
+
+
                 else -> error("Unknown screen $key")
             }
-
         })
 }
