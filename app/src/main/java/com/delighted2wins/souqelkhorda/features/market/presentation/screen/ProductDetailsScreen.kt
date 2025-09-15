@@ -7,10 +7,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.delighted2wins.souqelkhorda.features.market.presentation.component.*
+import com.delighted2wins.souqelkhorda.features.market.presentation.component.ProductDetails.ActionButtonsSection
+import com.delighted2wins.souqelkhorda.features.market.presentation.component.ProductDetails.DescriptionSection
+import com.delighted2wins.souqelkhorda.features.market.presentation.component.ProductDetails.ProductImageSection
+import com.delighted2wins.souqelkhorda.features.market.presentation.component.ProductDetails.ProductInfoSection
+import com.delighted2wins.souqelkhorda.features.market.presentation.component.ProductDetails.SellerInfoSection
 
 @Composable
 fun ProductDetailsScreen(
+    innerPadding: PaddingValues = PaddingValues(),
     productId: Int,
     onBackClick: () -> Unit = {}
 ) {
@@ -24,7 +29,9 @@ fun ProductDetailsScreen(
 
     Surface(
         color = Color.Transparent,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(innerPadding)
     ) {
         Column(
             modifier = Modifier
@@ -53,5 +60,5 @@ fun ProductDetailsScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun ProductDetailsScreenPreview() {
-    ProductDetailsScreen(0)
+    // ProductDetailsScreen(innerPadding = Unit, productId = 1)
 }

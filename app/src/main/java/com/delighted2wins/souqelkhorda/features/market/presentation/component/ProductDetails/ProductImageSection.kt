@@ -1,4 +1,4 @@
-package com.delighted2wins.souqelkhorda.features.market.presentation.component
+package com.delighted2wins.souqelkhorda.features.market.presentation.component.ProductDetails
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,13 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import coil.request.CachePolicy
-import coil.request.ImageRequest
-import coil.size.Size
+import com.delighted2wins.souqelkhorda.core.components.CachedUserImage
 import kotlinx.coroutines.delay
 
 @Composable

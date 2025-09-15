@@ -1,4 +1,4 @@
-package com.delighted2wins.souqelkhorda.features.market.presentation.component
+package com.delighted2wins.souqelkhorda.core.components
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
