@@ -1,4 +1,4 @@
-package com.delighted2wins.souqelkhorda.features.market.presentation.component
+package com.delighted2wins.souqelkhorda.features.market.presentation.component.ProductDetails
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

@@ -1,4 +1,4 @@
-package com.delighted2wins.souqelkhorda.features.market.presentation.component
+package com.delighted2wins.souqelkhorda.features.market.presentation.component.Market
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,6 +17,7 @@ import com.delighted2wins.souqelkhorda.core.utils.getTimeAgo
 import com.delighted2wins.souqelkhorda.core.utils.isArabic
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapItem
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.User
+import com.delighted2wins.souqelkhorda.features.market.presentation.component.ProductDetails.ScrapUserSection
 
 @Composable
 fun ScrapCard(

@@ -61,6 +61,7 @@ fun NavigationRoot(
                     NavEntry(key) {
                         bottomBarState.value = true
                         MarketScreen(
+                            innerPadding,
                             onBuyClick = {
                                 // Navigate to Buying Screen
                             },
@@ -75,6 +76,7 @@ fun NavigationRoot(
                     NavEntry(key) {
                         bottomBarState.value = false
                         ProductDetailsScreen(
+                            innerPadding,
                             productId = key.productId,
                             onBackClick = { backStack.remove(key) }
                         )

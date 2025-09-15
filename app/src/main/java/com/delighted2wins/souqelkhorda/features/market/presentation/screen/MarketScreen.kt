@@ -1,7 +1,9 @@
 package com.delighted2wins.souqelkhorda.features.market.presentation.screen
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -24,11 +26,12 @@ import com.delighted2wins.souqelkhorda.app.theme.Til
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapItem
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapStatus
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.User
-import com.delighted2wins.souqelkhorda.features.market.presentation.component.ScrapCard
-import com.delighted2wins.souqelkhorda.features.market.presentation.component.SearchBar
+import com.delighted2wins.souqelkhorda.features.market.presentation.component.Market.ScrapCard
+import com.delighted2wins.souqelkhorda.features.market.presentation.component.Market.SearchBar
 
 @Composable
 fun MarketScreen(
+    innerPadding: PaddingValues = PaddingValues(),
     onBuyClick: () -> Unit = {},
     onDetailsClick: (Int) -> Unit = {}
 ) {
@@ -39,7 +42,11 @@ fun MarketScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(12.dp),
+            .padding(
+                top = innerPadding.calculateTopPadding(),
+              //  bottom = innerPadding.calculateBottomPadding()
+            ),
+        contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item {
@@ -82,6 +89,9 @@ fun MarketScreen(
                 systemIsRtl  = isRtl,
             )
         }
+        item {
+            Spacer(modifier = Modifier.padding(60.dp))
+        }
     }
 }
 
@@ -92,11 +102,6 @@ fun sampleData() = listOf(
     ScrapItem(3, "Iron Scrap", "Pieces of old iron...", "الإسكندرية", 50, quantity = 5, status = ScrapStatus.Waiting, date = "2025-09-12", userId = 102),
     ScrapItem(4, "Copper & Wires", "Used copper wires...", "طنطا", 15, status = ScrapStatus.Available, date = "2025-09-01", userId = 103),
     ScrapItem(5, "زجاج مستعمل", "زجاج معاد التدوير...", "Mansoura", 20, status = ScrapStatus.Reserved, date = "2025-09-02", userId = 104)
-)
-
-fun dummyTags() = listOf(
-    "A",
-    "P",
 )
 
 fun sampleUser() = listOf(
