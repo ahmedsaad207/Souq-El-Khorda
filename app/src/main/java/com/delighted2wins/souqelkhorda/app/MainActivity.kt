@@ -71,11 +71,11 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
                     NavigationRoot(
                         modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding),
+                            .fillMaxSize(),
                         bottomBarState = bottomBarState,
                         snackBarState = snackBarHostState,
-                        backStack = backStack
+                        backStack = backStack,
+                        innerPadding = innerPadding
                     )
                 }
             }

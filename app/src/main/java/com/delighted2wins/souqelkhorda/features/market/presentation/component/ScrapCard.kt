@@ -15,8 +15,8 @@ import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
 import com.delighted2wins.souqelkhorda.core.utils.getTimeAgo
 import com.delighted2wins.souqelkhorda.core.utils.isArabic
-import com.delighted2wins.souqelkhorda.features.market.data.ScrapItem
-import com.delighted2wins.souqelkhorda.features.market.data.User
+import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapItem
+import com.delighted2wins.souqelkhorda.features.market.domain.entities.User
 
 @Composable
 fun ScrapCard(
