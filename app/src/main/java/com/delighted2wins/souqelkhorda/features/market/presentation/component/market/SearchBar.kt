@@ -1,4 +1,4 @@
-package com.delighted2wins.souqelkhorda.features.market.presentation.component.Market
+package com.delighted2wins.souqelkhorda.features.market.presentation.component.market
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.height

@@ -1,4 +1,4 @@
-package com.delighted2wins.souqelkhorda.features.market.presentation.component.OrderDetails
+package com.delighted2wins.souqelkhorda.features.market.presentation.component.orderdetails
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.transformable

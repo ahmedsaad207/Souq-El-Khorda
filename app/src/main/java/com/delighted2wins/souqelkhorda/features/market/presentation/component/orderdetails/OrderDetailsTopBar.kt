@@ -1,4 +1,4 @@
-package com.delighted2wins.souqelkhorda.features.market.presentation.component.OrderDetails
+package com.delighted2wins.souqelkhorda.features.market.presentation.component.orderdetails
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack

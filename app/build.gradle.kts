@@ -80,6 +80,8 @@ dependencies {
 
     // firebase
     implementation(platform("com.google.firebase:firebase-bom:34.2.0"))
+    implementation("com.google.firebase:firebase-firestore:24.10.0")
+    implementation("com.google.firebase:firebase-auth:24.0.1")
 
     //extended icons
     implementation (libs.androidx.compose.material.icons.extended)

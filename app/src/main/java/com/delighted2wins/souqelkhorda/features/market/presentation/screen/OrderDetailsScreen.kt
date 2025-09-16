@@ -8,7 +8,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -25,11 +24,11 @@ import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapOrder
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.User
-import com.delighted2wins.souqelkhorda.features.market.presentation.component.OrderDetails.OrderItemCard
-import com.delighted2wins.souqelkhorda.features.market.presentation.component.OrderDetails.ActionButtonsSection
-import com.delighted2wins.souqelkhorda.features.market.presentation.component.OrderDetails.DescriptionSection
-import com.delighted2wins.souqelkhorda.features.market.presentation.component.OrderDetails.OrderDetailsTopBar
-import com.delighted2wins.souqelkhorda.features.market.presentation.component.OrderDetails.SellerInfoSection
+import com.delighted2wins.souqelkhorda.features.market.presentation.component.orderdetails.OrderItemCard
+import com.delighted2wins.souqelkhorda.features.market.presentation.component.orderdetails.ActionButtonsSection
+import com.delighted2wins.souqelkhorda.features.market.presentation.component.orderdetails.DescriptionSection
+import com.delighted2wins.souqelkhorda.features.market.presentation.component.orderdetails.OrderDetailsTopBar
+import com.delighted2wins.souqelkhorda.features.market.presentation.component.orderdetails.SellerInfoSection
 
 @Composable
 fun OrderDetailsScreen(
