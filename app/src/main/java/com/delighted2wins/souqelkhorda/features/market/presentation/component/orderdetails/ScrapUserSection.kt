@@ -1,4 +1,4 @@
-package com.delighted2wins.souqelkhorda.features.market.presentation.component.OrderDetails
+package com.delighted2wins.souqelkhorda.features.market.presentation.component.orderdetails
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape

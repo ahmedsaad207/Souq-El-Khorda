@@ -12,33 +12,46 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.delighted2wins.souqelkhorda.app.theme.Til
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapOrder
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapOrderItem
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.User
-import com.delighted2wins.souqelkhorda.features.market.presentation.component.Market.ScrapCard
-import com.delighted2wins.souqelkhorda.features.market.presentation.component.Market.SearchBar
+import com.delighted2wins.souqelkhorda.features.market.presentation.component.market.ScrapCard
+import com.delighted2wins.souqelkhorda.features.market.presentation.component.market.SearchBar
+import com.delighted2wins.souqelkhorda.features.market.presentation.contract.market.MarketEffect
+import com.delighted2wins.souqelkhorda.features.market.presentation.contract.market.MarketIntent
 import kotlin.collections.listOf
 
 @Composable
 fun MarketScreen(
     innerPadding: PaddingValues = PaddingValues(),
+    viewModel: MarketViewModel = hiltViewModel(),
     onBuyClick: () -> Unit = {},
     onDetailsClick: (ScrapOrder) -> Unit
 ) {
-    var query by remember { mutableStateOf("") }
+    val state = viewModel.state
     val isRtl: Boolean = LocalLayoutDirection.current == LayoutDirection.Rtl
-    val users = sampleUser()
+
+    LaunchedEffect(Unit) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                is MarketEffect.NavigateToOrderDetails -> {
+                    onDetailsClick(effect.order)
+                }
+                is MarketEffect.ShowError -> {
+                    // TODO: show snackbar or dialog with effect.message
+                }
+            }
+        }
+    }
 
     LazyColumn(
         modifier = Modifier
@@ -47,20 +60,22 @@ fun MarketScreen(
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+
         item {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 SearchBar(
-                    query = query,
-                    onQueryChange = { query = it },
+                    query = state.query,
+                    onQueryChange = { viewModel.onIntent(MarketIntent.SearchQueryChanged(it)) },
                     modifier = Modifier.fillMaxWidth(),
                     isRtl = isRtl
                 )
             }
         }
 
+        // Section title
         item {
             Text(
                 text = if (isRtl) "العروض المتاحة" else "Available Offers",
@@ -70,23 +85,25 @@ fun MarketScreen(
             )
         }
 
+        // 🗂️ List of scrap orders from ViewModel
         items(
-            sampleData().filter {
-                it.title.contains(query, ignoreCase = true) || query.isBlank()
+            state.scrapOrders.filter {
+                it.title.contains(state.query, ignoreCase = true) || state.query.isBlank()
             }
         ) { scrapData ->
-            val user = users.firstOrNull { it.id == scrapData.userId }
-
             ScrapCard(
-                user = user ?: User(0, "مستخدم مجهول", "غير معروف"),
-                scrapData,
-                onBuyClick = { /* Handle buy action */ },
-                onDetailsClick = {
-                    onDetailsClick(scrapData)
-                },
-                systemIsRtl  = isRtl,
+                user = User(
+                    id = scrapData.userId,
+                    name = "User ${scrapData.userId}",
+                    location = scrapData.location
+                ),
+                scrap = scrapData,
+                onBuyClick = { onBuyClick() },
+                onDetailsClick = { onDetailsClick(scrapData) },
+                systemIsRtl = isRtl
             )
         }
+
         item {
             Spacer(modifier = Modifier.padding(60.dp))
         }
@@ -457,7 +474,6 @@ fun sampleUser() = listOf(
         location = "Cairo - Helwan" // No image URL
     )
 )
-
 
 
 @Preview(showBackground = true, showSystemUi = true)
