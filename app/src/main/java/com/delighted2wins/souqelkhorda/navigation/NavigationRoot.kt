@@ -14,8 +14,8 @@ import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
 import com.delighted2wins.souqelkhorda.features.additem.presentation.screen.AddItemScreen
 import com.delighted2wins.souqelkhorda.features.buyers.presentation.screen.NearestBuyersScreen
 import com.delighted2wins.souqelkhorda.features.market.presentation.screen.MarketScreen
+import com.delighted2wins.souqelkhorda.features.sale.presentation.screen.SaleScreen
 import com.delighted2wins.souqelkhorda.features.market.presentation.screen.OrderDetailsScreen
-import com.delighted2wins.souqelkhorda.features.sale.presentation.screen.DirectSaleScreen
 import com.delighted2wins.souqelkhorda.features.sign_up.presentation.screen.SignUpScreen
 import com.delighted2wins.souqelkhorda.features.splash.SplashScreen
 import com.delighted2wins.souqelkhorda.login.presentation.screen.LoginScreen
@@ -44,7 +44,7 @@ fun NavigationRoot(
                 is DirectSaleScreen -> {
                     NavEntry(key) {
                         bottomBarState.value = true
-                        DirectSaleScreen(innerPadding) {
+                        SaleScreen(innerPadding) {
                             backStack.add(element = AddItemKey(it))
                         }
                     }
@@ -53,7 +53,9 @@ fun NavigationRoot(
                 is AddItemKey -> {
                     NavEntry(key) {
                         bottomBarState.value = false
-                        AddItemScreen(key.category)
+                        AddItemScreen(key.category) {
+                            backStack.removeLastOrNull()
+                        }
                     }
                 }
 

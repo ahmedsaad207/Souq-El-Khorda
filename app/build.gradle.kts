@@ -74,7 +74,7 @@ dependencies {
 
 
     // hilt
-    implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.3.0")
     implementation("com.google.dagger:hilt-android:2.56.2")
     ksp("com.google.dagger:hilt-android-compiler:2.56.2")
 
@@ -86,4 +86,9 @@ dependencies {
 
     // coil
     implementation("io.coil-kt:coil-compose:2.7.0")
+
+    // room
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
 }
