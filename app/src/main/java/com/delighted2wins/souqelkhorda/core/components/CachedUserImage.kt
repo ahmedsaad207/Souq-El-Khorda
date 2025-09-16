@@ -1,4 +1,4 @@
-package com.delighted2wins.souqelkhorda.features.market.presentation.component
+package com.delighted2wins.souqelkhorda.core.components
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -32,7 +32,5 @@ fun CachedUserImage(imageUrl: String?, modifier: Modifier = Modifier) {
         error = painterResource(R.drawable.outline_person_24),
         contentDescription = "User profile image",
         modifier = modifier
-            .size(40.dp)
-            .clip(CircleShape)
     )
 }
