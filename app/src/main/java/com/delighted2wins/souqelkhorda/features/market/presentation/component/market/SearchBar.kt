@@ -43,10 +43,10 @@ fun SearchBar(
             { Icon(Icons.Default.Search, contentDescription = null, tint = Til) }
         } else null,
         singleLine = true,
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(20.dp),
         modifier = modifier
             .height(56.dp)
-            .border(width = 1.dp, color = Til, shape = shape),
+            .border(width = 2.dp, color = Til, shape = shape),
         colors = TextFieldDefaults.colors(
             focusedContainerColor = Color.White,
             unfocusedContainerColor = Color.White,
