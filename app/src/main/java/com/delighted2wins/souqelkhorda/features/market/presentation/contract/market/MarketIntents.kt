@@ -6,4 +6,5 @@ sealed class MarketIntent {
     object LoadScrapOrders: MarketIntent()
     data class SearchQueryChanged(val query: String): MarketIntent()
     data class ClickOrder(val order: ScrapOrder): MarketIntent()
+    object SellNowClicked: MarketIntent()
 }
