@@ -7,5 +7,6 @@ data class MarketState(
     val isRefreshing: Boolean = false,
     val successfulOrders: List<ScrapOrder> = emptyList(),
     val query: String = "",
-    val error: String? = null
+    val error: String? = null,
+    val isEmpty: Boolean = false
 )

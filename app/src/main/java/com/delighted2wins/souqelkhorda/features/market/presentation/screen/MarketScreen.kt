@@ -11,10 +11,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -34,6 +37,10 @@ import com.delighted2wins.souqelkhorda.features.market.presentation.contract.Mar
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import kotlinx.coroutines.launch
+import androidx.compose.material3.*
+import androidx.compose.ui.graphics.Color
+
 
 @Composable
 fun MarketScreen(
@@ -45,115 +52,150 @@ fun MarketScreen(
 ) {
     val state = viewModel.state
     val isRtl: Boolean = LocalLayoutDirection.current == LayoutDirection.Rtl
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                is MarketEffect.NavigateToOrderDetails -> { onDetailsClick(effect.order) }
-                is MarketEffect.ShowError -> { /* show snackbar, etc. */ }
-                is MarketEffect.NavigateToSellNow -> { navToAddItem() }
+                is MarketEffect.NavigateToOrderDetails -> onDetailsClick(effect.order)
+
+                is MarketEffect.ShowError -> {
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar(
+                            message = effect.message,
+                            actionLabel = if (isRtl) "إعادة المحاولة" else "Retry"
+                        ).let { result ->
+                            if (result == SnackbarResult.ActionPerformed) {
+                                viewModel.onIntent(MarketIntent.LoadScrapOrders)
+                            }
+                        }
+                    }
+                }
+
+                is MarketEffect.NavigateToSellNow -> navToAddItem()
             }
         }
     }
 
-    SwipeRefresh(
-        state = rememberSwipeRefreshState(state.isRefreshing),
-        onRefresh = { viewModel.onIntent(MarketIntent.Refresh) },
-        indicator = { state, trigger ->
-            SwipeRefreshIndicator(
-                state = state,
-                refreshTriggerDistance = trigger,
-                backgroundColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
-                scale = true,
-            )
-        },
-        modifier = Modifier.padding(innerPadding)
-    ) {
-        when {
-            state.isLoading -> {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    items(10) { ScrapCardShimmer(systemIsRtl = isRtl) }
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ) { scaffoldPadding ->
+        SwipeRefresh(
+            state = rememberSwipeRefreshState(state.isRefreshing),
+            onRefresh = { viewModel.onIntent(MarketIntent.Refresh) },
+            indicator = { state, trigger ->
+                SwipeRefreshIndicator(
+                    state = state,
+                    refreshTriggerDistance = trigger,
+                    backgroundColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    scale = true,
+                )
+            },
+            modifier = Modifier
+                .padding(innerPadding)
+                .padding(scaffoldPadding)
+        ) {
+            when {
+                state.isLoading -> {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        items(10) { ScrapCardShimmer(systemIsRtl = isRtl) }
+                    }
                 }
-            }
 
-            state.error != null -> {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = if (isRtl) "حدث خطأ" else "Something went wrong",
-                        color = MaterialTheme.colorScheme.error,
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                }
-            }
-
-            else -> {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    item {
-                        SearchBar(
-                            query = state.query,
-                            onQueryChange = { viewModel.onIntent(MarketIntent.SearchQueryChanged(it)) },
-                            modifier = Modifier.fillMaxWidth(),
-                            isRtl = isRtl
+                state.error != null -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = state.error,
+                            style = MaterialTheme.typography.titleLarge,
+                            color = MaterialTheme.colorScheme.error
                         )
                     }
+                }
 
-                    item {
-                        CompositionLocalProvider(
-                            LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr
-                        ) {
-                            Row(
+                state.isEmpty -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = if (isRtl) "الا توجد عروض متاحةالأن " else "No Offers Aِvailable Now",
+                            style = MaterialTheme.typography.titleLarge,
+                            color = Color.LightGray
+                        )
+                    }
+                }
+
+                else -> {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        item {
+                            SearchBar(
+                                query = state.query,
+                                onQueryChange = {
+                                    viewModel.onIntent(MarketIntent.SearchQueryChanged(it))
+                                },
                                 modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
+                                isRtl = isRtl
+                            )
+                        }
+
+                        item {
+                            CompositionLocalProvider(
+                                LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr
                             ) {
-                                DirectionalText(
-                                    text = if (isRtl) "العروض المتاحة" else "Available Offers",
-                                    contentIsRtl = isRtl,
-                                    style = MaterialTheme.typography.titleLarge,
-                                    color = Til,
-                                    modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
-                                )
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    DirectionalText(
+                                        text = if (isRtl) "العروض المتاحة" else "Available Offers",
+                                        contentIsRtl = isRtl,
+                                        style = MaterialTheme.typography.titleLarge,
+                                        color = Til,
+                                        modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
+                                    )
+                                }
                             }
                         }
-                    }
 
-                    items(
-                        state.successfulOrders.filter {
-                            it.title.contains(state.query, ignoreCase = true) || state.query.isBlank()
+                        items(
+                            state.successfulOrders.filter {
+                                it.title.contains(state.query, ignoreCase = true) || state.query.isBlank()
+                            }
+                        ) { scrapData ->
+                            ScrapCard(
+                                user = User(
+                                    id = scrapData.userId,
+                                    name = "User ${scrapData.userId}",
+                                    location = scrapData.location
+                                ),
+                                scrap = scrapData,
+                                onBuyClick = { navigateToMakeOffer() },
+                                onDetailsClick = { onDetailsClick(scrapData) },
+                                systemIsRtl = isRtl
+                            )
                         }
-                    ) { scrapData ->
-                        ScrapCard(
-                            user = User(
-                                id = scrapData.userId,
-                                name = "User ${scrapData.userId}",
-                                location = scrapData.location
-                            ),
-                            scrap = scrapData,
-                            onBuyClick = { navigateToMakeOffer() },
-                            onDetailsClick = { onDetailsClick(scrapData) },
-                            systemIsRtl = isRtl
-                        )
-                    }
 
-                    item { Spacer(modifier = Modifier.padding(60.dp)) }
+                        item { Spacer(modifier = Modifier.padding(60.dp)) }
+                    }
                 }
             }
         }
     }
 }
-
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
