@@ -8,6 +8,7 @@ data class MainUserDto(
     val password: String,
     val passwordConfirmation: String,
     val governorate: String,
+    val area: String,
     val address: String,
     val userImage: String? = null
 )

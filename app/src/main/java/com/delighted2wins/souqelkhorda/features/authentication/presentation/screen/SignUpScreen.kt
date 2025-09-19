@@ -1,6 +1,5 @@
 package com.delighted2wins.souqelkhorda.features.authentication.presentation.screen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,7 +21,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -68,6 +66,8 @@ fun SignUpScreen(
     var addressDetails by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
+    var area by remember { mutableStateOf("") }
+
     var governorateExpanded by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
@@ -80,7 +80,10 @@ fun SignUpScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = innerPadding.calculateTopPadding(), bottom = innerPadding.calculateBottomPadding())
+                .padding(
+                    top = innerPadding.calculateTopPadding(),
+                    bottom = innerPadding.calculateBottomPadding()
+                )
                 .padding(horizontal = 16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
@@ -154,6 +157,14 @@ fun SignUpScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             CustomTextField(
+                value = area,
+                onValueChange = { area = it },
+                label = stringResource(R.string.area),
+                placeholder = stringResource(R.string.enter_your_area),
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+            CustomTextField(
                 value = addressDetails,
                 onValueChange = { addressDetails = it },
                 label = stringResource(R.string.address_details),
@@ -174,7 +185,8 @@ fun SignUpScreen(
                             password = password,
                             passwordConfirmation = confirmPassword,
                             governorate = governorate,
-                            address = addressDetails
+                            address = addressDetails,
+                            area = area
                         )
                     )
                 },
@@ -198,7 +210,9 @@ fun SignUpScreen(
                     Text(text = stringResource(R.string.register), fontSize = 16.sp)
                 }
             }
-            Spacer(modifier = Modifier.height(600.dp).fillMaxWidth().background(color = Color.Red))
+            Spacer(modifier = Modifier
+                .height(48.dp))
+
         }
 
         when (registerState) {

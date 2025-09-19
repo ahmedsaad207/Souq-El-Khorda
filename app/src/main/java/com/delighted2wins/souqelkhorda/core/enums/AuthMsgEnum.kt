@@ -3,9 +3,7 @@ package com.delighted2wins.souqelkhorda.core.enums
 import java.util.Locale
 
 enum class AuthMsgEnum(val message: String, val arabicMessage: String) {
-    NETWORK("Network error", "خطأ في الشبكة"),
     UNAUTHORIZED("Unauthorized", "غير مصرح"),
-    USERNOTFOUND("User not found", "المستخدم غير موجود"),
     USERNAMEVALIDATE("Enter valid name", "أدخل اسمًا صالحًا"),
     EMAILVALIDATE("Enter valid email", "أدخل بريدًا إلكترونيًا صالحًا"),
     PASSWORDVALIDATE(
@@ -22,7 +20,7 @@ enum class AuthMsgEnum(val message: String, val arabicMessage: String) {
     SIGNUPSUCCESS("Registered successfully, welcome ", "تم التسجيل بنجاح، مرحبًا "),
     LOGINSUCCESS("Login successfully, welcome back ", "تسجيل الدخول بنجاح، مرحبًا بعودتك "),
     SIGNUPFAIL("Registration failed", "فشل التسجيل"),
-    UNKNOWN("Unknown error", "خطأ غير معروف"),
+    AREA("Enter valid area ","أدخل عنوان منطقة صحيح"),
     EMPTYFILDES("Please fill all fields", "يرجى ملء جميع الحقول");
 
     fun getMsg(): String {

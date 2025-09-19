@@ -1,6 +1,5 @@
 package com.delighted2wins.souqelkhorda.features.authentication.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.delighted2wins.souqelkhorda.core.enums.AuthMsgEnum
@@ -46,7 +45,6 @@ class LoginViewModel @Inject constructor(
                             val user = state.userAuth
                             cashUserCase(user)
                             _message.emit(AuthMsgEnum.LOGINSUCCESS.getMsg())
-                            Log.d("asd", "login: ${getCashUserCase().name}")
                         }
 
                         is AuthenticationState.Error -> {

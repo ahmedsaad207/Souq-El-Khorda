@@ -32,4 +32,6 @@
 
     <string name="address_details">Address Details</string>
     <string name="enter_full_address_details">Enter full address details</string>
+    <string name="area">Area</string>
+    <string name="enter_your_area">Enter your Area</string>
 </resources>

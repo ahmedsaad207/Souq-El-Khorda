@@ -9,6 +9,7 @@ data class AuthUser(
     val phone: String= "",
     val governorate: String="",
     val address: String="",
+    val area: String="",
     val imageUrl: String? = ""
 )
 
@@ -19,5 +20,6 @@ fun MainUserDto.toAuthUser() = AuthUser(
     phone = phone,
     governorate = governorate,
     address = address,
+    area = area,
     imageUrl = userImage
 )

@@ -2,12 +2,12 @@ package com.delighted2wins.souqelkhorda.features.authentication.presentation.vie
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.delighted2wins.souqelkhorda.core.enums.AuthMsgEnum
 import com.delighted2wins.souqelkhorda.core.extensions.isAddress
 import com.delighted2wins.souqelkhorda.core.extensions.isEmail
 import com.delighted2wins.souqelkhorda.core.extensions.isPassword
 import com.delighted2wins.souqelkhorda.core.extensions.isPhoneNumber
 import com.delighted2wins.souqelkhorda.core.extensions.isUserName
-import com.delighted2wins.souqelkhorda.core.enums.AuthMsgEnum
 import com.delighted2wins.souqelkhorda.features.authentication.data.model.SignUpRequestDto
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.SignUpUseCase
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.state.AuthenticationState
@@ -55,6 +55,10 @@ class SignUpViewModel @Inject constructor(
                 emitError(AuthMsgEnum.GOVERNORATEVALIDATE.getMsg())
                 return@launch
             }
+            if (signUpRequestDto.area.isEmpty()||signUpRequestDto.area.length<9) {
+                emitError(AuthMsgEnum.AREA.getMsg())
+                return@launch
+            }
             if (!signUpRequestDto.address.isAddress()) {
                 emitError(AuthMsgEnum.ADDRESSVALIDATE.getMsg())
                 return@launch
@@ -66,8 +70,6 @@ class SignUpViewModel @Inject constructor(
                         _registerState.emit(state)
                         when (state) {
                             is AuthenticationState.Success -> {
-//                                logOutUseCase()
-                                val user = state.userAuth
                                 _message.emit(AuthMsgEnum.SIGNUPSUCCESS.getMsg() )
                             }
                             is AuthenticationState.Error -> {
