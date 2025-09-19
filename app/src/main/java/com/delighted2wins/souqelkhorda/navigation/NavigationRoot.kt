@@ -71,6 +71,9 @@ fun NavigationRoot(
                             },
                             onDetailsClick = { order ->
                                 backStack.add(OrderDetailsKey(order))
+                            },
+                            navToAddItem = {
+                               // backStack.add(AddItemKey(TODO()))
                             }
                         )
                     }

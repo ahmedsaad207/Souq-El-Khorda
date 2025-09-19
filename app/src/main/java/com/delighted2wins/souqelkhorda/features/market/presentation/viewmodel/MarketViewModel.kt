@@ -33,14 +33,21 @@ class MarketViewModel @Inject constructor(
     fun onIntent(intent: MarketIntent) {
         when (intent) {
             is MarketIntent.LoadScrapOrders -> loadOrders()
-            is MarketIntent.SearchQueryChanged -> {
-                state = state.copy(query = intent.query)
-            }
+
+            is MarketIntent.SearchQueryChanged -> { state = state.copy(query = intent.query) }
+
             is MarketIntent.ClickOrder -> {
                 viewModelScope.launch {
                     _effect.emit(MarketEffect.NavigateToOrderDetails(intent.order))
                 }
             }
+
+            is MarketIntent.SellNowClicked -> {
+                viewModelScope.launch {
+                    _effect.emit(MarketEffect.NavigateToSellNow)
+                }
+            }
+
         }
     }
 

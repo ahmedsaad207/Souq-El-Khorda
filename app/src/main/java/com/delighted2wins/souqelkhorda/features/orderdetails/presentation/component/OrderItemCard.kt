@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapOrderItem
@@ -44,15 +45,16 @@ fun OrderItemCard(
                 maxLines = 1,
             )
 
-            Row(horizontalArrangement = Arrangement.spacedBy(16.dp))
-            {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
                 DirectionalText(
                     text = if (contentIsRtl) "الوزن: ${item.weight} كجم" else "Weight: ${item.weight} Kg",
                     contentIsRtl = contentIsRtl,
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
                     color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Start,
-                    modifier = Modifier.weight(0.2f)
+                    modifier = Modifier.weight(1f)
                 )
 
                 item.quantity?.let {
@@ -62,7 +64,7 @@ fun OrderItemCard(
                         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
                         color = MaterialTheme.colorScheme.primary,
                         textAlign = TextAlign.Start,
-                        modifier = Modifier.weight(.5f)
+                        modifier = Modifier.weight(2f)
                     )
                 }
             }
@@ -83,4 +85,21 @@ fun OrderItemCard(
             }
         }
     }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun OrderItemCardPreview() {
+    val sampleItem = ScrapOrderItem(
+        id = 1,
+        name = "Sample Scrap Item",
+        weight = 15,
+        quantity = 3,
+        images = listOf(
+            "https://via.placeholder.com/150",
+            "https://via.placeholder.com/200"
+        )
+    )
+
+    OrderItemCard(item = sampleItem, contentIsRtl = false)
 }

@@ -5,4 +5,5 @@ import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapOrde
 sealed class MarketEffect {
     data class NavigateToOrderDetails(val order: ScrapOrder): MarketEffect()
     data class ShowError(val message: String): MarketEffect()
+    object NavigateToSellNow: MarketEffect()
 }
