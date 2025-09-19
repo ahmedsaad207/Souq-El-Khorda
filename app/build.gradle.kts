@@ -4,7 +4,10 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
+    id("com.google.gms.google-services")
+
     alias(libs.plugins.jetbrains.kotlin.serialization)
+    id("kotlin-parcelize")
 
 }
 
@@ -71,6 +74,9 @@ dependencies {
     //icon
     implementation ("androidx.compose.material:material-icons-extended")
 
+    //scoped api
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose-android:2.8.7")
+
 
     // hilt
     implementation("androidx.hilt:hilt-navigation-compose:1.3.0")
@@ -78,8 +84,9 @@ dependencies {
     ksp("com.google.dagger:hilt-android-compiler:2.56.2")
 
     // firebase
-    implementation(platform("com.google.firebase:firebase-bom:33.15.0"))
-    implementation("com.google.firebase:firebase-firestore")
+    implementation(platform("com.google.firebase:firebase-bom:34.2.0"))
+    implementation("com.google.firebase:firebase-firestore:24.10.0")
+    implementation("com.google.firebase:firebase-auth:24.0.1")
 
     //extended icons
     implementation (libs.androidx.compose.material.icons.extended)

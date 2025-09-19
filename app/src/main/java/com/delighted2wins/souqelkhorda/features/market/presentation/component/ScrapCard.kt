@@ -1,11 +1,23 @@
 package com.delighted2wins.souqelkhorda.features.market.presentation.component
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -13,15 +25,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
-import com.delighted2wins.souqelkhorda.core.utils.getTimeAgo
 import com.delighted2wins.souqelkhorda.core.utils.isArabic
-import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapItem
+import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapOrder
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.User
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.ScrapUserSection
 
 @Composable
 fun ScrapCard(
     user: User,
-    scrap: ScrapItem,
+    scrap: ScrapOrder,
     onBuyClick: () -> Unit = {},
     onDetailsClick: (id:Int) -> Unit = {},
     systemIsRtl: Boolean = false
@@ -31,15 +43,13 @@ fun ScrapCard(
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
+        ScrapUserSection(
+            userData = user,
+            date = scrap.date,
+            systemIsRtl = systemIsRtl
+        )
+
         Column(modifier = Modifier.padding(12.dp)) {
-
-            ScrapUserSection(
-                userData = user,
-                status = scrap.status,
-                isRtl = systemIsRtl
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
 
             Column(modifier = Modifier.fillMaxWidth()) {
 
@@ -66,39 +76,45 @@ fun ScrapCard(
                     textAlign = TextAlign.Start
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    DirectionalText(
-                        text = if (systemIsRtl) "الوزن: ${scrap.weight} كجم" else "Weight: ${scrap.weight} Kg",
-                        contentIsRtl = systemIsRtl,
-                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-                        color = MaterialTheme.colorScheme.primary,
-                        textAlign = TextAlign.Start,
-                        modifier = Modifier.weight(1f)
-                    )
+//                    DirectionalText(
+//                        text = if (systemIsRtl) "الوزن: ${scrap.weight} كجم" else "Weight: ${scrap.weight} Kg",
+//                        contentIsRtl = systemIsRtl,
+//                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+//                        color = MaterialTheme.colorScheme.primary,
+//                        textAlign = TextAlign.Start,
+//                        modifier = Modifier.weight(.6f)
+//                    )
+//
+//                    scrap.quantity?.let {
+//                        DirectionalText(
+//                            text = if (systemIsRtl) "العدد: $it" else "Quantity: $it",
+//                            contentIsRtl = systemIsRtl,
+//                            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+//                            color = MaterialTheme.colorScheme.primary,
+//                            textAlign = TextAlign.Start,
+//                            modifier = Modifier.weight(.6f)
+//                        )
+//                    }
+//                    if (scrap.quantity == null) {
+//                        Spacer(modifier = Modifier.weight(.6f))
+//                    }
 
-                    scrap.quantity?.let {
-                        DirectionalText(
-                            text = if (systemIsRtl) "العدد: $it" else "Quantity: $it",
-                            contentIsRtl = systemIsRtl,
-                            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-                            color = MaterialTheme.colorScheme.primary,
-                            textAlign = TextAlign.Start,
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
-
                     DirectionalText(
-                        text = getTimeAgo(scrap.date, systemIsRtl),
+                        text = if (systemIsRtl) "السعر: ${scrap.price} ج.م" else "Price: ${scrap.price} EGP",
                         contentIsRtl = systemIsRtl,
-                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-                        color = MaterialTheme.colorScheme.secondary.copy(alpha = 2f),
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight.Bold,
+                            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                        ),
+                        color = Color.Red,
                         textAlign = TextAlign.End,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(.8f)
                     )
                 }
             }
@@ -116,7 +132,10 @@ fun ScrapCard(
                         shape = RoundedCornerShape(8.dp),
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text(if (systemIsRtl) "تفاصيل" else "Details")
+                        Text(
+                            if (systemIsRtl) "تفاصيل" else "Details",
+                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                        )
                     }
 
                     Button(
@@ -124,7 +143,10 @@ fun ScrapCard(
                         shape = RoundedCornerShape(8.dp),
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text(if (systemIsRtl) "شراء" else "Buy")
+                        Text(
+                            if (systemIsRtl) "شراء" else "Buy",
+                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                        )
                     }
                 }
             }
