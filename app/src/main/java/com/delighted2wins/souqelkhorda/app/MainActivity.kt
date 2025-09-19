@@ -7,20 +7,24 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.rememberNavBackStack
 import com.delighted2wins.souqelkhorda.app.theme.SouqElKhordaTheme
 import com.delighted2wins.souqelkhorda.core.components.AppBottomNavBar
-import com.delighted2wins.souqelkhorda.core.components.CustomTopAppBar
+import com.delighted2wins.souqelkhorda.core.components.AppTopAppBar
 import com.delighted2wins.souqelkhorda.core.extensions.configureSystemUI
 import com.delighted2wins.souqelkhorda.navigation.NavigationRoot
+import com.delighted2wins.souqelkhorda.navigation.ProfileScreen
 import com.delighted2wins.souqelkhorda.navigation.SplashScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -30,6 +34,7 @@ class MainActivity : ComponentActivity() {
     lateinit var snackBarHostState: SnackbarHostState
     lateinit var bottomBarState: MutableState<Boolean>
 
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -41,7 +46,9 @@ class MainActivity : ComponentActivity() {
 
             val backStack = rememberNavBackStack(SplashScreen)
             SouqElKhordaTheme(darkTheme = isSystemInDarkTheme(), dynamicColor = false) {
+                val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
                 Scaffold(
+                    modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
                     snackbarHost = {
                         SnackbarHost(
                             hostState = snackBarHostState,
@@ -50,10 +57,11 @@ class MainActivity : ComponentActivity() {
                     },
                     topBar = {
                         if (bottomBarState.value) {
-                            CustomTopAppBar(
-                                pageTitle = "Page Title",
-                                userName = "username"
-                            ) {}
+                            AppTopAppBar(
+                                scrollBehavior= scrollBehavior,
+                                onProfileClick = { backStack.add(ProfileScreen) },
+                                onNotificationClick = {}
+                            )
                         } else {
                             null
                         }
@@ -68,12 +76,11 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
                     NavigationRoot(
                         modifier = Modifier
-                            .fillMaxSize()
-//                            .padding(innerPadding),
-                        ,
+                            .fillMaxSize(),
                         bottomBarState = bottomBarState,
                         snackBarState = snackBarHostState,
-                        backStack = backStack
+                        backStack = backStack,
+                        innerPadding = innerPadding
                     )
                 }
             }

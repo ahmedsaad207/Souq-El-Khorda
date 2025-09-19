@@ -26,7 +26,8 @@ val LightColorScheme = lightColorScheme(
     onBackground = Color.Black,
     surface = LightBackground,
     onSurface = Color.Black,
-    surfaceVariant = LightTextField,
+
+    surfaceVariant = LightTextFieldBackground,
     onSurfaceVariant = LightTextHint,
 
     error = ErrorLight,
@@ -34,9 +35,11 @@ val LightColorScheme = lightColorScheme(
     errorContainer = Color(0xFFFFDAD6),
     onErrorContainer = Color(0xFF410001),
 
-    outline = OutlineLight,
+    outline = LightBorderUnfocused,
+
     inverseSurface = DarkBackground,
-    inverseOnSurface = Color.White
+    inverseOnSurface = Color.White,
+
 )
 
 val DarkColorScheme = darkColorScheme(
@@ -52,17 +55,19 @@ val DarkColorScheme = darkColorScheme(
 
     background = DarkBackground,
     onBackground = Color.White,
-    surface = DarkTextField,
+    surface = DarkTextFieldBackground,
     onSurface = Color.White,
-    surfaceVariant = Color(0xFF2A2A2A),
+
+    surfaceVariant = DarkTextFieldBackground,
     onSurfaceVariant = DarkTextHint,
 
-    error = ErrorDark,
+    error = DarkError,
     onError = Color.Black,
     errorContainer = Color(0xFF8B1D2E),
     onErrorContainer = Color.White,
 
-    outline = OutlineDark,
+    outline = DarkBorderUnfocused,
+
     inverseSurface = LightBackground,
     inverseOnSurface = Color.Black
 )
