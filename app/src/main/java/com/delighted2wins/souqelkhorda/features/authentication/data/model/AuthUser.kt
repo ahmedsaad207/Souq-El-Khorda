@@ -3,7 +3,7 @@ package com.delighted2wins.souqelkhorda.features.authentication.data.model
 import com.delighted2wins.souqelkhorda.core.model.MainUserDto
 
 data class AuthUser(
-    val id : Int =0,
+    val id : String ="",
     val name: String ="",
     val email: String= "",
     val phone: String= "",

@@ -1,7 +1,7 @@
 package com.delighted2wins.souqelkhorda.core.model
 
 data class MainUserDto(
-    val id : Int,
+    val id : String,
     val name: String,
     val email: String,
     val phone: String,

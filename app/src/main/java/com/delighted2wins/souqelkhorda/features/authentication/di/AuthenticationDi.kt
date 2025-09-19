@@ -1,9 +1,14 @@
 package com.delighted2wins.souqelkhorda.features.authentication.di
 
+import com.delighted2wins.souqelkhorda.features.authentication.data.local.AuthenticationLocalDataSourceImp
+import com.delighted2wins.souqelkhorda.features.authentication.data.local.IAuthenticationLocalDataSource
 import com.delighted2wins.souqelkhorda.features.authentication.data.remote.AuthenticationRemoteDataSourceImp
 import com.delighted2wins.souqelkhorda.features.authentication.data.remote.IAuthenticationRemoteDataSource
 import com.delighted2wins.souqelkhorda.features.authentication.data.repo.AuthenticationRepoImp
 import com.delighted2wins.souqelkhorda.features.authentication.domain.repo.IAuthenticationRepo
+import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.CashUserCase
+import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.FreeUserCase
+import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.GetCashUserCase
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.LoginUseCase
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.LogoutUseCase
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.SignUpUseCase
@@ -36,6 +41,11 @@ abstract class AuthenticationDataSourceModule {
         impl: AuthenticationRepoImp
     ): IAuthenticationRepo
 
+    @Binds
+    @Singleton
+    abstract fun bindLocalDataSource(
+        impl: AuthenticationLocalDataSourceImp
+    ): IAuthenticationLocalDataSource
 
 }
 
@@ -75,4 +85,22 @@ object UseCasesModule{
     fun provideLogoutUseCase(repo: IAuthenticationRepo): LogoutUseCase = LogoutUseCase(
         repo
     )
+    @Provides
+    @ViewModelScoped
+    fun provideCashUserDataUseCase(repo: IAuthenticationRepo) : CashUserCase = CashUserCase(
+        repo
+    )
+
+    @Provides
+    @ViewModelScoped
+    fun provideGetCashedUserDataUseCase(repo: IAuthenticationRepo) : GetCashUserCase =GetCashUserCase(
+        repo
+    )
+
+    @Provides
+    @ViewModelScoped
+    fun provideFreeUserDataUseCase(repo: IAuthenticationRepo) : FreeUserCase =FreeUserCase(
+        repo
+    )
+
 }

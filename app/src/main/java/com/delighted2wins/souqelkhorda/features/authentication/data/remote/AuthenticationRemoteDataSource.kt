@@ -28,7 +28,7 @@ class AuthenticationRemoteDataSourceImp @Inject constructor(
                 val firebaseUser = authResult.user ?: throw Exception("No user found")
 
                 val user = AuthUser(
-                    id = firebaseUser.uid.hashCode(),
+                    id = firebaseUser.uid,
                     name = signUpRequestDto.name,
                     email = signUpRequestDto.email,
                     phone = signUpRequestDto.phone,

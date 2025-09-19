@@ -1,8 +1,11 @@
 package com.delighted2wins.souqelkhorda.features.authentication.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.delighted2wins.souqelkhorda.features.authentication.data.model.AuthMsg
+import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.CashUserCase
+import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.GetCashUserCase
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.LoginUseCase
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.state.AuthenticationState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +20,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    val loginUseCase: LoginUseCase
+    val loginUseCase: LoginUseCase,
+    val cashUserCase: CashUserCase,
+    val getCashUserCase: GetCashUserCase,
 ) : ViewModel() {
     private val _loginState = MutableStateFlow<AuthenticationState>(AuthenticationState.Idle)
     val loginState = _loginState.asStateFlow()
@@ -39,14 +44,22 @@ class LoginViewModel @Inject constructor(
                     when (state) {
                         is AuthenticationState.Success -> {
                             val user = state.userAuth
-                            _message.emit(AuthMsg.LOGINSUCCESS.getMsg() + " ${user.name}")
+                            cashUserCase(user)
+                            _message.emit(AuthMsg.LOGINSUCCESS.getMsg())
+                            Log.d("asd", "login: ${getCashUserCase().name}")
                         }
+
                         is AuthenticationState.Error -> {
                             _message.emit(AuthMsg.UNAUTHORIZED.getMsg())
                         }
+
                         else -> Unit
                     }
                 }
         }
+    }
+
+   suspend fun isLoggedIn() : Boolean{
+        return getCashUserCase().email != ""
     }
 }

@@ -30,7 +30,7 @@ fun NavigationRoot(
             rememberViewModelStoreNavEntryDecorator(),
             rememberSceneSetupNavEntryDecorator()
         ),
-        onBack ={
+        onBack = {
             if (backStack.size > 1) {
                 backStack.removeLastOrNull()
             }
@@ -60,12 +60,21 @@ fun NavigationRoot(
 
                 SplashScreen -> {
                     NavEntry(key) {
-                        SplashScreen {
-                            bottomBarState.value = false
-                            backStack.set(
-                                element = LoginScreen, index = 0
-                            )
-                        }
+                        SplashScreen(
+                            navToLogin = {
+                                bottomBarState.value = false
+                                backStack.set(
+                                    element = LoginScreen, index = 0
+                                )
+                            },
+                            navToHome = {
+                                bottomBarState.value = true
+                                backStack.set(
+                                    element = DirectSaleScreen, index = 0
+                                )
+
+                            }
+                        )
                     }
                 }
 
@@ -92,10 +101,10 @@ fun NavigationRoot(
                         bottomBarState.value = false
                         SignUpScreen(onBackClick = {
                             backStack.remove(SignUpScreen)
-                            backStack.set(element =LoginScreen, index = 0)
+                            backStack.set(element = LoginScreen, index = 0)
                         }, snackBarHostState = snackBarState, onRegisterClick = {
                             backStack.remove(SignUpScreen)
-                            backStack.set(element =LoginScreen, index = 0)
+                            backStack.set(element = LoginScreen, index = 0)
                         })
 
                     }
