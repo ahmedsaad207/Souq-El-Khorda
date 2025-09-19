@@ -22,6 +22,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -78,7 +79,7 @@ fun SignUpScreen(
 
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(top = innerPadding.calculateTopPadding(), bottom = innerPadding.calculateBottomPadding())
                 .padding(horizontal = 16.dp)
                 .verticalScroll(rememberScrollState())
@@ -197,7 +198,7 @@ fun SignUpScreen(
                     Text(text = stringResource(R.string.register), fontSize = 16.sp)
                 }
             }
-            Spacer(modifier = Modifier.height(300.dp).fillMaxWidth().background(color = Color.Red))
+            Spacer(modifier = Modifier.height(600.dp).fillMaxWidth().background(color = Color.Red))
         }
 
         when (registerState) {

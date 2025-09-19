@@ -28,7 +28,8 @@ fun NavigationRoot(
     bottomBarState: MutableState<Boolean>,
     snackBarState: SnackbarHostState,
     backStack: NavBackStack,
-    innerPadding: PaddingValues
+    innerPadding: PaddingValues,
+    navState: MutableState<Boolean>
 ) {
     NavDisplay(
         modifier = modifier, backStack = backStack, entryDecorators = listOf(
@@ -44,6 +45,7 @@ fun NavigationRoot(
         entryProvider = { key ->
             when (key) {
                 is DirectSaleScreen -> {
+                    navState.value = false
                     NavEntry(key) {
                         bottomBarState.value = true
                         SaleScreen(innerPadding) {
@@ -145,8 +147,8 @@ fun NavigationRoot(
                                 backStack.set(element = LoginScreen, index = 0)
                             },
                             snackBarHostState = snackBarState,
-                            innerPadding = innerPadding,
-                            )
+                            innerPadding = innerPadding
+                        )
                     }
                 }
 
