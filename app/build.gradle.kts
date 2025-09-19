@@ -65,7 +65,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     //navigation3
-
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
@@ -99,4 +98,10 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
+
+    // accompanist placeholder (shimmer)
+    implementation("com.google.accompanist:accompanist-placeholder-material3:0.32.0")
+    // accompanist swipe refresh
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.32.0")
+
 }

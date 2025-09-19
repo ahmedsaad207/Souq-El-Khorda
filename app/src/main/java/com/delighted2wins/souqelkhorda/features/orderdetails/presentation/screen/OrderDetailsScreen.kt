@@ -34,8 +34,6 @@ import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.compon
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.OrderDetailsTopBar
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.OrderItemCard
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.SellerInfoSection
-import com.delighted2wins.souqelkhorda.features.market.presentation.screen.sampleData
-import com.delighted2wins.souqelkhorda.features.market.presentation.screen.sampleUser
 
 @Composable
 fun OrderDetailsScreen(
@@ -46,7 +44,7 @@ fun OrderDetailsScreen(
     var user by remember { mutableStateOf<User?>(null) }
 
     LaunchedEffect(Unit) {
-       user = sampleUser().firstOrNull{ it.id == order.userId }
+       //user = sampleUser().firstOrNull{ it.id == order.userId }
     }
 
     Surface(
@@ -121,9 +119,9 @@ fun OrderDetailsScreen(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun OrderDetailsScreenPreview() {
-    val sampleOrder = sampleData().first()
-    OrderDetailsScreen(order = sampleOrder)
-}
+//@Preview(showBackground = true, showSystemUi = true)
+//@Composable
+//fun OrderDetailsScreenPreview() {
+//    val sampleOrder = sampleData().first()
+//    OrderDetailsScreen(order = sampleOrder)
+//}
