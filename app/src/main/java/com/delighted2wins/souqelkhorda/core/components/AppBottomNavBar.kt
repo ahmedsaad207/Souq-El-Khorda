@@ -37,7 +37,7 @@ fun AppBottomNavBar(backStack: NavBackStack) {
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth(0.85f)
+                .fillMaxWidth(0.9f)
                 .height(100.dp)
                 .background(
                     brush = Brush.linearGradient(
