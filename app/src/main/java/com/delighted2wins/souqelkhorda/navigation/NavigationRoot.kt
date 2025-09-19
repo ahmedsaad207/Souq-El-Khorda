@@ -16,6 +16,7 @@ import com.delighted2wins.souqelkhorda.features.buyers.presentation.screen.Neare
 import com.delighted2wins.souqelkhorda.features.market.presentation.screen.MarketScreen
 import com.delighted2wins.souqelkhorda.features.sale.presentation.screen.SaleScreen
 import com.delighted2wins.souqelkhorda.features.market.presentation.screen.OrderDetailsScreen
+import com.delighted2wins.souqelkhorda.features.notification.presentation.screen.NotificationsScreen
 import com.delighted2wins.souqelkhorda.features.profile.presentation.screen.ProfileScreen
 import com.delighted2wins.souqelkhorda.features.sign_up.presentation.screen.SignUpScreen
 import com.delighted2wins.souqelkhorda.features.splash.SplashScreen
@@ -139,6 +140,15 @@ fun NavigationRoot(
                     NavEntry(key) {
                         bottomBarState.value = false
                         ProfileScreen(
+                            onBackClick = { backStack.remove(key) },
+                        )
+                    }
+                }
+
+                is NotificationsScreen -> {
+                    NavEntry(key) {
+                        bottomBarState.value = false
+                        NotificationsScreen(
                             onBackClick = { backStack.remove(key) },
                         )
                     }

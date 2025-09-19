@@ -16,9 +16,9 @@ import com.delighted2wins.souqelkhorda.features.notification.presentation.compon
 
 @Composable
 fun NotificationsScreen(
-    notifications: List<NotificationItem>,
+    notifications: List<NotificationItem> = emptyList(),
     onBackClick: () -> Unit = {},
-    onDismiss: (Int) -> Unit,
+    onItemClick: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -46,7 +46,8 @@ fun NotificationsScreen(
                     },
                     time = item.time,
                     unread = item.unread,
-                    onDismiss = { onDismiss(item.id) }
+                    onDismiss = {  },
+                    onItemClick = onItemClick
                 )
             }
         }
@@ -79,7 +80,7 @@ fun NotificationsScreenPreview() {
 
     NotificationsScreen(
         notifications = dummyNotifications,
-        onDismiss = { },
+        onItemClick = { }
     )
 }
 

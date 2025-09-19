@@ -1,6 +1,7 @@
 package com.delighted2wins.souqelkhorda.features.notification.presentation.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -48,7 +49,8 @@ fun NotificationCard(
     tagColor: Color = Color(0xFF00B259) ,
     time: String = "2 hours ago",
     unread: Boolean = true,
-    onDismiss: () -> Unit = {}
+    onDismiss: () -> Unit = {},
+    onItemClick: () -> Unit = {}
 ) {
     val colors = MaterialTheme.colorScheme
 
@@ -61,7 +63,8 @@ fun NotificationCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp, vertical = 4.dp),
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+            .clickable { onItemClick() },
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.cardColors(containerColor = backgroundColor)
