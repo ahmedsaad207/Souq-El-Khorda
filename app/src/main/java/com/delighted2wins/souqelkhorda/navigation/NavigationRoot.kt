@@ -61,7 +61,7 @@ fun NavigationRoot(
                     }
                 }
 
-                MarketScreen -> {
+                is MarketScreen -> {
                     NavEntry(key) {
                         bottomBarState.value = true
                         MarketScreen(
@@ -86,14 +86,14 @@ fun NavigationRoot(
                     }
                 }
 
-                NearestBuyersScreen -> {
+                is NearestBuyersScreen -> {
                     NavEntry(key) {
                         bottomBarState.value = true
                         NearestBuyersScreen()
                     }
                 }
 
-                SplashScreen -> {
+                is SplashScreen -> {
                     NavEntry(key) {
                         SplashScreen(
                             navToLogin = {
@@ -113,35 +113,40 @@ fun NavigationRoot(
                     }
                 }
 
-                LoginScreen -> {
+                is LoginScreen -> {
                     NavEntry(key) {
                         bottomBarState.value = false
                         LoginScreen(
+                            onRegisterClick = {
+                                backStack.add(SignUpScreen)
+                            },
                             onLoginClick = {
                                 backStack.set(
                                     element = DirectSaleScreen, index = 0
                                 )
                             },
-                            onRegisterClick = {
-                                backStack.add(SignUpScreen)
-                            },
                             snackBarHostState = snackBarState,
+                            innerPadding = innerPadding,
                         )
 
                     }
                 }
 
-                SignUpScreen -> {
+                is SignUpScreen -> {
                     NavEntry(key) {
                         bottomBarState.value = false
-                        SignUpScreen(onBackClick = {
-                            backStack.remove(SignUpScreen)
-                            backStack.set(element = LoginScreen, index = 0)
-                        }, snackBarHostState = snackBarState, onRegisterClick = {
-                            backStack.remove(SignUpScreen)
-                            backStack.set(element = LoginScreen, index = 0)
-                        })
-
+                        SignUpScreen(
+                            onBackClick = {
+                                backStack.remove(SignUpScreen)
+                                backStack.set(element = LoginScreen, index = 0)
+                            },
+                            onRegisterClick = {
+                                backStack.remove(SignUpScreen)
+                                backStack.set(element = LoginScreen, index = 0)
+                            },
+                            snackBarHostState = snackBarState,
+                            innerPadding = innerPadding,
+                            )
                     }
                 }
 
@@ -154,7 +159,7 @@ fun NavigationRoot(
                     }
                 }
 
-                OrdersScreen -> {
+                is  OrdersScreen -> {
                     NavEntry(key) {
                         bottomBarState.value = true
                         OrdersScreen(

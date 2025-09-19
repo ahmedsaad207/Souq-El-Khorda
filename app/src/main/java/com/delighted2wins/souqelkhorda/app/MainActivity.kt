@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -58,25 +59,21 @@ class MainActivity : ComponentActivity() {
                     topBar = {
                         if (bottomBarState.value) {
                             AppTopAppBar(
-                                scrollBehavior= scrollBehavior,
+                                scrollBehavior = scrollBehavior,
                                 onProfileClick = { backStack.add(ProfileScreen) },
                                 onNotificationClick = {}
                             )
-                        } else {
-                            null
                         }
                     },
                     bottomBar = {
                         if (bottomBarState.value) {
                             AppBottomNavBar(backStack)
-                        } else {
-                            null
                         }
                     }
                 ) { innerPadding ->
                     NavigationRoot(
                         modifier = Modifier
-                            .fillMaxSize(),
+                            .fillMaxWidth(),
                         bottomBarState = bottomBarState,
                         snackBarState = snackBarHostState,
                         backStack = backStack,
