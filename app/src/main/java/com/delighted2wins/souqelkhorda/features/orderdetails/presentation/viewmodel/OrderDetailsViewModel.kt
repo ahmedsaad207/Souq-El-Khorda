@@ -1,16 +1,48 @@
 package com.delighted2wins.souqelkhorda.features.orderdetails.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.delighted2wins.souqelkhorda.features.orderdetails.domain.usecase.GetScrapOrderDetailsUseCase
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.OrderDetailsIntent
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.OrderDetailsState
 import com.delighted2wins.souqelkhorda.features.sale.presentation.SaleState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
-class OrderDetailsViewModel@Inject constructor(
+class OrderDetailsViewModel @Inject constructor(
+    private val getScrapOrderDetails: GetScrapOrderDetailsUseCase
+) : ViewModel() {
 
-): ViewModel() {
-    private var _state = MutableStateFlow(SaleState())
-    val state = _state
+    private val _state = MutableStateFlow(OrderDetailsState())
+    val state: StateFlow<OrderDetailsState> = _state
 
+    fun onIntent(intent: OrderDetailsIntent) {
+        when (intent) {
+            is OrderDetailsIntent.LoadOrderDetails -> loadOrder(intent.order.id.toString())
+            OrderDetailsIntent.BackClicked -> TODO()
+            OrderDetailsIntent.Retry -> TODO()
+        }
+    }
+
+    private fun loadOrder(orderId: String) {
+        viewModelScope.launch {
+            _state.value = _state.value.copy(isLoading = true)
+            try {
+                val result = getScrapOrderDetails(orderId)
+                _state.value = _state.value.copy(
+                    isLoading = false,
+                    order = result,
+                    error = null
+                )
+            } catch (e: Exception) {
+                _state.value = _state.value.copy(
+                    isLoading = false,
+                    error = e.message ?: "Unknown error"
+                )
+            }
+        }
+    }
 }
