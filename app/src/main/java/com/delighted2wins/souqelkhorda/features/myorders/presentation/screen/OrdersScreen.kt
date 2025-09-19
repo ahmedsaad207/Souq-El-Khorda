@@ -25,14 +25,13 @@ fun OrdersScreen(
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { tabs.size })
     val scope = rememberCoroutineScope()
 
-
     LaunchedEffect(pagerState.currentPage) {
         when (pagerState.currentPage) {
             0 -> {
-                // Example: viewModel.loadSaleOrders()
+                // viewModel.loadSaleOrders()
             }
             1 -> {
-                // Example: viewModel.loadMarketOrders()
+                // viewModel.loadMarketOrders()
             }
         }
     }
@@ -43,41 +42,45 @@ fun OrdersScreen(
             .background(Color.White)
             .padding(innerPadding)
     ) {
+        // Custom styled tabs
         TabRow(
             selectedTabIndex = pagerState.currentPage,
             containerColor = Color.White,
-            contentColor = Color.Black
+            contentColor = Color.Black,
+            indicator = {} // remove default underline
         ) {
             tabs.forEachIndexed { index, (title, count) ->
                 val isSelected = pagerState.currentPage == index
-
                 Tab(
                     selected = isSelected,
-                    onClick = {
-                        scope.launch { pagerState.animateScrollToPage(index) }
-                    },
+                    onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
                     text = {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                            modifier = Modifier
+                                .background(
+                                    if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                                    else Color.Transparent,
+                                    shape = MaterialTheme.shapes.medium
+                                )
+                                .padding(horizontal = 12.dp, vertical = 6.dp)
                         ) {
                             Text(
                                 text = title,
-                                fontSize = 16.sp,
+                                fontSize = 20.sp,
                                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                                color = if (isSelected) Color.Black else Color.Gray
+                                color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Gray
                             )
 
-                            if (count > 0) {
-                                Badge(
-                                    containerColor = Color.Red,
-                                    contentColor = Color.White
-                                ) {
-                                    Text(
-                                        text = count.toString(),
-                                        fontSize = 12.sp
-                                    )
-                                }
+                            Badge(
+                                containerColor = Color.Red,
+                                contentColor = Color.White
+                            ) {
+                                Text(
+                                    text = count.toString(),
+                                    fontSize = 16.sp
+                                )
                             }
                         }
                     }
@@ -85,15 +88,16 @@ fun OrdersScreen(
             }
         }
 
+        Spacer(modifier = Modifier.height(8.dp))
+
         HorizontalPager(
             state = pagerState,
             modifier = Modifier.fillMaxSize()
         ) { page ->
             when (page) {
                 0 -> SaleOrdersScreen()
-                1 -> MarketOrdersScreen()
+                1 -> MarketOrdersScreen(2,3)
             }
         }
     }
-
 }
