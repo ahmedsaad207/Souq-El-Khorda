@@ -1,6 +1,11 @@
 package com.delighted2wins.souqelkhorda.features.market.presentation.screen
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,10 +29,10 @@ import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapOrder
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.User
-import com.delighted2wins.souqelkhorda.features.market.presentation.component.orderdetails.OrderItemCard
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.orderdetails.ActionButtonsSection
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.orderdetails.DescriptionSection
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.orderdetails.OrderDetailsTopBar
+import com.delighted2wins.souqelkhorda.features.market.presentation.component.orderdetails.OrderItemCard
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.orderdetails.SellerInfoSection
 
 @Composable

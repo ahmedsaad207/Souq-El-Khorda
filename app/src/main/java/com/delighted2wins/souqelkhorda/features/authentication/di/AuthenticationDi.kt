@@ -12,10 +12,6 @@ import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.Ge
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.LoginUseCase
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.LogoutUseCase
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.SignUpUseCase
-import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.firestore
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -51,19 +47,7 @@ abstract class AuthenticationDataSourceModule {
 
 
 
-@Module
-@InstallIn(SingletonComponent::class)
-object FirebaseModule {
 
-    @Provides
-    @Singleton
-    fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
-
-    @Provides
-    @Singleton
-    fun provideFirebaseFirestore(): FirebaseFirestore = Firebase.firestore
-
-}
 
 @Module
 @InstallIn(ViewModelComponent::class)

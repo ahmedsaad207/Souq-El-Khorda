@@ -16,12 +16,10 @@ import com.delighted2wins.souqelkhorda.features.authentication.presentation.scre
 import com.delighted2wins.souqelkhorda.features.buyers.presentation.screen.NearestBuyersScreen
 import com.delighted2wins.souqelkhorda.features.login.presentation.screen.LoginScreen
 import com.delighted2wins.souqelkhorda.features.market.presentation.screen.MarketScreen
-import com.delighted2wins.souqelkhorda.features.sale.presentation.screen.SaleScreen
 import com.delighted2wins.souqelkhorda.features.market.presentation.screen.OrderDetailsScreen
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.screen.OrdersScreen
 import com.delighted2wins.souqelkhorda.features.profile.presentation.screen.ProfileScreen
-import com.delighted2wins.souqelkhorda.features.sign_up.presentation.screen.SignUpScreen
-import com.delighted2wins.souqelkhorda.features.sale.presentation.screen.DirectSaleScreen
+import com.delighted2wins.souqelkhorda.features.sale.presentation.screen.SaleScreen
 import com.delighted2wins.souqelkhorda.features.splash.SplashScreen
 
 @Composable

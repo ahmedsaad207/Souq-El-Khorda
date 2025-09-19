@@ -28,7 +28,6 @@ import com.delighted2wins.souqelkhorda.features.market.presentation.component.ma
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.market.SearchBar
 import com.delighted2wins.souqelkhorda.features.market.presentation.contract.market.MarketEffect
 import com.delighted2wins.souqelkhorda.features.market.presentation.contract.market.MarketIntent
-import kotlin.collections.listOf
 
 @Composable
 fun MarketScreen(
