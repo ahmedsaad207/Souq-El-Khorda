@@ -2,12 +2,12 @@ package com.example.anees.data.local.sharedpreference
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.abdok.atmosphere.data.local.sharedPreference.ISharedPreferences
 import com.delighted2wins.souqelkhorda.core.AppConstant
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
-import androidx.core.content.edit
 
 @Singleton
 class SharedPreferencesImpl @Inject constructor(@ApplicationContext context: Context) :
