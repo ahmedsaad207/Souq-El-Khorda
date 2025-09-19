@@ -24,10 +24,10 @@ import com.delighted2wins.souqelkhorda.app.theme.Til
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapOrder
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapOrderItem
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.User
-import com.delighted2wins.souqelkhorda.features.market.presentation.component.market.ScrapCard
-import com.delighted2wins.souqelkhorda.features.market.presentation.component.market.SearchBar
-import com.delighted2wins.souqelkhorda.features.market.presentation.contract.market.MarketEffect
-import com.delighted2wins.souqelkhorda.features.market.presentation.contract.market.MarketIntent
+import com.delighted2wins.souqelkhorda.features.market.presentation.component.ScrapCard
+import com.delighted2wins.souqelkhorda.features.market.presentation.component.SearchBar
+import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketEffect
+import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketIntent
 
 @Composable
 fun MarketScreen(
