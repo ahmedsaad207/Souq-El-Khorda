@@ -37,7 +37,6 @@ class MarketViewModel @Inject constructor(
             is MarketIntent.Refresh -> {
                 state = state.copy(isRefreshing = true)
                 loadOrders()
-                state = state.copy(isRefreshing = false)
             }
 
             is MarketIntent.SearchQueryChanged -> { state = state.copy(query = intent.query) }
@@ -59,17 +58,31 @@ class MarketViewModel @Inject constructor(
 
     private fun loadOrders() {
         viewModelScope.launch {
-            state = state.copy(isLoading = true)
+            state = state.copy(isLoading = true, isEmpty = false)
             try {
                 val orders = getScrapOrdersUseCase()
-                state = state.copy(
-                    isLoading = false,
-                    successfulOrders = orders
-                )
+                if (orders.isEmpty()) {
+                    state = state.copy(
+                        isLoading = false,
+                        isRefreshing = false,
+                        successfulOrders = emptyList(),
+                        isEmpty = true
+                    )
+                } else {
+                    state = state.copy(
+                        isLoading = false,
+                        isRefreshing = false,
+                        successfulOrders = orders,
+                        isEmpty = false
+                    )
+                }
             } catch (e: Exception) {
-                state = state.copy(isLoading = false)
-                _effect.emit(MarketEffect.ShowError(e.message ?: "Unknown error"))
+                state = state.copy(isLoading = false, isRefreshing = false)
+                _effect.emit(
+                    MarketEffect.ShowError(e.message ?: "Network error, please try again")
+                )
             }
         }
     }
+
 }
