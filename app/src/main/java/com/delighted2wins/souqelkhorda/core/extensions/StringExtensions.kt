@@ -4,7 +4,7 @@ fun String.isEmail(): Boolean {
     return android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
 }
 fun String.isPhoneNumber(): Boolean {
-    return android.util.Patterns.PHONE.matcher(this).matches()
+    return this.matches( "^01[0-9]{9}$".toRegex())
 }
 
 fun String.isUserName(): Boolean {

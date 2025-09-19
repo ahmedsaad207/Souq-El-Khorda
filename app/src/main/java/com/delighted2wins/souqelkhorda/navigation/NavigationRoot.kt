@@ -12,15 +12,17 @@ import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
 import com.delighted2wins.souqelkhorda.features.additem.presentation.screen.AddItemScreen
+import com.delighted2wins.souqelkhorda.features.authentication.presentation.screen.SignUpScreen
 import com.delighted2wins.souqelkhorda.features.buyers.presentation.screen.NearestBuyersScreen
+import com.delighted2wins.souqelkhorda.features.login.presentation.screen.LoginScreen
 import com.delighted2wins.souqelkhorda.features.market.presentation.screen.MarketScreen
 import com.delighted2wins.souqelkhorda.features.sale.presentation.screen.SaleScreen
 import com.delighted2wins.souqelkhorda.features.market.presentation.screen.OrderDetailsScreen
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.screen.OrdersScreen
 import com.delighted2wins.souqelkhorda.features.profile.presentation.screen.ProfileScreen
 import com.delighted2wins.souqelkhorda.features.sign_up.presentation.screen.SignUpScreen
+import com.delighted2wins.souqelkhorda.features.sale.presentation.screen.DirectSaleScreen
 import com.delighted2wins.souqelkhorda.features.splash.SplashScreen
-import com.delighted2wins.souqelkhorda.features.login.presentation.screen.LoginScreen
 
 @Composable
 fun NavigationRoot(
@@ -36,7 +38,7 @@ fun NavigationRoot(
             rememberViewModelStoreNavEntryDecorator(),
             rememberSceneSetupNavEntryDecorator()
         ),
-        onBack ={
+        onBack = {
             if (backStack.size > 1) {
                 backStack.removeLastOrNull()
             }
@@ -95,12 +97,21 @@ fun NavigationRoot(
 
                 SplashScreen -> {
                     NavEntry(key) {
-                        SplashScreen {
-                            bottomBarState.value = false
-                            backStack.set(
-                                element = LoginScreen, index = 0
-                            )
-                        }
+                        SplashScreen(
+                            navToLogin = {
+                                bottomBarState.value = false
+                                backStack.set(
+                                    element = LoginScreen, index = 0
+                                )
+                            },
+                            navToHome = {
+                                bottomBarState.value = true
+                                backStack.set(
+                                    element = DirectSaleScreen, index = 0
+                                )
+
+                            }
+                        )
                     }
                 }
 
@@ -127,10 +138,10 @@ fun NavigationRoot(
                         bottomBarState.value = false
                         SignUpScreen(onBackClick = {
                             backStack.remove(SignUpScreen)
-                            backStack.add(LoginScreen)
+                            backStack.set(element = LoginScreen, index = 0)
                         }, snackBarHostState = snackBarState, onRegisterClick = {
                             backStack.remove(SignUpScreen)
-                            backStack.add(LoginScreen)
+                            backStack.set(element = LoginScreen, index = 0)
                         })
 
                     }
@@ -159,5 +170,6 @@ fun NavigationRoot(
 
                 else -> error("Unknown screen $key")
             }
+
         })
 }

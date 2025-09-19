@@ -13,14 +13,25 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.delighted2wins.souqelkhorda.R
+import com.delighted2wins.souqelkhorda.features.authentication.presentation.viewmodel.LoginViewModel
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(modifier: Modifier = Modifier, navToHome: () -> Unit) {
+fun SplashScreen(
+    viewModel: LoginViewModel = hiltViewModel(),
+    modifier: Modifier = Modifier,
+    navToHome: () -> Unit,
+    navToLogin: () -> Unit,
+) {
     LaunchedEffect(Unit) {
         delay(2000)
+        if (viewModel.isLoggedIn()){
         navToHome()
+        }else{
+            navToLogin()
+        }
     }
 
     Box(
