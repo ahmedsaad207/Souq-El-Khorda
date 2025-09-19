@@ -34,7 +34,7 @@ import kotlin.collections.listOf
 fun MarketScreen(
     innerPadding: PaddingValues = PaddingValues(),
     viewModel: MarketViewModel = hiltViewModel(),
-    onBuyClick: () -> Unit = {},
+    navigateToMakeOffer: () -> Unit = {},
     onDetailsClick: (ScrapOrder) -> Unit
 ) {
     val state = viewModel.state
@@ -98,7 +98,7 @@ fun MarketScreen(
                     location = scrapData.location
                 ),
                 scrap = scrapData,
-                onBuyClick = { onBuyClick() },
+                onBuyClick = { navigateToMakeOffer() },
                 onDetailsClick = { onDetailsClick(scrapData) },
                 systemIsRtl = isRtl
             )
