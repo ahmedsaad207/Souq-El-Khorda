@@ -13,6 +13,8 @@ data object NearestBuyersScreen:NavKey
 @Serializable
 data object MarketScreen:NavKey
 @Serializable
+data object OrdersScreen:NavKey
+@Serializable
 data object SplashScreen:NavKey
 
 @Serializable
@@ -23,6 +25,9 @@ data object SignUpScreen:NavKey
 
 @Serializable
 data class AddItemKey(val category: String):NavKey
+
+@Serializable
+data object ProfileScreen: NavKey
 
 @Parcelize
 data class OrderDetailsKey(val order : ScrapOrder) : NavKey, Parcelable

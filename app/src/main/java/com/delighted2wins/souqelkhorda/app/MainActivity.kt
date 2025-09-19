@@ -24,6 +24,7 @@ import com.delighted2wins.souqelkhorda.core.components.AppBottomNavBar
 import com.delighted2wins.souqelkhorda.core.components.AppTopAppBar
 import com.delighted2wins.souqelkhorda.core.extensions.configureSystemUI
 import com.delighted2wins.souqelkhorda.navigation.NavigationRoot
+import com.delighted2wins.souqelkhorda.navigation.ProfileScreen
 import com.delighted2wins.souqelkhorda.navigation.SplashScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -56,7 +57,11 @@ class MainActivity : ComponentActivity() {
                     },
                     topBar = {
                         if (bottomBarState.value) {
-                            AppTopAppBar(scrollBehavior= scrollBehavior) {}
+                            AppTopAppBar(
+                                scrollBehavior= scrollBehavior,
+                                onProfileClick = { backStack.add(ProfileScreen) },
+                                onNotificationClick = {}
+                            )
                         } else {
                             null
                         }
