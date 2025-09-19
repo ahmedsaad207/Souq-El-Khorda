@@ -85,7 +85,6 @@ fun NotificationCard(
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                // 🔹 Middle content: text
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = title,
@@ -112,7 +111,6 @@ fun NotificationCard(
                     }
                 }
 
-                // 🔹 Close button
                 IconButton(
                     onClick = onDismiss,
                     modifier = Modifier.size(20.dp)
@@ -127,13 +125,11 @@ fun NotificationCard(
 
             Spacer(modifier = Modifier.height(6.dp))
 
-            // 🔹 Footer: Tag + Time
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Just the tag text (no icon)
                 Box(
                     modifier = Modifier
                         .background(tagColor.copy(alpha = 0.15f), RoundedCornerShape(20.dp))
