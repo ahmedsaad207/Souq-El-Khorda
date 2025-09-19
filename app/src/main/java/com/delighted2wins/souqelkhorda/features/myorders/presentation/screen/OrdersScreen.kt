@@ -6,11 +6,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Badge
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -52,12 +55,11 @@ fun OrdersScreen(
             .background(Color.White)
             .padding(innerPadding)
     ) {
-        // Custom styled tabs
         TabRow(
             selectedTabIndex = pagerState.currentPage,
             containerColor = Color.White,
             contentColor = Color.Black,
-            indicator = {} // remove default underline
+            indicator = {}
         ) {
             tabs.forEachIndexed { index, (title, count) ->
                 val isSelected = pagerState.currentPage == index

@@ -34,6 +34,12 @@ class MarketViewModel @Inject constructor(
         when (intent) {
             is MarketIntent.LoadScrapOrders -> loadOrders()
 
+            is MarketIntent.Refresh -> {
+                state = state.copy(isRefreshing = true)
+                loadOrders()
+                state = state.copy(isRefreshing = false)
+            }
+
             is MarketIntent.SearchQueryChanged -> { state = state.copy(query = intent.query) }
 
             is MarketIntent.ClickOrder -> {
@@ -58,7 +64,7 @@ class MarketViewModel @Inject constructor(
                 val orders = getScrapOrdersUseCase()
                 state = state.copy(
                     isLoading = false,
-                    scrapOrders = orders
+                    successfulOrders = orders
                 )
             } catch (e: Exception) {
                 state = state.copy(isLoading = false)
