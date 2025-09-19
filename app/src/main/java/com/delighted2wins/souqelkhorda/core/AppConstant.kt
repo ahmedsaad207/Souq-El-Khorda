@@ -1,5 +1,7 @@
 package com.delighted2wins.souqelkhorda.core
 
 object AppConstant {
-    val FIRESTORE_COLLECTION_NAEM = "users"
+    const val FIRESTORE_COLLECTION_NAEM = "users"
+    const val SHARED_PREFERENCE_NAME = "SHARED_PREFERENCE_NAME"
+
 }
