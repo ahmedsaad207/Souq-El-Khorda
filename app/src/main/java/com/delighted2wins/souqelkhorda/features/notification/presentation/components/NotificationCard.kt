@@ -1,0 +1,159 @@
+package com.delighted2wins.souqelkhorda.features.notification.presentation.components
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.Store
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.delighted2wins.souqelkhorda.app.theme.AppTypography
+import com.delighted2wins.souqelkhorda.core.components.CachedUserImage
+
+@Preview(showBackground = true)
+@Composable
+fun NotificationCard(
+    imageUrl: String? = null,
+    title: String = "New Offer Received",
+    description: String = "Someone is interested in your old furniture set. Check the offer details and respond.",
+    tag: String = "SELLING",
+    tagColor: Color = Color(0xFF00B259) ,
+    time: String = "2 hours ago",
+    unread: Boolean = true,
+    onDismiss: () -> Unit = {}
+) {
+    val colors = MaterialTheme.colorScheme
+
+    val backgroundColor = if (unread) {
+        MaterialTheme.colorScheme.surface
+    } else {
+        MaterialTheme.colorScheme.inverseOnSurface
+    }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 4.dp),
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        colors = CardDefaults.cardColors(containerColor = backgroundColor)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Top
+            ) {
+                CachedUserImage(
+                    imageUrl = imageUrl,
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                )
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                // 🔹 Middle content: text
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = title,
+                        style = AppTypography.bodyMedium.copy(
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
+                    Text(
+                        text = description,
+                        style = AppTypography.bodySmall.copy(fontWeight = FontWeight.Normal),
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+
+                    if (!unread) {
+                        Text(
+                            text = "Read",
+                            style = AppTypography.labelSmall.copy(
+                                color = Color.Gray,
+                                fontWeight = FontWeight.Medium
+                            ),
+                            modifier = Modifier.padding(top = 2.dp)
+                        )
+                    }
+                }
+
+                // 🔹 Close button
+                IconButton(
+                    onClick = onDismiss,
+                    modifier = Modifier.size(20.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "Dismiss",
+                        tint = Color.Gray
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(6.dp))
+
+            // 🔹 Footer: Tag + Time
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Just the tag text (no icon)
+                Box(
+                    modifier = Modifier
+                        .background(tagColor.copy(alpha = 0.15f), RoundedCornerShape(20.dp))
+                        .padding(horizontal = 8.dp, vertical = 2.dp)
+                ) {
+                    Text(
+                        text = tag,
+                        style = AppTypography.bodySmall.copy(color = tagColor, fontWeight = FontWeight.Bold)
+                    )
+                }
+
+                Text(
+                    text = time,
+                    style = AppTypography.bodySmall.copy(fontWeight = FontWeight.Bold),
+                    color = colors.onSurface.copy(alpha = 0.6f)
+                )
+            }
+        }
+    }
+}
+
+
+

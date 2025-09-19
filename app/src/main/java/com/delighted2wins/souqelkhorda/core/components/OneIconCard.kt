@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.delighted2wins.souqelkhorda.R
+import com.delighted2wins.souqelkhorda.app.theme.AppTypography
 
 
 @SuppressLint("ConfigurationScreenWidthHeight")
@@ -40,8 +41,7 @@ fun OneIconCard(
         TapBarBtn(onIconClick = { onClick() }, icon = icon)
         Text(
             text = headerTxt,
-            fontSize = titleSize.sp,
-            fontWeight = FontWeight.Bold,
+            style = AppTypography.titleLarge.copy(fontSize = titleSize.sp, fontWeight = FontWeight.Bold),
         )
 
     }
