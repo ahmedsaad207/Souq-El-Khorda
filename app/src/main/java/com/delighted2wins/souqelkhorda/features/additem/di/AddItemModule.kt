@@ -4,7 +4,6 @@ import com.delighted2wins.souqelkhorda.features.additem.data.local.ScrapesLocalD
 import com.delighted2wins.souqelkhorda.features.additem.data.local.ScrapesLocalDataSourceImpl
 import com.delighted2wins.souqelkhorda.features.additem.data.repo.ScrapesRepoImpl
 import com.delighted2wins.souqelkhorda.features.additem.domain.repo.ScrapesRepo
-import com.delighted2wins.souqelkhorda.features.additem.domain.usecase.DeleteAllScrapsUseCase
 import com.delighted2wins.souqelkhorda.features.additem.domain.usecase.SaveScrapUseCase
 import dagger.Binds
 import dagger.Module

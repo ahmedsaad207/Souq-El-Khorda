@@ -6,9 +6,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetScrapOrdersUseCase
-import com.delighted2wins.souqelkhorda.features.market.presentation.contract.market.MarketEffect
-import com.delighted2wins.souqelkhorda.features.market.presentation.contract.market.MarketIntent
-import com.delighted2wins.souqelkhorda.features.market.presentation.contract.market.MarketState
+import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketEffect
+import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketIntent
+import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -33,14 +33,21 @@ class MarketViewModel @Inject constructor(
     fun onIntent(intent: MarketIntent) {
         when (intent) {
             is MarketIntent.LoadScrapOrders -> loadOrders()
-            is MarketIntent.SearchQueryChanged -> {
-                state = state.copy(query = intent.query)
-            }
+
+            is MarketIntent.SearchQueryChanged -> { state = state.copy(query = intent.query) }
+
             is MarketIntent.ClickOrder -> {
                 viewModelScope.launch {
                     _effect.emit(MarketEffect.NavigateToOrderDetails(intent.order))
                 }
             }
+
+            is MarketIntent.SellNowClicked -> {
+                viewModelScope.launch {
+                    _effect.emit(MarketEffect.NavigateToSellNow)
+                }
+            }
+
         }
     }
 

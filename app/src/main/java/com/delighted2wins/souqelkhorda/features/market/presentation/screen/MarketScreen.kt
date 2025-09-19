@@ -7,11 +7,18 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Message
+import androidx.compose.material.icons.filled.Sell
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,21 +28,22 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.delighted2wins.souqelkhorda.app.theme.Til
+import com.delighted2wins.souqelkhorda.core.components.DirectionalText
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapOrder
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapOrderItem
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.User
-import com.delighted2wins.souqelkhorda.features.market.presentation.component.market.ScrapCard
-import com.delighted2wins.souqelkhorda.features.market.presentation.component.market.SearchBar
-import com.delighted2wins.souqelkhorda.features.market.presentation.contract.market.MarketEffect
-import com.delighted2wins.souqelkhorda.features.market.presentation.contract.market.MarketIntent
-import kotlin.collections.listOf
+import com.delighted2wins.souqelkhorda.features.market.presentation.component.ScrapCard
+import com.delighted2wins.souqelkhorda.features.market.presentation.component.SearchBar
+import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketEffect
+import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketIntent
 
 @Composable
 fun MarketScreen(
     innerPadding: PaddingValues = PaddingValues(),
     viewModel: MarketViewModel = hiltViewModel(),
     navigateToMakeOffer: () -> Unit = {},
-    onDetailsClick: (ScrapOrder) -> Unit
+    onDetailsClick: (ScrapOrder) -> Unit,
+    navToAddItem: () -> Unit = {}
 ) {
     val state = viewModel.state
     val isRtl: Boolean = LocalLayoutDirection.current == LayoutDirection.Rtl
@@ -48,6 +56,9 @@ fun MarketScreen(
                 }
                 is MarketEffect.ShowError -> {
                     // TODO: show snackbar or dialog with effect.message
+                }
+                is MarketEffect.NavigateToSellNow -> {
+                    navToAddItem()
                 }
             }
         }
@@ -75,20 +86,45 @@ fun MarketScreen(
             }
         }
 
-        // Section title
         item {
-            Text(
-                text = if (isRtl) "العروض المتاحة" else "Available Offers",
-                style = MaterialTheme.typography.titleLarge,
-                color = Til,
-                modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
-            )
+            CompositionLocalProvider(LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr)
+            {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    DirectionalText(
+                        text = if (isRtl) "العروض المتاحة" else "Available Offers",
+                        contentIsRtl = isRtl,
+                        style = MaterialTheme.typography.titleLarge,
+                        color = Til,
+                        modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
+                    )
+
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    OutlinedButton(
+                        onClick = { viewModel.onIntent(MarketIntent.SellNowClicked) },
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Default.Sell,
+                                contentDescription = "sell now"
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(text = if (isRtl) "بيع الأن" else "Sell Now")
+                        }
+                    }
+                }
+            }
+
         }
 
-        // 🗂️ List of scrap orders from ViewModel
         items(
             state.scrapOrders.filter {
-                it.title.contains(state.query, ignoreCase = true) || state.query.isBlank()
+                it.date.contains(state.query, ignoreCase = true) || state.query.isBlank()
             }
         ) { scrapData ->
             ScrapCard(
