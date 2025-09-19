@@ -59,7 +59,10 @@ fun SaleScreen(
 
                 val order = Order(
                     userId = "1",
-                    scraps = uiState.value.data
+                    scraps = uiState.value.data,
+                    type = "SALE",
+                    status = "PENDING",
+                    time = System.currentTimeMillis(),
                 )
                 OrderSummarySection(
                     scraps = uiState.value.data,
@@ -74,4 +77,11 @@ fun SaleScreen(
         }
     }
 }
+
+//userId
+//scraps
+//timestamp
+//type-> sale
+//state -> تحت التنفيض
+
 
