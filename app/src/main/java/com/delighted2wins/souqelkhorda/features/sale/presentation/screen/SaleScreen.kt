@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -12,7 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.delighted2wins.souqelkhorda.features.sale.domain.entities.Order
+import com.delighted2wins.souqelkhorda.core.enums.OrderType
+import com.delighted2wins.souqelkhorda.core.model.Order
+import com.delighted2wins.souqelkhorda.core.model.Scrap
 import com.delighted2wins.souqelkhorda.features.sale.presentation.SaleIntent
 import com.delighted2wins.souqelkhorda.features.sale.presentation.components.OrderSummarySection
 import com.delighted2wins.souqelkhorda.features.sale.presentation.components.ScrapCategoriesGrid
@@ -58,8 +61,11 @@ fun SaleScreen(
                 Spacer(Modifier.height(24.dp))
 
                 val order = Order(
-                    userId = "1",
-                    scraps = uiState.value.data
+                    userId = "2",
+                    scraps = uiState.value.data,
+                    type = OrderType.SALE,
+                    title = "dummy title",
+                    description = "dummy description"
                 )
                 OrderSummarySection(
                     scraps = uiState.value.data,
@@ -70,11 +76,31 @@ fun SaleScreen(
         }
 
         item {
-            Spacer(
-                Modifier.height(
-                    innerPadding.calculateBottomPadding().coerceAtLeast(0.dp)
+            Spacer(Modifier.height(24.dp))
+            Button(onClick = {
+                val dummyScrap = Scrap(
+                    category = "dummy category",
+                    unit = "Kg",
+                    amount = 5.0,
+                    description = "scrap dummy description"
                 )
-            )
+
+
+                val order = Order(
+                    userId = "2",
+                    scraps = listOf(dummyScrap),
+                    type = OrderType.MARKET,
+                    title = "dummy title",
+                    description = "dummy description",
+                    price = 200
+                )
+
+                viewModel.processIntent(SaleIntent.SendOrder(order))
+
+            }) {
+                Text("Submit Market Order")
+            }
+            Spacer(Modifier.height(innerPadding.calculateBottomPadding()))
         }
     }
 }

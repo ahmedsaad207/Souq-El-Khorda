@@ -1,4 +1,4 @@
-package com.delighted2wins.souqelkhorda.features.sale.domain.entities
+package com.delighted2wins.souqelkhorda.core.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -9,7 +9,7 @@ data class Scrap(
     val id: Long = 0,
     val category: String,
     val unit: String,
-    val amount: Int,
+    val amount: Double,
     val description: String,
-//    val images: List<String> = emptyList()
+    val images: String = "https://media.wired.com/photos/593261cab8eb31692072f129/3:2/w_2560%2Cc_limit/85120553.jpg"
 )

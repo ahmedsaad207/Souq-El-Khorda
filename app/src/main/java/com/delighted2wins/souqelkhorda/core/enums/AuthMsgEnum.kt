@@ -1,8 +1,8 @@
-package com.delighted2wins.souqelkhorda.features.authentication.data.model
+package com.delighted2wins.souqelkhorda.core.enums
 
 import java.util.Locale
 
-enum class AuthMsg(val message: String, val arabicMessage: String) {
+enum class AuthMsgEnum(val message: String, val arabicMessage: String) {
     NETWORK("Network error", "خطأ في الشبكة"),
     UNAUTHORIZED("Unauthorized", "غير مصرح"),
     USERNOTFOUND("User not found", "المستخدم غير موجود"),
@@ -30,5 +30,3 @@ enum class AuthMsg(val message: String, val arabicMessage: String) {
         return if (currentLanguage == "ar") arabicMessage else message
     }
 }
-
-

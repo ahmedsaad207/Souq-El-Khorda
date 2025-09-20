@@ -3,7 +3,9 @@ package com.delighted2wins.souqelkhorda.features.sale.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.delighted2wins.souqelkhorda.features.additem.domain.usecase.DeleteAllScrapsUseCase
+import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.features.sale.domain.usecase.GetScrapesUseCase
+import com.delighted2wins.souqelkhorda.features.sale.domain.usecase.SendOrderUseCase
 import com.delighted2wins.souqelkhorda.features.sale.presentation.SaleIntent
 import com.delighted2wins.souqelkhorda.features.sale.presentation.SaleState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SaleViewModel @Inject constructor(
     private val getScrapesUseCase: GetScrapesUseCase,
-    private val deleteAllScrapsUseCase: DeleteAllScrapsUseCase
+    private val deleteAllScrapsUseCase: DeleteAllScrapsUseCase,
+    private val sendOrderUseCase: SendOrderUseCase
 ) : ViewModel() {
 
     private var _state = MutableStateFlow(SaleState())
@@ -39,7 +42,7 @@ class SaleViewModel @Inject constructor(
     fun processIntent(intent: SaleIntent) {
         when (intent) {
             is SaleIntent.SendOrder -> {
-                // TODO send order to firestore
+                sendOrder(intent.order)
                 deleteAll()
                 _state.update { current ->
                     current.copy(data = emptyList())
@@ -53,6 +56,10 @@ class SaleViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun sendOrder(order: Order) = viewModelScope.launch {
+        sendOrderUseCase(order)
     }
 
     private fun deleteAll() =

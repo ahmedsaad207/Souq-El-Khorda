@@ -3,7 +3,7 @@ package com.delighted2wins.souqelkhorda.features.authentication.presentation.vie
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.delighted2wins.souqelkhorda.features.authentication.data.model.AuthMsg
+import com.delighted2wins.souqelkhorda.core.enums.AuthMsgEnum
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.CashUserCase
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.GetCashUserCase
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.LoginUseCase
@@ -32,12 +32,12 @@ class LoginViewModel @Inject constructor(
     fun login(email: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
             if (email.isEmpty() || password.isEmpty()) {
-                _message.emit(AuthMsg.EMPTYFILDES.getMsg())
+                _message.emit(AuthMsgEnum.EMPTYFILDES.getMsg())
                 return@launch
             }
             loginUseCase(email, password)
                 .catch { e ->
-                    _loginState.emit(AuthenticationState.Error(AuthMsg.UNAUTHORIZED.getMsg()))
+                    _loginState.emit(AuthenticationState.Error(AuthMsgEnum.UNAUTHORIZED.getMsg()))
                 }
                 .collect { state ->
                     _loginState.emit(state)
@@ -45,12 +45,12 @@ class LoginViewModel @Inject constructor(
                         is AuthenticationState.Success -> {
                             val user = state.userAuth
                             cashUserCase(user)
-                            _message.emit(AuthMsg.LOGINSUCCESS.getMsg())
+                            _message.emit(AuthMsgEnum.LOGINSUCCESS.getMsg())
                             Log.d("asd", "login: ${getCashUserCase().name}")
                         }
 
                         is AuthenticationState.Error -> {
-                            _message.emit(AuthMsg.UNAUTHORIZED.getMsg())
+                            _message.emit(AuthMsgEnum.UNAUTHORIZED.getMsg())
                         }
 
                         else -> Unit
