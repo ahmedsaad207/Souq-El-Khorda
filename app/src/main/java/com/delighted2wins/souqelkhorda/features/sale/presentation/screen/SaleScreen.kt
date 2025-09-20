@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -12,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.delighted2wins.souqelkhorda.core.enums.OrderType
 import com.delighted2wins.souqelkhorda.features.sale.domain.entities.Order
 import com.delighted2wins.souqelkhorda.features.sale.presentation.SaleIntent
 import com.delighted2wins.souqelkhorda.features.sale.presentation.components.OrderSummarySection
@@ -58,8 +60,10 @@ fun SaleScreen(
                 Spacer(Modifier.height(24.dp))
 
                 val order = Order(
-                    userId = "1",
-                    scraps = uiState.value.data
+                    orderId = "1",
+                    userId = "2",
+                    scraps = uiState.value.data,
+                    type = OrderType.SALE,
                 )
                 OrderSummarySection(
                     scraps = uiState.value.data,
@@ -70,6 +74,12 @@ fun SaleScreen(
         }
 
         item {
+            Spacer(Modifier.height(24.dp))
+            Button(onClick = {
+
+            }) {
+                Text("Submit Order")
+            }
             Spacer(Modifier.height(innerPadding.calculateBottomPadding()))
         }
     }
