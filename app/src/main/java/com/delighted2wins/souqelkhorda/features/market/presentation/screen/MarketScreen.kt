@@ -27,7 +27,7 @@ import com.delighted2wins.souqelkhorda.core.components.DirectionalText
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapOrder
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.User
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.ScrapCard
-import com.delighted2wins.souqelkhorda.features.market.presentation.component.ScrapCardShimmer
+import com.delighted2wins.souqelkhorda.features.market.presentation.component.ShimmerScrapCard
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.SearchBar
 import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketEffect
 import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketIntent
@@ -77,7 +77,7 @@ fun MarketScreen(
                     contentPadding = PaddingValues(16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    items(10) { ScrapCardShimmer(systemIsRtl = isRtl) }
+                    items(10) { ShimmerScrapCard(systemIsRtl = isRtl) }
                 }
             }
 

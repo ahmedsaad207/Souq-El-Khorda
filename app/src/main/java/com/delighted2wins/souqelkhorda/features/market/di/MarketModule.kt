@@ -3,7 +3,7 @@ package com.delighted2wins.souqelkhorda.features.market.di
 import com.delighted2wins.souqelkhorda.features.market.data.remote.MarketRemoteDataSource
 import com.delighted2wins.souqelkhorda.features.market.data.repository.MarketRepositoryImpl
 import com.delighted2wins.souqelkhorda.features.market.domain.repository.MarketRepository
-import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetScrapOrdersUseCase
+import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetMarketOrdersUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,6 +24,6 @@ object MarketModule {
     @ViewModelScoped
     fun provideGetScrapOrdersUseCase(
         repository: MarketRepository
-    ): GetScrapOrdersUseCase = GetScrapOrdersUseCase(repository)
+    ): GetMarketOrdersUseCase = GetMarketOrdersUseCase(repository)
 
 }
