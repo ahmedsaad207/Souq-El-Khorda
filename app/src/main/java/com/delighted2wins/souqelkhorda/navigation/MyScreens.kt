@@ -27,7 +27,10 @@ data class AddItemKey(val category: String):NavKey
 
 @Serializable
 data object ProfileScreen: NavKey
-
+@Serializable
+data object NotificationsScreen: NavKey
+@Serializable
+data object HistoryScreen: NavKey
 @Parcelize
 data class OrderDetailsKey(val order : ScrapOrder) : NavKey, Parcelable
 

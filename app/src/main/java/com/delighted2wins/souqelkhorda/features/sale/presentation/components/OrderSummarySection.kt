@@ -13,7 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.delighted2wins.souqelkhorda.features.sale.domain.entities.Scrap
+import com.delighted2wins.souqelkhorda.core.model.Scrap
 
 @Composable
 fun OrderSummarySection(
@@ -50,7 +50,7 @@ fun OrderSummarySection(
             OutlinedButton(
                 onClick = onSend
             ) {
-                Text("Send")
+                Text("Send Sale Order")
             }
 
         }

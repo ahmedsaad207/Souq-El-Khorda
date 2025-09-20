@@ -1,7 +1,9 @@
 package com.delighted2wins.souqelkhorda.features.authentication.presentation.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,6 +22,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,6 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.components.OneIconCard
+import com.delighted2wins.souqelkhorda.core.enums.GovernorateEnum
 import com.delighted2wins.souqelkhorda.features.authentication.data.model.SignUpRequestDto
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.component.CustomDropdownMenu
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.component.CustomTextField
@@ -48,13 +52,14 @@ fun SignUpScreen(
     viewModel: SignUpViewModel = hiltViewModel(),
     onBackClick: () -> Unit = {},
     onRegisterClick: () -> Unit = {},
-    snackBarHostState: SnackbarHostState
+    snackBarHostState: SnackbarHostState,
+    innerPadding: PaddingValues
 ) {
     val primaryColor = Color(0xFF179C92)
 
     val registerState by viewModel.registerState.collectAsStateWithLifecycle()
     val isLoading = registerState is AuthenticationState.Loading
-    val governorates = listOf("Cairo", "Giza", "Alexandria", "Luxor", "Aswan")
+    val governorates = GovernorateEnum.getAllGovernorate()
 
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -71,14 +76,12 @@ fun SignUpScreen(
         }
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
+
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 24.dp)
+                .fillMaxWidth()
+                .padding(top = innerPadding.calculateTopPadding(), bottom = innerPadding.calculateBottomPadding())
+                .padding(horizontal = 16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
             OneIconCard(
@@ -140,7 +143,7 @@ fun SignUpScreen(
             CustomDropdownMenu(
                 value = governorate,
                 onValueChange = {
-                    governorate = it
+                    governorate = GovernorateEnum.getValue(it)
                 },
                 label = stringResource(R.string.governorate),
                 options = governorates,
@@ -195,8 +198,7 @@ fun SignUpScreen(
                     Text(text = stringResource(R.string.register), fontSize = 16.sp)
                 }
             }
-            Spacer(modifier = Modifier.height(48.dp))
-
+            Spacer(modifier = Modifier.height(600.dp).fillMaxWidth().background(color = Color.Red))
         }
 
         when (registerState) {
@@ -221,7 +223,7 @@ fun SignUpScreen(
                 onRegisterClick()
             }
         }
-    }
+
 }
 
 

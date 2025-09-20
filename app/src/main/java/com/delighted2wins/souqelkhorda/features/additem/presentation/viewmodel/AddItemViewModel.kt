@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.delighted2wins.souqelkhorda.features.additem.domain.usecase.SaveScrapUseCase
 import com.delighted2wins.souqelkhorda.features.additem.presentation.AddItemIntent
 import com.delighted2wins.souqelkhorda.features.additem.presentation.AddItemState
-import com.delighted2wins.souqelkhorda.features.sale.domain.entities.Scrap
+import com.delighted2wins.souqelkhorda.core.model.Scrap
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

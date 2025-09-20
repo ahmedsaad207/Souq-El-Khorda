@@ -1,7 +1,6 @@
 package com.delighted2wins.souqelkhorda.features.sale.data.remote
 
-import com.delighted2wins.souqelkhorda.features.sale.domain.entities.Order
-import kotlinx.coroutines.flow.Flow
+import com.delighted2wins.souqelkhorda.core.model.Order
 
 interface OrdersRemoteDataSource {
 

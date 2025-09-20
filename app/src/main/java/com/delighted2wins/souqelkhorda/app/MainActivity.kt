@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -24,6 +24,7 @@ import com.delighted2wins.souqelkhorda.core.components.AppBottomNavBar
 import com.delighted2wins.souqelkhorda.core.components.AppTopAppBar
 import com.delighted2wins.souqelkhorda.core.extensions.configureSystemUI
 import com.delighted2wins.souqelkhorda.navigation.NavigationRoot
+import com.delighted2wins.souqelkhorda.navigation.NotificationsScreen
 import com.delighted2wins.souqelkhorda.navigation.ProfileScreen
 import com.delighted2wins.souqelkhorda.navigation.SplashScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,6 +34,7 @@ class MainActivity : ComponentActivity() {
 
     lateinit var snackBarHostState: SnackbarHostState
     lateinit var bottomBarState: MutableState<Boolean>
+    lateinit var navState: MutableState<Boolean>
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,12 +45,15 @@ class MainActivity : ComponentActivity() {
 
             snackBarHostState = remember { SnackbarHostState() }
             bottomBarState = remember { mutableStateOf(false) }
+            navState = remember { mutableStateOf(true) }
 
             val backStack = rememberNavBackStack(SplashScreen)
             SouqElKhordaTheme(darkTheme = isSystemInDarkTheme(), dynamicColor = false) {
                 val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
                 Scaffold(
-                    modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+                    modifier = if (navState.value) Modifier else Modifier.nestedScroll(
+                        scrollBehavior.nestedScrollConnection
+                    ),
                     snackbarHost = {
                         SnackbarHost(
                             hostState = snackBarHostState,
@@ -58,29 +63,26 @@ class MainActivity : ComponentActivity() {
                     topBar = {
                         if (bottomBarState.value) {
                             AppTopAppBar(
-                                scrollBehavior= scrollBehavior,
+                                scrollBehavior = scrollBehavior,
                                 onProfileClick = { backStack.add(ProfileScreen) },
-                                onNotificationClick = {}
+                                onNotificationClick = { backStack.add(NotificationsScreen) }
                             )
-                        } else {
-                            null
                         }
                     },
                     bottomBar = {
                         if (bottomBarState.value) {
                             AppBottomNavBar(backStack)
-                        } else {
-                            null
                         }
                     }
                 ) { innerPadding ->
                     NavigationRoot(
                         modifier = Modifier
-                            .fillMaxSize(),
+                            .fillMaxWidth(),
                         bottomBarState = bottomBarState,
                         snackBarState = snackBarHostState,
                         backStack = backStack,
-                        innerPadding = innerPadding
+                        innerPadding = innerPadding,
+                        navState = navState
                     )
                 }
             }

@@ -3,7 +3,7 @@ package com.delighted2wins.souqelkhorda.core.local.db
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.delighted2wins.souqelkhorda.features.sale.domain.entities.Scrap
+import com.delighted2wins.souqelkhorda.core.model.Scrap
 import kotlinx.coroutines.flow.Flow
 
 @Dao

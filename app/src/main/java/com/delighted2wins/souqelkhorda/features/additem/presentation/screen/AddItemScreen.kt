@@ -21,7 +21,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.delighted2wins.souqelkhorda.features.additem.presentation.AddItemIntent
 import com.delighted2wins.souqelkhorda.features.additem.presentation.viewmodel.AddItemViewModel
-import com.delighted2wins.souqelkhorda.features.sale.domain.entities.Scrap
+import com.delighted2wins.souqelkhorda.core.model.Scrap
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,7 +63,7 @@ fun AddItemScreen(
                     val dummyScrap = Scrap(
                         category = category,
                         unit = "Kg",
-                        amount = 5,
+                        amount = 5.0,
                         description = "Scrap item example"
                     )
                     viewModel.processIntent(AddItemIntent.AddIntent(dummyScrap))
