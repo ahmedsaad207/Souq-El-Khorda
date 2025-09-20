@@ -23,6 +23,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.delighted2wins.souqelkhorda.app.theme.AppTypography
 
 @Composable
 fun HistorySummaryCard(
@@ -49,6 +51,7 @@ fun HistorySummaryCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.onSecondaryContainer)
                 .padding(vertical = 16.dp),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
@@ -74,13 +77,11 @@ fun SummaryStat(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        // outer pale circle with an inner (darker) filled circle containing the icon
         Box(
             modifier = Modifier
                 .size(outerSize),
             contentAlignment = Alignment.Center
         ) {
-            // pale outer circle
             Box(
                 modifier = Modifier
                     .size(outerSize)
@@ -88,7 +89,6 @@ fun SummaryStat(
                     .background(color.copy(alpha = 0.12f))
             )
 
-            // inner filled circle
             Box(
                 modifier = Modifier
                     .size(innerSize)
@@ -106,7 +106,7 @@ fun SummaryStat(
                 Icon(
                     imageVector = icon,
                     contentDescription = label,
-                    tint = Color.White,      // white icon on colored inner circle (good contrast)
+                    tint = Color.White,
                     modifier = Modifier.size(iconSize)
                 )
             }
@@ -116,7 +116,7 @@ fun SummaryStat(
 
         Text(
             text = value,
-            style = MaterialTheme.typography.bodyLarge.copy(
+            style = AppTypography.bodyLarge.copy(
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp
             )
@@ -124,7 +124,7 @@ fun SummaryStat(
 
         Text(
             text = label,
-            style = MaterialTheme.typography.bodySmall.copy(
+            style = AppTypography.bodySmall.copy(
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
                 fontSize = 12.sp
             )

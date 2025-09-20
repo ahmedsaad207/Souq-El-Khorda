@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,6 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.delighted2wins.souqelkhorda.app.theme.AppTypography
 
 @Composable
 fun HistoryTabs(
@@ -44,19 +46,20 @@ fun TabChip(
     selected: Boolean,
     onClick: () -> Unit
 ) {
+    val colors = MaterialTheme.colorScheme
     Surface(
         modifier = Modifier
-            .clip(RoundedCornerShape(50)) // pill shape
+            .clip(RoundedCornerShape(50))
             .clickable { onClick() },
-        color = if (selected) Color(0xFF2E7D32) else Color(0xFFE0E0E0), // green when active, gray when not
+        color = if (selected) colors.primary else colors.onSurfaceVariant,
         tonalElevation = if (selected) 4.dp else 0.dp,
         shadowElevation = 0.dp
     ) {
         Text(
             text = text,
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
-            color = if (selected) Color.White else Color.Black,
-            fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal
+            color = if (selected) colors.onPrimary else colors.onPrimaryContainer,
+            style = if (selected) AppTypography.labelLarge.copy(fontWeight = FontWeight.Bold) else AppTypography.labelLarge
         )
     }
 }

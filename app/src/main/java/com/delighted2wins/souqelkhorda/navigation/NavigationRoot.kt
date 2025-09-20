@@ -14,6 +14,7 @@ import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
 import com.delighted2wins.souqelkhorda.features.additem.presentation.screen.AddItemScreen
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.screen.SignUpScreen
 import com.delighted2wins.souqelkhorda.features.buyers.presentation.screen.NearestBuyersScreen
+import com.delighted2wins.souqelkhorda.features.history.presentation.screen.PreviewHistoryScreen
 import com.delighted2wins.souqelkhorda.features.login.presentation.screen.LoginScreen
 import com.delighted2wins.souqelkhorda.features.market.presentation.screen.MarketScreen
 import com.delighted2wins.souqelkhorda.features.orderdetails.OrderDetailsScreen
@@ -154,6 +155,7 @@ fun NavigationRoot(
                         bottomBarState.value = false
                         ProfileScreen(
                             onBackClick = { backStack.remove(key) },
+                            onHistoryClick = { backStack.add(HistoryScreen) }
                         )
                     }
                 }
@@ -173,6 +175,15 @@ fun NavigationRoot(
                         bottomBarState.value = false
                         NotificationsScreen(
                             onBackClick = { backStack.remove(key) },
+                        )
+                    }
+                }
+
+                is HistoryScreen -> {
+                    NavEntry(key) {
+                        bottomBarState.value = false
+                        PreviewHistoryScreen(
+
                         )
                     }
                 }

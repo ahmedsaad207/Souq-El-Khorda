@@ -86,7 +86,7 @@ fun PreviewHistoryScreen() {
 
 @Composable
 fun HistoryScreen(
-    orders: List<ScrapOrder>,
+    orders: List<ScrapOrder> = emptyList(),
     onBackClick: () -> Unit = {},
 ) {
     val colors = MaterialTheme.colorScheme
@@ -95,11 +95,11 @@ fun HistoryScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF9F9F9))
+            .background(colors.background)
     ) {
         OneIconCard(
             modifier = Modifier
-                .background(Color(0xFF2E7D32))
+                .background(colors.secondary)
                 .padding(vertical = 16.dp),
             onClick = onBackClick,
             icon = Icons.AutoMirrored.Filled.ArrowBack,
@@ -108,9 +108,9 @@ fun HistoryScreen(
 
         HistorySummaryCard(
             stats = listOf(
-                Triple("24", "Completed", Color(0xFF4CAF50)),
-                Triple("3", "Pending", Color(0xFFFF9800)),
-                Triple("2", "Cancelled", Color(0xFFF44336))
+                Triple("24", "Completed", Color(0xFF00B259)),
+                Triple("3", "Pending", Color(0xFFFE7E0F)),
+                Triple("2", "Cancelled", Color(0xFFFF1111))
             )
         )
 
@@ -129,13 +129,13 @@ fun HistoryScreen(
             items(orders) { order ->
                 HistoryCard(
                     title = order.title,
-                    transactionType = if (order.type == "sale") "Sale" else "Market",
-                    status = "Completed",
+                    transactionType = if (order.type == "sale") "SALE" else "MARKET",
+                    status = "COMPLETED",
                     date = order.dateCreated,
                     items = order.items.map { it.toString() },
                     expanded = false,
                     onExpandToggle = {},
-                    onViewDetails = { /* navigate */ }
+                    onViewDetails = { }
                 )
             }
         }
