@@ -14,12 +14,14 @@ import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
 import com.delighted2wins.souqelkhorda.features.additem.presentation.screen.AddItemScreen
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.screen.SignUpScreen
 import com.delighted2wins.souqelkhorda.features.buyers.presentation.screen.NearestBuyersScreen
+import com.delighted2wins.souqelkhorda.features.history.presentation.screen.HistoryScreen
 import com.delighted2wins.souqelkhorda.features.login.presentation.screen.LoginScreen
 import com.delighted2wins.souqelkhorda.features.market.presentation.screen.MarketScreen
 import com.delighted2wins.souqelkhorda.features.orderdetails.OrderDetailsScreen
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.screen.OrdersScreen
-import com.delighted2wins.souqelkhorda.features.profile.presentation.screen.ProfileScreen
 import com.delighted2wins.souqelkhorda.features.sale.presentation.screen.SaleScreen
+import com.delighted2wins.souqelkhorda.features.notification.presentation.screen.NotificationsScreen
+import com.delighted2wins.souqelkhorda.features.profile.presentation.screen.ProfileScreen
 import com.delighted2wins.souqelkhorda.features.splash.SplashScreen
 
 @Composable
@@ -160,6 +162,7 @@ fun NavigationRoot(
                         bottomBarState.value = false
                         ProfileScreen(
                             onBackClick = { backStack.remove(key) },
+                            onHistoryClick = { backStack.add(HistoryScreen) }
                         )
                     }
                 }
@@ -174,10 +177,27 @@ fun NavigationRoot(
                     }
                 }
 
+                is NotificationsScreen -> {
+                    NavEntry(key) {
+                        bottomBarState.value = false
+                        NotificationsScreen(
+                            onBackClick = { backStack.remove(key) },
+                        )
+                    }
+                }
+
+                is HistoryScreen -> {
+                    NavEntry(key) {
+                        bottomBarState.value = false
+                        HistoryScreen(
+                            onBackClick = { backStack.remove(key) }
+                        )
+                    }
+                }
+
 
 
                 else -> error("Unknown screen $key")
             }
-
         })
 }
