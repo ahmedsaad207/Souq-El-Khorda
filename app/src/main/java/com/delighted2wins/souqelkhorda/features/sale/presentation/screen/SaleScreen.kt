@@ -70,7 +70,11 @@ fun SaleScreen(
         }
 
         item {
-            Spacer(Modifier.height(innerPadding.calculateBottomPadding()))
+            Spacer(
+                Modifier.height(
+                    innerPadding.calculateBottomPadding().coerceAtLeast(0.dp)
+                )
+            )
         }
     }
 }

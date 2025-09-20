@@ -6,9 +6,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetScrapOrdersUseCase
-import com.delighted2wins.souqelkhorda.features.market.presentation.contract.market.MarketEffect
-import com.delighted2wins.souqelkhorda.features.market.presentation.contract.market.MarketIntent
-import com.delighted2wins.souqelkhorda.features.market.presentation.contract.market.MarketState
+import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketEffect
+import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketIntent
+import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -33,30 +33,56 @@ class MarketViewModel @Inject constructor(
     fun onIntent(intent: MarketIntent) {
         when (intent) {
             is MarketIntent.LoadScrapOrders -> loadOrders()
-            is MarketIntent.SearchQueryChanged -> {
-                state = state.copy(query = intent.query)
+
+            is MarketIntent.Refresh -> {
+                state = state.copy(isRefreshing = true)
+                loadOrders()
             }
+
+            is MarketIntent.SearchQueryChanged -> { state = state.copy(query = intent.query) }
+
             is MarketIntent.ClickOrder -> {
                 viewModelScope.launch {
                     _effect.emit(MarketEffect.NavigateToOrderDetails(intent.order))
                 }
             }
+
+            is MarketIntent.SellNowClicked -> {
+                viewModelScope.launch {
+                    _effect.emit(MarketEffect.NavigateToSellNow)
+                }
+            }
+
         }
     }
 
     private fun loadOrders() {
         viewModelScope.launch {
-            state = state.copy(isLoading = true)
+            state = state.copy(isLoading = true, isEmpty = false)
             try {
                 val orders = getScrapOrdersUseCase()
-                state = state.copy(
-                    isLoading = false,
-                    scrapOrders = orders
-                )
+                if (orders.isEmpty()) {
+                    state = state.copy(
+                        isLoading = false,
+                        isRefreshing = false,
+                        successfulOrders = emptyList(),
+                        isEmpty = true
+                    )
+                } else {
+                    state = state.copy(
+                        isLoading = false,
+                        isRefreshing = false,
+                        successfulOrders = orders,
+                        isEmpty = false
+                    )
+                }
             } catch (e: Exception) {
-                state = state.copy(isLoading = false)
-                _effect.emit(MarketEffect.ShowError(e.message ?: "Unknown error"))
+                state = state.copy(isLoading = false, isRefreshing = false)
+                _effect.emit(
+                    MarketEffect.ShowError(e.message ?: "Network error, please try again")
+                )
             }
         }
     }
+
 }
