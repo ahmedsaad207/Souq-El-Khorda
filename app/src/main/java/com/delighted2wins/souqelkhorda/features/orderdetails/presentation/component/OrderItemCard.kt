@@ -20,7 +20,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
-import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapOrderItem
 
 @Composable
 fun OrderItemCard(

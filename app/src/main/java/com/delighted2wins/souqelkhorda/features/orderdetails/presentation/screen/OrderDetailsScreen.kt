@@ -23,12 +23,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
-import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapOrder
-import com.delighted2wins.souqelkhorda.features.market.domain.entities.User
+import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.ActionButtonsSection
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.DescriptionSection
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.OrderDetailsTopBar
@@ -41,7 +39,7 @@ fun OrderDetailsScreen(
     onBackClick: () -> Unit = {},
 ) {
     val isRtl: Boolean = LocalLayoutDirection.current == LayoutDirection.Rtl
-    var user by remember { mutableStateOf<User?>(null) }
+    var marketUser by remember { mutableStateOf<MarketUser?>(null) }
 
     LaunchedEffect(Unit) {
        //user = sampleUser().firstOrNull{ it.id == order.userId }
@@ -74,8 +72,8 @@ fun OrderDetailsScreen(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         SellerInfoSection(
-                            userImage = user?.imageUrl,
-                            userName = user?.name ?: "Loading...",
+                            userImage = marketUser?.imageUrl,
+                            userName = marketUser?.name ?: "Loading...",
                             isVerified = true,
                             rating = 4.8,
                             reviewCount = 120

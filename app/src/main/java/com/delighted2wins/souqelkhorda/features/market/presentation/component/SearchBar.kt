@@ -26,6 +26,8 @@ fun SearchBar(
     modifier: Modifier = Modifier,
     isRtl: Boolean
 ) {
+    val roundedShape = RoundedCornerShape(20.dp)
+
     TextField(
         value = query,
         onValueChange = onQueryChange,
@@ -43,10 +45,10 @@ fun SearchBar(
             { Icon(Icons.Default.Search, contentDescription = null, tint = Til) }
         } else null,
         singleLine = true,
-        shape = RoundedCornerShape(20.dp),
+        shape = roundedShape,
         modifier = modifier
             .height(56.dp)
-            .border(width = 2.dp, color = Til, shape = shape),
+            .border(width = 2.dp, color = Til, shape = roundedShape),
         colors = TextFieldDefaults.colors(
             focusedContainerColor = Color.White,
             unfocusedContainerColor = Color.White,

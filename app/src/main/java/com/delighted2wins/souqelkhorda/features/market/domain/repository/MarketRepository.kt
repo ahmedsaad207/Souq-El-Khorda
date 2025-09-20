@@ -1,7 +1,7 @@
 package com.delighted2wins.souqelkhorda.features.market.domain.repository
 
-import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapOrder
+import com.delighted2wins.souqelkhorda.features.sale.domain.entities.Order
 
 interface MarketRepository {
-    suspend fun getScrapOrders(): List<ScrapOrder>
+    suspend fun getMarketOrders(): List<Order>
 }

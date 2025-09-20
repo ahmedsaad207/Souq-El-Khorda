@@ -2,7 +2,6 @@ package com.delighted2wins.souqelkhorda.navigation
 
 import android.os.Parcelable
 import androidx.navigation3.runtime.NavKey
-import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapOrder
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 

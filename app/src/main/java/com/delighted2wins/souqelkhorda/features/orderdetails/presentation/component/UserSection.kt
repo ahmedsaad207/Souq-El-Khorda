@@ -27,11 +27,11 @@ import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.core.components.CachedUserImage
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
 import com.delighted2wins.souqelkhorda.core.utils.getTimeAgo
-import com.delighted2wins.souqelkhorda.features.market.domain.entities.User
+import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 
 @Composable
 fun ScrapUserSection(
-    userData: User,
+    marketUserData: MarketUser,
     date: String,
     systemIsRtl: Boolean = false
 ) {
@@ -54,7 +54,7 @@ fun ScrapUserSection(
                 modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
             ) {
                 CachedUserImage(
-                    imageUrl = userData.imageUrl,
+                    imageUrl = marketUserData.imageUrl,
                     modifier = Modifier
                         .size(48.dp)
                         .clip(RoundedCornerShape(24.dp))
@@ -64,14 +64,14 @@ fun ScrapUserSection(
 
                 Column {
                     Text(
-                        text = userData.name,
+                        text = marketUserData.name,
                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                         color = Color.White,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        text = userData.location,
+                        text = marketUserData.location,
                         style = MaterialTheme.typography.titleSmall,
                         color = Color.LightGray,
                         maxLines = 1,
@@ -102,11 +102,11 @@ fun ScrapUserSection(
 @Preview(showBackground = true)
 @Composable
 fun ScrapUserSectionPreview() {
-    val user = User(
+    val marketUser = MarketUser(
         id = 2,
         name = "فاطمة أحمد",
         location = "الجيزة - الدقي",
         imageUrl = "https://avatar.iran.liara.run/public/boy?username=Scott"
     )
-    ScrapUserSection(user, "9/9/2009", systemIsRtl = false)
+    ScrapUserSection(marketUser, "9/9/2009", systemIsRtl = false)
 }

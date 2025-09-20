@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetScrapOrdersUseCase
+import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetMarketOrdersUseCase
 import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketEffect
 import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketIntent
 import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketState
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MarketViewModel @Inject constructor(
-    private val getScrapOrdersUseCase: GetScrapOrdersUseCase
+    private val getMarketOrdersUseCase: GetMarketOrdersUseCase
 ) : ViewModel() {
 
     var state by mutableStateOf(MarketState())
@@ -54,7 +54,7 @@ class MarketViewModel @Inject constructor(
                 error = null
             )
             try {
-                val orders = getScrapOrdersUseCase()
+                val orders = getMarketOrdersUseCase()
                 state = state.copy(
                     isLoading = false,
                     isRefreshing = false,
