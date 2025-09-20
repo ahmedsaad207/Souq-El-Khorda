@@ -66,6 +66,7 @@ fun NavigationRoot(
                         bottomBarState.value = true
                         MarketScreen(
                             innerPadding,
+                            snackBarHostState = snackBarState,
                             navigateToMakeOffer = {
                                 // Navigate to Buying Screen
                             },

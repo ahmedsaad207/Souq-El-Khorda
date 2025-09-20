@@ -32,57 +32,49 @@ class MarketViewModel @Inject constructor(
 
     fun onIntent(intent: MarketIntent) {
         when (intent) {
-            is MarketIntent.LoadScrapOrders -> loadOrders()
+            MarketIntent.LoadScrapOrders -> loadOrders(showLoading = true)
 
-            is MarketIntent.Refresh -> {
-                state = state.copy(isRefreshing = true)
-                loadOrders()
+            MarketIntent.Refresh -> loadOrders(showLoading = true, isRefreshing = true)
+
+            is MarketIntent.SearchQueryChanged -> {
+                state = state.copy(query = intent.query)
             }
+            is MarketIntent.ClickOrder -> emitEffect(MarketEffect.NavigateToOrderDetails(intent.order))
 
-            is MarketIntent.SearchQueryChanged -> { state = state.copy(query = intent.query) }
-
-            is MarketIntent.ClickOrder -> {
-                viewModelScope.launch {
-                    _effect.emit(MarketEffect.NavigateToOrderDetails(intent.order))
-                }
-            }
-
-            is MarketIntent.SellNowClicked -> {
-                viewModelScope.launch {
-                    _effect.emit(MarketEffect.NavigateToSellNow)
-                }
-            }
-
+            MarketIntent.SellNowClicked -> emitEffect(MarketEffect.NavigateToSellNow)
         }
     }
 
-    private fun loadOrders() {
+    private fun loadOrders(showLoading: Boolean = false, isRefreshing: Boolean = false) {
         viewModelScope.launch {
-            state = state.copy(isLoading = true, isEmpty = false)
+            state = state.copy(
+                isLoading = true,
+                isRefreshing = isRefreshing,
+                isEmpty = false,
+                error = null
+            )
             try {
                 val orders = getScrapOrdersUseCase()
-                if (orders.isEmpty()) {
-                    state = state.copy(
-                        isLoading = false,
-                        isRefreshing = false,
-                        successfulOrders = emptyList(),
-                        isEmpty = true
-                    )
-                } else {
-                    state = state.copy(
-                        isLoading = false,
-                        isRefreshing = false,
-                        successfulOrders = orders,
-                        isEmpty = false
-                    )
-                }
-            } catch (e: Exception) {
-                state = state.copy(isLoading = false, isRefreshing = false)
-                _effect.emit(
-                    MarketEffect.ShowError(e.message ?: "Network error, please try again")
+                state = state.copy(
+                    isLoading = false,
+                    isRefreshing = false,
+                    successfulOrders = orders,
+                    isEmpty = orders.isEmpty()
                 )
+            } catch (e: Exception) {
+                val errorMsg = e.message ?: "Network error"
+                state = state.copy(
+                    isLoading = false,
+                    isRefreshing = false,
+                    error = errorMsg
+                )
+                emitEffect(MarketEffect.ShowError("$errorMsg, please try again"))
             }
         }
+    }
+
+    private fun emitEffect(effect: MarketEffect) {
+        viewModelScope.launch { _effect.emit(effect) }
     }
 
 }
