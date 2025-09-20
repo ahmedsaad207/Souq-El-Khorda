@@ -14,7 +14,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.delighted2wins.souqelkhorda.core.enums.OrderType
-import com.delighted2wins.souqelkhorda.features.sale.domain.entities.Order
+import com.delighted2wins.souqelkhorda.core.model.Order
+import com.delighted2wins.souqelkhorda.core.model.Scrap
 import com.delighted2wins.souqelkhorda.features.sale.presentation.SaleIntent
 import com.delighted2wins.souqelkhorda.features.sale.presentation.components.OrderSummarySection
 import com.delighted2wins.souqelkhorda.features.sale.presentation.components.ScrapCategoriesGrid
@@ -60,10 +61,11 @@ fun SaleScreen(
                 Spacer(Modifier.height(24.dp))
 
                 val order = Order(
-                    orderId = "1",
                     userId = "2",
                     scraps = uiState.value.data,
                     type = OrderType.SALE,
+                    title = "dummy title",
+                    description = "dummy description"
                 )
                 OrderSummarySection(
                     scraps = uiState.value.data,
@@ -76,9 +78,27 @@ fun SaleScreen(
         item {
             Spacer(Modifier.height(24.dp))
             Button(onClick = {
+                val dummyScrap = Scrap(
+                    category = "dummy category",
+                    unit = "Kg",
+                    amount = 5.0,
+                    description = "scrap dummy description"
+                )
+
+
+                val order = Order(
+                    userId = "2",
+                    scraps = listOf(dummyScrap),
+                    type = OrderType.MARKET,
+                    title = "dummy title",
+                    description = "dummy description",
+                    price = 200
+                )
+
+                viewModel.processIntent(SaleIntent.SendOrder(order))
 
             }) {
-                Text("Submit Order")
+                Text("Submit Market Order")
             }
             Spacer(Modifier.height(innerPadding.calculateBottomPadding()))
         }

@@ -3,7 +3,7 @@ package com.delighted2wins.souqelkhorda.features.sale.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.delighted2wins.souqelkhorda.features.additem.domain.usecase.DeleteAllScrapsUseCase
-import com.delighted2wins.souqelkhorda.features.sale.domain.entities.Order
+import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.features.sale.domain.usecase.GetScrapesUseCase
 import com.delighted2wins.souqelkhorda.features.sale.domain.usecase.SendOrderUseCase
 import com.delighted2wins.souqelkhorda.features.sale.presentation.SaleIntent

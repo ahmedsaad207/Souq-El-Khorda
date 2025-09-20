@@ -1,7 +1,7 @@
 package com.delighted2wins.souqelkhorda.features.sale.presentation
 
-import com.delighted2wins.souqelkhorda.features.sale.domain.entities.Order
-import com.delighted2wins.souqelkhorda.features.sale.domain.entities.Scrap
+import com.delighted2wins.souqelkhorda.core.model.Order
+import com.delighted2wins.souqelkhorda.core.model.Scrap
 
 sealed class SaleIntent {
     data class SendOrder(val order: Order) : SaleIntent()

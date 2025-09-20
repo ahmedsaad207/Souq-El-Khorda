@@ -2,7 +2,7 @@ package com.delighted2wins.souqelkhorda.core.local.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.delighted2wins.souqelkhorda.features.sale.domain.entities.Scrap
+import com.delighted2wins.souqelkhorda.core.model.Scrap
 
 @Database(
     entities = [Scrap::class],

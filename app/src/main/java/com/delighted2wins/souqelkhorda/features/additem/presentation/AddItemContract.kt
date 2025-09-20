@@ -1,6 +1,6 @@
 package com.delighted2wins.souqelkhorda.features.additem.presentation
 
-import com.delighted2wins.souqelkhorda.features.sale.domain.entities.Scrap
+import com.delighted2wins.souqelkhorda.core.model.Scrap
 
 data class AddItemState(
     val isLoading: Boolean = false,

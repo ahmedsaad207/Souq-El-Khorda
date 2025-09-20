@@ -1,4 +1,4 @@
-package com.delighted2wins.souqelkhorda.features.sale.domain.entities
+package com.delighted2wins.souqelkhorda.core.model
 
 data class Offer(
     val userId: String,
