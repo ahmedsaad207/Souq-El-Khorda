@@ -23,6 +23,7 @@ import com.delighted2wins.souqelkhorda.features.market.presentation.component.Sc
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.SearchBar
 import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketEffect
 import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketIntent
+import com.delighted2wins.souqelkhorda.features.sale.domain.entities.Order
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,7 +33,7 @@ fun MarketScreen(
     snackBarHostState: SnackbarHostState,
     viewModel: MarketViewModel = hiltViewModel(),
     navigateToMakeOffer: () -> Unit = {},
-    onDetailsClick: (ScrapOrder) -> Unit,
+    onDetailsClick: (Order) -> Unit,
     navToAddItem: () -> Unit = {}
 ) {
     val state = viewModel.state

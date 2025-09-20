@@ -28,11 +28,12 @@ import com.delighted2wins.souqelkhorda.core.components.DirectionalText
 import com.delighted2wins.souqelkhorda.core.utils.isArabic
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.ScrapUserSection
+import com.delighted2wins.souqelkhorda.features.sale.domain.entities.Order
 
 @Composable
 fun ScrapCard(
     marketUser: MarketUser,
-    scrap: ScrapOrder,
+    orderData: Order,
     onBuyClick: () -> Unit = {},
     onDetailsClick: (id:Int) -> Unit = {},
     systemIsRtl: Boolean = false
@@ -44,7 +45,7 @@ fun ScrapCard(
     ) {
         ScrapUserSection(
             marketUserData = marketUser,
-            date = scrap.date,
+            date = orderData.date,
             systemIsRtl = systemIsRtl
         )
 
