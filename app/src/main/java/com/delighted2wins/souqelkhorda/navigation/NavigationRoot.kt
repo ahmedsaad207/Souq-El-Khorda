@@ -19,10 +19,8 @@ import com.delighted2wins.souqelkhorda.features.market.presentation.screen.Marke
 import com.delighted2wins.souqelkhorda.features.orderdetails.OrderDetailsScreen
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.screen.OrdersScreen
 import com.delighted2wins.souqelkhorda.features.sale.presentation.screen.SaleScreen
-import com.delighted2wins.souqelkhorda.features.market.presentation.screen.OrderDetailsScreen
 import com.delighted2wins.souqelkhorda.features.notification.presentation.screen.NotificationsScreen
 import com.delighted2wins.souqelkhorda.features.profile.presentation.screen.ProfileScreen
-import com.delighted2wins.souqelkhorda.features.sale.presentation.screen.SaleScreen
 import com.delighted2wins.souqelkhorda.features.splash.SplashScreen
 
 @Composable

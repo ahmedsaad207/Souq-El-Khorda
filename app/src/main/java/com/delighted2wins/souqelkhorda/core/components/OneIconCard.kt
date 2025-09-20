@@ -24,6 +24,7 @@ import com.delighted2wins.souqelkhorda.app.theme.AppTypography
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun OneIconCard(
+    modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
     headerTxt: String = stringResource(R.string.home_screen),
     icon: ImageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -32,7 +33,7 @@ fun OneIconCard(
     val config = LocalConfiguration.current
     val screenWidth = config.screenWidthDp
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(top = 8.dp, bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
