@@ -14,7 +14,7 @@ import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
 import com.delighted2wins.souqelkhorda.features.additem.presentation.screen.AddItemScreen
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.screen.SignUpScreen
 import com.delighted2wins.souqelkhorda.features.buyers.presentation.screen.NearestBuyersScreen
-import com.delighted2wins.souqelkhorda.features.history.presentation.screen.PreviewHistoryScreen
+import com.delighted2wins.souqelkhorda.features.history.presentation.screen.HistoryScreen
 import com.delighted2wins.souqelkhorda.features.login.presentation.screen.LoginScreen
 import com.delighted2wins.souqelkhorda.features.market.presentation.screen.MarketScreen
 import com.delighted2wins.souqelkhorda.features.orderdetails.OrderDetailsScreen
@@ -182,8 +182,8 @@ fun NavigationRoot(
                 is HistoryScreen -> {
                     NavEntry(key) {
                         bottomBarState.value = false
-                        PreviewHistoryScreen(
-
+                        HistoryScreen(
+                            onBackClick = { backStack.remove(key) }
                         )
                     }
                 }
