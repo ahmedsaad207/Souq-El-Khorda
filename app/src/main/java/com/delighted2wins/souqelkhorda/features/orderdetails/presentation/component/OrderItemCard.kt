@@ -20,10 +20,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
+import com.delighted2wins.souqelkhorda.core.model.Scrap
 
 @Composable
 fun OrderItemCard(
-    item: ScrapOrderItem,
+    item: Scrap,
     contentIsRtl: Boolean = false,
     @SuppressLint("ModifierParameter") modifier: Modifier = Modifier
 ) {
@@ -36,19 +37,19 @@ fun OrderItemCard(
             modifier = Modifier.padding(12.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            DirectionalText(
-                text = item.name,
-                contentIsRtl = contentIsRtl,
-                color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
-                maxLines = 1,
-            )
+//            DirectionalText(
+//                text = item.name,
+//                contentIsRtl = contentIsRtl,
+//                color = MaterialTheme.colorScheme.onSurface,
+//                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
+//                maxLines = 1,
+//            )
 
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 DirectionalText(
-                    text = if (contentIsRtl) "الوزن: ${item.weight} كجم" else "Weight: ${item.weight} Kg",
+                    text = if (contentIsRtl) "الوزن: ${item.amount} كجم" else "Weight: ${item.amount} Kg",
                     contentIsRtl = contentIsRtl,
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
                     color = MaterialTheme.colorScheme.primary,
@@ -56,21 +57,21 @@ fun OrderItemCard(
                     modifier = Modifier.weight(1f)
                 )
 
-                item.quantity?.let {
-                    DirectionalText(
-                        text = if (contentIsRtl) "العدد: $it" else "Quantity: $it",
-                        contentIsRtl = contentIsRtl,
-                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-                        color = MaterialTheme.colorScheme.primary,
-                        textAlign = TextAlign.Start,
-                        modifier = Modifier.weight(2f)
-                    )
-                }
+//                item.quantity.let {
+//                    DirectionalText(
+//                        text = if (contentIsRtl) "العدد: $it" else "Quantity: $it",
+//                        contentIsRtl = contentIsRtl,
+//                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+//                        color = MaterialTheme.colorScheme.primary,
+//                        textAlign = TextAlign.Start,
+//                        modifier = Modifier.weight(2f)
+//                    )
+//                }
             }
             Spacer(modifier = Modifier.height(8.dp))
 
 
-            if (item.images.isNullOrEmpty()) {
+            if (item.images.isEmpty()) {
                 Text(
                     text = if (contentIsRtl) "لا توجد صور" else "No images available",
                     style = MaterialTheme.typography.bodyMedium,
@@ -80,25 +81,8 @@ fun OrderItemCard(
                         .padding(16.dp)
                 )
             } else {
-                ZoomableImageList(urls = item.images)
+                ZoomableImageList(urls = listOf(item.images))
             }
         }
     }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun OrderItemCardPreview() {
-    val sampleItem = ScrapOrderItem(
-        id = 1,
-        name = "Sample Scrap Item",
-        weight = 15,
-        quantity = 3,
-        images = listOf(
-            "https://via.placeholder.com/150",
-            "https://via.placeholder.com/200"
-        )
-    )
-
-    OrderItemCard(item = sampleItem, contentIsRtl = false)
 }

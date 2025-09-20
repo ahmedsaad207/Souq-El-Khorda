@@ -22,13 +22,13 @@ abstract class MarketDataSourceModule {
     @Binds
     @Singleton
     abstract fun bindMarketRemoteDataSource(
-        impl: MarketRemoteDataSource
+        impl: MarketRemoteDataSourceImpl
     ): MarketRemoteDataSource
 
     @Binds
     @Singleton
     abstract fun bindMarketRepository(
-        impl: MarketRepository
+        impl: MarketRepositoryImpl
     ): MarketRepository
 
 }
@@ -36,12 +36,6 @@ abstract class MarketDataSourceModule {
 @Module
 @InstallIn(ViewModelComponent::class)
 object MarketUseCaseModule {
-
-    @Provides
-    @ViewModelScoped
-    fun provideMarketRepository(
-        remoteDataSource: MarketRemoteDataSourceImpl
-    ): MarketRepository = MarketRepositoryImpl(remoteDataSource)
 
     @Provides
     @ViewModelScoped

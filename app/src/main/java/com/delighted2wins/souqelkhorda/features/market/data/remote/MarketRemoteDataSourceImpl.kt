@@ -2,7 +2,7 @@ package com.delighted2wins.souqelkhorda.features.market.data.remote
 
 import android.util.Log
 import com.delighted2wins.souqelkhorda.core.model.MainUserDto
-import com.delighted2wins.souqelkhorda.features.sale.domain.entities.Order
+import com.delighted2wins.souqelkhorda.core.model.Order
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.tasks.await

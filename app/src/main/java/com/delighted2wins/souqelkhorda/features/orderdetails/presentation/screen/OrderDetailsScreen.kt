@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
+import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.ActionButtonsSection
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.DescriptionSection
@@ -35,15 +36,11 @@ import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.compon
 
 @Composable
 fun OrderDetailsScreen(
-    order: ScrapOrder,
+    order: Order,
     onBackClick: () -> Unit = {},
 ) {
     val isRtl: Boolean = LocalLayoutDirection.current == LayoutDirection.Rtl
     var marketUser by remember { mutableStateOf<MarketUser?>(null) }
-
-    LaunchedEffect(Unit) {
-       //user = sampleUser().firstOrNull{ it.id == order.userId }
-    }
 
     Surface(
         color = Color.Transparent,
@@ -102,7 +99,7 @@ fun OrderDetailsScreen(
                 )
             }
 
-            items(order.items) { item ->
+            items(order.scraps) { item ->
                 OrderItemCard(
                     item = item,
                     contentIsRtl = isRtl,

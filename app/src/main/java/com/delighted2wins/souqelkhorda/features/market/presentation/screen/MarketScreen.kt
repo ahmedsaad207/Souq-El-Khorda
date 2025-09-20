@@ -13,17 +13,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.delighted2wins.souqelkhorda.app.theme.Til
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
-import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapOrder
-import com.delighted2wins.souqelkhorda.features.market.domain.entities.User
+import com.delighted2wins.souqelkhorda.core.model.Order
+import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.ScrapCard
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.ScrapCardShimmer
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.SearchBar
 import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketEffect
 import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketIntent
-import com.delighted2wins.souqelkhorda.features.sale.domain.entities.Order
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -167,17 +166,24 @@ fun MarketScreen(
                             it.title.contains(state.query, ignoreCase = true) || state.query.isBlank()
                         }
                     ) { scrapData ->
-                        ScrapCard(
-                            user = User(
-                                id = scrapData.userId,
-                                name = "User ${scrapData.userId}",
-                                location = scrapData.location
-                            ),
-                            scrap = scrapData,
-                            onBuyClick = { navigateToMakeOffer() },
-                            onDetailsClick = { onDetailsClick(scrapData) },
-                            systemIsRtl = isRtl
-                        )
+
+                        var user by remember { mutableStateOf<MarketUser?>(null) }
+
+                        LaunchedEffect(scrapData) {
+                            viewModel.getUserData(scrapData.userId) { loadedUser ->
+                                user = loadedUser
+                            }
+                        }
+
+                        user?.let { loadedUser ->
+                            ScrapCard(
+                                marketUser = loadedUser,
+                                orderData = scrapData,
+                                onBuyClick = { navigateToMakeOffer() },
+                                onDetailsClick = { onDetailsClick(scrapData) },
+                                systemIsRtl = isRtl
+                            )
+                        } ?: ScrapCardShimmer(systemIsRtl = isRtl)
                     }
 
                     item { Spacer(modifier = Modifier.padding(60.dp)) }

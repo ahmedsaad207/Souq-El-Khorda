@@ -30,7 +30,7 @@ import com.delighted2wins.souqelkhorda.core.utils.getTimeAgo
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 
 @Composable
-fun ScrapUserSection(
+fun UserSection(
     marketUserData: MarketUser,
     date: String,
     systemIsRtl: Boolean = false
@@ -108,5 +108,5 @@ fun ScrapUserSectionPreview() {
         location = "الجيزة - الدقي",
         imageUrl = "https://avatar.iran.liara.run/public/boy?username=Scott"
     )
-    ScrapUserSection(marketUser, "9/9/2009", systemIsRtl = false)
+    UserSection(marketUser, "9/9/2009", systemIsRtl = false)
 }

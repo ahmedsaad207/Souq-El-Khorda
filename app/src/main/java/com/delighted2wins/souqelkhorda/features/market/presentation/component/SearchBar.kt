@@ -4,9 +4,11 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialogDefaults.shape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -39,10 +41,34 @@ fun SearchBar(
             )
         },
         leadingIcon = if (!isRtl) {
-            { Icon(Icons.Default.Search, contentDescription = null, tint = Til) }
+            {
+                Icon(Icons.Default.Search, contentDescription = null, tint = Til)
+            }
+        } else if (query.isNotEmpty()) {
+            {
+                IconButton(onClick = { onQueryChange("") }) {
+                    Icon(Icons.Default.Close, contentDescription = "Clear", tint = Til)
+                }
+            }
         } else null,
         trailingIcon = if (isRtl) {
-            { Icon(Icons.Default.Search, contentDescription = null, tint = Til) }
+            if (query.isNotEmpty()) {
+                {
+                    IconButton(onClick = { onQueryChange("") }) {
+                        Icon(Icons.Default.Close, contentDescription = "Clear", tint = Til)
+                    }
+                }
+            } else {
+                {
+                    Icon(Icons.Default.Search, contentDescription = null, tint = Til)
+                }
+            }
+        } else if (query.isNotEmpty()) {
+            {
+                IconButton(onClick = { onQueryChange("") }) {
+                    Icon(Icons.Default.Close, contentDescription = "Clear", tint = Til)
+                }
+            }
         } else null,
         singleLine = true,
         shape = roundedShape,

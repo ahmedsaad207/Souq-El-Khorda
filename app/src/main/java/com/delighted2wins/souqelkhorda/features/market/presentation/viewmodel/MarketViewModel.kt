@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetMarketOrdersUseCase
 import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetUserForMarketUseCase
 import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketEffect
@@ -25,6 +26,8 @@ class MarketViewModel @Inject constructor(
     var state by mutableStateOf(MarketState())
         private set
 
+    private val loadedUsers = mutableMapOf<String, MarketUser>()
+
     private val _effect = MutableSharedFlow<MarketEffect>()
     val effect = _effect.asSharedFlow()
 
@@ -34,9 +37,9 @@ class MarketViewModel @Inject constructor(
 
     fun onIntent(intent: MarketIntent) {
         when (intent) {
-            MarketIntent.LoadScrapOrders -> loadOrders(showLoading = true)
+            MarketIntent.LoadScrapOrders -> loadOrders()
 
-            MarketIntent.Refresh -> loadOrders(showLoading = true, isRefreshing = true)
+            MarketIntent.Refresh -> loadOrders(isRefreshing = true)
 
             is MarketIntent.SearchQueryChanged -> {
                 state = state.copy(query = intent.query)
@@ -47,7 +50,26 @@ class MarketViewModel @Inject constructor(
         }
     }
 
-    private fun loadOrders(showLoading: Boolean = false, isRefreshing: Boolean = false) {
+    fun getUserData(userId: String, onLoaded: (MarketUser) -> Unit) {
+        val cachedUser = loadedUsers[userId]
+        if (cachedUser != null) {
+            onLoaded(cachedUser)
+            return
+        }
+
+        viewModelScope.launch {
+            try {
+                val user = getMarketUserUseCase(userId)
+                loadedUsers[userId] = user
+                onLoaded(user)
+            } catch (e: Exception) {
+                onLoaded(MarketUser(id = 0, name = "User $userId", location = "Unknown"))
+            }
+        }
+    }
+
+
+    private fun loadOrders(isRefreshing: Boolean = false) {
         viewModelScope.launch {
             state = state.copy(
                 isLoading = true,

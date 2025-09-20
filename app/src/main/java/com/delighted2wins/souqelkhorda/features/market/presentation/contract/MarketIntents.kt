@@ -1,6 +1,7 @@
 package com.delighted2wins.souqelkhorda.features.market.presentation.contract
 
-import com.delighted2wins.souqelkhorda.features.sale.domain.entities.Order
+import com.delighted2wins.souqelkhorda.core.model.Order
+
 
 sealed class MarketIntent {
     object LoadScrapOrders: MarketIntent()
