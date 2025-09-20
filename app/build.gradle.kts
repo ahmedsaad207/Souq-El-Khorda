@@ -100,7 +100,5 @@ dependencies {
 
     // accompanist placeholder (shimmer)
     implementation("com.google.accompanist:accompanist-placeholder-material3:0.32.0")
-    // accompanist swipe refresh
-    implementation("com.google.accompanist:accompanist-swiperefresh:0.32.0")
 
 }

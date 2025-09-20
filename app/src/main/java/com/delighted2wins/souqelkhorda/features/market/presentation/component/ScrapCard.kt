@@ -26,14 +26,14 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
 import com.delighted2wins.souqelkhorda.core.utils.isArabic
-import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapOrder
-import com.delighted2wins.souqelkhorda.features.market.domain.entities.User
+import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.ScrapUserSection
+import com.delighted2wins.souqelkhorda.features.sale.domain.entities.Order
 
 @Composable
 fun ScrapCard(
-    user: User,
-    scrap: ScrapOrder,
+    marketUser: MarketUser,
+    orderData: Order,
     onBuyClick: () -> Unit = {},
     onDetailsClick: (id:Int) -> Unit = {},
     systemIsRtl: Boolean = false
@@ -44,8 +44,8 @@ fun ScrapCard(
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         ScrapUserSection(
-            userData = user,
-            date = scrap.date,
+            marketUserData = marketUser,
+            date = orderData.date,
             systemIsRtl = systemIsRtl
         )
 
