@@ -1,4 +1,4 @@
-package com.delighted2wins.souqelkhorda.features.login.presentation.screen
+package com.delighted2wins.souqelkhorda.features.authentication.presentation.screen
 
 
 import android.annotation.SuppressLint
@@ -38,7 +38,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.component.DotLoadingIndicator
@@ -88,7 +88,7 @@ fun LoginScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(innerPadding)
-            .background(colors.onPrimary),
+            .background(colors.background),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(
@@ -96,7 +96,7 @@ fun LoginScreen(
         )
 
         Image(
-            painter = painterResource(R.drawable.team),
+            painter = painterResource(R.drawable.logo),
             modifier = Modifier
                 .size((screenWidth * 0.25).dp)
                 .clip(CircleShape),
@@ -104,11 +104,10 @@ fun LoginScreen(
             contentDescription = "App Logo",
         )
 
-
-
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(16.dp))
         Text(
-            stringResource(R.string.welcome_back), fontSize = 20.sp, color = Color.Green,
+            stringResource(R.string.welcome_back), fontSize = 20.sp,
+            color = colors.primary,
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(

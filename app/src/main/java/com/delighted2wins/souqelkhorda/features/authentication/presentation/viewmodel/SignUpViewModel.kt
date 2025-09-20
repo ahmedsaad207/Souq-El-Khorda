@@ -55,7 +55,7 @@ class SignUpViewModel @Inject constructor(
                 emitError(AuthMsgEnum.GOVERNORATEVALIDATE.getMsg())
                 return@launch
             }
-            if (signUpRequestDto.area.isEmpty()||signUpRequestDto.area.length<9) {
+            if (signUpRequestDto.area.isEmpty() || signUpRequestDto.area.length < 7) {
                 emitError(AuthMsgEnum.AREA.getMsg())
                 return@launch
             }
@@ -70,11 +70,13 @@ class SignUpViewModel @Inject constructor(
                         _registerState.emit(state)
                         when (state) {
                             is AuthenticationState.Success -> {
-                                _message.emit(AuthMsgEnum.SIGNUPSUCCESS.getMsg() )
+                                _message.emit(AuthMsgEnum.SIGNUPSUCCESS.getMsg())
                             }
+
                             is AuthenticationState.Error -> {
                                 _message.emit(AuthMsgEnum.SIGNUPFAIL.getMsg())
                             }
+
                             else -> Unit
                         }
                     }
@@ -83,6 +85,7 @@ class SignUpViewModel @Inject constructor(
             }
         }
     }
+
     private suspend fun emitError(msg: String) {
         _message.emit(msg)
         _registerState.emit(AuthenticationState.Error(msg))
