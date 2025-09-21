@@ -4,13 +4,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.delighted2wins.souqelkhorda.R
+import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.FreeUserCase
+import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.LogoutUseCase
 import com.delighted2wins.souqelkhorda.features.profile.domain.usecase.GetUserProfileUseCase
 import com.delighted2wins.souqelkhorda.features.profile.domain.usecase.UpdateUserEmailUseCase
 import com.delighted2wins.souqelkhorda.features.profile.domain.usecase.UpdateUserProfileUseCase
 import com.delighted2wins.souqelkhorda.features.profile.presentation.contract.ProfileContract
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -20,11 +24,16 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     private val updateUserProfileUseCase: UpdateUserProfileUseCase,
     private val getUserProfileUseCase: GetUserProfileUseCase,
-    private val updateUserEmailUseCase: UpdateUserEmailUseCase
+    private val updateUserEmailUseCase: UpdateUserEmailUseCase,
+    private val logoutUseCase: LogoutUseCase,
+    private val freeUserCase: FreeUserCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ProfileContract.State())
     val state = _state.asStateFlow()
+
+    private val _effect = MutableSharedFlow<ProfileContract.Effect>()
+    val effect = _effect.asSharedFlow()
 
     init {
         loadProfile()
@@ -47,6 +56,13 @@ class ProfileViewModel @Inject constructor(
             is ProfileContract.Intent.SaveImageUrl -> updateImageUrl()
             is ProfileContract.Intent.StartEditing -> startEditing(intent.fieldSelector, intent.fieldSetter)
             is ProfileContract.Intent.CancelEditing -> cancelEditing(intent.fieldSelector, intent.fieldSetter)
+
+            is ProfileContract.Intent.Logout -> {
+                logoutUseCase()
+                freeUserCase()
+                sendEffect(ProfileContract.Effect.Logout)
+            }
+            is ProfileContract.Intent.NavigateToHistory -> sendEffect(ProfileContract.Effect.NavigateToHistory)
         }
     }
 
@@ -170,6 +186,12 @@ class ProfileViewModel @Inject constructor(
         val imageUrl = _state.value.imageUrl
         updateField(imageUrl, { updateUserProfileUseCase.updateImageUrl(imageUrl.value) }) { state, field ->
             state.copy(imageUrl = field)
+        }
+    }
+
+    private fun sendEffect(effect: ProfileContract.Effect) {
+        viewModelScope.launch {
+            _effect.emit(effect)
         }
     }
 }

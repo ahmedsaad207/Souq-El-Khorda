@@ -26,6 +26,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,6 +54,15 @@ fun ProfileScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val colors = MaterialTheme.colorScheme
+
+    LaunchedEffect(Unit) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                ProfileContract.Effect.Logout -> onLogoutClick()
+                ProfileContract.Effect.NavigateToHistory -> onHistoryClick()
+            }
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -149,9 +159,9 @@ fun ProfileScreen(
                 Divider(modifier = Modifier.fillMaxWidth(), thickness = 1.dp, color = colors.surfaceVariant)
 
                 Spacer(modifier = Modifier.height(16.dp))
-                HistoryButton(onClick = onHistoryClick)
+                HistoryButton(onClick = { viewModel.handleIntent(ProfileContract.Intent.NavigateToHistory) })
                 Spacer(modifier = Modifier.height(16.dp))
-                LogoutButton(onLogout = onLogoutClick)
+                LogoutButton(onLogout = { viewModel.handleIntent(ProfileContract.Intent.Logout) })
             }
         }
     }

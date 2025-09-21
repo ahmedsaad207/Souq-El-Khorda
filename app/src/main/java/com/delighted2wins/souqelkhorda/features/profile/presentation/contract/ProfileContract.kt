@@ -48,6 +48,14 @@ interface ProfileContract {
             val fieldSelector: (State) -> ProfileFieldState,
             val fieldSetter: (State, ProfileFieldState) -> State
         ) : Intent()
+
+        data object Logout : Intent()
+        data object NavigateToHistory : Intent()
+    }
+
+    sealed class Effect {
+        object NavigateToHistory : Effect()
+        object Logout : Effect()
     }
 }
 
