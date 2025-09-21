@@ -71,7 +71,6 @@ fun SellScreen(
         item {
             ItemsSection(uiState.data) {
                 val scrap = Scrap(
-                    id = Random.nextInt(0, 1000000).toLong(),
                     category = "paper",
                     unit = "kg",
                     amount = 2.0,

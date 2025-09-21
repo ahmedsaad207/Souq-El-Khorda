@@ -1,7 +1,7 @@
 package com.delighted2wins.souqelkhorda.features.additem.di
 
-import com.delighted2wins.souqelkhorda.features.additem.data.local.ScrapesLocalDataSource
-import com.delighted2wins.souqelkhorda.features.additem.data.local.ScrapesLocalDataSourceImpl
+import com.delighted2wins.souqelkhorda.features.sell.data.local.ScrapesLocalDataSource
+import com.delighted2wins.souqelkhorda.features.sell.data.local.ScrapesLocalDataSourceImpl
 import com.delighted2wins.souqelkhorda.features.additem.data.repo.ScrapesRepoImpl
 import com.delighted2wins.souqelkhorda.features.additem.domain.repo.ScrapesRepo
 import com.delighted2wins.souqelkhorda.features.additem.domain.usecase.SaveScrapUseCase

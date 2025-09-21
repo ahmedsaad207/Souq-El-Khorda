@@ -1,4 +1,4 @@
-package com.delighted2wins.souqelkhorda.features.additem.data.local
+package com.delighted2wins.souqelkhorda.features.sell.data.local
 
 import com.delighted2wins.souqelkhorda.core.model.Scrap
 import kotlinx.coroutines.flow.Flow

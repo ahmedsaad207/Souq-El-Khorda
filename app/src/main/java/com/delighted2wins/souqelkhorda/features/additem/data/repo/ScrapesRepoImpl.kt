@@ -1,6 +1,6 @@
 package com.delighted2wins.souqelkhorda.features.additem.data.repo
 
-import com.delighted2wins.souqelkhorda.features.additem.data.local.ScrapesLocalDataSource
+import com.delighted2wins.souqelkhorda.features.sell.data.local.ScrapesLocalDataSource
 import com.delighted2wins.souqelkhorda.features.additem.domain.repo.ScrapesRepo
 import com.delighted2wins.souqelkhorda.core.model.Scrap
 import kotlinx.coroutines.flow.Flow

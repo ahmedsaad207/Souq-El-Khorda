@@ -178,7 +178,7 @@ fun MarketScreen(
                         user?.let { loadedUser ->
                             ScrapCard(
                                 marketUser = loadedUser,
-                                orderData = scrapData,
+                                scrap = scrapData,
                                 onBuyClick = { navigateToMakeOffer() },
                                 onDetailsClick = { onDetailsClick(scrapData) },
                                 systemIsRtl = isRtl
