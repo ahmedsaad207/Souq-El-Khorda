@@ -32,4 +32,13 @@
     <string name="register">تسجيل</string>
     <string name="confirm_password">تأكيد كلمة المرور</string>
 
+    <string name="profile">الملف الشخصي</string>
+    <string name="profile_username">اسم المستخدم</string>
+    <string name="profile_email">البريد الإلكتروني</string>
+    <string name="profile_phone">رقم الهاتف</string>
+    <string name="profile_governorate">المحافظة</string>
+    <string name="profile_address">العنوان</string>
+    <string name="view_cleanup_history">عرض سجل التنظيف</string>
+    <string name="logout">تسجيل الخروج</string>
+
 </resources>

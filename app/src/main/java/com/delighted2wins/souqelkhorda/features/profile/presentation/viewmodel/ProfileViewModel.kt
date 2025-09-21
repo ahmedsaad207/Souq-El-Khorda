@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.FreeUserCase
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.LogoutUseCase
+import com.delighted2wins.souqelkhorda.features.profile.domain.entity.ProfileMessagesEnum
 import com.delighted2wins.souqelkhorda.features.profile.domain.usecase.GetUserProfileUseCase
 import com.delighted2wins.souqelkhorda.features.profile.domain.usecase.SetLanguageUseCase
 import com.delighted2wins.souqelkhorda.features.profile.domain.usecase.UpdateUserEmailUseCase
@@ -131,8 +132,8 @@ class ProfileViewModel @Inject constructor(
             val result = update()
             result.onSuccess {
                 _state.update { setFieldValue(it, current.copy(isEditing = false, isLoading = false, success = true)) }
-            }.onFailure {
-                _state.update { setFieldValue(it, current.copy(isLoading = false, error = it.generalError)) }
+            }.onFailure { throwable ->
+                _state.update { setFieldValue(it, current.copy(isLoading = false, error = throwable.message ?: ProfileMessagesEnum.UNKNOWN.getMsg())) }
             }
         }
     }

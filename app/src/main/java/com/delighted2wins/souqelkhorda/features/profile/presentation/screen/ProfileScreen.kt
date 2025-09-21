@@ -10,9 +10,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
@@ -31,11 +33,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.components.TowIconAppBar
 import com.delighted2wins.souqelkhorda.core.extensions.restartActivity
 import com.delighted2wins.souqelkhorda.features.profile.presentation.component.HistoryButton
@@ -82,8 +86,8 @@ fun ProfileScreen(
                 TowIconAppBar(
                     onStartClick = { onBackClick() },
                     onEndClick = { },
-                    headerTxt = "Profile",
-                    onStartIcon = Icons.Default.ArrowBack,
+                    headerTxt = stringResource(R.string.profile),
+                    onStartIcon = Icons.AutoMirrored.Default.ArrowBack,
                     onEnIcon = Icons.Default.Language,
                     isProfile = true,
                     onLanguageClick = { lang ->
@@ -110,7 +114,7 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 EditableField(
-                    label = "UserName",
+                    label = stringResource(R.string.profile_username),
                     state = state.name,
                     onValueChange = { viewModel.handleIntent(ProfileContract.Intent.ChangeName(it)) },
                     onStartEdit = { viewModel.handleIntent(ProfileContract.Intent.StartEditing({ it.name }) { st, f -> st.copy(name = f) }) },
@@ -121,7 +125,7 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 EditableField(
-                    label = "Email",
+                    label = stringResource(R.string.profile_email),
                     state = state.email,
                     onValueChange = { viewModel.handleIntent(ProfileContract.Intent.ChangeEmail(it)) },
                     onStartEdit = { viewModel.handleIntent(ProfileContract.Intent.StartEditing({ it.email }) { st, f -> st.copy(email = f) }) },
@@ -132,7 +136,7 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 EditableField(
-                    label = "Phone",
+                    label = stringResource(R.string.profile_phone),
                     state = state.phone,
                     onValueChange = { viewModel.handleIntent(ProfileContract.Intent.ChangePhone(it)) },
                     onStartEdit = { viewModel.handleIntent(ProfileContract.Intent.StartEditing({ it.phone }) { st, f -> st.copy(phone = f) }) },
@@ -143,7 +147,7 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 EditableField(
-                    label = "Governorate",
+                    label = stringResource(R.string.profile_governorate),
                     state = state.governorate,
                     onValueChange = { viewModel.handleIntent(ProfileContract.Intent.ChangeGovernorate(it)) },
                     onStartEdit = { viewModel.handleIntent(ProfileContract.Intent.StartEditing({ it.governorate }) { st, f -> st.copy(governorate = f) }) },
@@ -154,7 +158,7 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 EditableField(
-                    label = "Address",
+                    label = stringResource(R.string.profile_address),
                     state = state.address,
                     onValueChange = { viewModel.handleIntent(ProfileContract.Intent.ChangeAddress(it)) },
                     onStartEdit = { viewModel.handleIntent(ProfileContract.Intent.StartEditing({ it.address }) { st, f -> st.copy(address = f) }) },
@@ -220,11 +224,22 @@ fun EditableField(
 
         if (state.error != null) {
             Spacer(modifier = Modifier.height(6.dp))
-            Text(
-                text = state.error,
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodySmall
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Error,
+                    contentDescription = "Error",
+                    tint = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.size(16.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = state.error,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
         }
     }
 }
