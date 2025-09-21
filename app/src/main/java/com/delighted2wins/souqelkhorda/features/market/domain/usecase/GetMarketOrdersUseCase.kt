@@ -6,5 +6,5 @@ import javax.inject.Inject
 class GetMarketOrdersUseCase @Inject constructor(
     private val repository: MarketRepository
 ) {
-    suspend operator fun invoke() = repository.getScrapOrders()
+    suspend operator fun invoke() = repository.getMarketOrders()
 }

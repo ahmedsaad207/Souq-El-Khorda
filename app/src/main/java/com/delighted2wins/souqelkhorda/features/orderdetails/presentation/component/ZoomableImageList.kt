@@ -5,7 +5,6 @@ import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyRow
@@ -20,8 +19,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import coil.compose.AsyncImage
-import com.delighted2wins.souqelkhorda.core.components.CachedUserImage
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.Alignment
+import coil.compose.SubcomposeAsyncImage
+import coil.compose.SubcomposeAsyncImageContent
+import coil.compose.AsyncImagePainter
+import com.google.accompanist.placeholder.material3.placeholder
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material3.shimmer
 
 @Composable
 fun ZoomableImageList(urls: List<String>) {
@@ -32,12 +39,32 @@ fun ZoomableImageList(urls: List<String>) {
         modifier = Modifier.fillMaxWidth()
     ) {
         items(urls) { url ->
-            CachedUserImage(
-                imageUrl = url,
+            SubcomposeAsyncImage(
+                model = url,
+                contentDescription = null,
                 modifier = Modifier
-                    .fillMaxHeight()
+                    .size(100.dp)
                     .clickable { selectedImage = url }
-            )
+            ) {
+                when (painter.state) {
+                    is AsyncImagePainter.State.Loading -> {
+                        Box(
+                            modifier = Modifier
+                                .matchParentSize()
+                                .placeholder(
+                                    visible = true,
+                                    color = MaterialTheme.colorScheme.surfaceVariant,
+                                    highlight = PlaceholderHighlight.shimmer(),
+                                    shape = RoundedCornerShape(8.dp)
+                                )
+                        )
+                    }
+
+                    else -> {
+                        SubcomposeAsyncImageContent()
+                    }
+                }
+            }
         }
     }
 
@@ -47,6 +74,7 @@ fun ZoomableImageList(urls: List<String>) {
         }
     }
 }
+
 
 @Composable
 fun ZoomableImage(url: String, onClose: () -> Unit) {
@@ -60,11 +88,13 @@ fun ZoomableImage(url: String, onClose: () -> Unit) {
         offsetY += panChange.y
     }
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .clickable { onClose() }
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .clickable { onClose() },
+        contentAlignment = Alignment.Center
     ) {
-        AsyncImage(
+        SubcomposeAsyncImage(
             model = url,
             contentDescription = null,
             modifier = Modifier
@@ -76,6 +106,27 @@ fun ZoomableImage(url: String, onClose: () -> Unit) {
                     translationY = offsetY
                 )
                 .transformable(state)
-        )
+        ) {
+            when (painter.state) {
+                is AsyncImagePainter.State.Loading -> {
+                    Box(
+                        modifier = Modifier
+                            .matchParentSize()
+                            .placeholder(
+                                visible = true,
+                                color = MaterialTheme.colorScheme.surfaceVariant,
+                                highlight = PlaceholderHighlight.shimmer(),
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                    )
+                }
+
+                else -> {
+                    SubcomposeAsyncImageContent()
+                }
+            }
+        }
     }
 }
+
+

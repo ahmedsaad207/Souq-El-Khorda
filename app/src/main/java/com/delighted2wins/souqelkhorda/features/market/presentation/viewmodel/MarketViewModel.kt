@@ -6,6 +6,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetMarketOrdersUseCase
+import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
+import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetMarketOrdersUseCase
+import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetUserForMarketUseCase
 import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketEffect
 import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketIntent
 import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketState
@@ -17,11 +20,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MarketViewModel @Inject constructor(
-    private val getMarketOrdersUseCase: GetMarketOrdersUseCase
+    private val getMarketOrdersUseCase: GetMarketOrdersUseCase,
+    private val getMarketUserUseCase: GetUserForMarketUseCase
 ) : ViewModel() {
 
     var state by mutableStateOf(MarketState())
         private set
+
+    private val loadedUsers = mutableMapOf<String, MarketUser>()
 
     private val _effect = MutableSharedFlow<MarketEffect>()
     val effect = _effect.asSharedFlow()
@@ -32,44 +38,73 @@ class MarketViewModel @Inject constructor(
 
     fun onIntent(intent: MarketIntent) {
         when (intent) {
-            is MarketIntent.LoadScrapOrders -> loadOrders()
+            MarketIntent.LoadScrapOrders -> loadOrders()
 
-            is MarketIntent.Refresh -> {
-                state = state.copy(isRefreshing = true)
-                loadOrders()
-                state = state.copy(isRefreshing = false)
+            MarketIntent.Refresh -> loadOrders(isRefreshing = true)
+
+            is MarketIntent.SearchQueryChanged -> {
+                state = state.copy(query = intent.query)
             }
+            is MarketIntent.NavigateToOrderDetails -> emitEffect(
+                MarketEffect.NavigateToOrderDetails(
+                    intent.order,
+                    intent.user
+                )
+            )
 
-            is MarketIntent.SearchQueryChanged -> { state = state.copy(query = intent.query) }
-
-            is MarketIntent.ClickOrder -> {
-                viewModelScope.launch {
-                    _effect.emit(MarketEffect.NavigateToOrderDetails(intent.order))
-                }
-            }
-
-            is MarketIntent.SellNowClicked -> {
-                viewModelScope.launch {
-                    _effect.emit(MarketEffect.NavigateToSellNow)
-                }
-            }
-
+            MarketIntent.SellNowClicked -> emitEffect(MarketEffect.NavigateToSellNow)
         }
     }
 
-    private fun loadOrders() {
+    fun getUserData(userId: String, onLoaded: (MarketUser) -> Unit) {
+        val cachedUser = loadedUsers[userId]
+        if (cachedUser != null) {
+            onLoaded(cachedUser)
+            return
+        }
+
         viewModelScope.launch {
-            state = state.copy(isLoading = true)
+            try {
+                val user = getMarketUserUseCase(userId)
+                loadedUsers[userId] = user
+                onLoaded(user)
+            } catch (e: Exception) {
+                onLoaded(MarketUser(id = 0, name = "User $userId", location = "Unknown"))
+            }
+        }
+    }
+
+
+    private fun loadOrders(isRefreshing: Boolean = false) {
+        viewModelScope.launch {
+            state = state.copy(
+                isLoading = true,
+                isRefreshing = isRefreshing,
+                isEmpty = false,
+                error = null
+            )
             try {
                 val orders = getMarketOrdersUseCase()
                 state = state.copy(
                     isLoading = false,
-                    successfulOrders = orders
+                    isRefreshing = false,
+                    successfulOrders = orders,
+                    isEmpty = orders.isEmpty()
                 )
             } catch (e: Exception) {
-                state = state.copy(isLoading = false)
-                _effect.emit(MarketEffect.ShowError(e.message ?: "Unknown error"))
+                val errorMsg = e.message ?: "Network error"
+                state = state.copy(
+                    isLoading = false,
+                    isRefreshing = false,
+                    error = errorMsg
+                )
+                emitEffect(MarketEffect.ShowError("$errorMsg, please try again"))
             }
         }
     }
+
+    private fun emitEffect(effect: MarketEffect) {
+        viewModelScope.launch { _effect.emit(effect) }
+    }
+
 }

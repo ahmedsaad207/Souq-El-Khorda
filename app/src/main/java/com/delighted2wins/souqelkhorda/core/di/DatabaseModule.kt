@@ -2,7 +2,9 @@ package com.delighted2wins.souqelkhorda.core.di
 
 import android.content.Context
 import androidx.room.Room
-import com.delighted2wins.souqelkhorda.core.local.db.ScrapeDatabase
+import com.delighted2wins.souqelkhorda.features.sell.data.local.database.ScrapeDatabase
+import com.delighted2wins.souqelkhorda.features.sell.domain.repo.OrdersRepository
+import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.SendOrderUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,4 +27,11 @@ object DatabaseModule {
 
     @Provides
     fun provideScrapDoa(db: ScrapeDatabase) = db.scrapDao()
+
+//    @Provides
+//    @Singleton
+//    fun provideFirestore() = Firebase.firestore
+
+    @Provides
+    fun provideSendOrderUseCase(repo: OrdersRepository) = SendOrderUseCase(repo)
 }

@@ -29,13 +29,12 @@ import com.delighted2wins.souqelkhorda.core.components.CachedUserImage
 fun SellerInfoSection(
     userImage: String?,
     userName: String,
-    isVerified: Boolean,
-    rating: Double,
-    reviewCount: Int
+    isVerified: Boolean? = false,
+    rating: Double? = 0.0,
+    reviewCount: Int? = 0
 ) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(6.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)
@@ -60,32 +59,40 @@ fun SellerInfoSection(
                     Text(
                         text = userName,
                         style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Icon(
-                        imageVector = if (isVerified) Icons.Default.Verified else TODO(),
-                        contentDescription = "Verified",
-                        tint = Color.Blue
-                    )
-                }
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = Icons.Default.Star,
-                        contentDescription = "Star rating",
-                        tint = Color.Yellow
-                    )
-                    Text(
-                        text = rating.toString(),
-                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Bold,
                         color = Color.White
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = "($reviewCount reviews)",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color.White.copy(alpha = 0.7f)
-                    )
+                    if (isVerified == true) {
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Icon(
+                            imageVector = Icons.Default.Verified,
+                            contentDescription = "Verified",
+                            tint = Color.Blue
+                        )
+                    }
+                }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    if (rating != null && rating > 0) {
+                        Icon(
+                            imageVector = Icons.Default.Star,
+                            contentDescription = "Star rating",
+                            tint = Color.Yellow
+                        )
+                        Text(
+                            text = rating.toString(),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color.White
+                        )
+                    }
+
+                    if (reviewCount != null && reviewCount > 0) {
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "($reviewCount reviews)",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color.White.copy(alpha = 0.7f)
+                        )
+                    }
                 }
             }
         }

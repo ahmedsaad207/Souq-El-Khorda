@@ -25,17 +25,18 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
+import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.core.utils.isArabic
-import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapOrder
-import com.delighted2wins.souqelkhorda.features.market.domain.entities.User
-import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.ScrapUserSection
+import com.delighted2wins.souqelkhorda.core.utils.toFormattedDate
+import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.UserSection
 
 @Composable
 fun ScrapCard(
-    user: User,
-    scrap: ScrapOrder,
+    marketUser: MarketUser,
+    scrap: Order,
     onBuyClick: () -> Unit = {},
-    onDetailsClick: (id:Int) -> Unit = {},
+    onDetailsClick: (Order, MarketUser) -> Unit,
     systemIsRtl: Boolean = false
 ) {
     Card(
@@ -43,9 +44,9 @@ fun ScrapCard(
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
-        ScrapUserSection(
-            userData = user,
-            date = scrap.date,
+        UserSection(
+            marketUserData = marketUser,
+            date = scrap.date.toFormattedDate(),
             systemIsRtl = systemIsRtl
         )
 
@@ -125,10 +126,12 @@ fun ScrapCard(
             ) {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp)
                 ) {
                     OutlinedButton(
-                        onClick = { onDetailsClick(scrap.id) },
+                        onClick = { onDetailsClick(scrap, marketUser) },
                         shape = RoundedCornerShape(8.dp),
                         modifier = Modifier.weight(1f)
                     ) {

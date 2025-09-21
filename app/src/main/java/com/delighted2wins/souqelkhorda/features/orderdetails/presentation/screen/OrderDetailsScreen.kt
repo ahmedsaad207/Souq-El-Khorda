@@ -23,12 +23,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
-import com.delighted2wins.souqelkhorda.features.market.domain.entities.ScrapOrder
-import com.delighted2wins.souqelkhorda.features.market.domain.entities.User
+import com.delighted2wins.souqelkhorda.core.model.Order
+import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.ActionButtonsSection
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.DescriptionSection
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.OrderDetailsTopBar
@@ -37,15 +36,12 @@ import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.compon
 
 @Composable
 fun OrderDetailsScreen(
-    order: ScrapOrder,
+    order: Order,
+    user: MarketUser,
     onBackClick: () -> Unit = {},
 ) {
     val isRtl: Boolean = LocalLayoutDirection.current == LayoutDirection.Rtl
-    var user by remember { mutableStateOf<User?>(null) }
-
-    LaunchedEffect(Unit) {
-       //user = sampleUser().firstOrNull{ it.id == order.userId }
-    }
+   // var marketUser by remember { mutableStateOf<MarketUser?>(null) }
 
     Surface(
         color = Color.Transparent,
@@ -74,11 +70,8 @@ fun OrderDetailsScreen(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         SellerInfoSection(
-                            userImage = user?.imageUrl,
-                            userName = user?.name ?: "Loading...",
-                            isVerified = true,
-                            rating = 4.8,
-                            reviewCount = 120
+                            userImage = user.imageUrl,
+                            userName = user.name,
                         )
 
                         Spacer(modifier = Modifier.height(18.dp))
@@ -100,11 +93,11 @@ fun OrderDetailsScreen(
                     text = if (isRtl) "تفاصيل الأصناف" else "Order Items",
                     contentIsRtl = isRtl,
                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                    modifier = Modifier.fillMaxWidth().padding(start = 6.dp, end = 16.dp, top = 8.dp, bottom = 4.dp)
+                    modifier = Modifier.fillMaxWidth().padding(start = 6.dp, end = 16.dp, top = 8.dp)
                 )
             }
 
-            items(order.items) { item ->
+            items(order.scraps) { item ->
                 OrderItemCard(
                     item = item,
                     contentIsRtl = isRtl,
@@ -119,9 +112,3 @@ fun OrderDetailsScreen(
     }
 }
 
-//@Preview(showBackground = true, showSystemUi = true)
-//@Composable
-//fun OrderDetailsScreenPreview() {
-//    val sampleOrder = sampleData().first()
-//    OrderDetailsScreen(order = sampleOrder)
-//}

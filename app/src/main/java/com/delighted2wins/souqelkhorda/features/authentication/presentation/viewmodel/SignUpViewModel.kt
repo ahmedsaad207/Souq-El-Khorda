@@ -7,9 +7,8 @@ import com.delighted2wins.souqelkhorda.core.extensions.isEmail
 import com.delighted2wins.souqelkhorda.core.extensions.isPassword
 import com.delighted2wins.souqelkhorda.core.extensions.isPhoneNumber
 import com.delighted2wins.souqelkhorda.core.extensions.isUserName
-import com.delighted2wins.souqelkhorda.features.authentication.data.model.AuthMsg
+import com.delighted2wins.souqelkhorda.core.enums.AuthMsgEnum
 import com.delighted2wins.souqelkhorda.features.authentication.data.model.SignUpRequestDto
-import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.LogoutUseCase
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.SignUpUseCase
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.state.AuthenticationState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,7 +24,6 @@ import javax.inject.Inject
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val signUpUseCase: SignUpUseCase,
-    private val logOutUseCase: LogoutUseCase
 ) : ViewModel() {
     private val _registerState = MutableStateFlow<AuthenticationState>(AuthenticationState.Idle)
     val registerState = _registerState.asStateFlow()
@@ -34,52 +32,52 @@ class SignUpViewModel @Inject constructor(
     fun signUp(signUpRequestDto: SignUpRequestDto) {
         viewModelScope.launch(Dispatchers.IO) {
             if (!signUpRequestDto.name.isUserName()) {
-                emitError(AuthMsg.USERNAMEVALIDATE.getMsg())
+                emitError(AuthMsgEnum.USERNAMEVALIDATE.getMsg())
                 return@launch
             }
             if (!signUpRequestDto.email.isEmail()) {
-                emitError(AuthMsg.EMAILVALIDATE.getMsg())
+                emitError(AuthMsgEnum.EMAILVALIDATE.getMsg())
                 return@launch
             }
             if (!signUpRequestDto.password.isPassword()) {
-                emitError(AuthMsg.PASSWORDVALIDATE.getMsg())
+                emitError(AuthMsgEnum.PASSWORDVALIDATE.getMsg())
                 return@launch
             }
             if (signUpRequestDto.passwordConfirmation != signUpRequestDto.password) {
-                emitError(AuthMsg.PASSWORDCONFIRMATION.getMsg())
+                emitError(AuthMsgEnum.PASSWORDCONFIRMATION.getMsg())
                 return@launch
             }
             if (!signUpRequestDto.phone.isPhoneNumber()) {
-                emitError(AuthMsg.PHONEVALIDATE.getMsg())
+                emitError(AuthMsgEnum.PHONEVALIDATE.getMsg())
                 return@launch
             }
             if (signUpRequestDto.governorate.isEmpty()) {
-                emitError(AuthMsg.GOVERNORATEVALIDATE.getMsg())
+                emitError(AuthMsgEnum.GOVERNORATEVALIDATE.getMsg())
                 return@launch
             }
             if (!signUpRequestDto.address.isAddress()) {
-                emitError(AuthMsg.ADDRESSVALIDATE.getMsg())
+                emitError(AuthMsgEnum.ADDRESSVALIDATE.getMsg())
                 return@launch
             }
             try {
                 signUpUseCase(signUpRequestDto)
-                    .catch { emitError(AuthMsg.SIGNUPFAIL.getMsg()) }
+                    .catch { emitError(AuthMsgEnum.SIGNUPFAIL.getMsg()) }
                     .collect { state ->
                         _registerState.emit(state)
                         when (state) {
                             is AuthenticationState.Success -> {
 //                                logOutUseCase()
                                 val user = state.userAuth
-                                _message.emit(AuthMsg.SIGNUPSUCCESS.getMsg() )
+                                _message.emit(AuthMsgEnum.SIGNUPSUCCESS.getMsg() )
                             }
                             is AuthenticationState.Error -> {
-                                _message.emit(AuthMsg.SIGNUPFAIL.getMsg())
+                                _message.emit(AuthMsgEnum.SIGNUPFAIL.getMsg())
                             }
                             else -> Unit
                         }
                     }
             } catch (e: Exception) {
-                emitError(AuthMsg.SIGNUPFAIL.getMsg())
+                emitError(AuthMsgEnum.SIGNUPFAIL.getMsg())
             }
         }
     }
