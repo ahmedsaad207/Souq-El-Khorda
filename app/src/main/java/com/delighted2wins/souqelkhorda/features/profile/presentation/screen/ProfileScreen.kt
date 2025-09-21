@@ -208,10 +208,10 @@ fun EditableField(
                     } else {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             IconButton(onClick = onSave) {
-                                Icon(imageVector = Icons.Default.Check, contentDescription = "Save")
+                                Icon(imageVector = Icons.Default.Check, contentDescription = "Save", tint = MaterialTheme.colorScheme.primary)
                             }
                             IconButton(onClick = onCancel) {
-                                Icon(imageVector = Icons.Default.Close, contentDescription = "Cancel")
+                                Icon(imageVector = Icons.Default.Close, contentDescription = "Cancel", tint = MaterialTheme.colorScheme.error)
                             }
                         }
                     }
