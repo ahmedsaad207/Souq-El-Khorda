@@ -1,4 +1,4 @@
-package com.delighted2wins.souqelkhorda.features.sale.domain.usecase
+package com.delighted2wins.souqelkhorda.features.sell.domain.usecase
 
 import com.delighted2wins.souqelkhorda.features.additem.domain.repo.ScrapesRepo
 import javax.inject.Inject

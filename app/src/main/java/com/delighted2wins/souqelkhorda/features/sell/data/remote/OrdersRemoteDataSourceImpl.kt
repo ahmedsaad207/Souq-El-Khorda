@@ -1,4 +1,4 @@
-package com.delighted2wins.souqelkhorda.features.sale.data.remote
+package com.delighted2wins.souqelkhorda.features.sell.data.remote
 
 import com.delighted2wins.souqelkhorda.core.model.Order
 import com.google.firebase.firestore.FirebaseFirestore

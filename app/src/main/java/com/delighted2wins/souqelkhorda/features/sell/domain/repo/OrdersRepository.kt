@@ -1,4 +1,4 @@
-package com.delighted2wins.souqelkhorda.features.sale.domain.repo
+package com.delighted2wins.souqelkhorda.features.sell.domain.repo
 
 import com.delighted2wins.souqelkhorda.core.model.Order
 

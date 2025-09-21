@@ -1,8 +1,8 @@
-package com.delighted2wins.souqelkhorda.features.sale.di
+package com.delighted2wins.souqelkhorda.features.sell.di
 
 import com.delighted2wins.souqelkhorda.features.additem.domain.repo.ScrapesRepo
 import com.delighted2wins.souqelkhorda.features.additem.domain.usecase.DeleteAllScrapsUseCase
-import com.delighted2wins.souqelkhorda.features.sale.domain.usecase.GetScrapesUseCase
+import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.GetScrapesUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

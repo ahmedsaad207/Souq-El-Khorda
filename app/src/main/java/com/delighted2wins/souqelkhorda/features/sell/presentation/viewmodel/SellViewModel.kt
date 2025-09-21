@@ -1,13 +1,13 @@
-package com.delighted2wins.souqelkhorda.features.sale.presentation.viewmodel
+package com.delighted2wins.souqelkhorda.features.sell.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.delighted2wins.souqelkhorda.features.additem.domain.usecase.DeleteAllScrapsUseCase
 import com.delighted2wins.souqelkhorda.core.model.Order
-import com.delighted2wins.souqelkhorda.features.sale.domain.usecase.GetScrapesUseCase
-import com.delighted2wins.souqelkhorda.features.sale.domain.usecase.SendOrderUseCase
-import com.delighted2wins.souqelkhorda.features.sale.presentation.SaleIntent
-import com.delighted2wins.souqelkhorda.features.sale.presentation.SaleState
+import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.GetScrapesUseCase
+import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.SendOrderUseCase
+import com.delighted2wins.souqelkhorda.features.sell.presentation.SaleIntent
+import com.delighted2wins.souqelkhorda.features.sell.presentation.SaleState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SaleViewModel @Inject constructor(
+class SellViewModel @Inject constructor(
     private val getScrapesUseCase: GetScrapesUseCase,
     private val deleteAllScrapsUseCase: DeleteAllScrapsUseCase,
     private val sendOrderUseCase: SendOrderUseCase

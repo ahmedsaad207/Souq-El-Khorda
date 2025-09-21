@@ -3,10 +3,8 @@ package com.delighted2wins.souqelkhorda.core.di
 import android.content.Context
 import androidx.room.Room
 import com.delighted2wins.souqelkhorda.core.local.db.ScrapeDatabase
-import com.delighted2wins.souqelkhorda.features.sale.domain.repo.OrdersRepository
-import com.delighted2wins.souqelkhorda.features.sale.domain.usecase.SendOrderUseCase
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.firestore
+import com.delighted2wins.souqelkhorda.features.sell.domain.repo.OrdersRepository
+import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.SendOrderUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

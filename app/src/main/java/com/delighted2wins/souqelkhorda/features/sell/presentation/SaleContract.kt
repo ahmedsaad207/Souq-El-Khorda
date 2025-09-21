@@ -1,4 +1,4 @@
-package com.delighted2wins.souqelkhorda.features.sale.presentation
+package com.delighted2wins.souqelkhorda.features.sell.presentation
 
 import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.core.model.Scrap
