@@ -24,23 +24,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.delighted2wins.souqelkhorda.features.myorders.presentation.component.FilterWithBadge
+import com.delighted2wins.souqelkhorda.features.myorders.presentation.component.OrdersList
+import com.delighted2wins.souqelkhorda.features.myorders.presentation.contract.MyOrdersState
 
 @Composable
 fun MarketOrdersScreen(
-    mySellsCount: Int = 3,
-    myOffersCount: Int = 1
+    state: MyOrdersState,
+    onChipSelected: (String) -> Unit
 ) {
-    var selectedFilter by remember { mutableStateOf("sells") }
+    var selectedFilter by remember { mutableStateOf("Sells") }
 
     LaunchedEffect(selectedFilter) {
-        when (selectedFilter) {
-            "sells" -> {
-                // viewModel.loadMySells()
-            }
-            "offers" -> {
-                // viewModel.loadMyOffers()
-            }
-        }
+        onChipSelected(selectedFilter)
     }
 
     Column(
@@ -52,67 +48,50 @@ fun MarketOrdersScreen(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            FilterChip(
-                selected = selectedFilter == "sells",
-                onClick = { selectedFilter = "sells" },
-                label = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = "My Sells",
-                            fontWeight = if (selectedFilter == "sells") FontWeight.Bold else FontWeight.Normal
-                        )
-                        if (mySellsCount > 0) {
-                            Spacer(modifier = Modifier.width(6.dp))
-                            Badge(
-                                containerColor = Color.Red,
-                                contentColor = Color.White
-                            ) {
-                                Text(
-                                    text = mySellsCount.toString(),
-                                    fontSize = 12.sp
-                                )
-                            }
-                        }
-                    }
-                }
+            FilterWithBadge(
+                label = "Sells",
+                count = state.sellsCount,
+                selected = selectedFilter == "Sells",
+                onClick = { selectedFilter = "Sells" }
             )
 
-            FilterChip(
-                selected = selectedFilter == "offers",
-                onClick = { selectedFilter = "offers" },
-                label = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = "My Offers",
-                            fontWeight = if (selectedFilter == "offers") FontWeight.Bold else FontWeight.Normal
-                        )
-                        if (myOffersCount > 0) {
-                            Spacer(modifier = Modifier.width(6.dp))
-                            Badge(
-                                containerColor = Color.Red,
-                                contentColor = Color.White
-                            ) {
-                                Text(
-                                    text = myOffersCount.toString(),
-                                    fontSize = 12.sp
-                                )
-                            }
-                        }
-                    }
-                }
+            FilterWithBadge(
+                label = "Offers",
+                count = state.offersCount,
+                selected = selectedFilter == "Offers",
+                onClick = { selectedFilter = "Offers" }
             )
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-        // Screen Content depending on filter
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
             when (selectedFilter) {
-                "sells" -> Text("Showing My Sells", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                "offers" -> Text("Showing My Offers", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                "Sells" -> {
+                    if (state.sells.isEmpty() && !state.isLoading) {
+                        Text("No sells available", fontSize = 16.sp, color = Color.Gray)
+                    } else {
+                        OrdersList(
+                            orders = state.sells,
+                            isLoading = state.isLoading,
+                            error = state.error
+                        )
+                    }
+                }
+                "Offers" -> {
+                    if (state.offers.isEmpty() && !state.isLoading) {
+                        Text("No offers available", fontSize = 16.sp, color = Color.Gray)
+                    } else {
+                        OrdersList(
+                            orders = state.offers,
+                            isLoading = state.isLoading,
+                            error = state.error
+                        )
+                    }
+                }
             }
         }
     }

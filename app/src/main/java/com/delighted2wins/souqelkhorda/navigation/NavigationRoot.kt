@@ -176,7 +176,6 @@ fun NavigationRoot(
                         bottomBarState.value = true
                         OrdersScreen(
                             innerPadding,
-                            onBackClick = { backStack.remove(key) },
                         )
                     }
                 }

@@ -19,6 +19,7 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,26 +27,32 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.delighted2wins.souqelkhorda.features.myorders.presentation.contract.MyOrdersIntents
+import com.delighted2wins.souqelkhorda.features.myorders.presentation.viewmodel.MyOrdersViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OrdersScreen(
     innerPadding: PaddingValues = PaddingValues(),
-    onBackClick: () -> Unit
+    viewModel: MyOrdersViewModel = hiltViewModel(),
 ) {
-    val tabs = listOf("Sale" to 2, "Market" to 5)
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    val tabs = listOf(
+        "Sale" to state.saleCount,
+        "Market" to (state.offersCount + state.sellsCount)
+    )
+
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { tabs.size })
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(pagerState.currentPage) {
         when (pagerState.currentPage) {
-            0 -> {
-                // viewModel.loadSaleOrders()
-            }
-            1 -> {
-                // viewModel.loadMarketOrders()
-            }
+            0 -> viewModel.onIntent(MyOrdersIntents.LoadSaleOrders)
+            1 -> viewModel.onIntent(MyOrdersIntents.LoadSells)
         }
     }
 
@@ -107,8 +114,21 @@ fun OrdersScreen(
             modifier = Modifier.fillMaxSize()
         ) { page ->
             when (page) {
-                0 -> SaleOrdersScreen()
-                1 -> MarketOrdersScreen(2,3)
+                0 -> SaleOrdersScreen(
+                    state.saleOrders,
+                    state.isLoading,
+                    state.error
+                )
+                1 -> MarketOrdersScreen(
+                    state = state,
+                    onChipSelected = { chip ->
+                        when (chip) {
+                            "Sells" -> viewModel.onIntent(MyOrdersIntents.LoadSells)
+                            "Offers" -> viewModel.onIntent(MyOrdersIntents.LoadOffers)
+                        }
+                    }
+                )
+
             }
         }
     }
