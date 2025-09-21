@@ -72,8 +72,8 @@ fun NavigationRoot(
                             navigateToMakeOffer = {
                                 // Navigate to Buying Screen
                             },
-                            onDetailsClick = { order ->
-                                backStack.add(OrderDetailsKey(order))
+                            onDetailsClick = { order, user ->
+                                backStack.add(OrderDetailsKey(order, user))
                             },
                             navToAddItem = {
                                // backStack.add(AddItemKey(TODO()))
@@ -87,6 +87,7 @@ fun NavigationRoot(
                         bottomBarState.value = false
                         OrderDetailsScreen(
                             order = key.order,
+                            user = key.user,
                             onBackClick = { backStack.remove(key) }
                         )
                     }

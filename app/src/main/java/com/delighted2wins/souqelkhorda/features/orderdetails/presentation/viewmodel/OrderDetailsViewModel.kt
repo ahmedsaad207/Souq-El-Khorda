@@ -5,8 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.delighted2wins.souqelkhorda.features.orderdetails.domain.usecase.GetScrapOrderDetailsUseCase
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.OrderDetailsIntent
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.OrderDetailsState
-import com.delighted2wins.souqelkhorda.features.sale.presentation.SaleState
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -21,7 +19,7 @@ class OrderDetailsViewModel @Inject constructor(
 
     fun onIntent(intent: OrderDetailsIntent) {
         when (intent) {
-            is OrderDetailsIntent.LoadOrderDetails -> loadOrder(intent.order.id.toString())
+            is OrderDetailsIntent.LoadOrderDetails -> loadOrder(intent.order.orderId)
             OrderDetailsIntent.BackClicked -> TODO()
             OrderDetailsIntent.Retry -> TODO()
         }

@@ -32,7 +32,7 @@ fun MarketScreen(
     snackBarHostState: SnackbarHostState,
     viewModel: MarketViewModel = hiltViewModel(),
     navigateToMakeOffer: () -> Unit = {},
-    onDetailsClick: (Order) -> Unit,
+    onDetailsClick: (Order, MarketUser) -> Unit,
     navToAddItem: () -> Unit = {}
 ) {
     val state = viewModel.state
@@ -43,7 +43,7 @@ fun MarketScreen(
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                is MarketEffect.NavigateToOrderDetails -> onDetailsClick(effect.order)
+                is MarketEffect.NavigateToOrderDetails -> onDetailsClick(effect.order, effect.user)
                 is MarketEffect.ShowError -> {
                     coroutineScope.launch {
                         snackBarHostState.showSnackbar(
@@ -180,7 +180,7 @@ fun MarketScreen(
                                 marketUser = loadedUser,
                                 scrap = scrapData,
                                 onBuyClick = { navigateToMakeOffer() },
-                                onDetailsClick = { onDetailsClick(scrapData) },
+                                onDetailsClick = { order, user -> onDetailsClick(order, user) },
                                 systemIsRtl = isRtl
                             )
                         } ?: ScrapCardShimmer(systemIsRtl = isRtl)

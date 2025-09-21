@@ -37,10 +37,11 @@ import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.compon
 @Composable
 fun OrderDetailsScreen(
     order: Order,
+    user: MarketUser,
     onBackClick: () -> Unit = {},
 ) {
     val isRtl: Boolean = LocalLayoutDirection.current == LayoutDirection.Rtl
-    var marketUser by remember { mutableStateOf<MarketUser?>(null) }
+   // var marketUser by remember { mutableStateOf<MarketUser?>(null) }
 
     Surface(
         color = Color.Transparent,
@@ -69,11 +70,8 @@ fun OrderDetailsScreen(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         SellerInfoSection(
-                            userImage = marketUser?.imageUrl,
-                            userName = marketUser?.name ?: "Loading...",
-                            isVerified = true,
-                            rating = 4.8,
-                            reviewCount = 120
+                            userImage = user.imageUrl,
+                            userName = user.name,
                         )
 
                         Spacer(modifier = Modifier.height(18.dp))
@@ -95,7 +93,7 @@ fun OrderDetailsScreen(
                     text = if (isRtl) "تفاصيل الأصناف" else "Order Items",
                     contentIsRtl = isRtl,
                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                    modifier = Modifier.fillMaxWidth().padding(start = 6.dp, end = 16.dp, top = 8.dp, bottom = 4.dp)
+                    modifier = Modifier.fillMaxWidth().padding(start = 6.dp, end = 16.dp, top = 8.dp)
                 )
             }
 
@@ -114,9 +112,3 @@ fun OrderDetailsScreen(
     }
 }
 
-//@Preview(showBackground = true, showSystemUi = true)
-//@Composable
-//fun OrderDetailsScreenPreview() {
-//    val sampleOrder = sampleData().first()
-//    OrderDetailsScreen(order = sampleOrder)
-//}

@@ -44,7 +44,12 @@ class MarketViewModel @Inject constructor(
             is MarketIntent.SearchQueryChanged -> {
                 state = state.copy(query = intent.query)
             }
-            is MarketIntent.ClickOrder -> emitEffect(MarketEffect.NavigateToOrderDetails(intent.order))
+            is MarketIntent.NavigateToOrderDetails -> emitEffect(
+                MarketEffect.NavigateToOrderDetails(
+                    intent.order,
+                    intent.user
+                )
+            )
 
             MarketIntent.SellNowClicked -> emitEffect(MarketEffect.NavigateToSellNow)
         }
