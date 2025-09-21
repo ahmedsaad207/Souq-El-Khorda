@@ -183,7 +183,7 @@ fun MarketScreen(
                                 onDetailsClick = { order, user -> onDetailsClick(order, user) },
                                 systemIsRtl = isRtl
                             )
-                        } ?: ScrapCardShimmer(systemIsRtl = isRtl)
+                        } ?: ShimmerScrapCard(systemIsRtl = isRtl)
                     }
 
                     item { Spacer(modifier = Modifier.padding(60.dp)) }

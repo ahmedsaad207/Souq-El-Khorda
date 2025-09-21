@@ -36,8 +36,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OrdersScreen(
-    viewModel: MyOrdersViewModel = hiltViewModel(),
     innerPadding: PaddingValues = PaddingValues(),
+    viewModel: MyOrdersViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 

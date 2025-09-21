@@ -14,10 +14,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.delighted2wins.souqelkhorda.core.model.Order
 
 @Composable
 fun OrdersList(
-    orders: List<String>,
+    orders: List<Order>,
     isLoading: Boolean,
     error: String?
 ) {
@@ -68,7 +69,7 @@ fun OrdersList(
                 contentPadding = PaddingValues(16.dp)
             ) {
                 items(orders) { order ->
-                    OrderItem(order)
+                    OrderItem(order = order)
                 }
             }
         }

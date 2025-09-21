@@ -1,7 +1,9 @@
 package com.delighted2wins.souqelkhorda.features.myorders.domain.repository
 
+import com.delighted2wins.souqelkhorda.core.model.Order
+
 interface MyOrdersRepository {
-    suspend fun getSaleOrders(): List<String> // Replace with <Order> data model
-    suspend fun getOffers(): List<String>    // Replace with <Order> data model
-    suspend fun getSells(): List<String>    // Replace with <Order> data model
+    suspend fun getSaleOrders(): List<Order>
+    suspend fun getOffers(): List<Order>
+    suspend fun getSells(): List<Order>
 }

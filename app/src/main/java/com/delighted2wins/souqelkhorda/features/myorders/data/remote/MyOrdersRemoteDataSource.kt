@@ -1,7 +1,9 @@
 package com.delighted2wins.souqelkhorda.features.myorders.data.remote
 
+import com.delighted2wins.souqelkhorda.core.model.Order
+
 interface MyOrdersRemoteDataSource {
-    suspend fun fetchSaleOrders(): List<String> // Replace with <Order> data model
-    suspend fun fetchOffers(): List<String>    // Replace with <Order> data model
-    suspend fun fetchSells(): List<String>    // Replace with <Order> data model
+    suspend fun fetchSaleOrders(): List<Order>
+    suspend fun fetchOffers(): List<Order>
+    suspend fun fetchSells(): List<Order>
 }

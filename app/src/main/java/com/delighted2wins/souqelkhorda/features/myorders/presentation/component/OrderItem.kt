@@ -11,9 +11,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.delighted2wins.souqelkhorda.core.model.Order
 
 @Composable
-fun OrderItem(order: String) {
+fun OrderItem(order: Order) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -21,7 +22,7 @@ fun OrderItem(order: String) {
             .padding(12.dp)
     ) {
         Text(
-            text = order,
+            text = order.title,
             fontSize = 18.sp,
             fontWeight = FontWeight.Medium
         )

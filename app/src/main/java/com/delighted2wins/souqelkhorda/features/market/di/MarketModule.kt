@@ -5,7 +5,6 @@ import com.delighted2wins.souqelkhorda.features.market.data.remote.MarketRemoteD
 import com.delighted2wins.souqelkhorda.features.market.data.repository.MarketRepositoryImpl
 import com.delighted2wins.souqelkhorda.features.market.domain.repository.MarketRepository
 import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetMarketOrdersUseCase
-import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetMarketOrdersUseCase
 import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetUserForMarketUseCase
 import dagger.Binds
 import dagger.Module
