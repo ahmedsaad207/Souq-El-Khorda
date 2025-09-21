@@ -2,13 +2,15 @@ package com.delighted2wins.souqelkhorda.features.profile.data.repository
 
 import com.delighted2wins.souqelkhorda.features.authentication.data.local.IAuthenticationLocalDataSource
 import com.delighted2wins.souqelkhorda.features.authentication.data.model.AuthUser
+import com.delighted2wins.souqelkhorda.features.profile.data.local.ProfileLocalDataSource
 import com.delighted2wins.souqelkhorda.features.profile.data.remote.ProfileRemoteDataSource
 import com.delighted2wins.souqelkhorda.features.profile.domain.repository.ProfileRepository
 import javax.inject.Inject
 
 class ProfileRepositoryImpl @Inject constructor(
     private val profileRemoteDataSource: ProfileRemoteDataSource,
-    private val authLocalDataSource: IAuthenticationLocalDataSource
+    private val authLocalDataSource: IAuthenticationLocalDataSource,
+    private val profileLocalDataSource: ProfileLocalDataSource
 ) : ProfileRepository {
 
     override suspend fun updateName(name: String): Result<Unit> {
@@ -70,5 +72,13 @@ class ProfileRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    override fun saveLanguage(code: String) {
+        profileLocalDataSource.saveLanguage(code)
+    }
+
+    override fun getLanguage(): String {
+        return profileLocalDataSource.getLanguage()
     }
 }

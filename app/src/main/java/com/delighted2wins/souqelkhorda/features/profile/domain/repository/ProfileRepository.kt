@@ -10,4 +10,7 @@ interface ProfileRepository {
     suspend fun updateAddress(address: String): Result<Unit>
     suspend fun updateImageUrl(imageUrl: String): Result<Unit>
     suspend fun getUserProfile(): Result<AuthUser>
+
+    fun saveLanguage(code: String)
+    fun getLanguage(): String
 }

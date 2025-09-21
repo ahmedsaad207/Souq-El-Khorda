@@ -49,6 +49,8 @@ interface ProfileContract {
             val fieldSetter: (State, ProfileFieldState) -> State
         ) : Intent()
 
+        data class ChangeLanguage(val lang: String) : Intent()
+
         data object Logout : Intent()
         data object NavigateToHistory : Intent()
     }

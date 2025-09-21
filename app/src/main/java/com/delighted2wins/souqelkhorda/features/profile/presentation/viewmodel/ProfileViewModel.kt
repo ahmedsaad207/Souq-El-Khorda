@@ -7,6 +7,7 @@ import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.FreeUserCase
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.LogoutUseCase
 import com.delighted2wins.souqelkhorda.features.profile.domain.usecase.GetUserProfileUseCase
+import com.delighted2wins.souqelkhorda.features.profile.domain.usecase.SetLanguageUseCase
 import com.delighted2wins.souqelkhorda.features.profile.domain.usecase.UpdateUserEmailUseCase
 import com.delighted2wins.souqelkhorda.features.profile.domain.usecase.UpdateUserProfileUseCase
 import com.delighted2wins.souqelkhorda.features.profile.presentation.contract.ProfileContract
@@ -26,7 +27,8 @@ class ProfileViewModel @Inject constructor(
     private val getUserProfileUseCase: GetUserProfileUseCase,
     private val updateUserEmailUseCase: UpdateUserEmailUseCase,
     private val logoutUseCase: LogoutUseCase,
-    private val freeUserCase: FreeUserCase
+    private val freeUserCase: FreeUserCase,
+    private val setLanguageUseCase: SetLanguageUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ProfileContract.State())
@@ -56,6 +58,8 @@ class ProfileViewModel @Inject constructor(
             is ProfileContract.Intent.SaveImageUrl -> updateImageUrl()
             is ProfileContract.Intent.StartEditing -> startEditing(intent.fieldSelector, intent.fieldSetter)
             is ProfileContract.Intent.CancelEditing -> cancelEditing(intent.fieldSelector, intent.fieldSetter)
+
+            is ProfileContract.Intent.ChangeLanguage -> setLanguageUseCase(intent.lang)
 
             is ProfileContract.Intent.Logout -> {
                 logoutUseCase()

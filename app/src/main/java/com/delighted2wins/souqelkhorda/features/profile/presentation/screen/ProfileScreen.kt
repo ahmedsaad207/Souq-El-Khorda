@@ -30,12 +30,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.delighted2wins.souqelkhorda.core.components.TowIconAppBar
+import com.delighted2wins.souqelkhorda.core.extensions.restartActivity
 import com.delighted2wins.souqelkhorda.features.profile.presentation.component.HistoryButton
 import com.delighted2wins.souqelkhorda.features.profile.presentation.component.LogoutButton
 import com.delighted2wins.souqelkhorda.features.profile.presentation.component.ProfileHeader
@@ -53,6 +55,8 @@ fun ProfileScreen(
     onHistoryClick: () -> Unit = {}
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    val context = LocalContext.current
     val colors = MaterialTheme.colorScheme
 
     LaunchedEffect(Unit) {
@@ -82,7 +86,10 @@ fun ProfileScreen(
                     onStartIcon = Icons.Default.ArrowBack,
                     onEnIcon = Icons.Default.Language,
                     isProfile = true,
-                    onLanguageClick = { }
+                    onLanguageClick = { lang ->
+                        viewModel.handleIntent(ProfileContract.Intent.ChangeLanguage(lang))
+                        context.restartActivity()
+                    }
                 )
             }
 
