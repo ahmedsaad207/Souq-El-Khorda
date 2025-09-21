@@ -15,7 +15,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
@@ -110,15 +109,31 @@ fun ProfileScreen(
                     )
                 )
 
-                Divider(modifier = Modifier.fillMaxWidth(), thickness = 1.dp, color = colors.surfaceVariant)
+                Divider(
+                    modifier = Modifier.fillMaxWidth(),
+                    thickness = 1.dp,
+                    color = colors.surfaceVariant
+                )
                 Spacer(modifier = Modifier.height(16.dp))
 
                 EditableField(
                     label = stringResource(R.string.profile_username),
                     state = state.name,
                     onValueChange = { viewModel.handleIntent(ProfileContract.Intent.ChangeName(it)) },
-                    onStartEdit = { viewModel.handleIntent(ProfileContract.Intent.StartEditing({ it.name }) { st, f -> st.copy(name = f) }) },
-                    onCancel = { viewModel.handleIntent(ProfileContract.Intent.CancelEditing({ it.name }) { st, f -> st.copy(name = f) }) },
+                    onStartEdit = {
+                        viewModel.handleIntent(ProfileContract.Intent.StartEditing({ it.name }) { st, f ->
+                            st.copy(
+                                name = f
+                            )
+                        })
+                    },
+                    onCancel = {
+                        viewModel.handleIntent(ProfileContract.Intent.CancelEditing({ it.name }) { st, f ->
+                            st.copy(
+                                name = f
+                            )
+                        })
+                    },
                     onSave = { viewModel.handleIntent(ProfileContract.Intent.SaveName) }
                 )
 
@@ -128,8 +143,20 @@ fun ProfileScreen(
                     label = stringResource(R.string.profile_email),
                     state = state.email,
                     onValueChange = { viewModel.handleIntent(ProfileContract.Intent.ChangeEmail(it)) },
-                    onStartEdit = { viewModel.handleIntent(ProfileContract.Intent.StartEditing({ it.email }) { st, f -> st.copy(email = f) }) },
-                    onCancel = { viewModel.handleIntent(ProfileContract.Intent.CancelEditing({ it.email }) { st, f -> st.copy(email = f) }) },
+                    onStartEdit = {
+                        viewModel.handleIntent(ProfileContract.Intent.StartEditing({ it.email }) { st, f ->
+                            st.copy(
+                                email = f
+                            )
+                        })
+                    },
+                    onCancel = {
+                        viewModel.handleIntent(ProfileContract.Intent.CancelEditing({ it.email }) { st, f ->
+                            st.copy(
+                                email = f
+                            )
+                        })
+                    },
                     onSave = { viewModel.handleIntent(ProfileContract.Intent.SaveEmail) }
                 )
 
@@ -139,8 +166,20 @@ fun ProfileScreen(
                     label = stringResource(R.string.profile_phone),
                     state = state.phone,
                     onValueChange = { viewModel.handleIntent(ProfileContract.Intent.ChangePhone(it)) },
-                    onStartEdit = { viewModel.handleIntent(ProfileContract.Intent.StartEditing({ it.phone }) { st, f -> st.copy(phone = f) }) },
-                    onCancel = { viewModel.handleIntent(ProfileContract.Intent.CancelEditing({ it.phone }) { st, f -> st.copy(phone = f) }) },
+                    onStartEdit = {
+                        viewModel.handleIntent(ProfileContract.Intent.StartEditing({ it.phone }) { st, f ->
+                            st.copy(
+                                phone = f
+                            )
+                        })
+                    },
+                    onCancel = {
+                        viewModel.handleIntent(ProfileContract.Intent.CancelEditing({ it.phone }) { st, f ->
+                            st.copy(
+                                phone = f
+                            )
+                        })
+                    },
                     onSave = { viewModel.handleIntent(ProfileContract.Intent.SavePhone) }
                 )
 
@@ -149,9 +188,27 @@ fun ProfileScreen(
                 EditableField(
                     label = stringResource(R.string.profile_governorate),
                     state = state.governorate,
-                    onValueChange = { viewModel.handleIntent(ProfileContract.Intent.ChangeGovernorate(it)) },
-                    onStartEdit = { viewModel.handleIntent(ProfileContract.Intent.StartEditing({ it.governorate }) { st, f -> st.copy(governorate = f) }) },
-                    onCancel = { viewModel.handleIntent(ProfileContract.Intent.CancelEditing({ it.governorate }) { st, f -> st.copy(governorate = f) }) },
+                    onValueChange = {
+                        viewModel.handleIntent(
+                            ProfileContract.Intent.ChangeGovernorate(
+                                it
+                            )
+                        )
+                    },
+                    onStartEdit = {
+                        viewModel.handleIntent(ProfileContract.Intent.StartEditing({ it.governorate }) { st, f ->
+                            st.copy(
+                                governorate = f
+                            )
+                        })
+                    },
+                    onCancel = {
+                        viewModel.handleIntent(ProfileContract.Intent.CancelEditing({ it.governorate }) { st, f ->
+                            st.copy(
+                                governorate = f
+                            )
+                        })
+                    },
                     onSave = { viewModel.handleIntent(ProfileContract.Intent.SaveGovernorate) }
                 )
 
@@ -161,13 +218,29 @@ fun ProfileScreen(
                     label = stringResource(R.string.profile_address),
                     state = state.address,
                     onValueChange = { viewModel.handleIntent(ProfileContract.Intent.ChangeAddress(it)) },
-                    onStartEdit = { viewModel.handleIntent(ProfileContract.Intent.StartEditing({ it.address }) { st, f -> st.copy(address = f) }) },
-                    onCancel = { viewModel.handleIntent(ProfileContract.Intent.CancelEditing({ it.address }) { st, f -> st.copy(address = f) }) },
+                    onStartEdit = {
+                        viewModel.handleIntent(ProfileContract.Intent.StartEditing({ it.address }) { st, f ->
+                            st.copy(
+                                address = f
+                            )
+                        })
+                    },
+                    onCancel = {
+                        viewModel.handleIntent(ProfileContract.Intent.CancelEditing({ it.address }) { st, f ->
+                            st.copy(
+                                address = f
+                            )
+                        })
+                    },
                     onSave = { viewModel.handleIntent(ProfileContract.Intent.SaveAddress) }
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
-                Divider(modifier = Modifier.fillMaxWidth(), thickness = 1.dp, color = colors.surfaceVariant)
+                Divider(
+                    modifier = Modifier.fillMaxWidth(),
+                    thickness = 1.dp,
+                    color = colors.surfaceVariant
+                )
 
                 Spacer(modifier = Modifier.height(16.dp))
                 HistoryButton(onClick = { viewModel.handleIntent(ProfileContract.Intent.NavigateToHistory) })
@@ -204,14 +277,25 @@ fun EditableField(
             trailingContent = if (state.isEditing) {
                 {
                     if (state.isLoading) {
-                        CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(20.dp),
+                            strokeWidth = 2.dp
+                        )
                     } else {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             IconButton(onClick = onSave) {
-                                Icon(imageVector = Icons.Default.Check, contentDescription = "Save", tint = MaterialTheme.colorScheme.primary)
+                                Icon(
+                                    imageVector = Icons.Default.Check,
+                                    contentDescription = "Save",
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
                             }
                             IconButton(onClick = onCancel) {
-                                Icon(imageVector = Icons.Default.Close, contentDescription = "Cancel", tint = MaterialTheme.colorScheme.error)
+                                Icon(
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = "Cancel",
+                                    tint = MaterialTheme.colorScheme.error
+                                )
                             }
                         }
                     }

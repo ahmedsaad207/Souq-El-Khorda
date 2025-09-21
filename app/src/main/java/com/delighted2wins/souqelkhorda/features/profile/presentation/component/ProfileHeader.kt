@@ -37,7 +37,7 @@ fun ProfileHeader(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .height(300.dp),
+            .height(320.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
