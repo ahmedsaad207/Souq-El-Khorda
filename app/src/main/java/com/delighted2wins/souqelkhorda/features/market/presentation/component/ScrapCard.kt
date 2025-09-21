@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
 import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.core.utils.isArabic
+import com.delighted2wins.souqelkhorda.core.utils.toFormattedDate
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.UserSection
 
@@ -35,7 +36,7 @@ fun ScrapCard(
     marketUser: MarketUser,
     scrap: Order,
     onBuyClick: () -> Unit = {},
-    onDetailsClick: (id: Int) -> Unit = {},
+    onDetailsClick: (Order, MarketUser) -> Unit,
     systemIsRtl: Boolean = false
 ) {
     Card(
@@ -45,7 +46,7 @@ fun ScrapCard(
     ) {
         UserSection(
             marketUserData = marketUser,
-            date = scrap.date.toString(),
+            date = scrap.date.toFormattedDate(),
             systemIsRtl = systemIsRtl
         )
 
@@ -130,7 +131,7 @@ fun ScrapCard(
                         .padding(top = 16.dp)
                 ) {
                     OutlinedButton(
-                        onClick = { onDetailsClick(scrap.orderId.toInt()) },
+                        onClick = { onDetailsClick(scrap, marketUser) },
                         shape = RoundedCornerShape(8.dp),
                         modifier = Modifier.weight(1f)
                     ) {
