@@ -1,5 +1,6 @@
 package com.delighted2wins.souqelkhorda.features.profile.presentation.screen
 
+import CustomTextFieldWithIcon
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,13 +24,10 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,7 +35,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.delighted2wins.souqelkhorda.core.components.TowIconAppBar
-import com.delighted2wins.souqelkhorda.features.profile.presentation.component.CustomTextFieldWithIcon
 import com.delighted2wins.souqelkhorda.features.profile.presentation.component.HistoryButton
 import com.delighted2wins.souqelkhorda.features.profile.presentation.component.LogoutButton
 import com.delighted2wins.souqelkhorda.features.profile.presentation.component.ProfileHeader
@@ -55,20 +52,18 @@ fun ProfileScreen(
     onHistoryClick: () -> Unit = {}
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-
     val colors = MaterialTheme.colorScheme
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
+            modifier = Modifier.verticalScroll(rememberScrollState())
         ) {
             Box {
                 ProfileHeaderBackground()
                 ProfileHeader(
                     email = state.email.value,
                     name = state.name.value,
-                    onEditAvatar = { }
+                    onEditAvatar = {  }
                 )
                 TowIconAppBar(
                     onStartClick = { onBackClick() },
@@ -80,6 +75,7 @@ fun ProfileScreen(
                     onLanguageClick = { }
                 )
             }
+
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -92,19 +88,17 @@ fun ProfileScreen(
                         "23" to "Canceled"
                     )
                 )
-                Divider(
-                    modifier = Modifier.fillMaxWidth(),
-                    thickness = 1.dp,
-                    color = colors.surfaceVariant
-                )
+
+                Divider(modifier = Modifier.fillMaxWidth(), thickness = 1.dp, color = colors.surfaceVariant)
                 Spacer(modifier = Modifier.height(16.dp))
+
                 EditableField(
                     label = "UserName",
                     state = state.name,
-                    onValueChange = { viewModel.changeValue(it, { s -> s.name }) { st, f -> st.copy(name = f) } },
-                    onStartEdit = { viewModel.startEditing({ it.name }) { st, f -> st.copy(name = f) } },
-                    onCancel = { viewModel.cancelEditing({ it.name }) { st, f -> st.copy(name = f) } },
-                    onSave = { viewModel.updateName() }
+                    onValueChange = { viewModel.handleIntent(ProfileContract.Intent.ChangeName(it)) },
+                    onStartEdit = { viewModel.handleIntent(ProfileContract.Intent.StartEditing({ it.name }) { st, f -> st.copy(name = f) }) },
+                    onCancel = { viewModel.handleIntent(ProfileContract.Intent.CancelEditing({ it.name }) { st, f -> st.copy(name = f) }) },
+                    onSave = { viewModel.handleIntent(ProfileContract.Intent.SaveName) }
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -112,10 +106,10 @@ fun ProfileScreen(
                 EditableField(
                     label = "Email",
                     state = state.email,
-                    onValueChange = { viewModel.changeValue(it, { s -> s.email }) { st, f -> st.copy(email = f) } },
-                    onStartEdit = { viewModel.startEditing({ it.email }) { st, f -> st.copy(email = f) } },
-                    onCancel = { viewModel.cancelEditing({ it.email }) { st, f -> st.copy(email = f) } },
-                    onSave = { viewModel.updateEmail() }
+                    onValueChange = { viewModel.handleIntent(ProfileContract.Intent.ChangeEmail(it)) },
+                    onStartEdit = { viewModel.handleIntent(ProfileContract.Intent.StartEditing({ it.email }) { st, f -> st.copy(email = f) }) },
+                    onCancel = { viewModel.handleIntent(ProfileContract.Intent.CancelEditing({ it.email }) { st, f -> st.copy(email = f) }) },
+                    onSave = { viewModel.handleIntent(ProfileContract.Intent.SaveEmail) }
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -123,37 +117,36 @@ fun ProfileScreen(
                 EditableField(
                     label = "Phone",
                     state = state.phone,
-                    onValueChange = { viewModel.changeValue(it, { s -> s.phone }) { st, f -> st.copy(phone = f) } },
-                    onStartEdit = { viewModel.startEditing({ it.phone }) { st, f -> st.copy(phone = f) } },
-                    onCancel = { viewModel.cancelEditing({ it.phone }) { st, f -> st.copy(phone = f) } },
-                    onSave = { viewModel.updatePhone() }
+                    onValueChange = { viewModel.handleIntent(ProfileContract.Intent.ChangePhone(it)) },
+                    onStartEdit = { viewModel.handleIntent(ProfileContract.Intent.StartEditing({ it.phone }) { st, f -> st.copy(phone = f) }) },
+                    onCancel = { viewModel.handleIntent(ProfileContract.Intent.CancelEditing({ it.phone }) { st, f -> st.copy(phone = f) }) },
+                    onSave = { viewModel.handleIntent(ProfileContract.Intent.SavePhone) }
                 )
+
                 Spacer(modifier = Modifier.height(12.dp))
+
                 EditableField(
                     label = "Governorate",
                     state = state.governorate,
-                    onValueChange = { viewModel.changeValue(it, { s -> s.governorate }) { st, f -> st.copy(governorate = f) } },
-                    onStartEdit = { viewModel.startEditing({ it.governorate }) { st, f -> st.copy(governorate = f) } },
-                    onCancel = { viewModel.cancelEditing({ it.governorate }) { st, f -> st.copy(governorate = f) } },
-                    onSave = { viewModel.updateGovernorate() }
+                    onValueChange = { viewModel.handleIntent(ProfileContract.Intent.ChangeGovernorate(it)) },
+                    onStartEdit = { viewModel.handleIntent(ProfileContract.Intent.StartEditing({ it.governorate }) { st, f -> st.copy(governorate = f) }) },
+                    onCancel = { viewModel.handleIntent(ProfileContract.Intent.CancelEditing({ it.governorate }) { st, f -> st.copy(governorate = f) }) },
+                    onSave = { viewModel.handleIntent(ProfileContract.Intent.SaveGovernorate) }
                 )
+
                 Spacer(modifier = Modifier.height(12.dp))
+
                 EditableField(
                     label = "Address",
                     state = state.address,
-                    onValueChange = { viewModel.changeValue(it, { s -> s.address }) { st, f -> st.copy(address = f) } },
-                    onStartEdit = { viewModel.startEditing({ it.address }) { st, f -> st.copy(address = f) } },
-                    onCancel = { viewModel.cancelEditing({ it.address }) { st, f -> st.copy(address = f) } },
-                    onSave = { viewModel.updateAddress() }
+                    onValueChange = { viewModel.handleIntent(ProfileContract.Intent.ChangeAddress(it)) },
+                    onStartEdit = { viewModel.handleIntent(ProfileContract.Intent.StartEditing({ it.address }) { st, f -> st.copy(address = f) }) },
+                    onCancel = { viewModel.handleIntent(ProfileContract.Intent.CancelEditing({ it.address }) { st, f -> st.copy(address = f) }) },
+                    onSave = { viewModel.handleIntent(ProfileContract.Intent.SaveAddress) }
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
-
-                Divider(
-                    modifier = Modifier.fillMaxWidth(),
-                    thickness = 1.dp,
-                    color = colors.surfaceVariant
-                )
+                Divider(modifier = Modifier.fillMaxWidth(), thickness = 1.dp, color = colors.surfaceVariant)
 
                 Spacer(modifier = Modifier.height(16.dp))
                 HistoryButton(onClick = onHistoryClick)
@@ -163,6 +156,7 @@ fun ProfileScreen(
         }
     }
 }
+
 
 @Composable
 fun EditableField(
@@ -174,50 +168,50 @@ fun EditableField(
     onSave: () -> Unit
 ) {
     Column {
-        if (state.isEditing) {
-            OutlinedTextField(
-                value = state.value,
-                onValueChange = onValueChange,
-                label = { Text(label) },
-                trailingIcon = {
+        CustomTextFieldWithIcon(
+            value = state.value,
+            onValueChange = if (state.isEditing) onValueChange else { _ -> },
+            label = label,
+            placeholder = state.value.ifEmpty { label },
+            onIconClick = { if (!state.isEditing) onStartEdit() },
+            imageVectorIcon = when {
+                state.isEditing -> null
+                state.success -> Icons.Default.Check
+                state.error != null -> Icons.Default.Error
+                else -> Icons.Default.Edit
+            },
+            trailingContent = if (state.isEditing) {
+                {
                     if (state.isLoading) {
                         CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
                     } else {
-                        Row {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
                             IconButton(onClick = onSave) {
-                                Icon(Icons.Default.Check, contentDescription = "Save")
+                                Icon(imageVector = Icons.Default.Check, contentDescription = "Save")
                             }
                             IconButton(onClick = onCancel) {
-                                Icon(Icons.Default.Close, contentDescription = "Cancel")
+                                Icon(imageVector = Icons.Default.Close, contentDescription = "Cancel")
                             }
                         }
                     }
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-        } else {
-            CustomTextFieldWithIcon(
-                value = state.value,
-                onValueChange = {},
-                label = label,
-                placeholder = state.value,
-                onIconClick = onStartEdit,
-                keyboardType = KeyboardType.Text,
-                singleLine = true,
-                readOnly = true,
-                icon = when {
-                    state.success -> Icons.Default.Check
-                    state.error != null -> Icons.Default.Error
-                    else -> Icons.Default.Edit
                 }
-            )
-        }
+            } else null,
+            readOnly = !state.isEditing,
+            keyboardType = KeyboardType.Text,
+            singleLine = true
+        )
 
         if (state.error != null) {
-            Text(text = state.error, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+            Spacer(modifier = Modifier.height(6.dp))
+            Text(
+                text = state.error,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall
+            )
         }
     }
 }
+
 
 
 

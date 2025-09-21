@@ -23,13 +23,31 @@ interface ProfileContract {
     )
 
     sealed class Intent {
-        data class LoadProfile(val userId: String) : Intent()
-        data class UpdateName(val userId: String, val name: String) : Intent()
-        data class UpdateEmail(val userId: String, val email: String) : Intent()
-        data class UpdatePhone(val userId: String, val phone: String) : Intent()
-        data class UpdateGovernorate(val userId: String, val governorate: String) : Intent()
-        data class UpdateAddress(val userId: String, val address: String) : Intent()
-        data class UpdateImageUrl(val userId: String, val imageUrl: String) : Intent()
-    }
+        data object LoadProfile : Intent()
 
+        data class ChangeName(val name: String) : Intent()
+        data class ChangeEmail(val email: String) : Intent()
+        data class ChangePhone(val phone: String) : Intent()
+        data class ChangeGovernorate(val governorate: String) : Intent()
+        data class ChangeAddress(val address: String) : Intent()
+        data class ChangeImageUrl(val imageUrl: String) : Intent()
+
+        data object SaveName : Intent()
+        data object SaveEmail : Intent()
+        data object SavePhone : Intent()
+        data object SaveGovernorate : Intent()
+        data object SaveAddress : Intent()
+        data object SaveImageUrl : Intent()
+
+        data class StartEditing(
+            val fieldSelector: (State) -> ProfileFieldState,
+            val fieldSetter: (State, ProfileFieldState) -> State
+        ) : Intent()
+
+        data class CancelEditing(
+            val fieldSelector: (State) -> ProfileFieldState,
+            val fieldSetter: (State, ProfileFieldState) -> State
+        ) : Intent()
+    }
 }
+
