@@ -5,7 +5,7 @@ import com.delighted2wins.souqelkhorda.features.market.data.remote.MarketRemoteD
 import com.delighted2wins.souqelkhorda.features.market.data.repository.MarketRepositoryImpl
 import com.delighted2wins.souqelkhorda.features.market.domain.repository.MarketRepository
 import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetMarketOrdersUseCase
-import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetUserForMarketUseCase
+import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetUserDataByIdUseCase
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -45,8 +45,8 @@ object MarketUseCaseModule {
 
     @Provides
     @ViewModelScoped
-    fun provideGetMarketUserUseCase(
+    fun provideGetUserDataByIdUseCase(
         repository: MarketRepository
-    ): GetUserForMarketUseCase = GetUserForMarketUseCase(repository)
+    ): GetUserDataByIdUseCase = GetUserDataByIdUseCase(repository)
 
 }

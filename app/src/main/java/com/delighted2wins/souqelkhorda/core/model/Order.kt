@@ -6,7 +6,6 @@ import com.delighted2wins.souqelkhorda.core.enums.OrderType
 import com.delighted2wins.souqelkhorda.core.enums.UserRole
 import kotlinx.parcelize.Parcelize
 
-@Parcelize
 data class Order(
     val orderId: String = "",
     val userId: String = "",
@@ -19,4 +18,4 @@ data class Order(
     val title: String = "",
     val description: String = "",
     val price: Int = 0
-) : Parcelable
+)

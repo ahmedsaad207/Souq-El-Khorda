@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.delighted2wins.souqelkhorda.app.theme.Til
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
-import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.ScrapCard
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.ShimmerScrapCard
@@ -31,9 +30,8 @@ fun MarketScreen(
     innerPadding: PaddingValues = PaddingValues(),
     snackBarHostState: SnackbarHostState,
     viewModel: MarketViewModel = hiltViewModel(),
-    navigateToMakeOffer: () -> Unit = {},
-    onDetailsClick: (Order, MarketUser) -> Unit,
-    navToAddItem: () -> Unit = {}
+    onMakeOfferClick: () -> Unit = {},
+    onDetailsClick: (String, String) -> Unit,
 ) {
     val state = viewModel.state
     val isRtl: Boolean = LocalLayoutDirection.current == LayoutDirection.Rtl
@@ -43,7 +41,7 @@ fun MarketScreen(
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                is MarketEffect.NavigateToOrderDetails -> onDetailsClick(effect.order, effect.user)
+                is MarketEffect.NavigateToOrderDetails -> onDetailsClick(effect.orderId, effect.ownerId)
                 is MarketEffect.ShowError -> {
                     coroutineScope.launch {
                         snackBarHostState.showSnackbar(
@@ -56,7 +54,6 @@ fun MarketScreen(
                         }
                     }
                 }
-                is MarketEffect.NavigateToSellNow -> navToAddItem()
             }
         }
     }
@@ -179,8 +176,8 @@ fun MarketScreen(
                             ScrapCard(
                                 marketUser = loadedUser,
                                 scrap = scrapData,
-                                onMakeOfferClick = { navigateToMakeOffer() },
-                                onDetailsClick = { order, user -> onDetailsClick(order, user) },
+                                onMakeOfferClick = { onMakeOfferClick() },
+                                onDetailsClick = { orderId, ownerId -> onDetailsClick(orderId, ownerId)},
                                 systemIsRtl = isRtl
                             )
                         } ?: ShimmerScrapCard(systemIsRtl = isRtl)

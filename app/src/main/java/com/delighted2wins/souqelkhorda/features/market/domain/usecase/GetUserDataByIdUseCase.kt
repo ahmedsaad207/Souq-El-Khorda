@@ -4,7 +4,7 @@ import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUse
 import com.delighted2wins.souqelkhorda.features.market.domain.repository.MarketRepository
 import javax.inject.Inject
 
-class GetUserForMarketUseCase @Inject constructor(
+class GetUserDataByIdUseCase @Inject constructor(
     private val repository: MarketRepository
 ) {
     suspend operator fun invoke(userId: String) : MarketUser = repository.fetchUserForMarket(userId)
