@@ -5,11 +5,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 
-@Parcelize
 data class Scrap(
     val category: String = "",
     val unit: String = "",
     val amount: Double = 0.0,
     val description: String = "",
     val images: String = "https://media.wired.com/photos/593261cab8eb31692072f129/3:2/w_2560%2Cc_limit/85120553.jpg"
-): Parcelable
+)

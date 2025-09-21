@@ -37,7 +37,7 @@ fun ScrapCard(
     marketUser: MarketUser,
     scrap: Order,
     onMakeOfferClick: () -> Unit = {},
-    onDetailsClick: (Order, MarketUser) -> Unit,
+    onDetailsClick: (String, String) -> Unit,
     systemIsRtl: Boolean = false
 ) {
     Card(
@@ -118,7 +118,7 @@ fun ScrapCard(
                         .padding(top = 16.dp)
                 ) {
                     OutlinedButton(
-                        onClick = { onDetailsClick(scrap, marketUser) },
+                        onClick = { onDetailsClick(scrap.orderId, scrap.userId) },
                         shape = RoundedCornerShape(8.dp),
                         modifier = Modifier.weight(1f)
                     ) {

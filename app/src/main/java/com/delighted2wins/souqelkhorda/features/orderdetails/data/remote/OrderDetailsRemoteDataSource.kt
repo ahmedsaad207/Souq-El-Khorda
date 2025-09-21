@@ -1,16 +1,9 @@
-package com.delighted2wins.souqelkhorda.features.orderdetails.data
+package com.delighted2wins.souqelkhorda.features.orderdetails.data.remote
 
+import com.delighted2wins.souqelkhorda.core.enums.OrderSource
 import com.delighted2wins.souqelkhorda.core.model.Order
-import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.tasks.await
-import javax.inject.Inject
 
-class OrderDetailsRemoteDataSource @Inject constructor(
-    private val firestore: FirebaseFirestore
-) {
-    suspend fun fetchOrderDetails(orderId: String): Order? {
-        val doc = firestore.collection("orders").document(orderId).get().await()
-        return doc.toObject(Order::class.java)
-    }
+interface OrderDetailsRemoteDataSource {
+    suspend fun fetchOrderDetails(orderId: String, ownerId: String, buyerId: String?, source: OrderSource): Order?
+
 }
-

@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetMarketOrdersUseCase
-import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetUserForMarketUseCase
+import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetUserDataByIdUseCase
 import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketEffect
 import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketIntent
 import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketState
@@ -20,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MarketViewModel @Inject constructor(
     private val getMarketOrdersUseCase: GetMarketOrdersUseCase,
-    private val getMarketUserUseCase: GetUserForMarketUseCase
+    private val getMarketUserUseCase: GetUserDataByIdUseCase
 ) : ViewModel() {
 
     var state by mutableStateOf(MarketState())
@@ -44,14 +44,13 @@ class MarketViewModel @Inject constructor(
             is MarketIntent.SearchQueryChanged -> {
                 state = state.copy(query = intent.query)
             }
+
             is MarketIntent.NavigateToOrderDetails -> emitEffect(
                 MarketEffect.NavigateToOrderDetails(
-                    intent.order,
-                    intent.user
+                    intent.orderId,
+                    intent.orderOwnerId
                 )
             )
-
-            MarketIntent.SellNowClicked -> emitEffect(MarketEffect.NavigateToSellNow)
         }
     }
 
