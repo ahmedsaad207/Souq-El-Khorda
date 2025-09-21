@@ -15,7 +15,7 @@ val LightColorScheme = lightColorScheme(
     primary = Til,
     onPrimary = Color.White,
     primaryContainer = Til,
-    onPrimaryContainer = Color.Black,
+    onPrimaryContainer = Color.White,
 
     secondary = LightFirstBottomNavColor,
     onSecondary = Color.White,
@@ -46,12 +46,12 @@ val DarkColorScheme = darkColorScheme(
     primary = DarkTil,
     onPrimary = Color.White,
     primaryContainer = DarkTil,
-    onPrimaryContainer = Color.Black,
+    onPrimaryContainer = DarkTextFieldBackground,
 
     secondary = DarkFirstBottomNavColor,
     onSecondary = Color.Black,
     secondaryContainer = DarkSecondBottomNavColor,
-    onSecondaryContainer = Color.Black,
+    onSecondaryContainer = Color(0xFF223D39),
 
     background = DarkBackground,
     onBackground = Color.White,

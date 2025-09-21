@@ -1,11 +1,12 @@
 package com.delighted2wins.souqelkhorda.app
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -22,17 +23,28 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import com.delighted2wins.souqelkhorda.app.theme.SouqElKhordaTheme
 import com.delighted2wins.souqelkhorda.core.components.AppBottomNavBar
 import com.delighted2wins.souqelkhorda.core.components.AppTopAppBar
+import com.delighted2wins.souqelkhorda.core.enums.LanguageEnum
+import com.delighted2wins.souqelkhorda.core.extensions.applyLanguage
 import com.delighted2wins.souqelkhorda.core.extensions.configureSystemUI
+import com.delighted2wins.souqelkhorda.features.profile.di.MainActivityEntryPoint
+import com.delighted2wins.souqelkhorda.features.profile.domain.usecase.GetLanguageUseCase
 import com.delighted2wins.souqelkhorda.navigation.NavigationRoot
+import com.delighted2wins.souqelkhorda.navigation.NotificationsScreen
 import com.delighted2wins.souqelkhorda.navigation.ProfileScreen
 import com.delighted2wins.souqelkhorda.navigation.SplashScreen
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.EntryPointAccessors
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     lateinit var snackBarHostState: SnackbarHostState
     lateinit var bottomBarState: MutableState<Boolean>
+    lateinit var navState: MutableState<Boolean>
+
+    @Inject
+    lateinit var getLanguageUseCase: GetLanguageUseCase
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,12 +55,15 @@ class MainActivity : ComponentActivity() {
 
             snackBarHostState = remember { SnackbarHostState() }
             bottomBarState = remember { mutableStateOf(false) }
+            navState = remember { mutableStateOf(true) }
 
             val backStack = rememberNavBackStack(SplashScreen)
             SouqElKhordaTheme(darkTheme = isSystemInDarkTheme(), dynamicColor = false) {
                 val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
                 Scaffold(
-                    modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+                    modifier = if (navState.value) Modifier else Modifier.nestedScroll(
+                        scrollBehavior.nestedScrollConnection
+                    ),
                     snackbarHost = {
                         SnackbarHost(
                             hostState = snackBarHostState,
@@ -58,35 +73,51 @@ class MainActivity : ComponentActivity() {
                     topBar = {
                         if (bottomBarState.value) {
                             AppTopAppBar(
-                                scrollBehavior= scrollBehavior,
+                                scrollBehavior = scrollBehavior,
                                 onProfileClick = { backStack.add(ProfileScreen) },
-                                onNotificationClick = {}
+                                onNotificationClick = { backStack.add(NotificationsScreen) }
                             )
-                        } else {
-                            null
                         }
                     },
                     bottomBar = {
                         if (bottomBarState.value) {
                             AppBottomNavBar(backStack)
-                        } else {
-                            null
                         }
                     }
                 ) { innerPadding ->
                     NavigationRoot(
                         modifier = Modifier
-                            .fillMaxSize(),
+                            .fillMaxWidth(),
                         bottomBarState = bottomBarState,
                         snackBarState = snackBarHostState,
                         backStack = backStack,
-                        innerPadding = innerPadding
+                        innerPadding = innerPadding,
+                        navState = navState
                     )
                 }
             }
 
         }
     }
+
+    override fun attachBaseContext(newBase: Context) {
+        val entryPoint = EntryPointAccessors.fromApplication(
+            newBase.applicationContext,
+            MainActivityEntryPoint::class.java
+        )
+
+        val lang = entryPoint.getLanguageUseCase()
+
+        val languageCode = if (lang() == LanguageEnum.DEFAULT.code) {
+            newBase.resources.configuration.locales[0].language
+        } else {
+            lang()
+        }
+
+        val context = newBase.applyLanguage(languageCode)
+        super.attachBaseContext(context)
+    }
+
 }
 
 

@@ -14,12 +14,14 @@ import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
 import com.delighted2wins.souqelkhorda.features.additem.presentation.screen.AddItemScreen
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.screen.SignUpScreen
 import com.delighted2wins.souqelkhorda.features.buyers.presentation.screen.NearestBuyersScreen
+import com.delighted2wins.souqelkhorda.features.history.presentation.screen.HistoryScreen
 import com.delighted2wins.souqelkhorda.features.login.presentation.screen.LoginScreen
 import com.delighted2wins.souqelkhorda.features.market.presentation.screen.MarketScreen
 import com.delighted2wins.souqelkhorda.features.orderdetails.OrderDetailsScreen
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.screen.OrdersScreen
+import com.delighted2wins.souqelkhorda.features.sell.presentation.screen.SellScreen
+import com.delighted2wins.souqelkhorda.features.notification.presentation.screen.NotificationsScreen
 import com.delighted2wins.souqelkhorda.features.profile.presentation.screen.ProfileScreen
-import com.delighted2wins.souqelkhorda.features.sale.presentation.screen.SaleScreen
 import com.delighted2wins.souqelkhorda.features.splash.SplashScreen
 
 @Composable
@@ -28,7 +30,8 @@ fun NavigationRoot(
     bottomBarState: MutableState<Boolean>,
     snackBarState: SnackbarHostState,
     backStack: NavBackStack,
-    innerPadding: PaddingValues
+    innerPadding: PaddingValues,
+    navState: MutableState<Boolean>
 ) {
     NavDisplay(
         modifier = modifier, backStack = backStack, entryDecorators = listOf(
@@ -44,11 +47,10 @@ fun NavigationRoot(
         entryProvider = { key ->
             when (key) {
                 is DirectSaleScreen -> {
+                    navState.value = false
                     NavEntry(key) {
                         bottomBarState.value = true
-                        SaleScreen(innerPadding) {
-                            backStack.add(element = AddItemKey(it))
-                        }
+                        SellScreen(innerPadding)
                     }
                 }
 
@@ -61,11 +63,12 @@ fun NavigationRoot(
                     }
                 }
 
-                MarketScreen -> {
+                is MarketScreen -> {
                     NavEntry(key) {
                         bottomBarState.value = true
                         MarketScreen(
                             innerPadding,
+                            snackBarHostState = snackBarState,
                             navigateToMakeOffer = {
                                 // Navigate to Buying Screen
                             },
@@ -89,14 +92,14 @@ fun NavigationRoot(
                     }
                 }
 
-                NearestBuyersScreen -> {
+                is NearestBuyersScreen -> {
                     NavEntry(key) {
                         bottomBarState.value = true
                         NearestBuyersScreen()
                     }
                 }
 
-                SplashScreen -> {
+                is SplashScreen -> {
                     NavEntry(key) {
                         SplashScreen(
                             navToLogin = {
@@ -116,35 +119,40 @@ fun NavigationRoot(
                     }
                 }
 
-                LoginScreen -> {
+                is LoginScreen -> {
                     NavEntry(key) {
                         bottomBarState.value = false
                         LoginScreen(
+                            onRegisterClick = {
+                                backStack.add(SignUpScreen)
+                            },
                             onLoginClick = {
                                 backStack.set(
                                     element = DirectSaleScreen, index = 0
                                 )
                             },
-                            onRegisterClick = {
-                                backStack.add(SignUpScreen)
-                            },
                             snackBarHostState = snackBarState,
+                            innerPadding = innerPadding,
                         )
 
                     }
                 }
 
-                SignUpScreen -> {
+                is SignUpScreen -> {
                     NavEntry(key) {
                         bottomBarState.value = false
-                        SignUpScreen(onBackClick = {
-                            backStack.remove(SignUpScreen)
-                            backStack.set(element = LoginScreen, index = 0)
-                        }, snackBarHostState = snackBarState, onRegisterClick = {
-                            backStack.remove(SignUpScreen)
-                            backStack.set(element = LoginScreen, index = 0)
-                        })
-
+                        SignUpScreen(
+                            onBackClick = {
+                                backStack.remove(SignUpScreen)
+                                backStack.set(element = LoginScreen, index = 0)
+                            },
+                            onRegisterClick = {
+                                backStack.remove(SignUpScreen)
+                                backStack.set(element = LoginScreen, index = 0)
+                            },
+                            snackBarHostState = snackBarState,
+                            innerPadding = innerPadding
+                        )
                     }
                 }
 
@@ -153,11 +161,16 @@ fun NavigationRoot(
                         bottomBarState.value = false
                         ProfileScreen(
                             onBackClick = { backStack.remove(key) },
+                            onHistoryClick = { backStack.add(HistoryScreen) },
+                            onLogoutClick = {
+                                backStack.clear()
+                                backStack.add(LoginScreen)
+                            }
                         )
                     }
                 }
 
-                OrdersScreen -> {
+                is  OrdersScreen -> {
                     NavEntry(key) {
                         bottomBarState.value = true
                         OrdersScreen(
@@ -167,10 +180,27 @@ fun NavigationRoot(
                     }
                 }
 
+                is NotificationsScreen -> {
+                    NavEntry(key) {
+                        bottomBarState.value = false
+                        NotificationsScreen(
+                            onBackClick = { backStack.remove(key) },
+                        )
+                    }
+                }
+
+                is HistoryScreen -> {
+                    NavEntry(key) {
+                        bottomBarState.value = false
+                        HistoryScreen(
+                            onBackClick = { backStack.remove(key) }
+                        )
+                    }
+                }
+
 
 
                 else -> error("Unknown screen $key")
             }
-
         })
 }

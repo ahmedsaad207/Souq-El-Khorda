@@ -1,7 +1,7 @@
 package com.delighted2wins.souqelkhorda.features.additem.domain.usecase
 
 import com.delighted2wins.souqelkhorda.features.additem.domain.repo.ScrapesRepo
-import com.delighted2wins.souqelkhorda.features.sale.domain.entities.Scrap
+import com.delighted2wins.souqelkhorda.core.model.Scrap
 import javax.inject.Inject
 
 class SaveScrapUseCase @Inject constructor(

@@ -18,11 +18,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.delighted2wins.souqelkhorda.R
+import com.delighted2wins.souqelkhorda.app.theme.AppTypography
 
 
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun OneIconCard(
+    modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
     headerTxt: String = stringResource(R.string.home_screen),
     icon: ImageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -31,7 +33,7 @@ fun OneIconCard(
     val config = LocalConfiguration.current
     val screenWidth = config.screenWidthDp
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(top = 8.dp, bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -40,8 +42,7 @@ fun OneIconCard(
         TapBarBtn(onIconClick = { onClick() }, icon = icon)
         Text(
             text = headerTxt,
-            fontSize = titleSize.sp,
-            fontWeight = FontWeight.Bold,
+            style = AppTypography.titleLarge.copy(fontSize = titleSize.sp, fontWeight = FontWeight.Bold),
         )
 
     }
