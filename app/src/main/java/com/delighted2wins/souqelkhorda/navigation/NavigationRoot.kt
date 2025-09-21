@@ -19,7 +19,7 @@ import com.delighted2wins.souqelkhorda.features.login.presentation.screen.LoginS
 import com.delighted2wins.souqelkhorda.features.market.presentation.screen.MarketScreen
 import com.delighted2wins.souqelkhorda.features.orderdetails.OrderDetailsScreen
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.screen.OrdersScreen
-import com.delighted2wins.souqelkhorda.features.sale.presentation.screen.SaleScreen
+import com.delighted2wins.souqelkhorda.features.sell.presentation.screen.SellScreen
 import com.delighted2wins.souqelkhorda.features.notification.presentation.screen.NotificationsScreen
 import com.delighted2wins.souqelkhorda.features.profile.presentation.screen.ProfileScreen
 import com.delighted2wins.souqelkhorda.features.splash.SplashScreen
@@ -50,9 +50,7 @@ fun NavigationRoot(
                     navState.value = false
                     NavEntry(key) {
                         bottomBarState.value = true
-                        SaleScreen(innerPadding) {
-                            backStack.add(element = AddItemKey(it))
-                        }
+                        SellScreen(innerPadding)
                     }
                 }
 

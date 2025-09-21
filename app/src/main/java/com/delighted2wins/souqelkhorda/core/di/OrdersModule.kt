@@ -1,9 +1,9 @@
 package com.delighted2wins.souqelkhorda.core.di
 
-import com.delighted2wins.souqelkhorda.features.sale.data.remote.OrdersRemoteDataSource
-import com.delighted2wins.souqelkhorda.features.sale.data.remote.OrdersRemoteDataSourceImpl
-import com.delighted2wins.souqelkhorda.features.sale.data.repo.OrdersRepositoryImpl
-import com.delighted2wins.souqelkhorda.features.sale.domain.repo.OrdersRepository
+import com.delighted2wins.souqelkhorda.features.sell.data.remote.OrdersRemoteDataSource
+import com.delighted2wins.souqelkhorda.features.sell.data.remote.OrdersRemoteDataSourceImpl
+import com.delighted2wins.souqelkhorda.features.sell.data.repo.OrdersRepositoryImpl
+import com.delighted2wins.souqelkhorda.features.sell.domain.repo.OrdersRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
