@@ -163,7 +163,11 @@ fun NavigationRoot(
                         bottomBarState.value = false
                         ProfileScreen(
                             onBackClick = { backStack.remove(key) },
-                            onHistoryClick = { backStack.add(HistoryScreen) }
+                            onHistoryClick = { backStack.add(HistoryScreen) },
+                            onLogoutClick = {
+                                backStack.clear()
+                                backStack.add(LoginScreen)
+                            }
                         )
                     }
                 }

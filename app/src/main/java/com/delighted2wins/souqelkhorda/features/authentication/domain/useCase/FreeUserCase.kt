@@ -4,5 +4,5 @@ import com.delighted2wins.souqelkhorda.features.authentication.domain.repo.IAuth
 import javax.inject.Inject
 
 class FreeUserCase @Inject constructor(val repo: IAuthenticationRepo) {
-    suspend operator fun invoke() = repo.freeUserCash()
+    operator fun invoke() = repo.freeUserCash()
 }
