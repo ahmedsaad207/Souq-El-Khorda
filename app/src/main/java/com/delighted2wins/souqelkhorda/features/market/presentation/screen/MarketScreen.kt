@@ -179,7 +179,7 @@ fun MarketScreen(
                             ScrapCard(
                                 marketUser = loadedUser,
                                 scrap = scrapData,
-                                onBuyClick = { navigateToMakeOffer() },
+                                onMakeOfferClick = { navigateToMakeOffer() },
                                 onDetailsClick = { order, user -> onDetailsClick(order, user) },
                                 systemIsRtl = isRtl
                             )
