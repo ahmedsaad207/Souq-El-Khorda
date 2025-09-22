@@ -27,6 +27,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.delighted2wins.souqelkhorda.core.enums.OrderSource
@@ -41,7 +43,7 @@ fun OrdersScreen(
     viewModel: MyOrdersViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-
+    val systemIsRtl = LocalConfiguration.current.layoutDirection == LayoutDirection.Rtl.ordinal
     val tabs = listOf(
         OrderSource.COMPANY to state.saleCount,
         OrderSource.MARKET to (state.offersCount + state.sellsCount)
@@ -60,12 +62,12 @@ fun OrdersScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(Color.Transparent)
             .padding(innerPadding)
     ) {
         TabRow(
             selectedTabIndex = pagerState.currentPage,
-            containerColor = Color.White,
+            containerColor = Color.Transparent,
             contentColor = Color.Black,
             indicator = {}
         ) {
@@ -115,10 +117,11 @@ fun OrdersScreen(
             modifier = Modifier.fillMaxSize()
         ) { page ->
             when (page) {
-                0 -> SaleOrdersScreen(
+                0 -> CompanyOrdersScreen(
                     state.saleOrders,
                     state.isLoading,
-                    state.error
+                    state.error,
+                    systemIsRtl
                 )
                 1 -> MarketOrdersScreen(
                     state = state,
@@ -127,9 +130,9 @@ fun OrdersScreen(
                             "Sells" -> viewModel.onIntent(MyOrdersIntents.LoadSells)
                             "Offers" -> viewModel.onIntent(MyOrdersIntents.LoadOffers)
                         }
-                    }
+                    },
+                    systemIsRtl
                 )
-
             }
         }
     }
