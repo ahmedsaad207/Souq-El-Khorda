@@ -5,7 +5,7 @@ import com.delighted2wins.souqelkhorda.features.myorders.data.remote.MyOrdersRem
 import com.delighted2wins.souqelkhorda.features.myorders.data.repository.MyOrdersRepositoryImpl
 import com.delighted2wins.souqelkhorda.features.myorders.domain.repository.MyOrdersRepository
 import com.delighted2wins.souqelkhorda.features.myorders.domain.usecase.LoadOffersUseCase
-import com.delighted2wins.souqelkhorda.features.myorders.domain.usecase.LoadSaleOrdersUseCase
+import com.delighted2wins.souqelkhorda.features.myorders.domain.usecase.LoadCompanyOrdersUseCase
 import com.delighted2wins.souqelkhorda.features.myorders.domain.usecase.LoadSellsUseCase
 import dagger.Binds
 import dagger.Module
@@ -42,7 +42,7 @@ object MyOrdersUseCaseModule {
     @ViewModelScoped
     fun provideLoadSaleOrdersUseCase(
         repository: MyOrdersRepository
-    ): LoadSaleOrdersUseCase = LoadSaleOrdersUseCase(repository)
+    ): LoadCompanyOrdersUseCase = LoadCompanyOrdersUseCase(repository)
 
     @Provides
     @ViewModelScoped

@@ -34,7 +34,8 @@ import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.compon
 
 @Composable
 fun ScrapCard(
-    marketUser: MarketUser,
+    currentUserId: String?,
+    marketUser: MarketUser?,
     scrap: Order,
     onMakeOfferClick: () -> Unit = {},
     onDetailsClick: (String, String) -> Unit,
@@ -45,11 +46,13 @@ fun ScrapCard(
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
-        UserSection(
-            marketUserData = marketUser,
-            date = scrap.date.toFormattedDate(),
-            systemIsRtl = systemIsRtl
-        )
+        marketUser?.let {
+            UserSection(
+                marketUserData = it,
+                date = scrap.date.toFormattedDate(),
+                systemIsRtl = systemIsRtl
+            )
+        }
 
         Column(modifier = Modifier.padding(12.dp)) {
 
@@ -128,15 +131,17 @@ fun ScrapCard(
                         )
                     }
 
-                    Button(
-                        onClick = onMakeOfferClick,
-                        shape = RoundedCornerShape(8.dp),
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Text(
-                            if (systemIsRtl) "قدم عرضك" else "Make Offer",
-                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
-                        )
+                    if (!currentUserId.isNullOrEmpty() && currentUserId != scrap.userId) {
+                        Button(
+                            onClick = onMakeOfferClick,
+                            shape = RoundedCornerShape(8.dp),
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text(
+                                text = if (systemIsRtl) "قدم عرضك" else "Make Offer",
+                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                            )
+                        }
                     }
                 }
             }

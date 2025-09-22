@@ -60,9 +60,6 @@ fun NavigationRoot(
                         MarketScreen(
                             innerPadding,
                             snackBarHostState = snackBarState,
-                            onMakeOfferClick = {
-                                // Handle the click event here
-                            },
                             onDetailsClick = { orderId, ownerId ->
                                 backStack.add(
                                     OrderDetailsKey(

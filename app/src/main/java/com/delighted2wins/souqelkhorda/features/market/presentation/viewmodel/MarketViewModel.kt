@@ -1,16 +1,20 @@
 package com.delighted2wins.souqelkhorda.features.market.presentation.screen
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.delighted2wins.souqelkhorda.core.model.Offer
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
+import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetCurrentUserUseCase
 import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetMarketOrdersUseCase
 import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetUserDataByIdUseCase
 import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketEffect
 import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketIntent
 import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketState
+import com.delighted2wins.souqelkhorda.features.offers.domain.usecase.MakeOfferUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -19,12 +23,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MarketViewModel @Inject constructor(
-    private val getMarketOrdersUseCase: GetMarketOrdersUseCase,
-    private val getMarketUserUseCase: GetUserDataByIdUseCase
+    private val fetchMarketOrders: GetMarketOrdersUseCase,
+    private val getUserByIdUseCase: GetUserDataByIdUseCase,
+    private val getCurrentUserUseCase: GetCurrentUserUseCase,
+    private val makeOfferUseCase: MakeOfferUseCase
 ) : ViewModel() {
 
     var state by mutableStateOf(MarketState())
         private set
+
+    private var _currentUser by mutableStateOf<MarketUser?>(null)
+    val currentUser: MarketUser? get() = _currentUser
 
     private val loadedUsers = mutableMapOf<String, MarketUser>()
 
@@ -51,6 +60,11 @@ class MarketViewModel @Inject constructor(
                     intent.orderOwnerId
                 )
             )
+
+            is MarketIntent.MakeOffer -> {
+                makeOffer(intent.offer)
+            }
+
         }
     }
 
@@ -63,12 +77,21 @@ class MarketViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                val user = getMarketUserUseCase(userId)
+                val user = getUserByIdUseCase(userId)
                 loadedUsers[userId] = user
                 onLoaded(user)
             } catch (e: Exception) {
-                onLoaded(MarketUser(id = 0, name = "User $userId", location = "Unknown"))
+                onLoaded(MarketUser(id = "", name = "User $userId", location = "Unknown"))
             }
+        }
+    }
+
+    suspend fun loadCurrentUser() {
+        _currentUser = try {
+            getCurrentUserUseCase()
+        } catch (e: Exception) {
+            Log.e("MarketViewModel", "Error loading current user", e)
+            MarketUser(id = "", name = "User", location = "Unknown")
         }
     }
 
@@ -82,7 +105,7 @@ class MarketViewModel @Inject constructor(
                 error = null
             )
             try {
-                val orders = getMarketOrdersUseCase()
+                val orders = fetchMarketOrders()
                 state = state.copy(
                     isLoading = false,
                     isRefreshing = false,
@@ -103,6 +126,20 @@ class MarketViewModel @Inject constructor(
 
     private fun emitEffect(effect: MarketEffect) {
         viewModelScope.launch { _effect.emit(effect) }
+    }
+
+    private fun makeOffer(offer: Offer) {
+        viewModelScope.launch {
+            try {
+                val offerId = makeOfferUseCase(offer)
+                if (offerId.isNotEmpty()) {
+                    emitEffect(MarketEffect.ShowSuccess("Offer made successfully"))
+                }
+            } catch (e: Exception) {
+                val errorMsg = e.message ?: "Network error"
+                emitEffect(MarketEffect.ShowError(errorMsg))
+            }
+        }
     }
 
 }

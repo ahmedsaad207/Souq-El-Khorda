@@ -105,7 +105,7 @@ class OrderDetailsViewModel @Inject constructor(
                 OrderSource.COMPANY -> OrderDetailsState.Success.Company(order)
                 OrderSource.SALES -> OrderDetailsState.Success.Sales(order)
                 OrderSource.OFFERS -> {
-                    val buyerOffer: Offer? = order.offers.find { it.userId == buyerId }
+                    val buyerOffer: Offer? = order.offers.find { it.buyerId == buyerId }
                     OrderDetailsState.Success.Offers(order, buyerOffer)
                 }
                 else -> OrderDetailsState.Error("Unknown source")
@@ -133,7 +133,7 @@ class OrderDetailsViewModel @Inject constructor(
                 Log.d("OrderDetailsViewModel", "Fetched user data: $user")
             } catch (e: Exception) {
                 Log.e("OrderDetailsViewModel", "Error fetching user data: ${e.message}")
-                _orderOwner.value = MarketUser(id = 0, name = "Unknown", location = "Unknown")
+                _orderOwner.value = MarketUser(id = "", name = "Unknown", location = "Unknown")
             }
         }
     }

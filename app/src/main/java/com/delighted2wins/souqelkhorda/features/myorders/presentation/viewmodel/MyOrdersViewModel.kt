@@ -3,7 +3,7 @@ package com.delighted2wins.souqelkhorda.features.myorders.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.delighted2wins.souqelkhorda.features.myorders.domain.usecase.LoadOffersUseCase
-import com.delighted2wins.souqelkhorda.features.myorders.domain.usecase.LoadSaleOrdersUseCase
+import com.delighted2wins.souqelkhorda.features.myorders.domain.usecase.LoadCompanyOrdersUseCase
 import com.delighted2wins.souqelkhorda.features.myorders.domain.usecase.LoadSellsUseCase
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.contract.MyOrdersIntents
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.contract.MyOrdersState
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyOrdersViewModel @Inject constructor(
-    private val loadSaleOrdersUseCase: LoadSaleOrdersUseCase,
+    private val loadCompanyOrdersUseCase: LoadCompanyOrdersUseCase,
     private val loadSellsUseCase: LoadSellsUseCase,
     private val loadOffersUseCase: LoadOffersUseCase
 ) : ViewModel() {
@@ -35,7 +35,7 @@ class MyOrdersViewModel @Inject constructor(
         viewModelScope.launch {
             _state.value = _state.value.copy(isLoading = true, error = null)
             try {
-                val result = loadSaleOrdersUseCase()
+                val result = loadCompanyOrdersUseCase()
                 _state.value = _state.value.copy(
                     isLoading = false,
                     saleOrders = result,
