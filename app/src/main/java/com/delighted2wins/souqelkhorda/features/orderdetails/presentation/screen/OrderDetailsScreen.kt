@@ -62,8 +62,11 @@ fun OrderDetailsScreen(
         )
     }
 
-    LaunchedEffect(orderOwnerId , orderBuyerId) {
+    LaunchedEffect(orderOwnerId) {
         viewModel.getUserData(orderOwnerId)
+    }
+
+    LaunchedEffect(orderBuyerId) {
         if (orderBuyerId != null) {
             viewModel.getUserData(orderBuyerId)
         }
@@ -186,7 +189,7 @@ private fun RenderSuccess(
 ) {
     when (state) {
         is OrderDetailsState.Success.Market -> {
-            MarketOrderDetailsUI(state.order,orderOwner!!, isRtl, onBackClick)
+            MarketOrderDetailsUI(state.order,orderOwner, isRtl, onBackClick)
         }
         is OrderDetailsState.Success.Company -> {
             //CompanyOrderDetailsUI(state.order, isRtl, onBackClick)
