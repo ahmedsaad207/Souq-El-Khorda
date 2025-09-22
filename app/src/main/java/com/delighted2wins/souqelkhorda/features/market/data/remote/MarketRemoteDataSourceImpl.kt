@@ -8,6 +8,7 @@ import com.delighted2wins.souqelkhorda.core.enums.UserRole
 import com.delighted2wins.souqelkhorda.core.model.MainUserDto
 import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.core.model.Scrap
+import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.tasks.await
@@ -58,13 +59,26 @@ class MarketRemoteDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getUser(userId: String): MainUserDto {
+    override suspend fun getUser(userId: String): MarketUser {
         val snapshot = firestore.collection("users")
             .document(userId)
             .get()
             .await()
 
-        return snapshot.toObject(MainUserDto::class.java)
-            ?: throw Exception("User not found")
+        if (!snapshot.exists()) throw Exception("User not found")
+
+        val id = snapshot.getString("id") ?: ""
+        val name = snapshot.getString("name") ?: ""
+        val governorate = snapshot.getString("governorate") ?: ""
+        val address = snapshot.getString("address") ?: ""
+        val userImage = snapshot.getString("userImage")
+
+        return MarketUser(
+            id = id.hashCode(),
+            name = name,
+            location = "$governorate, $address",
+            imageUrl = userImage
+        )
     }
+
 }

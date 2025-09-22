@@ -30,7 +30,7 @@ import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.compon
 @Composable
 fun MarketOrderDetailsUI(
     order: Order,
-    orderOwner: MarketUser,
+    orderOwner: MarketUser?,
     isRtl: Boolean,
     onBackClick: () -> Unit = {}
 ) {
@@ -61,8 +61,8 @@ fun MarketOrderDetailsUI(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         SellerInfoSection(
-                            userImage = orderOwner.imageUrl,
-                            userName = orderOwner.name,
+                            userImage = orderOwner?.imageUrl,
+                            userName = orderOwner?.name ?: "User No Found",
                         )
 
                         Spacer(modifier = Modifier.height(18.dp))

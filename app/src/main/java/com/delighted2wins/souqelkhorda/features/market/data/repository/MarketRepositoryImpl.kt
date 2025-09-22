@@ -16,7 +16,7 @@ class MarketRepositoryImpl @Inject constructor(
     }
 
     override suspend fun fetchUserForMarket(userId: String): MarketUser {
-        return remoteDataSource.getUser(userId).toMarketUser()
+        return remoteDataSource.getUser(userId)
     }
 
 }
