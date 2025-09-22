@@ -25,5 +25,8 @@ class FirestoreOrderService @Inject constructor(
             .document(orderId)
             .update("orderId", orderId)
             .await()
+
+        firestore.collection("history")
+            .add(order)
     }
 }
