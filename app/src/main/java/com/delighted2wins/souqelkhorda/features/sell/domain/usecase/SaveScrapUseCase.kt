@@ -1,10 +1,14 @@
 package com.delighted2wins.souqelkhorda.features.sell.domain.usecase
 
 import com.delighted2wins.souqelkhorda.features.sell.domain.repo.ScrapRepository
+import com.delighted2wins.souqelkhorda.core.model.Scrap
 import javax.inject.Inject
 
-class GetScrapesUseCase @Inject constructor(
+class SaveScrapUseCase @Inject constructor(
     private val repo: ScrapRepository
 ) {
-    operator fun invoke() = repo.getScraps()
+
+    suspend operator fun invoke(scrap: Scrap) {
+        repo.saveScrap(scrap)
+    }
 }

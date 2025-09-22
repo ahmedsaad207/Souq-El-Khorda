@@ -3,8 +3,8 @@ package com.delighted2wins.souqelkhorda.features.sell.domain.usecase
 import com.delighted2wins.souqelkhorda.features.sell.domain.repo.ScrapRepository
 import javax.inject.Inject
 
-class GetScrapesUseCase @Inject constructor(
+class DeleteScrapByIdUseCase @Inject constructor(
     private val repo: ScrapRepository
 ) {
-    operator fun invoke() = repo.getScraps()
+    operator fun invoke(id: Int) = repo.deleteScrapById(id)
 }

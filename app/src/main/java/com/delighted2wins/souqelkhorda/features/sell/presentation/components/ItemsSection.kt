@@ -26,7 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.delighted2wins.souqelkhorda.core.model.Scrap
-import com.delighted2wins.souqelkhorda.features.sell.presentation.SaleIntent
+import com.delighted2wins.souqelkhorda.features.sell.presentation.contract.SellIntent
 import com.delighted2wins.souqelkhorda.features.sell.presentation.viewmodel.SellViewModel
 
 @Composable
@@ -35,7 +35,6 @@ fun ItemsSection(
     viewModel: SellViewModel = hiltViewModel(),
     onClick: () -> Unit
 ) {
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -112,7 +111,7 @@ fun ItemsSection(
                             scrap = scrap,
                             onEdit = {},
                             onDelete = {
-                                viewModel.processIntent(SaleIntent.CancelOrder)
+                                viewModel.processIntent(SellIntent.DeleteScrap(scrap))
                             }
                         )
                     }
