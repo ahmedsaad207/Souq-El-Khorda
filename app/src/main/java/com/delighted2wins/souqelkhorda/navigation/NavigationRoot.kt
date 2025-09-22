@@ -11,17 +11,16 @@ import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
-import com.delighted2wins.souqelkhorda.features.additem.presentation.screen.AddItemScreen
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.screen.SignUpScreen
 import com.delighted2wins.souqelkhorda.features.buyers.presentation.screen.NearestBuyersScreen
 import com.delighted2wins.souqelkhorda.features.history.presentation.screen.HistoryScreen
 import com.delighted2wins.souqelkhorda.features.login.presentation.screen.LoginScreen
 import com.delighted2wins.souqelkhorda.features.market.presentation.screen.MarketScreen
-import com.delighted2wins.souqelkhorda.features.orderdetails.OrderDetailsScreen
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.screen.OrdersScreen
-import com.delighted2wins.souqelkhorda.features.sell.presentation.screen.SellScreen
 import com.delighted2wins.souqelkhorda.features.notification.presentation.screen.NotificationsScreen
+import com.delighted2wins.souqelkhorda.features.orderdetails.OrderDetailsScreen
 import com.delighted2wins.souqelkhorda.features.profile.presentation.screen.ProfileScreen
+import com.delighted2wins.souqelkhorda.features.sell.presentation.screen.SellScreen
 import com.delighted2wins.souqelkhorda.features.splash.SplashScreen
 
 @Composable
@@ -54,15 +53,6 @@ fun NavigationRoot(
                     }
                 }
 
-                is AddItemKey -> {
-                    NavEntry(key) {
-                        bottomBarState.value = false
-                        AddItemScreen(key.category) {
-                            backStack.removeLastOrNull()
-                        }
-                    }
-                }
-
                 is MarketScreen -> {
                     NavEntry(key) {
                         bottomBarState.value = true
@@ -76,7 +66,7 @@ fun NavigationRoot(
                                 backStack.add(OrderDetailsKey(order))
                             },
                             navToAddItem = {
-                               // backStack.add(AddItemKey(TODO()))
+                                // backStack.add(AddItemKey(TODO()))
                             }
                         )
                     }
@@ -170,7 +160,7 @@ fun NavigationRoot(
                     }
                 }
 
-                is  OrdersScreen -> {
+                is OrdersScreen -> {
                     NavEntry(key) {
                         bottomBarState.value = true
                         OrdersScreen(
@@ -197,7 +187,6 @@ fun NavigationRoot(
                         )
                     }
                 }
-
 
 
                 else -> error("Unknown screen $key")

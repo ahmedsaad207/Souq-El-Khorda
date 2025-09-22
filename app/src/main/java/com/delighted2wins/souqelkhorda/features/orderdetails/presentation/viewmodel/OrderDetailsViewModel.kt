@@ -1,7 +1,7 @@
 package com.delighted2wins.souqelkhorda.features.orderdetails.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.delighted2wins.souqelkhorda.features.sell.presentation.SaleState
+import com.delighted2wins.souqelkhorda.features.sell.presentation.contract.SellState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
@@ -10,7 +10,7 @@ import javax.inject.Inject
 class OrderDetailsViewModel@Inject constructor(
 
 ): ViewModel() {
-    private var _state = MutableStateFlow(SaleState())
+    private var _state = MutableStateFlow(SellState())
     val state = _state
 
 }

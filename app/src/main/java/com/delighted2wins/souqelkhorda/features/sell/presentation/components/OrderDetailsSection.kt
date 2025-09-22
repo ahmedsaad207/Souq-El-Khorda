@@ -79,36 +79,14 @@ fun OrderDetailsSection(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text(
-            text = "Description (Optional)",
-            style = MaterialTheme.typography.bodyMedium,
-            color = Color.Black
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-
-        TextField(
-            value = description.value,
-            onValueChange = { description.value = it },
-            modifier = Modifier
+        CustomTextField(
+            textFieldModifier = Modifier
                 .fillMaxWidth()
-                .heightIn(min = 100.dp)
-                .border(
-                    width = 1.dp,
-                    color = Color.Gray.copy(alpha = 0.5f),
-                    shape = RoundedCornerShape(12.dp)
-                ),
-            shape = RoundedCornerShape(12.dp),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color.White,
-                unfocusedContainerColor = Color.White,
-                disabledContainerColor = Color.White,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent
-            )
+                .heightIn(min = 100.dp),
+            state = description,
+            label = "Description (Optional)",
+            onValueChange = { description.value = it }
         )
-
 
         if (selectedDestination.value == Destination.Market) {
             Spacer(modifier = Modifier.height(16.dp))
