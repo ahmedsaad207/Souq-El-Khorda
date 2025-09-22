@@ -11,86 +11,29 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.delighted2wins.souqelkhorda.core.components.OneIconCard
+import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
+import com.delighted2wins.souqelkhorda.core.enums.OrderType
+import com.delighted2wins.souqelkhorda.core.extensions.convertNumbersToArabic
 import com.delighted2wins.souqelkhorda.features.history.presentation.components.HistoryCard
 import com.delighted2wins.souqelkhorda.features.history.presentation.components.HistorySummaryCard
 import com.delighted2wins.souqelkhorda.features.history.presentation.components.HistoryTabs
-
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewHistoryCard() {
-    HistoryCard(
-        title = "Plastic Bottles Sale",
-        transactionType = "Market",
-        status = "Completed",
-        date = "Dec 15, 2025",
-        items = listOf("15x Plastic Bottles", "8x Aluminum Cans", "2x Glass Jars"),
-        expanded = true,
-        onExpandToggle = {},
-        onViewDetails = {}
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewHistoryScreen() {
-    val dummyOrders = listOf(
-        ScrapOrder(
-            id = 1,
-            title = "Plastic Bottles Sale",
-            type = "Market",
-            status = "Completed",
-            dateCreated = "Dec 15, 2025",
-            amount = "$12.50",
-            items = listOf("15x Plastic Bottles", "8x Aluminum Cans", "2x Glass Jars")
-        ),
-        ScrapOrder(
-            id = 2,
-            title = "Cardboard Collection",
-            type = "Sale",
-            status = "Pending",
-            dateCreated = "Dec 14, 2025",
-            amount = "$8.25",
-            items = listOf("12x Large Cardboard Boxes", "5x Small Paper Bags")
-        ),
-        ScrapOrder(
-            id = 3,
-            title = "Organic Waste Sale",
-            type = "Market",
-            status = "Completed",
-            dateCreated = "Dec 13, 2025",
-            amount = "$8.75",
-            items = listOf(
-                "3kg Food Scraps",
-                "2kg Garden Waste",
-                "1kg Coffee Grounds",
-                "0.5kg Fruit Peels"
-            )
-        )
-    )
-
-    HistoryScreen(
-        orders = dummyOrders,
-        onBackClick = {},
-    )
-}
+import com.delighted2wins.souqelkhorda.features.history.presentation.contract.HistoryContract
+import com.delighted2wins.souqelkhorda.features.history.presentation.viewmodel.HistoryViewModel
 
 
 @Composable
 fun HistoryScreen(
-    orders: List<ScrapOrder> = emptyList(),
+    viewModel: HistoryViewModel = hiltViewModel(),
     onBackClick: () -> Unit = {},
 ) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
     val colors = MaterialTheme.colorScheme
-    var selectedTab by remember { mutableStateOf("All") }
 
     Column(
         modifier = Modifier
@@ -108,31 +51,39 @@ fun HistoryScreen(
 
         HistorySummaryCard(
             stats = listOf(
-                Triple("24", "Completed", Color(0xFF00B259)),
-                Triple("3", "Pending", Color(0xFFFE7E0F)),
-                Triple("2", "Cancelled", Color(0xFFFF1111))
+                Triple(state.completedCount.toString(), OrderStatus.COMPLETED.getLocalizedValue(), OrderStatus.COMPLETED.color),
+                Triple(state.pendingCount.toString(), OrderStatus.PENDING.getLocalizedValue(), OrderStatus.PENDING.color),
+                Triple(state.cancelledCount.toString(), OrderStatus.CANCELLED.getLocalizedValue(), OrderStatus.CANCELLED.color)
             )
         )
 
 
         HistoryTabs(
             tabs = listOf("All", "Sale", "Market"),
-            selectedTab = selectedTab,
-            onTabSelected = { selectedTab = it }
+            selectedTab = state.selectedTab,
+            onTabSelected = { viewModel.handleIntent(HistoryContract.Intent.FilterOrders(it)) }
         )
+
+        val filteredOrders = state.orders.filter { order ->
+            when (state.selectedTab) {
+                "Sale" -> order.type == OrderType.SALE
+                "Market" -> order.type == OrderType.MARKET
+                else -> true
+            }
+        }
 
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = 4.dp)
         ) {
-            items(orders) { order ->
+            items(filteredOrders) { order ->
                 HistoryCard(
                     title = order.title,
-                    transactionType = if (order.type == "sale") "SALE" else "MARKET",
-                    status = "COMPLETED",
-                    date = order.dateCreated,
-                    items = order.items.map { it.toString() },
+                    transactionType = order.type,
+                    status = order.status,
+                    date = order.date.toString().convertNumbersToArabic(),
+                    items = order.scraps.map { it.toString() },
                     expanded = false,
                     onExpandToggle = {},
                     onViewDetails = { }
@@ -142,12 +93,3 @@ fun HistoryScreen(
     }
 }
 
-data class ScrapOrder(
-    val id: Int,
-    val title: String,
-    val type: String, // "Sale" or "Market"
-    val status: String, // "Completed", "Pending", "Cancelled"
-    val dateCreated: String,
-    val amount: String,
-    val items: List<String>
-)

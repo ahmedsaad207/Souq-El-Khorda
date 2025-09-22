@@ -35,12 +35,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.app.theme.AppTypography
+import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
+import com.delighted2wins.souqelkhorda.core.enums.OrderType
 
 @Composable
 fun HistoryCard(
     title: String = "Plastic Bottle Sale",
-    transactionType: String = "SALE",
-    status: String = "PENDING",
+    transactionType: OrderType = OrderType.SALE,
+    status: OrderStatus = OrderStatus.PENDING,
     date: String = "Dec 15, 2025",
     description: String = "Collected from recycling center.",
     items: List<String>,
@@ -147,36 +149,34 @@ fun HistoryCard(
 }
 
 @Composable
-fun StatusChip(status: String) {
+fun StatusChip(status: OrderStatus) {
     val (bg, textColor) = when (status) {
-        "COMPLETED" -> Color(0xFFE6F4EA) to Color(0xFF2E7D32)
-        "PENDING" -> Color(0xFFFFF4E6) to Color(0xFF2A62FF)
-        "CANCELED" -> Color(0xFFFDECEA) to Color(0xFFC62828)
-        else -> Color.LightGray to Color.DarkGray
+        OrderStatus.PENDING -> OrderStatus.PENDING.color to Color(0xFFE6F4EA)
+        OrderStatus.COMPLETED -> OrderStatus.COMPLETED.color to Color(0xFFFFF4E6)
+        OrderStatus.CANCELLED -> OrderStatus.CANCELLED.color to Color(0xFFFDECEA)
     }
 
     Box(
         modifier = Modifier
-            .background(bg, RoundedCornerShape(20.dp))
-            .padding(horizontal = 8.dp, vertical = 2.dp)
+            .background(bg, RoundedCornerShape(4.dp))
+            .padding(horizontal = 8.dp, vertical = 4.dp)
     ) {
-        Text(status, color = textColor, style = AppTypography.bodySmall)
+        Text(status.getLocalizedValue(), color = textColor, style = AppTypography.bodyMedium)
     }
 }
 
 @Composable
-fun TypeChip(type: String) {
+fun TypeChip(type: OrderType) {
     val (bg, textColor) = when (type) {
-        "SALE" -> Color(0xFFE3F2FD) to Color(0xFF1976D2)
-        "MARKET" -> Color(0xFFF3E5F5) to Color(0xFF7B1FA2)
-        else -> Color.LightGray to Color.DarkGray
+        OrderType.SALE -> OrderType.SALE.color to Color(0xFFE3F2FD)
+        OrderType.MARKET -> OrderType.MARKET.color to Color(0xFFF3E5F5)
     }
 
     Box(
         modifier = Modifier
-            .background(bg, RoundedCornerShape(20.dp))
-            .padding(horizontal = 8.dp, vertical = 2.dp)
+            .background(bg, RoundedCornerShape(4.dp))
+            .padding(horizontal = 8.dp, vertical = 4.dp)
     ) {
-        Text(type, color = textColor, style = AppTypography.bodySmall)
+        Text(type.getLocalizedValue(), color = textColor, style = AppTypography.bodyMedium)
     }
 }
