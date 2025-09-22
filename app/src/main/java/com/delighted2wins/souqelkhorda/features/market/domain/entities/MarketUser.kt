@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class MarketUser(
-    val id: Int,
+    val id: String,
     val name: String,
     val location: String,
     val imageUrl: String? = null

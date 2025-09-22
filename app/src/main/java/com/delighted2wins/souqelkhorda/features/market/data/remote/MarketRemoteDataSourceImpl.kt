@@ -74,7 +74,7 @@ class MarketRemoteDataSourceImpl @Inject constructor(
         val userImage = snapshot.getString("userImage")
 
         return MarketUser(
-            id = id.hashCode(),
+            id = id,
             name = name,
             location = "$governorate, $address",
             imageUrl = userImage
