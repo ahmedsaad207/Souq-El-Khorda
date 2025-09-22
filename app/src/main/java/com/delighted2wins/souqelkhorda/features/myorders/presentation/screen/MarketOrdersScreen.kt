@@ -32,7 +32,8 @@ import com.delighted2wins.souqelkhorda.features.myorders.presentation.contract.M
 @Composable
 fun MarketOrdersScreen(
     state: MyOrdersState,
-    onChipSelected: (String) -> Unit
+    onChipSelected: (String) -> Unit,
+    systemIsRtl: Boolean
 ) {
     var selectedFilter by remember { mutableStateOf("Sells") }
 
@@ -90,7 +91,7 @@ fun MarketOrdersScreen(
                         OrdersList(
                             orders = state.offers,
                             isLoading = state.isLoading,
-                            error = state.error
+                            error = state.error,
                         )
                     }
                 }
