@@ -185,6 +185,7 @@ fun MarketScreen(
 
                         user?.let { loadedUser ->
                             ScrapCard(
+                                currentUserId = viewModel.currentUser?.id.toString(),
                                 marketUser = loadedUser,
                                 scrap = scrapData,
                                 onMakeOfferClick = {

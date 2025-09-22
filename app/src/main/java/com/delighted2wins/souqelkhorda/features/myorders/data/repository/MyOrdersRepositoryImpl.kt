@@ -8,8 +8,8 @@ import javax.inject.Inject
 class MyOrdersRepositoryImpl @Inject constructor(
     private val remoteDataSource: MyOrdersRemoteDataSource
 ): MyOrdersRepository {
-    override suspend fun getSaleOrders(): List<Order> {
-        return remoteDataSource.fetchSaleOrders()
+    override suspend fun getCompanyOrders(): List<Order> {
+        return remoteDataSource.fetchCompanyOrders()
     }
 
     override suspend fun getOffers(): List<Order> {
