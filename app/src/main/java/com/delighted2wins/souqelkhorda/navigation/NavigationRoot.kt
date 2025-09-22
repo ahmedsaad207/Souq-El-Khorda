@@ -11,6 +11,8 @@ import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
+import com.delighted2wins.souqelkhorda.core.enums.OrderSource
+import com.delighted2wins.souqelkhorda.features.additem.presentation.screen.AddItemScreen
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.screen.SignUpScreen
 import com.delighted2wins.souqelkhorda.features.buyers.presentation.screen.NearestBuyersScreen
 import com.delighted2wins.souqelkhorda.features.history.presentation.screen.HistoryScreen
@@ -59,14 +61,11 @@ fun NavigationRoot(
                         MarketScreen(
                             innerPadding,
                             snackBarHostState = snackBarState,
-                            navigateToMakeOffer = {
-                                // Navigate to Buying Screen
+                            onMakeOfferClick = {
+                                // Handle the click event here
                             },
-                            onDetailsClick = { order ->
-                                backStack.add(OrderDetailsKey(order))
-                            },
-                            navToAddItem = {
-                                // backStack.add(AddItemKey(TODO()))
+                            onDetailsClick = { orderId, ownerId ->
+                                backStack.add(OrderDetailsKey(orderId, ownerId, source = OrderSource.MARKET))
                             }
                         )
                     }
@@ -76,7 +75,10 @@ fun NavigationRoot(
                     NavEntry(key) {
                         bottomBarState.value = false
                         OrderDetailsScreen(
-                            order = key.order,
+                            orderId = key.orderId,
+                            orderOwnerId = key.orderOwnerId,
+                            orderBuyerId = key.orderBuyerId,
+                            source = key.source,
                             onBackClick = { backStack.remove(key) }
                         )
                     }
@@ -165,7 +167,6 @@ fun NavigationRoot(
                         bottomBarState.value = true
                         OrdersScreen(
                             innerPadding,
-                            onBackClick = { backStack.remove(key) },
                         )
                     }
                 }

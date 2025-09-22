@@ -13,7 +13,7 @@ import com.google.accompanist.placeholder.material3.placeholder
 import com.google.accompanist.placeholder.material3.shimmer
 
 @Composable
-fun ScrapCardShimmer(
+fun ShimmerScrapCard(
     systemIsRtl: Boolean = false
 ) {
     Card(
@@ -23,7 +23,6 @@ fun ScrapCardShimmer(
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
 
-            // User section shimmer (avatar + name)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

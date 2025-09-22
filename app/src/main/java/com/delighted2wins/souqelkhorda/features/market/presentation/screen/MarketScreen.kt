@@ -16,10 +16,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.delighted2wins.souqelkhorda.app.theme.Til
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
-import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.ScrapCard
-import com.delighted2wins.souqelkhorda.features.market.presentation.component.ScrapCardShimmer
+import com.delighted2wins.souqelkhorda.features.market.presentation.component.ShimmerScrapCard
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.SearchBar
 import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketEffect
 import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketIntent
@@ -31,9 +30,8 @@ fun MarketScreen(
     innerPadding: PaddingValues = PaddingValues(),
     snackBarHostState: SnackbarHostState,
     viewModel: MarketViewModel = hiltViewModel(),
-    navigateToMakeOffer: () -> Unit = {},
-    onDetailsClick: (Order) -> Unit,
-    navToAddItem: () -> Unit = {}
+    onMakeOfferClick: () -> Unit = {},
+    onDetailsClick: (String, String) -> Unit,
 ) {
     val state = viewModel.state
     val isRtl: Boolean = LocalLayoutDirection.current == LayoutDirection.Rtl
@@ -43,7 +41,7 @@ fun MarketScreen(
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                is MarketEffect.NavigateToOrderDetails -> onDetailsClick(effect.order)
+                is MarketEffect.NavigateToOrderDetails -> onDetailsClick(effect.orderId, effect.ownerId)
                 is MarketEffect.ShowError -> {
                     coroutineScope.launch {
                         snackBarHostState.showSnackbar(
@@ -56,7 +54,6 @@ fun MarketScreen(
                         }
                     }
                 }
-                is MarketEffect.NavigateToSellNow -> navToAddItem()
             }
         }
     }
@@ -76,7 +73,7 @@ fun MarketScreen(
                     contentPadding = PaddingValues(16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    items(10) { ScrapCardShimmer(systemIsRtl = isRtl) }
+                    items(10) { ShimmerScrapCard(systemIsRtl = isRtl) }
                 }
             }
 
@@ -179,11 +176,11 @@ fun MarketScreen(
                             ScrapCard(
                                 marketUser = loadedUser,
                                 scrap = scrapData,
-                                onBuyClick = { navigateToMakeOffer() },
-                                onDetailsClick = { onDetailsClick(scrapData) },
+                                onMakeOfferClick = { onMakeOfferClick() },
+                                onDetailsClick = { orderId, ownerId -> onDetailsClick(orderId, ownerId)},
                                 systemIsRtl = isRtl
                             )
-                        } ?: ScrapCardShimmer(systemIsRtl = isRtl)
+                        } ?: ShimmerScrapCard(systemIsRtl = isRtl)
                     }
 
                     item { Spacer(modifier = Modifier.padding(60.dp)) }

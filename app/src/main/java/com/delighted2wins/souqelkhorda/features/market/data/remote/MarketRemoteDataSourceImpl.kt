@@ -1,6 +1,7 @@
 package com.delighted2wins.souqelkhorda.features.market.data.remote
 
 import android.util.Log
+import com.delighted2wins.souqelkhorda.core.enums.OrderSource
 import com.delighted2wins.souqelkhorda.core.model.MainUserDto
 import com.delighted2wins.souqelkhorda.core.model.Order
 import com.google.firebase.firestore.FirebaseFirestore
@@ -15,7 +16,7 @@ class MarketRemoteDataSourceImpl @Inject constructor(
         return try {
             val snapshot = firestore
                 .collection("orders")
-                .document("market")
+                .document(OrderSource.MARKET.toString().lowercase())
                 .collection("items")
                 .orderBy("date", Query.Direction.DESCENDING)
                 .get()
