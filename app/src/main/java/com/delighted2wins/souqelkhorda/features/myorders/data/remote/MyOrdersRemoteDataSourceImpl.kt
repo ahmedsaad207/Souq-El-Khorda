@@ -1,8 +1,17 @@
 package com.delighted2wins.souqelkhorda.features.myorders.data.remote
 
+import android.util.Log
+import com.delighted2wins.souqelkhorda.core.enums.OfferStatus
+import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
+import com.delighted2wins.souqelkhorda.core.enums.OrderType
+import com.delighted2wins.souqelkhorda.core.enums.UserRole
+import com.delighted2wins.souqelkhorda.core.model.Offer
 import com.delighted2wins.souqelkhorda.core.model.Order
+import com.delighted2wins.souqelkhorda.core.model.Scrap
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -14,41 +23,120 @@ class MyOrdersRemoteDataSourceImpl @Inject constructor(
     private val saleOrdersRef = firestore.collection("orders")
         .document("sale")
         .collection("items")
+        .orderBy("date", Query.Direction.DESCENDING)
 
     private val marketOrdersRef = firestore.collection("orders")
         .document("market")
         .collection("items")
+        .orderBy("date", Query.Direction.DESCENDING)
 
-    private fun currentUserId(): String {
-        return auth.currentUser?.uid ?: ""
-    }
+    private fun currentUserId(): String = auth.currentUser?.uid ?: ""
 
-    override suspend fun fetchSaleOrders(): List<Order> {
-        val snapshot = saleOrdersRef.get().await()
-        return snapshot.documents.mapNotNull { it.toObject(Order::class.java) }
+    override suspend fun fetchCompanyOrders(): List<Order> {
+        return try {
+            val snapshot = saleOrdersRef.get().await()
+            snapshot.documents.mapNotNull { doc ->
+                val data = doc.data ?: return@mapNotNull null
+
+                val scrapsList = (data["scraps"] as? List<Map<String, Any>>)?.map { scrapMap ->
+                    Scrap(amount = scrapMap["amount"]?.toString() ?: "")
+                } ?: emptyList()
+
+                Order(
+                    orderId = doc.id,
+                    userId = data["userId"] as? String ?: "",
+                    scraps = scrapsList,
+                    type = (data["type"] as? String)?.let { OrderType.valueOf(it) } ?: OrderType.SALE,
+                    status = (data["status"] as? String)?.let { OrderStatus.valueOf(it) } ?: OrderStatus.PENDING,
+                    date = data["date"] as? Long ?: System.currentTimeMillis(),
+                    userRole = (data["userRole"] as? String)?.let { UserRole.valueOf(it) } ?: UserRole.SELLER,
+                    title = data["title"] as? String ?: "",
+                    description = data["description"] as? String ?: "",
+                    price = (data["price"] as? Long)?.toInt() ?: 0
+                )
+            }
+        } catch (e: Exception) {
+            Log.e("MyOrdersRemoteDataSource", "Error fetching company orders", e)
+            emptyList()
+        }
     }
 
     override suspend fun fetchSells(): List<Order> {
         val myUserId = currentUserId()
         if (myUserId.isEmpty()) return emptyList()
 
-        val snapshot = marketOrdersRef
-            .whereEqualTo("userId", myUserId)
-            .get()
-            .await()
-        return snapshot.documents.mapNotNull { it.toObject(Order::class.java) }
+        return try {
+            val snapshot = marketOrdersRef.get().await()
+
+            snapshot.documents.mapNotNull { doc ->
+                val data = doc.data ?: return@mapNotNull null
+
+                if (data["userId"] != myUserId) return@mapNotNull null
+
+                val scrapsList = (data["scraps"] as? List<Map<String, Any>>)?.map { scrapMap ->
+                    Scrap(amount = scrapMap["amount"]?.toString() ?: "")
+                } ?: emptyList()
+
+                Order(
+                    orderId = doc.id,
+                    userId = data["userId"] as? String ?: "",
+                    scraps = scrapsList,
+                    type = (data["type"] as? String)?.let { OrderType.valueOf(it) } ?: OrderType.SALE,
+                    status = (data["status"] as? String)?.let { OrderStatus.valueOf(it) } ?: OrderStatus.PENDING,
+                    date = data["date"] as? Long ?: System.currentTimeMillis(),
+                    userRole = (data["userRole"] as? String)?.let { UserRole.valueOf(it) } ?: UserRole.SELLER,
+                    title = data["title"] as? String ?: "",
+                    description = data["description"] as? String ?: "",
+                    price = (data["price"] as? Long)?.toInt() ?: 0,
+                )
+            }
+        } catch (e: Exception) {
+            Log.e("MyOrdersRemoteDataSource", "Error fetching sells", e)
+            emptyList()
+        }
     }
 
     override suspend fun fetchOffers(): List<Order> {
         val myUserId = currentUserId()
         if (myUserId.isEmpty()) return emptyList()
 
-        val snapshot = marketOrdersRef.get().await()
-        return snapshot.documents.mapNotNull { doc ->
-            val order = doc.toObject(Order::class.java)
-            val offers = doc["offers"] as? List<Map<String, Any>>
-            val hasMyOffer = offers?.any { it["userId"] == myUserId } == true
-            if (hasMyOffer) order else null
+        return try {
+            val offersSnapshot = firestore.collection("offers")
+                .whereEqualTo("buyerId", myUserId)
+                .get()
+                .await()
+
+            val orderIds = offersSnapshot.documents.mapNotNull { it.getString("orderId") }
+            if (orderIds.isEmpty()) return emptyList()
+
+            val ordersSnapshot = marketOrdersRef
+                .whereIn(FieldPath.documentId(), orderIds)
+                .get()
+                .await()
+
+            ordersSnapshot.documents.mapNotNull { doc ->
+                val data = doc.data ?: return@mapNotNull null
+
+                val scrapsList = (data["scraps"] as? List<Map<String, Any>>)?.map { scrapMap ->
+                    Scrap(amount = scrapMap["amount"]?.toString() ?: "")
+                } ?: emptyList()
+
+                Order(
+                    orderId = doc.id,
+                    userId = data["userId"] as? String ?: "",
+                    scraps = scrapsList,
+                    type = (data["type"] as? String)?.let { OrderType.valueOf(it) } ?: OrderType.SALE,
+                    status = (data["status"] as? String)?.let { OrderStatus.valueOf(it) } ?: OrderStatus.PENDING,
+                    date = data["date"] as? Long ?: System.currentTimeMillis(),
+                    userRole = (data["userRole"] as? String)?.let { UserRole.valueOf(it) } ?: UserRole.SELLER,
+                    title = data["title"] as? String ?: "",
+                    description = data["description"] as? String ?: "",
+                    price = (data["price"] as? Long)?.toInt() ?: 0
+                )
+            }
+        } catch (e: Exception) {
+            Log.e("MyOrdersRemoteDataSource", "Error fetching offers", e)
+            emptyList()
         }
     }
 }

@@ -28,15 +28,17 @@ import com.delighted2wins.souqelkhorda.core.components.DirectionalText
 import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.core.utils.isArabic
 import com.delighted2wins.souqelkhorda.core.utils.toFormattedDate
+import com.delighted2wins.souqelkhorda.core.utils.toTimeAgo
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.UserSection
 
 @Composable
 fun ScrapCard(
-    marketUser: MarketUser,
+    currentUserId: String?,
+    marketUser: MarketUser?,
     scrap: Order,
-    onBuyClick: () -> Unit = {},
-    onDetailsClick: (Order, MarketUser) -> Unit,
+    onMakeOfferClick: () -> Unit = {},
+    onDetailsClick: (String, String) -> Unit,
     systemIsRtl: Boolean = false
 ) {
     Card(
@@ -44,11 +46,13 @@ fun ScrapCard(
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
-        UserSection(
-            marketUserData = marketUser,
-            date = scrap.date.toFormattedDate(),
-            systemIsRtl = systemIsRtl
-        )
+        marketUser?.let {
+            UserSection(
+                marketUserData = it,
+                date = scrap.date.toFormattedDate(),
+                systemIsRtl = systemIsRtl
+            )
+        }
 
         Column(modifier = Modifier.padding(12.dp)) {
 
@@ -80,42 +84,28 @@ fun ScrapCard(
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-//                    DirectionalText(
-//                        text = if (systemIsRtl) "الوزن: ${scrap.weight} كجم" else "Weight: ${scrap.weight} Kg",
-//                        contentIsRtl = systemIsRtl,
-//                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-//                        color = MaterialTheme.colorScheme.primary,
-//                        textAlign = TextAlign.Start,
-//                        modifier = Modifier.weight(.6f)
-//                    )
-//
-//                    scrap.quantity?.let {
-//                        DirectionalText(
-//                            text = if (systemIsRtl) "العدد: $it" else "Quantity: $it",
-//                            contentIsRtl = systemIsRtl,
-//                            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-//                            color = MaterialTheme.colorScheme.primary,
-//                            textAlign = TextAlign.Start,
-//                            modifier = Modifier.weight(.6f)
-//                        )
-//                    }
-//                    if (scrap.quantity == null) {
-//                        Spacer(modifier = Modifier.weight(.6f))
-//                    }
+                    DirectionalText(
+                        text = scrap.date.toTimeAgo(systemIsRtl),
+                        contentIsRtl = systemIsRtl,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier.weight(1f)
+                    )
 
                     DirectionalText(
                         text = if (systemIsRtl) "السعر: ${scrap.price} ج.م" else "Price: ${scrap.price} EGP",
                         contentIsRtl = systemIsRtl,
                         style = MaterialTheme.typography.bodyMedium.copy(
                             fontWeight = FontWeight.Bold,
-                            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                            fontSize = MaterialTheme.typography.bodyLarge.fontSize
                         ),
                         color = Color.Red,
                         textAlign = TextAlign.End,
-                        modifier = Modifier.weight(.8f)
+                        modifier = Modifier.weight(1f)
                     )
                 }
             }
@@ -131,7 +121,7 @@ fun ScrapCard(
                         .padding(top = 16.dp)
                 ) {
                     OutlinedButton(
-                        onClick = { onDetailsClick(scrap, marketUser) },
+                        onClick = { onDetailsClick(scrap.orderId, scrap.userId) },
                         shape = RoundedCornerShape(8.dp),
                         modifier = Modifier.weight(1f)
                     ) {
@@ -141,15 +131,17 @@ fun ScrapCard(
                         )
                     }
 
-                    Button(
-                        onClick = onBuyClick,
-                        shape = RoundedCornerShape(8.dp),
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Text(
-                            if (systemIsRtl) "شراء" else "Buy",
-                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
-                        )
+                    if (!currentUserId.isNullOrEmpty() && currentUserId != scrap.userId) {
+                        Button(
+                            onClick = onMakeOfferClick,
+                            shape = RoundedCornerShape(8.dp),
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text(
+                                text = if (systemIsRtl) "قدم عرضك" else "Make Offer",
+                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                            )
+                        }
                     }
                 }
             }

@@ -2,6 +2,7 @@ package com.delighted2wins.souqelkhorda.navigation
 
 import android.os.Parcelable
 import androidx.navigation3.runtime.NavKey
+import com.delighted2wins.souqelkhorda.core.enums.OrderSource
 import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import kotlinx.parcelize.Parcelize
@@ -33,6 +34,12 @@ data object ProfileScreen: NavKey
 data object NotificationsScreen: NavKey
 @Serializable
 data object HistoryScreen: NavKey
-@Parcelize
-data class OrderDetailsKey(val order : Order, val user: MarketUser) : NavKey, Parcelable
+@Serializable
+data class OrderDetailsKey(
+    val orderId: String,
+    val orderOwnerId: String,
+    val orderBuyerId: String? = null,
+    val source: OrderSource
+) : NavKey
+
 

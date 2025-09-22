@@ -16,8 +16,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.delighted2wins.souqelkhorda.app.theme.Til
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
-import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
+import com.delighted2wins.souqelkhorda.features.offers.component.MakeOfferBottomSheet
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.ScrapCard
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.ShimmerScrapCard
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.SearchBar
@@ -31,19 +31,28 @@ fun MarketScreen(
     innerPadding: PaddingValues = PaddingValues(),
     snackBarHostState: SnackbarHostState,
     viewModel: MarketViewModel = hiltViewModel(),
-    navigateToMakeOffer: () -> Unit = {},
-    onDetailsClick: (Order, MarketUser) -> Unit,
-    navToAddItem: () -> Unit = {}
+    onDetailsClick: (String, String) -> Unit,
 ) {
     val state = viewModel.state
     val isRtl: Boolean = LocalLayoutDirection.current == LayoutDirection.Rtl
     val pullToRefreshState = rememberPullToRefreshState()
     val coroutineScope = rememberCoroutineScope()
 
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var selectedOrderId by remember { mutableStateOf("")}
+    var isBottomSheetVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        viewModel.loadCurrentUser()
+    }
+
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                is MarketEffect.NavigateToOrderDetails -> onDetailsClick(effect.order, effect.user)
+                is MarketEffect.NavigateToOrderDetails -> onDetailsClick(effect.orderId, effect.ownerId)
+                is MarketEffect.ShowSuccess -> {
+                    coroutineScope.launch { snackBarHostState.showSnackbar(message = effect.message,) }
+                }
                 is MarketEffect.ShowError -> {
                     coroutineScope.launch {
                         snackBarHostState.showSnackbar(
@@ -56,7 +65,6 @@ fun MarketScreen(
                         }
                     }
                 }
-                is MarketEffect.NavigateToSellNow -> navToAddItem()
             }
         }
     }
@@ -177,10 +185,15 @@ fun MarketScreen(
 
                         user?.let { loadedUser ->
                             ScrapCard(
+                                currentUserId = viewModel.currentUser?.id.toString(),
                                 marketUser = loadedUser,
                                 scrap = scrapData,
-                                onBuyClick = { navigateToMakeOffer() },
-                                onDetailsClick = { order, user -> onDetailsClick(order, user) },
+                                onMakeOfferClick = {
+                                    selectedOrderId = scrapData.orderId
+                                    isBottomSheetVisible = true
+                                    coroutineScope.launch { sheetState.show() }
+                                },
+                                onDetailsClick = { orderId, ownerId -> onDetailsClick(orderId, ownerId)},
                                 systemIsRtl = isRtl
                             )
                         } ?: ShimmerScrapCard(systemIsRtl = isRtl)
@@ -189,6 +202,27 @@ fun MarketScreen(
                     item { Spacer(modifier = Modifier.padding(60.dp)) }
                 }
             }
+        }
+    }
+
+    if (isBottomSheetVisible && selectedOrderId.isNotEmpty()) {
+        ModalBottomSheet(
+            onDismissRequest = { isBottomSheetVisible = false },
+            sheetState = sheetState
+        ) {
+            MakeOfferBottomSheet(
+                orderId = selectedOrderId,
+                offerMaker = viewModel.currentUser!!,
+                sheetState = sheetState,
+                coroutineScope = coroutineScope,
+                onSubmitOffer = { offer ->
+                    viewModel.onIntent(MarketIntent.MakeOffer(offer))
+                    selectedOrderId = ""
+                    isBottomSheetVisible = false
+                    coroutineScope.launch { sheetState.hide() }
+                },
+                isRtl = isRtl
+            )
         }
     }
 }

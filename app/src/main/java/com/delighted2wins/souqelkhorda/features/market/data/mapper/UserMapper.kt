@@ -5,7 +5,7 @@ import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUse
 
 fun MainUserDto.toMarketUser(): MarketUser {
     return MarketUser(
-        id = id.hashCode(),
+        id = id,
         name = name,
         location = "$governorate, $address",
         imageUrl = userImage

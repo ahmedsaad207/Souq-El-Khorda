@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.delighted2wins.souqelkhorda.core.enums.OrderSource
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.contract.MyOrdersIntents
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.viewmodel.MyOrdersViewModel
 import kotlinx.coroutines.launch
@@ -42,8 +43,8 @@ fun OrdersScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     val tabs = listOf(
-        "Sale" to state.saleCount,
-        "Market" to (state.offersCount + state.sellsCount)
+        OrderSource.COMPANY to state.saleCount,
+        OrderSource.MARKET to (state.offersCount + state.sellsCount)
     )
 
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { tabs.size })
@@ -86,7 +87,7 @@ fun OrdersScreen(
                                 .padding(horizontal = 12.dp, vertical = 6.dp)
                         ) {
                             Text(
-                                text = title,
+                                text = title.name,
                                 fontSize = 20.sp,
                                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                                 color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Gray
@@ -123,8 +124,8 @@ fun OrdersScreen(
                     state = state,
                     onChipSelected = { chip ->
                         when (chip) {
-                            "Sells" -> viewModel.onIntent(MyOrdersIntents.LoadSells)
-                            "Offers" -> viewModel.onIntent(MyOrdersIntents.LoadOffers)
+                            OrderSource.SALES.name -> viewModel.onIntent(MyOrdersIntents.LoadSells)
+                            OrderSource.MARKET.name -> viewModel.onIntent(MyOrdersIntents.LoadOffers)
                         }
                     }
                 )
