@@ -39,7 +39,7 @@ fun CompanyOrderCard(
             .clickable { onClick(order) },
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFF5F5F5)
+            containerColor = MaterialTheme.colorScheme.surface
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
@@ -53,6 +53,7 @@ fun CompanyOrderCard(
                 Text(
                     text = "ID #${generateUiOrderId(order.orderId, order.date)}",
                     style = AppTypography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Box(
                     modifier = Modifier
@@ -68,7 +69,7 @@ fun CompanyOrderCard(
                 ) {
                     Text(
                         text = order.status.name,
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         style = AppTypography.titleSmall
                     )
                 }
@@ -79,6 +80,7 @@ fun CompanyOrderCard(
             Text(
                 text = order.title,
                 style = AppTypography.titleLarge,
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -98,7 +100,7 @@ fun CompanyOrderCard(
                 Text(
                     text = order.date.toTimeAgo(systemIsRtl),
                     fontSize = 12.sp,
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
@@ -126,7 +128,7 @@ fun CompanyOrderCard(
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.outlinedButtonColors(
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
-                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                            contentColor = MaterialTheme.colorScheme.onPrimary
                         )
                     ) {
                         Text(
@@ -141,7 +143,7 @@ fun CompanyOrderCard(
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.error,
-                            contentColor = MaterialTheme.colorScheme.onError
+                            contentColor = MaterialTheme.colorScheme.onPrimary
                         )
                     ) {
                         Text(

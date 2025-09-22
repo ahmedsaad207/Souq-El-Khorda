@@ -2,7 +2,6 @@ package com.delighted2wins.souqelkhorda.features.myorders.presentation.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -17,17 +16,17 @@ import androidx.compose.ui.unit.sp
 import com.delighted2wins.souqelkhorda.core.model.Order
 
 @Composable
-fun OrdersList(
+fun OrdersDisplay(
     orders: List<Order>,
     isLoading: Boolean,
-    error: String?
+    error: String?,
+    systemIsRtl: Boolean = false
 ) {
     when {
         isLoading -> {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(16.dp)
             ) {
                 items(20) {
                     ShimmerOrderItem()
@@ -66,10 +65,13 @@ fun OrdersList(
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(16.dp)
             ) {
                 items(orders) { order ->
-                    OrderItem(order = order)
+                    OrderItem(
+                        order = order,
+                        onDetailsClick = {},
+                        systemIsRtl = systemIsRtl
+                    )
                 }
             }
         }

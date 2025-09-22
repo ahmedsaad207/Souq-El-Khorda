@@ -67,7 +67,7 @@ fun OrdersScreen(
     ) {
         TabRow(
             selectedTabIndex = pagerState.currentPage,
-            containerColor = Color.White,
+            containerColor = Color.Transparent,
             contentColor = Color.Black,
             indicator = {}
         ) {
