@@ -1,5 +1,6 @@
 package com.delighted2wins.souqelkhorda.features.myorders.presentation.screen
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -83,6 +84,7 @@ fun MarketOrdersScreen(
                 }
                 "Offers" -> {
                     if (state.offers.isEmpty() && !state.isLoading) {
+                        Log.d("MarketOrdersScreen", "Offers: ${state.offers}")
                         Text("No offers available", fontSize = 16.sp, color = Color.Gray)
                     } else {
                         OrdersList(

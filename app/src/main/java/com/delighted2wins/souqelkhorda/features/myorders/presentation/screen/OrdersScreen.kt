@@ -124,8 +124,8 @@ fun OrdersScreen(
                     state = state,
                     onChipSelected = { chip ->
                         when (chip) {
-                            OrderSource.SALES.name -> viewModel.onIntent(MyOrdersIntents.LoadSells)
-                            OrderSource.MARKET.name -> viewModel.onIntent(MyOrdersIntents.LoadOffers)
+                            "Sells" -> viewModel.onIntent(MyOrdersIntents.LoadSells)
+                            "Offers" -> viewModel.onIntent(MyOrdersIntents.LoadOffers)
                         }
                     }
                 )
