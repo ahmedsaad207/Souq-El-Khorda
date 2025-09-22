@@ -2,8 +2,12 @@ package com.delighted2wins.souqelkhorda.features.market.data.remote
 
 import android.util.Log
 import com.delighted2wins.souqelkhorda.core.enums.OrderSource
+import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
+import com.delighted2wins.souqelkhorda.core.enums.OrderType
+import com.delighted2wins.souqelkhorda.core.enums.UserRole
 import com.delighted2wins.souqelkhorda.core.model.MainUserDto
 import com.delighted2wins.souqelkhorda.core.model.Order
+import com.delighted2wins.souqelkhorda.core.model.Scrap
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.tasks.await
@@ -12,6 +16,7 @@ import javax.inject.Inject
 class MarketRemoteDataSourceImpl @Inject constructor(
     private val firestore: FirebaseFirestore
 ): MarketRemoteDataSource {
+
     override suspend fun getMarketOrders(): List<Order> {
         return try {
             val snapshot = firestore
@@ -22,7 +27,30 @@ class MarketRemoteDataSourceImpl @Inject constructor(
                 .get()
                 .await()
 
-            snapshot.documents.mapNotNull { doc -> doc.toObject(Order::class.java) }
+            snapshot.documents.mapNotNull { doc ->
+                val data = doc.data ?: return@mapNotNull null
+
+                val scrapsList = (data["scraps"] as? List<Map<String, Any>>)?.map { scrapMap ->
+                    Scrap(
+                        amount = scrapMap["amount"]?.toString() ?: ""
+                    )
+                } ?: emptyList()
+
+                Order(
+                    orderId = doc.id,
+                    userId = data["userId"] as? String ?: "",
+                    scraps = scrapsList,
+                    type = (data["type"] as? String)?.let { OrderType.valueOf(it) } ?: OrderType.SALE,
+                    status = (data["status"] as? String)?.let { OrderStatus.valueOf(it) } ?: OrderStatus.PENDING,
+                    date = data["date"] as? Long ?: System.currentTimeMillis(),
+                    offers = emptyList(),
+                    userRole = (data["userRole"] as? String)?.let { UserRole.valueOf(it) } ?: UserRole.SELLER,
+                    title = data["title"] as? String ?: "",
+                    description = data["description"] as? String ?: "",
+                    price = (data["price"] as? Long)?.toInt() ?: 0
+                )
+            }
+
 
         } catch (e: Exception) {
             Log.e("Market-Debug", "Error fetching market orders:", e)
@@ -39,5 +67,4 @@ class MarketRemoteDataSourceImpl @Inject constructor(
         return snapshot.toObject(MainUserDto::class.java)
             ?: throw Exception("User not found")
     }
-
 }
