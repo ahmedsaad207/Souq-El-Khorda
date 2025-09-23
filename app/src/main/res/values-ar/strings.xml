@@ -31,6 +31,8 @@
 
     <string name="register">تسجيل</string>
     <string name="confirm_password">تأكيد كلمة المرور</string>
+    <string name="area">المنطقة</string>
+    <string name="enter_your_area">أدخل منطقتك</string>
 
     <string name="profile">الملف الشخصي</string>
     <string name="profile_username">اسم المستخدم</string>

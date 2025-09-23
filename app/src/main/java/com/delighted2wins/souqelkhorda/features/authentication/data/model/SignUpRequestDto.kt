@@ -7,5 +7,6 @@ data class SignUpRequestDto(
     val password: String,
     val passwordConfirmation: String,
     val governorate: String,
-    val address: String
+    val address: String,
+    val area: String
 )

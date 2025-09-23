@@ -17,9 +17,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -39,8 +40,8 @@ fun CustomDropdownMenu(
     expanded: Boolean,
     onExpandedChange: (Boolean) -> Unit
 ) {
-    val primaryColor = Color(0xFF179C92)
-    val textFieldColor = Color(0xFFF2F2F2)
+
+    val colors = MaterialTheme.colorScheme
 
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
@@ -50,7 +51,7 @@ fun CustomDropdownMenu(
         animationSpec = tween(durationMillis = 300)
     )
     val borderColor by animateColorAsState(
-        targetValue = if (isFocused) primaryColor else Color.White,
+        targetValue = if (isFocused) colors.primary else colors.onSurfaceVariant,
         animationSpec = tween(durationMillis = 300)
     )
 
@@ -80,18 +81,14 @@ fun CustomDropdownMenu(
                 trailingIcon = {
                     ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
                 },
-                colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedBorderColor = Color.Transparent,
-                    focusedBorderColor = primaryColor,
-                    disabledBorderColor = Color.Transparent,
-                    errorBorderColor = Color.Transparent,
-                    cursorColor = Color.Black,
-                    focusedContainerColor = Color(0xFFF5F5F5),
-                    unfocusedContainerColor = textFieldColor,
-                    disabledContainerColor = Color(0xFFF5F5F5),
-                    errorContainerColor = Color(0xFFF5F5F5),
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = colors.onPrimary,
+                    unfocusedContainerColor = colors.onPrimary,
+                    cursorColor = colors.primary,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    focusedTextColor = colors.onBackground,
+                    unfocusedTextColor = colors.onBackground
                 ),
                 textStyle = LocalTextStyle.current.copy(
                     fontSize = 14.sp
@@ -103,10 +100,10 @@ fun CustomDropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { onExpandedChange(false) },
                 modifier = Modifier
-                    .background(Color.White)
+                    .background(colors.surfaceVariant)
                     .border(
                         width = 1.dp,
-                        color = Color.Black,
+                        color = colors.onSurfaceVariant,
                         shape = RoundedCornerShape(12.dp)
                     )
             ) {

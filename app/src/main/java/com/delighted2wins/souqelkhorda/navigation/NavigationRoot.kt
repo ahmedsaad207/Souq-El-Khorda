@@ -12,10 +12,10 @@ import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
 import com.delighted2wins.souqelkhorda.core.enums.OrderSource
+import com.delighted2wins.souqelkhorda.features.authentication.presentation.screen.LoginScreen
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.screen.SignUpScreen
 import com.delighted2wins.souqelkhorda.features.buyers.presentation.screen.NearestBuyersScreen
 import com.delighted2wins.souqelkhorda.features.history.presentation.screen.HistoryScreen
-import com.delighted2wins.souqelkhorda.features.login.presentation.screen.LoginScreen
 import com.delighted2wins.souqelkhorda.features.market.presentation.screen.MarketScreen
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.screen.OrdersScreen
 import com.delighted2wins.souqelkhorda.features.notification.presentation.screen.NotificationsScreen
@@ -60,9 +60,6 @@ fun NavigationRoot(
                         MarketScreen(
                             innerPadding,
                             snackBarHostState = snackBarState,
-                            onMakeOfferClick = {
-                                // Handle the click event here
-                            },
                             onDetailsClick = { orderId, ownerId ->
                                 backStack.add(
                                     OrderDetailsKey(

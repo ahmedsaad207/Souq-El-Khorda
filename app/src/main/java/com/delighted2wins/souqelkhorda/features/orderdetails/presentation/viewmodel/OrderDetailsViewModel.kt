@@ -1,5 +1,6 @@
 package com.delighted2wins.souqelkhorda.features.orderdetails.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.delighted2wins.souqelkhorda.features.sell.presentation.contract.SellState
 import androidx.lifecycle.viewModelScope
@@ -104,7 +105,7 @@ class OrderDetailsViewModel @Inject constructor(
                 OrderSource.COMPANY -> OrderDetailsState.Success.Company(order)
                 OrderSource.SALES -> OrderDetailsState.Success.Sales(order)
                 OrderSource.OFFERS -> {
-                    val buyerOffer: Offer? = order.offers.find { it.userId == buyerId }
+                    val buyerOffer: Offer? = order.offers.find { it.buyerId == buyerId }
                     OrderDetailsState.Success.Offers(order, buyerOffer)
                 }
                 else -> OrderDetailsState.Error("Unknown source")
@@ -123,14 +124,16 @@ class OrderDetailsViewModel @Inject constructor(
         if (userId.isEmpty()) {
             _orderOwner.value = null
             return
+            Log.e("OrderDetailsViewModel", "Invalid user ID: $userId")
         }
         viewModelScope.launch {
             try {
                 val user = fetchUserDataById(userId)
                 _orderOwner.value = user
+                Log.d("OrderDetailsViewModel", "Fetched user data: $user")
             } catch (e: Exception) {
-                e.printStackTrace()
-                _orderOwner.value = MarketUser(id = 0, name = "Unknown", location = "Unknown")
+                Log.e("OrderDetailsViewModel", "Error fetching user data: ${e.message}")
+                _orderOwner.value = MarketUser(id = "", name = "Unknown", location = "Unknown")
             }
         }
     }

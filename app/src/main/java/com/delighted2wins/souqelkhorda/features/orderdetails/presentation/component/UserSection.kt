@@ -103,7 +103,7 @@ fun UserSection(
 @Composable
 fun ScrapUserSectionPreview() {
     val marketUser = MarketUser(
-        id = 2,
+        id = "",
         name = "فاطمة أحمد",
         location = "الجيزة - الدقي",
         imageUrl = "https://avatar.iran.liara.run/public/boy?username=Scott"
