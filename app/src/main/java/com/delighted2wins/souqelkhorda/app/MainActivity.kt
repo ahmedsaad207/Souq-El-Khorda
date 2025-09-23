@@ -1,5 +1,6 @@
 package com.delighted2wins.souqelkhorda.app
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,11 +23,18 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import com.delighted2wins.souqelkhorda.app.theme.SouqElKhordaTheme
 import com.delighted2wins.souqelkhorda.core.components.AppBottomNavBar
 import com.delighted2wins.souqelkhorda.core.components.AppTopAppBar
+import com.delighted2wins.souqelkhorda.core.enums.LanguageEnum
+import com.delighted2wins.souqelkhorda.core.extensions.applyLanguage
 import com.delighted2wins.souqelkhorda.core.extensions.configureSystemUI
+import com.delighted2wins.souqelkhorda.features.profile.di.MainActivityEntryPoint
+import com.delighted2wins.souqelkhorda.features.profile.domain.usecase.GetLanguageUseCase
 import com.delighted2wins.souqelkhorda.navigation.NavigationRoot
+import com.delighted2wins.souqelkhorda.navigation.NotificationsScreen
 import com.delighted2wins.souqelkhorda.navigation.ProfileScreen
 import com.delighted2wins.souqelkhorda.navigation.SplashScreen
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.EntryPointAccessors
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -34,6 +42,9 @@ class MainActivity : ComponentActivity() {
     lateinit var snackBarHostState: SnackbarHostState
     lateinit var bottomBarState: MutableState<Boolean>
     lateinit var navState: MutableState<Boolean>
+
+    @Inject
+    lateinit var getLanguageUseCase: GetLanguageUseCase
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,7 +75,7 @@ class MainActivity : ComponentActivity() {
                             AppTopAppBar(
                                 scrollBehavior = scrollBehavior,
                                 onProfileClick = { backStack.add(ProfileScreen) },
-                                onNotificationClick = {}
+                                onNotificationClick = { backStack.add(NotificationsScreen) }
                             )
                         }
                     },
@@ -88,6 +99,25 @@ class MainActivity : ComponentActivity() {
 
         }
     }
+
+    override fun attachBaseContext(newBase: Context) {
+        val entryPoint = EntryPointAccessors.fromApplication(
+            newBase.applicationContext,
+            MainActivityEntryPoint::class.java
+        )
+
+        val lang = entryPoint.getLanguageUseCase()
+
+        val languageCode = if (lang() == LanguageEnum.DEFAULT.code) {
+            newBase.resources.configuration.locales[0].language
+        } else {
+            lang()
+        }
+
+        val context = newBase.applyLanguage(languageCode)
+        super.attachBaseContext(context)
+    }
+
 }
 
 

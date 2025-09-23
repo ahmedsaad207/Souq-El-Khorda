@@ -32,6 +32,13 @@
 
     <string name="address_details">Address Details</string>
     <string name="enter_full_address_details">Enter full address details</string>
-    <string name="area">Area</string>
-    <string name="enter_your_area">Enter your Area</string>
+
+    <string name="profile">Profile</string>
+    <string name="profile_username">UserName</string>
+    <string name="profile_email">Email</string>
+    <string name="profile_phone">Phone</string>
+    <string name="profile_governorate">Governorate</string>
+    <string name="profile_address">Address</string>
+    <string name="view_cleanup_history">View Cleanup History</string>
+    <string name="logout">Logout</string>
 </resources>

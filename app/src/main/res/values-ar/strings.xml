@@ -34,4 +34,13 @@
     <string name="area">المنطقة</string>
     <string name="enter_your_area">أدخل منطقتك</string>
 
+    <string name="profile">الملف الشخصي</string>
+    <string name="profile_username">اسم المستخدم</string>
+    <string name="profile_email">البريد الإلكتروني</string>
+    <string name="profile_phone">رقم الهاتف</string>
+    <string name="profile_governorate">المحافظة</string>
+    <string name="profile_address">العنوان</string>
+    <string name="view_cleanup_history">عرض سجل التنظيف</string>
+    <string name="logout">تسجيل الخروج</string>
+
 </resources>
