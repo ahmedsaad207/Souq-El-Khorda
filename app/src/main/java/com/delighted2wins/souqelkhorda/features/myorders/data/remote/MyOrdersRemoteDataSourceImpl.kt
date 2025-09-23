@@ -20,6 +20,8 @@ class MyOrdersRemoteDataSourceImpl @Inject constructor(
     private val auth: FirebaseAuth
 ) : MyOrdersRemoteDataSource {
 
+    private val myUserId = currentUserId()
+
     private val saleOrdersRef = firestore.collection("orders")
         .document("sale")
         .collection("items")
@@ -37,6 +39,8 @@ class MyOrdersRemoteDataSourceImpl @Inject constructor(
             val snapshot = saleOrdersRef.get().await()
             snapshot.documents.mapNotNull { doc ->
                 val data = doc.data ?: return@mapNotNull null
+
+                if (data["userId"] != myUserId) return@mapNotNull null
 
                 val scrapsList = (data["scraps"] as? List<Map<String, Any>>)?.map { scrapMap ->
                     Scrap(amount = scrapMap["amount"]?.toString() ?: "")
@@ -62,7 +66,6 @@ class MyOrdersRemoteDataSourceImpl @Inject constructor(
     }
 
     override suspend fun fetchSells(): List<Order> {
-        val myUserId = currentUserId()
         if (myUserId.isEmpty()) return emptyList()
 
         return try {
@@ -97,7 +100,6 @@ class MyOrdersRemoteDataSourceImpl @Inject constructor(
     }
 
     override suspend fun fetchOffers(): List<Order> {
-        val myUserId = currentUserId()
         Log.d("MyOrdersRemoteDataSource", "fetchOffers() called, currentUserId: $myUserId")
         if (myUserId.isEmpty()) return emptyList()
 
