@@ -34,7 +34,7 @@ fun CompanyOrderCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = 12.dp, vertical = 8.dp),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
@@ -123,7 +123,7 @@ fun CompanyOrderCard(
                     Button(
                         onClick = { onDetailsClick(order.orderId, order.userId) },
                         shape = RoundedCornerShape(8.dp),
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier.weight(0.9f),
                         colors = ButtonDefaults.outlinedButtonColors(
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
                             contentColor = MaterialTheme.colorScheme.onPrimary
