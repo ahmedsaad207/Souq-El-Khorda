@@ -1,6 +1,7 @@
 package com.delighted2wins.souqelkhorda.features.sell.presentation.components
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -56,6 +57,7 @@ import com.delighted2wins.souqelkhorda.core.enums.MeasurementType
 import com.delighted2wins.souqelkhorda.core.enums.ScrapType
 import com.delighted2wins.souqelkhorda.core.extensions.dashedBorder
 import com.delighted2wins.souqelkhorda.core.model.Scrap
+import com.delighted2wins.souqelkhorda.features.profile.presentation.contract.ProfileContract
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
@@ -82,8 +84,6 @@ fun AddScrapSection(
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri ->
-            Log.d("TAG", "AddScrapSection/launcher/onResult/ uri= $uri")
-
             if (uri != null && !selectedImages.contains(uri)) {
                 selectedImages = selectedImages + uri
             }
@@ -395,12 +395,9 @@ fun AddScrapSection(
                         unit = selectedMeasurementType.value.label,
                         amount = amount.value,
                         description = description.value,
-//                        images = selectedImages[0].toString()
+                        images = selectedImages.map { it.toString() }
                     )
-                    Log.d(
-                        "TAG",
-                        "AddScrapSection: category: ${scrap.category}, unit: ${scrap.unit}, amount: ${scrap.amount}, description: ${scrap.description}"
-                    )
+
                     onAddClick(scrap)
                 },
                 modifier = Modifier.weight(1f),

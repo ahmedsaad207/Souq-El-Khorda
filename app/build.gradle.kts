@@ -104,4 +104,7 @@ dependencies {
     // cloudinary
     implementation("com.cloudinary:cloudinary-android:3.0.2")
 
+    // gson
+    implementation("com.google.code.gson:gson:2.13.2")
+
 }

@@ -13,7 +13,7 @@ interface ScrapDao {
     suspend fun insertScrap(scrap: ScrapEntity)
 
     @Query("SELECT * FROM scraps")
-    fun getScraps(): Flow<List<ScrapEntity>>
+    fun getScraps(): List<ScrapEntity>
 
     @Query("DELETE FROM scraps")
     suspend fun deleteAllScraps()
