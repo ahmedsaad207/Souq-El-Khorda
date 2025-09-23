@@ -31,6 +31,7 @@ import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUse
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.ShimmerScrapCard
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.OrderDetailsIntent
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.OrderDetailsState
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.screen.CompanyOrderDetailsUI
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.screen.MarketOrderDetailsUI
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.viewmodel.OrderDetailsViewModel
 
@@ -192,7 +193,7 @@ private fun RenderSuccess(
             MarketOrderDetailsUI(state.order,orderOwner, isRtl, onBackClick)
         }
         is OrderDetailsState.Success.Company -> {
-            //CompanyOrderDetailsUI(state.order, isRtl, onBackClick)
+            CompanyOrderDetailsUI(state.order,orderOwner, isRtl, onBackClick)
         }
         is OrderDetailsState.Success.Sales -> {
            // SalesOrderDetailsUI(state.order, isRtl, onBackClick)

@@ -19,6 +19,7 @@ import com.delighted2wins.souqelkhorda.features.myorders.presentation.contract.M
 fun MarketOrdersScreen(
     state: MyOrdersState,
     onChipSelected: (String) -> Unit,
+    onDetailsClick: (String, String) -> Unit,
     systemIsRtl: Boolean
 ) {
     var selectedFilter by remember { mutableStateOf("Sells") }

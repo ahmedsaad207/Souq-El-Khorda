@@ -1,5 +1,6 @@
 package com.delighted2wins.souqelkhorda.features.sell.data.remote.firestore
 
+import com.delighted2wins.souqelkhorda.core.enums.OrderType
 import com.delighted2wins.souqelkhorda.core.model.Order
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -33,4 +34,20 @@ class FirestoreOrderService @Inject constructor(
             .collection("orders")
             .add(order)
     }
+
+    suspend fun deleteCompanyOrder(orderId: String): Boolean {
+        return try {
+            firestore.collection("orders")
+                .document(OrderType.SALE.name.lowercase())
+                .collection("items")
+                .document(orderId)
+                .delete()
+                .await()
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
 }

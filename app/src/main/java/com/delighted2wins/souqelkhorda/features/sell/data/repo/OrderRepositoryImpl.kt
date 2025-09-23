@@ -11,4 +11,7 @@ class OrderRepositoryImpl @Inject constructor(
     override suspend fun sendOrder(order: Order) {
         remote.sendOrder(order)
     }
+    override suspend fun deleteOrder(orderId: String): Boolean {
+        return remote.deleteOrder(orderId)
+    }
 }

@@ -6,7 +6,7 @@ import javax.inject.Inject
 class DeleteOfferUseCase @Inject constructor(
     private val repository: OffersRepository
 ) {
-    suspend operator fun invoke(offerId: String) {
-        repository.deleteOffer(offerId)
+    suspend operator fun invoke(offerId: String): Boolean  {
+        return repository.deleteOffer(offerId)
     }
 }

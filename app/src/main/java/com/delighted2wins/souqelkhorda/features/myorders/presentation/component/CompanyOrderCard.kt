@@ -27,16 +27,14 @@ import com.delighted2wins.souqelkhorda.core.utils.toTimeAgo
 @Composable
 fun CompanyOrderCard(
     order: Order,
-    onClick: (Order) -> Unit,
     onDetailsClick: (String, String) -> Unit,
-    onDeclineClick: () -> Unit,
+    onDeclineClick: (String) -> Unit,
     systemIsRtl: Boolean
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .clickable { onClick(order) },
+            .padding(horizontal = 16.dp, vertical = 8.dp),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
@@ -138,7 +136,7 @@ fun CompanyOrderCard(
                     }
 
                     Button(
-                        onClick = onDeclineClick,
+                        onClick = { onDeclineClick(order.orderId) },
                         shape = RoundedCornerShape(8.dp),
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.buttonColors(
@@ -147,7 +145,7 @@ fun CompanyOrderCard(
                         )
                     ) {
                         Text(
-                            text = if (systemIsRtl) "الغاء العرض" else "Decline Offer",
+                            text = if (systemIsRtl) "الغاء الطلب" else "Decline Order",
                             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
                         )
                     }

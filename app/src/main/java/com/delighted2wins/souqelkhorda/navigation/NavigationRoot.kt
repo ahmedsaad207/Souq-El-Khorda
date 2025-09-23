@@ -169,6 +169,16 @@ fun NavigationRoot(
                         bottomBarState.value = true
                         OrdersScreen(
                             innerPadding,
+                            snackBarState,
+                            onDetailsClick = { orderId, ownerId ->
+                                backStack.add(
+                                    OrderDetailsKey(
+                                        orderId,
+                                        ownerId,
+                                        source = OrderSource.COMPANY
+                                    )
+                                )
+                            }
                         )
                     }
                 }
