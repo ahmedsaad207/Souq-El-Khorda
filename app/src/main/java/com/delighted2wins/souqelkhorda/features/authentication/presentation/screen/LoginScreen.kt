@@ -119,13 +119,13 @@ fun LoginScreen(
 
 
         LoginTF(onValueChange = {
-            email = it
+            email = it.trim()
         })
         Spacer(
             Modifier.height((screenHeight * 0.01).dp)
         )
         LoginPasswordTF(onValueChange = {
-            password = it
+            password = it.trim()
         })
         Spacer(
             Modifier.height((screenHeight * 0.01).dp)
@@ -134,7 +134,6 @@ fun LoginScreen(
             shape = RoundedCornerShape(8.dp),
             onClick = {
                 viewModel.login(email, password)
-//                onLoginClick()
             },
             modifier = Modifier
                 .fillMaxWidth()

@@ -41,4 +41,8 @@
     <string name="profile_address">Address</string>
     <string name="view_cleanup_history">View Cleanup History</string>
     <string name="logout">Logout</string>
+
+
+    <string name="area">Area</string>
+    <string name="enter_your_area">Enter your area</string>
 </resources>
