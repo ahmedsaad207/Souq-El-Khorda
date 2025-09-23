@@ -1,11 +1,10 @@
 package com.delighted2wins.souqelkhorda.features.sell.presentation.components
 
-import android.R.attr.label
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -20,7 +19,9 @@ fun CustomTextField(
     textFieldModifier: Modifier = Modifier,
     state: MutableState<String>,
     onValueChange: (String) -> Unit,
-    label: String = ""
+    label: String = "",
+    placeholder: String = "",
+    keyboardOptions:KeyboardOptions = KeyboardOptions.Default
 ) {
     Column(
         modifier = modifier
@@ -30,7 +31,7 @@ fun CustomTextField(
         }
         TextField(
             value = state.value,
-            onValueChange = { state.value = it },
+            onValueChange = { onValueChange(it) },
             modifier = textFieldModifier
                 .border(
                     width = 1.dp,
@@ -45,7 +46,9 @@ fun CustomTextField(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent
-            )
+            ),
+            keyboardOptions = keyboardOptions,
+            placeholder = { Text(placeholder) }
         )
     }
 }

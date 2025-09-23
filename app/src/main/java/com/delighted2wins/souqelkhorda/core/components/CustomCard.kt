@@ -12,6 +12,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.features.sell.presentation.components.TitleSection
 
@@ -19,6 +20,9 @@ import com.delighted2wins.souqelkhorda.features.sell.presentation.components.Tit
 fun CustomCard(
     title: String,
     color: Color,
+    subTitle: String = "",
+    icon: ImageVector? = null,
+    iconTint: Color = Color.Transparent,
     content: @Composable () -> Unit
 ) {
     Card(
@@ -43,7 +47,10 @@ fun CustomCard(
 
             TitleSection(
                 text = title,
-                color = color
+                color = color,
+                subTitle = subTitle,
+                icon = icon,
+                iconTint = iconTint
             )
 
             Spacer(modifier = Modifier.height(16.dp))

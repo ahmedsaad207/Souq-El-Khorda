@@ -33,6 +33,7 @@ import com.delighted2wins.souqelkhorda.features.sell.presentation.viewmodel.Sell
 fun ItemsSection(
     data: List<Scrap>,
     viewModel: SellViewModel = hiltViewModel(),
+    onEditClick: (Scrap) -> Unit,
     onClick: () -> Unit
 ) {
     Card(
@@ -109,7 +110,7 @@ fun ItemsSection(
                     data.forEach { scrap ->
                         ScrapItem(
                             scrap = scrap,
-                            onEdit = {},
+                            onEdit = { onEditClick(scrap) },
                             onDelete = {
                                 viewModel.processIntent(SellIntent.DeleteScrap(scrap))
                             }
