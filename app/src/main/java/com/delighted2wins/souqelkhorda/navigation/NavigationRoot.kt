@@ -163,20 +163,15 @@ fun NavigationRoot(
                         )
                     }
                 }
-
                 is OrdersScreen -> {
                     NavEntry(key) {
                         bottomBarState.value = true
                         OrdersScreen(
-                            innerPadding,
-                            snackBarState,
-                            onDetailsClick = { orderId, ownerId ->
+                            innerPadding = innerPadding,
+                            snackBarHostState = snackBarState,
+                            onDetailsClick = { orderId, ownerId, buyerId, source ->
                                 backStack.add(
-                                    OrderDetailsKey(
-                                        orderId,
-                                        ownerId,
-                                        source = OrderSource.COMPANY
-                                    )
+                                    OrderDetailsKey(orderId, ownerId, buyerId, source)
                                 )
                             }
                         )

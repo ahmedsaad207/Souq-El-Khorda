@@ -1,5 +1,6 @@
 package com.delighted2wins.souqelkhorda.features.orderdetails
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -33,6 +34,7 @@ import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contra
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.OrderDetailsState
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.screen.CompanyOrderDetailsUI
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.screen.MarketOrderDetailsUI
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.screen.SalesOrderDetailsUI
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.viewmodel.OrderDetailsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,8 +53,15 @@ fun OrderDetailsScreen(
     val orderBuyer by viewModel.orderBuyer.collectAsStateWithLifecycle()
     val pullToRefreshState = rememberPullToRefreshState()
 
+    LaunchedEffect(Unit) {
+        Log.d("Navigation", "Navigated to OrderDetailsScreen with orderId: $orderId")
+    }
 
     LaunchedEffect(orderId, orderOwnerId, orderBuyerId) {
+        Log.d("OrderDetailsScreen", "Loading order details for order ID: $orderId")
+        Log.d("OrderDetailsScreen", "Loading order owner ID: $orderOwnerId")
+        Log.d("OrderDetailsScreen", "Loading order buyer ID: $orderBuyerId")
+
         viewModel.onIntent(
             OrderDetailsIntent.LoadOrderDetails(
                 orderId,
@@ -128,22 +137,20 @@ fun OrderDetailsScreen(
                 }
 
                 OrderDetailsState.Empty -> {
+                    Log.d("OrderDetailsScreen", "Empty state reached")
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
                         contentPadding = PaddingValues(16.dp)
                     ) {
                         item {
                             Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(400.dp),
+                                modifier = Modifier.fillParentMaxSize(),
                                 contentAlignment = Alignment.Center
                             ) {
-                                DirectionalText(
+                                Text(
                                     text =  if (layoutDirectionRtl) "لا توجد بيانات" else "No data available",
                                     style = MaterialTheme.typography.titleLarge,
                                     color = MaterialTheme.colorScheme.error,
-                                    contentIsRtl = layoutDirectionRtl,
                                     modifier = Modifier.align(Alignment.Center)
                                 )
                             }
@@ -160,19 +167,12 @@ fun OrderDetailsScreen(
                             onBackClick = onBackClick
                         )
                     } ?:
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(16.dp),
-                        contentAlignment = Alignment.Center
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        DirectionalText(
-                            text = if (layoutDirectionRtl) "جارٍ التحديث..." else "Refreshing...",
-                            style = MaterialTheme.typography.titleLarge,
-                            color = MaterialTheme.colorScheme.error,
-                            contentIsRtl = layoutDirectionRtl,
-                            modifier = Modifier.align(Alignment.Center)
-                        )
+                        items(10) { ShimmerScrapCard(systemIsRtl = layoutDirectionRtl) }
                     }
                 }
             }
@@ -196,7 +196,7 @@ private fun RenderSuccess(
             CompanyOrderDetailsUI(state.order,orderOwner, isRtl, onBackClick)
         }
         is OrderDetailsState.Success.Sales -> {
-           // SalesOrderDetailsUI(state.order, isRtl, onBackClick)
+           SalesOrderDetailsUI(state.order, isRtl, onBackClick)
         }
         is OrderDetailsState.Success.Offers -> {
           //  OffersOrderDetailsUI(state.order, state.buyerOffer, isRtl, onBackClick)

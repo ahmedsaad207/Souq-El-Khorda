@@ -1,6 +1,5 @@
 package com.delighted2wins.souqelkhorda.features.myorders.presentation.screen
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -41,14 +40,14 @@ fun MarketOrdersScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 FilterWithBadge(
-                    label = "Sells",
+                    label = if (systemIsRtl) "معروضاتي" else "Sells",
                     count = state.sellsCount,
                     selected = selectedFilter == "Sells",
                     onClick = { selectedFilter = "Sells" }
                 )
 
                 FilterWithBadge(
-                    label = "Offers",
+                    label = if (systemIsRtl) "عروضي" else "Offers",
                     count = state.offersCount,
                     selected = selectedFilter == "Offers",
                     onClick = { selectedFilter = "Offers" }
@@ -64,12 +63,20 @@ fun MarketOrdersScreen(
                 when (selectedFilter) {
                     "Sells" -> {
                         if (state.sells.isEmpty() && !state.isLoading) {
-                            Text("No sells available", fontSize = 16.sp, color = Color.Gray)
+                            Box (Modifier.fillMaxSize(), contentAlignment = Alignment.Center)
+                            {
+                                Text(
+                                    if (systemIsRtl) "لا يوجد معروضات متاحة" else "No sells available",
+                                    fontSize = 24.sp,
+                                    color = Color.Gray
+                                )
+                            }
                         } else {
                             OrdersDisplay(
                                 orders = state.sells,
                                 isLoading = state.isLoading,
                                 error = state.error,
+                                onDetailsClick = onDetailsClick,
                                 systemIsRtl = systemIsRtl
                             )
                         }
@@ -77,13 +84,20 @@ fun MarketOrdersScreen(
 
                     "Offers" -> {
                         if (state.offers.isEmpty() && !state.isLoading) {
-                            Log.d("MarketOrdersScreen", "Offers: ${state.offers}")
-                            Text("No offers available", fontSize = 16.sp, color = Color.Gray)
+                            Box (Modifier.fillMaxSize(), contentAlignment = Alignment.Center)
+                            {
+                                Text(
+                                    if (systemIsRtl) "لا يوجد عروض متاحة" else "No offers available",
+                                    fontSize = 24.sp,
+                                    color = Color.Gray
+                                )
+                            }
                         } else {
                             OrdersDisplay(
                                 orders = state.offers,
                                 isLoading = state.isLoading,
                                 error = state.error,
+                                onDetailsClick = onDetailsClick,
                                 systemIsRtl = systemIsRtl
                             )
                         }

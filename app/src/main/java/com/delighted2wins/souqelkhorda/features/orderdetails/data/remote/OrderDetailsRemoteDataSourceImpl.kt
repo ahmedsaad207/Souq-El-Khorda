@@ -18,9 +18,56 @@ class OrderDetailsRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun fetchOrderDetails(
         orderId: String,
+        source: OrderSource
+    ): Order? {
+        return try {
+            val covert = if (source == OrderSource.COMPANY) {
+                "sale"
+            } else{
+                "market"
+            }
+            val snapshot = firestore
+                .collection("orders")
+                .document(covert)
+                .collection("items")
+                .document(orderId)
+                .get()
+                .await()
+
+            val data = snapshot.data ?: return null
+            Log.d("Order_Details-Debug", "Fetched order details: $data")
+
+            val scrapsList = (data["scraps"] as? List<Map<String, Any>>)?.map { scrapMap ->
+                Scrap(
+                    amount = scrapMap["amount"]?.toString() ?: ""
+                )
+            } ?: emptyList()
+
+            Order(
+                orderId = snapshot.id,
+                userId = data["userId"] as? String ?: "",
+                scraps = scrapsList,
+                type = (data["type"] as? String)?.let { OrderType.valueOf(it) } ?: OrderType.SALE,
+                status = (data["status"] as? String)?.let { OrderStatus.valueOf(it) } ?: OrderStatus.PENDING,
+                date = data["date"] as? Long ?: System.currentTimeMillis(),
+                offers = emptyList(),
+                userRole = (data["userRole"] as? String)?.let { UserRole.valueOf(it) } ?: UserRole.SELLER,
+                title = data["title"] as? String ?: "",
+                description = data["description"] as? String ?: "",
+                price = (data["price"] as? Long)?.toInt() ?: 0
+            )
+
+        } catch (e: Exception) {
+            Log.e("Order_Details-Debug", "Error fetching order details:", e)
+            null
+        }
+    }
+
+    override suspend fun fetchOrderDetails(
+        orderId: String,
         ownerId: String,
         buyerId: String?,
-        source: OrderSource
+        source: OrderSource,
     ): Order? {
         return try {
             val covert = if (source == OrderSource.COMPANY) {
@@ -63,4 +110,5 @@ class OrderDetailsRemoteDataSourceImpl @Inject constructor(
             null
         }
     }
+
 }
