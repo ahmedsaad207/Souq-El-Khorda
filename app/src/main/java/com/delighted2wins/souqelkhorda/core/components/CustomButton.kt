@@ -20,10 +20,12 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun CustomButton(
+    modifier: Modifier = Modifier,
     icon: ImageVector? = null,
     contentDescription: String? = null,
     iconTint: Color = Color.White,
@@ -45,8 +47,7 @@ fun CustomButton(
             contentColor = textColor,
             disabledContentColor = textColor.copy(alpha = 0.7f)
         ),
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = modifier
             .height(56.dp),
         shape = RoundedCornerShape(12.dp)
     ) {
@@ -72,7 +73,7 @@ fun CustomButton(
         Text(
             text = if (isLoading.value) textLoading else text,
             color = textColor,
-            style = textStyle
+            style = textStyle.copy(fontWeight = FontWeight.SemiBold)
         )
     }
 }

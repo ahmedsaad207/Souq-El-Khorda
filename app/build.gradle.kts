@@ -101,4 +101,7 @@ dependencies {
     // accompanist placeholder (shimmer)
     implementation("com.google.accompanist:accompanist-placeholder-material3:0.32.0")
 
+    // cloudinary
+    implementation("com.cloudinary:cloudinary-android:3.0.2")
+
 }
