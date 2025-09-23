@@ -1,5 +1,6 @@
 package com.delighted2wins.souqelkhorda.features.offers.data.remote
 
+import android.util.Log
 import com.delighted2wins.souqelkhorda.core.enums.OfferStatus
 import com.delighted2wins.souqelkhorda.core.model.Offer
 import com.google.firebase.firestore.FirebaseFirestore
@@ -25,9 +26,16 @@ class OffersRemoteDataSourceImpl @Inject constructor(
             .await()
     }
 
-    override suspend fun deleteOffer(offerId: String) {
-        offersCollection.document(offerId).delete().await()
+    override suspend fun deleteOffer(offerId: String): Boolean {
+        return try {
+            offersCollection.document(offerId).delete().await()
+            true
+        } catch (e: Exception) {
+            Log.e("OffersRemoteDataSource", "Error deleting offer", e)
+            false
+        }
     }
+
 
     override suspend fun getOfferById(offerId: String): Offer? {
         val snapshot = offersCollection.document(offerId).get().await()

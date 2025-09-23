@@ -10,4 +10,8 @@ class OrdersRemoteDataSourceImpl @Inject constructor(
     override suspend fun sendOrder(order: Order) {
         service.sendOrder(order)
     }
+
+    override suspend fun deleteOrder(orderId: String): Boolean {
+        return service.deleteCompanyOrder(orderId)
+    }
 }

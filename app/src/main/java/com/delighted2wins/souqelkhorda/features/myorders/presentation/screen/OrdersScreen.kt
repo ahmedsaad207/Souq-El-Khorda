@@ -14,13 +14,18 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Badge
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,10 +33,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.delighted2wins.souqelkhorda.core.enums.OrderSource
+import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketEffect
+import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketIntent
+import com.delighted2wins.souqelkhorda.features.myorders.presentation.component.DeleteConfirmationDialog
+import com.delighted2wins.souqelkhorda.features.myorders.presentation.contract.MyOrdersEffect
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.contract.MyOrdersIntents
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.viewmodel.MyOrdersViewModel
 import kotlinx.coroutines.launch
@@ -40,7 +50,9 @@ import kotlinx.coroutines.launch
 @Composable
 fun OrdersScreen(
     innerPadding: PaddingValues = PaddingValues(),
+    snackBarHostState: SnackbarHostState,
     viewModel: MyOrdersViewModel = hiltViewModel(),
+    onDetailsClick: (String, String) -> Unit = { _, _ -> }
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val systemIsRtl = LocalConfiguration.current.layoutDirection == LayoutDirection.Rtl.ordinal
@@ -51,6 +63,33 @@ fun OrdersScreen(
 
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { tabs.size })
     val scope = rememberCoroutineScope()
+    val coroutineScope = rememberCoroutineScope()
+    val isRtl: Boolean = LocalLayoutDirection.current == LayoutDirection.Rtl
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    var orderToDelete by remember { mutableStateOf<String?>(null) }
+
+
+    LaunchedEffect(Unit) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                is MyOrdersEffect.ShowSuccess -> {
+                    coroutineScope.launch { snackBarHostState.showSnackbar(message = effect.message,) }
+                }
+                is MyOrdersEffect.ShowError -> {
+                    coroutineScope.launch {
+                        snackBarHostState.showSnackbar(
+                            message = effect.message,
+                            actionLabel = if (isRtl) "إعادة المحاولة" else "Retry"
+                        ).let { result ->
+                            if (result == SnackbarResult.ActionPerformed) {
+                                viewModel.onIntent(MyOrdersIntents.LoadSaleOrders)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     LaunchedEffect(pagerState.currentPage) {
         when (pagerState.currentPage) {
@@ -121,6 +160,11 @@ fun OrdersScreen(
                     state.saleOrders,
                     state.isLoading,
                     state.error,
+                    onDetailsClick,
+                    onDeclineClick = { orderId ->
+                        orderToDelete = orderId
+                        showDeleteDialog = true
+                    },
                     systemIsRtl
                 )
                 1 -> MarketOrdersScreen(
@@ -131,9 +175,20 @@ fun OrdersScreen(
                             "Offers" -> viewModel.onIntent(MyOrdersIntents.LoadOffers)
                         }
                     },
+                    onDetailsClick,
                     systemIsRtl
                 )
             }
+        }
+        if (showDeleteDialog) {
+            DeleteConfirmationDialog(
+                isRtl = isRtl,
+                onConfirm = {
+                    orderToDelete?.let { viewModel.onIntent(MyOrdersIntents.DeleteCompanyOrder(it)) }
+                    showDeleteDialog = false
+                },
+                onDismiss = { showDeleteDialog = false }
+            )
         }
     }
 }

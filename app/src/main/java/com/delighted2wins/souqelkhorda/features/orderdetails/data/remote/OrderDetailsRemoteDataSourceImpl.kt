@@ -23,9 +23,14 @@ class OrderDetailsRemoteDataSourceImpl @Inject constructor(
         source: OrderSource
     ): Order? {
         return try {
+            val covert = if (source == OrderSource.COMPANY) {
+                "sale"
+            } else {
+                source.toString().lowercase()
+            }
             val snapshot = firestore
                 .collection("orders")
-                .document(source.toString().lowercase())
+                .document(covert)
                 .collection("items")
                 .document(orderId)
                 .get()
