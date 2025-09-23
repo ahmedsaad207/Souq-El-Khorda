@@ -121,9 +121,24 @@ fun CompanyOrderCard(
                         .padding(top = 4.dp)
                 ) {
                     Button(
+                        onClick = { onDeclineClick(order.orderId) },
+                        shape = RoundedCornerShape(8.dp),
+                        modifier = Modifier.weight(1f),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.error,
+                            contentColor = MaterialTheme.colorScheme.onPrimary
+                        )
+                    ) {
+                        Text(
+                            text = if (systemIsRtl) "الغاء الطلب" else "Cancel",
+                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                        )
+                    }
+
+                    Button(
                         onClick = { onDetailsClick(order.orderId, order.userId) },
                         shape = RoundedCornerShape(8.dp),
-                        modifier = Modifier.weight(0.9f),
+                        modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.outlinedButtonColors(
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
                             contentColor = MaterialTheme.colorScheme.onPrimary
@@ -135,20 +150,6 @@ fun CompanyOrderCard(
                         )
                     }
 
-                    Button(
-                        onClick = { onDeclineClick(order.orderId) },
-                        shape = RoundedCornerShape(8.dp),
-                        modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.error,
-                            contentColor = MaterialTheme.colorScheme.onPrimary
-                        )
-                    ) {
-                        Text(
-                            text = if (systemIsRtl) "الغاء الطلب" else "Decline Order",
-                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
-                        )
-                    }
                 }
             }
         }
