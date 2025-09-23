@@ -89,7 +89,9 @@ fun NavigationRoot(
                 is NearestBuyersScreen -> {
                     NavEntry(key) {
                         bottomBarState.value = true
-                        NearestBuyersScreen()
+                        NearestBuyersScreen(
+                            innerPadding = innerPadding,
+                            )
                     }
                 }
 

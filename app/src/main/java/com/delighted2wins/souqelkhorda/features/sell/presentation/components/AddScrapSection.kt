@@ -1,6 +1,5 @@
 package com.delighted2wins.souqelkhorda.features.sell.presentation.components
 
-import android.R.attr.contentDescription
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

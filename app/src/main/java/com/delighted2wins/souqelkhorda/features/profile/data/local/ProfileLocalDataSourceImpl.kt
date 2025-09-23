@@ -2,7 +2,6 @@ package com.delighted2wins.souqelkhorda.features.profile.data.local
 
 import com.abdok.atmosphere.data.local.sharedPreference.ISharedPreferences
 import com.delighted2wins.souqelkhorda.core.AppConstant.LANGUAGE
-import com.delighted2wins.souqelkhorda.features.authentication.data.model.AuthUser
 import javax.inject.Inject
 
 class ProfileLocalDataSourceImpl @Inject constructor(

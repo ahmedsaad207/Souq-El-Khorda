@@ -4,8 +4,8 @@ import com.delighted2wins.souqelkhorda.features.myorders.data.remote.MyOrdersRem
 import com.delighted2wins.souqelkhorda.features.myorders.data.remote.MyOrdersRemoteDataSourceImpl
 import com.delighted2wins.souqelkhorda.features.myorders.data.repository.MyOrdersRepositoryImpl
 import com.delighted2wins.souqelkhorda.features.myorders.domain.repository.MyOrdersRepository
-import com.delighted2wins.souqelkhorda.features.myorders.domain.usecase.LoadOffersUseCase
 import com.delighted2wins.souqelkhorda.features.myorders.domain.usecase.LoadCompanyOrdersUseCase
+import com.delighted2wins.souqelkhorda.features.myorders.domain.usecase.LoadOffersUseCase
 import com.delighted2wins.souqelkhorda.features.myorders.domain.usecase.LoadSellsUseCase
 import dagger.Binds
 import dagger.Module

@@ -1,9 +1,7 @@
 package com.delighted2wins.souqelkhorda.features.profile.presentation.viewmodel
 
-import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.FreeUserCase
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.LogoutUseCase
 import com.delighted2wins.souqelkhorda.features.profile.domain.entity.ProfileMessagesEnum

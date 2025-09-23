@@ -1,6 +1,5 @@
 package com.delighted2wins.souqelkhorda.features.sell.data.mapper
 
-import android.util.Log
 import com.delighted2wins.souqelkhorda.core.model.Scrap
 import com.delighted2wins.souqelkhorda.features.sell.data.model.ScrapEntity
 

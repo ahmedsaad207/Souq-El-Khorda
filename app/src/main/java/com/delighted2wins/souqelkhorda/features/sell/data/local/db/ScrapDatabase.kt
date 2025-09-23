@@ -2,7 +2,6 @@ package com.delighted2wins.souqelkhorda.features.sell.data.local.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.delighted2wins.souqelkhorda.features.sell.data.local.db.ScrapDao
 import com.delighted2wins.souqelkhorda.features.sell.data.model.ScrapEntity
 
 @Database(
