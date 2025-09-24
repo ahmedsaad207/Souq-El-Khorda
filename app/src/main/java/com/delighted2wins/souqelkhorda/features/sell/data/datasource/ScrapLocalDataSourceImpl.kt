@@ -15,14 +15,14 @@ class ScrapLocalDataSourceImpl @Inject constructor(
 ) : ScrapLocalDataSource {
     override suspend fun saveScrap(scrap: Scrap) {
         val entity = scrap.toEntity()
-        Log.d("TAG", "local/saveScrap: id=${entity.id}")
         dao.insertScrap(entity)
     }
 
-    override fun getScraps(): Flow<List<Scrap>> {
-        return dao.getScraps().map { list ->
-            list.map { it.toDomain() }
+    override fun getScraps(): Flow<List<Scrap>> = flow {
+        val scraps = dao.getScraps().map { scrapEntity ->
+            scrapEntity.toDomain()
         }
+        emit(scraps)
     }
 
     override suspend fun deleteAllScraps() = dao.deleteAllScraps()

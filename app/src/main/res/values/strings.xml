@@ -45,4 +45,9 @@
 
     <string name="area">Area</string>
     <string name="enter_your_area">Enter your area</string>
+    <string name="nearest_buyer_title">Nearby Shops\n</string>
+    <string name="nearest_buyer_sub_title">Scrap collection points nearby</string>
+    <string name="call">call</string>
+    <string name="direction">Direction</string>
+    <string name="accepted_types">Accepted Types:</string>
 </resources>

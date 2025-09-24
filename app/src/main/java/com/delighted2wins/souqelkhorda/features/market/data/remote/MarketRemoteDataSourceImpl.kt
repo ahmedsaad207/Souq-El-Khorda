@@ -5,7 +5,6 @@ import com.delighted2wins.souqelkhorda.core.enums.OrderSource
 import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
 import com.delighted2wins.souqelkhorda.core.enums.OrderType
 import com.delighted2wins.souqelkhorda.core.enums.UserRole
-import com.delighted2wins.souqelkhorda.core.model.MainUserDto
 import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.core.model.Scrap
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
@@ -33,7 +32,8 @@ class MarketRemoteDataSourceImpl @Inject constructor(
 
                 val scrapsList = (data["scraps"] as? List<Map<String, Any>>)?.map { scrapMap ->
                     Scrap(
-                        amount = scrapMap["amount"]?.toString() ?: ""
+                        amount = scrapMap["amount"]?.toString() ?: "",
+                        images = emptyList() // TODO
                     )
                 } ?: emptyList()
 

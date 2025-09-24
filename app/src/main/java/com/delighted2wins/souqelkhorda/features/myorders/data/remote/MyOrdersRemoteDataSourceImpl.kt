@@ -1,11 +1,9 @@
 package com.delighted2wins.souqelkhorda.features.myorders.data.remote
 
 import android.util.Log
-import com.delighted2wins.souqelkhorda.core.enums.OfferStatus
 import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
 import com.delighted2wins.souqelkhorda.core.enums.OrderType
 import com.delighted2wins.souqelkhorda.core.enums.UserRole
-import com.delighted2wins.souqelkhorda.core.model.Offer
 import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.core.model.Scrap
 import com.google.firebase.auth.FirebaseAuth
@@ -43,17 +41,23 @@ class MyOrdersRemoteDataSourceImpl @Inject constructor(
                 if (data["userId"] != myUserId) return@mapNotNull null
 
                 val scrapsList = (data["scraps"] as? List<Map<String, Any>>)?.map { scrapMap ->
-                    Scrap(amount = scrapMap["amount"]?.toString() ?: "")
+                    Scrap(
+                        amount = scrapMap["amount"]?.toString() ?: "",
+                        images = emptyList() // TODO
+                    )
                 } ?: emptyList()
 
                 Order(
                     orderId = doc.id,
                     userId = data["userId"] as? String ?: "",
                     scraps = scrapsList,
-                    type = (data["type"] as? String)?.let { OrderType.valueOf(it) } ?: OrderType.SALE,
-                    status = (data["status"] as? String)?.let { OrderStatus.valueOf(it) } ?: OrderStatus.PENDING,
+                    type = (data["type"] as? String)?.let { OrderType.valueOf(it) }
+                        ?: OrderType.SALE,
+                    status = (data["status"] as? String)?.let { OrderStatus.valueOf(it) }
+                        ?: OrderStatus.PENDING,
                     date = data["date"] as? Long ?: System.currentTimeMillis(),
-                    userRole = (data["userRole"] as? String)?.let { UserRole.valueOf(it) } ?: UserRole.SELLER,
+                    userRole = (data["userRole"] as? String)?.let { UserRole.valueOf(it) }
+                        ?: UserRole.SELLER,
                     title = data["title"] as? String ?: "",
                     description = data["description"] as? String ?: "",
                     price = (data["price"] as? Long)?.toInt() ?: 0
@@ -77,17 +81,23 @@ class MyOrdersRemoteDataSourceImpl @Inject constructor(
                 if (data["userId"] != myUserId) return@mapNotNull null
 
                 val scrapsList = (data["scraps"] as? List<Map<String, Any>>)?.map { scrapMap ->
-                    Scrap(amount = scrapMap["amount"]?.toString() ?: "")
+                    Scrap(
+                        amount = scrapMap["amount"]?.toString() ?: "",
+                        images = emptyList() // TODO
+                    )
                 } ?: emptyList()
 
                 Order(
                     orderId = doc.id,
                     userId = data["userId"] as? String ?: "",
                     scraps = scrapsList,
-                    type = (data["type"] as? String)?.let { OrderType.valueOf(it) } ?: OrderType.SALE,
-                    status = (data["status"] as? String)?.let { OrderStatus.valueOf(it) } ?: OrderStatus.PENDING,
+                    type = (data["type"] as? String)?.let { OrderType.valueOf(it) }
+                        ?: OrderType.SALE,
+                    status = (data["status"] as? String)?.let { OrderStatus.valueOf(it) }
+                        ?: OrderStatus.PENDING,
                     date = data["date"] as? Long ?: System.currentTimeMillis(),
-                    userRole = (data["userRole"] as? String)?.let { UserRole.valueOf(it) } ?: UserRole.SELLER,
+                    userRole = (data["userRole"] as? String)?.let { UserRole.valueOf(it) }
+                        ?: UserRole.SELLER,
                     title = data["title"] as? String ?: "",
                     description = data["description"] as? String ?: "",
                     price = (data["price"] as? Long)?.toInt() ?: 0,
@@ -147,18 +157,24 @@ class MyOrdersRemoteDataSourceImpl @Inject constructor(
                     val data = doc.data ?: return@mapNotNull null
 
                     val scrapsList = (data["scraps"] as? List<Map<String, Any>>)?.map { scrapMap ->
-                        Scrap(amount = scrapMap["amount"]?.toString() ?: "")
+                        Scrap(
+                            amount = scrapMap["amount"]?.toString() ?: "",
+                            images = emptyList() // TODO
+                        )
                     } ?: emptyList()
 
                     Order(
                         orderId = doc.id,
                         userId = data["userId"] as? String ?: "",
                         scraps = scrapsList,
-                        type = (data["type"] as? String)?.let { OrderType.valueOf(it) } ?: OrderType.SALE,
-                        status = (data["status"] as? String)?.let { OrderStatus.valueOf(it) } ?: OrderStatus.PENDING,
+                        type = (data["type"] as? String)?.let { OrderType.valueOf(it) }
+                            ?: OrderType.SALE,
+                        status = (data["status"] as? String)?.let { OrderStatus.valueOf(it) }
+                            ?: OrderStatus.PENDING,
                         date = data["date"] as? Long ?: System.currentTimeMillis(),
                         offers = emptyList(),
-                        userRole = (data["userRole"] as? String)?.let { UserRole.valueOf(it) } ?: UserRole.SELLER,
+                        userRole = (data["userRole"] as? String)?.let { UserRole.valueOf(it) }
+                            ?: UserRole.SELLER,
                         title = data["title"] as? String ?: "",
                         description = data["description"] as? String ?: "",
                         price = (data["price"] as? Long)?.toInt() ?: 0

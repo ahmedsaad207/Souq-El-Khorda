@@ -1,6 +1,5 @@
 package com.delighted2wins.souqelkhorda.features.sell.data.mapper
 
-import android.util.Log
 import com.delighted2wins.souqelkhorda.core.model.Scrap
 import com.delighted2wins.souqelkhorda.features.sell.data.model.ScrapEntity
 
@@ -11,7 +10,7 @@ fun ScrapEntity.toDomain(): Scrap {
         unit = unit,
         amount = amount,
         description = description,
-        images = listOf(images)
+        images = images
     )
 }
 
@@ -21,6 +20,6 @@ fun Scrap.toEntity(): ScrapEntity {
         unit = unit,
         amount = amount,
         description = description,
-        images = listOf(images).toString()
+        images = images
     )
 }

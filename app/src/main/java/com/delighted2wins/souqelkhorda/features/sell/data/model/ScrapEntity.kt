@@ -10,5 +10,5 @@ data class ScrapEntity(
     val unit: String,
     val amount: String,
     val description: String,
-    val images: String
+    val images: List<String>
 )
