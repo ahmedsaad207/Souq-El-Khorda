@@ -56,7 +56,7 @@ class HistoryViewModel @Inject constructor(
         }
     }
 
-    private fun filterOrders(tab: String) {
-        _state.update { it.copy(selectedTab = tab) }
+    private fun filterOrders(tab: Int) {
+        _state.update { it.copy(selectedTabIndex = tab) }
     }
 }
