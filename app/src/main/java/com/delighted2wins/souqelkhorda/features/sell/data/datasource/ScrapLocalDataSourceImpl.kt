@@ -30,4 +30,9 @@ class ScrapLocalDataSourceImpl @Inject constructor(
     override fun deleteScrapById(id: Int): Flow<Int> = flow {
         emit(dao.deleteScrapById(id))
     }
+
+    override fun updateScrap(scrap: Scrap): Flow<Int> = flow{
+        val updatedRows = dao.updateScrap(scrap.toEntity())
+        emit(updatedRows)
+    }
 }

@@ -1,8 +1,6 @@
 package com.delighted2wins.souqelkhorda.features.sell.presentation.screen
 
 import android.annotation.SuppressLint
-import android.net.Uri
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,11 +14,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -29,25 +30,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.cloudinary.android.MediaManager
-import com.cloudinary.android.callback.ErrorInfo
-import com.cloudinary.android.callback.UploadCallback
+import com.delighted2wins.souqelkhorda.R
+import com.delighted2wins.souqelkhorda.core.components.ConfirmationDialog
 import com.delighted2wins.souqelkhorda.core.components.CustomButton
 import com.delighted2wins.souqelkhorda.core.components.CustomCard
+import com.delighted2wins.souqelkhorda.core.enums.BottomSheetMode
 import com.delighted2wins.souqelkhorda.core.enums.Destination
 import com.delighted2wins.souqelkhorda.core.enums.OrderType
 import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.core.model.Scrap
-import com.delighted2wins.souqelkhorda.features.sell.presentation.components.AddScrapSection
+import com.delighted2wins.souqelkhorda.features.sell.presentation.components.BottomSheetSection
 import com.delighted2wins.souqelkhorda.features.sell.presentation.components.ItemsSection
 import com.delighted2wins.souqelkhorda.features.sell.presentation.components.OrderDestinationSection
 import com.delighted2wins.souqelkhorda.features.sell.presentation.components.OrderDetailsSection
 import com.delighted2wins.souqelkhorda.features.sell.presentation.contract.SellIntent
 import com.delighted2wins.souqelkhorda.features.sell.presentation.viewmodel.SellViewModel
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @SuppressLint("ConfigurationScreenWidthHeight")
@@ -69,15 +72,18 @@ fun SellScreen(
         }
     )
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
-    var isBottomSheetVisible by remember { mutableStateOf(false) }
+    val isBottomSheetVisible = remember { mutableStateOf(false) }
 
     val selectedDestination = remember { mutableStateOf(Destination.Company) }
     val title = remember { mutableStateOf("") }
     val description = remember { mutableStateOf("") }
-    val price = remember { mutableStateOf(0) }
+    val price = remember { mutableIntStateOf(0) }
     val showError = remember { mutableStateOf(false) }
     val isLoading = remember { mutableStateOf(false) }
-    val scrapToEdit = remember { mutableStateOf<Scrap?>(null) }
+    val bottomSheetMode = remember { mutableStateOf(BottomSheetMode.ADD) }
+    var currentScrap by remember { mutableStateOf<Scrap?>(null) }
+    var scrapToDelete by remember { mutableStateOf<Scrap?>(null) }
+    var orderToSubmit by remember { mutableStateOf<Order?>(null) }
 
     LaunchedEffect(uiState.isScrapSaved) {
         if (uiState.isScrapSaved) {
@@ -97,12 +103,37 @@ fun SellScreen(
             isLoading.value = false
             title.value = ""
             description.value = ""
-            price.value = 0
+            price.intValue = 0
             viewModel.resetOrderSubmittedFlag()
         }
     }
 
+    if (scrapToDelete != null) {
+        ConfirmationDialog(
+            title =stringResource(R.string.confirm_delete),
+            message = "Are you sure you want to delete this scrap?",
+            confirmLabel = stringResource(R.string.delete),
+            onConfirm = {
+                viewModel.processIntent(SellIntent.DeleteScrap(scrapToDelete!!))
+                scrapToDelete = null
+            },
+            onDismiss = { scrapToDelete = null }
+        )
+    }
 
+    if (orderToSubmit != null) {
+        ConfirmationDialog(
+            title = "Submit Order",
+            message = "Are you sure you want to submit this order?",
+            confirmLabel = stringResource(R.string.submit),
+            onConfirm = {
+                isLoading.value = true
+                viewModel.processIntent(SellIntent.SendOrder(orderToSubmit!!))
+                orderToSubmit = null
+            },
+            onDismiss = { orderToSubmit = null }
+        )
+    }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -126,13 +157,19 @@ fun SellScreen(
             item {
                 ItemsSection(
                     uiState.data,
-                    onEditClick = { scrap ->
-                        scrapToEdit.value = scrap
-                        isBottomSheetVisible = true
+                    onEdit = { scrap ->
+                        currentScrap = scrap
+                        bottomSheetMode.value = BottomSheetMode.EDIT
+                        isBottomSheetVisible.value = true
+                    },
+                    onAddItem = {
+                        bottomSheetMode.value = BottomSheetMode.ADD
+                        isBottomSheetVisible.value = true
+                    },
+                    onDelete = {
+                        scrapToDelete = it
                     }
-                ) {
-                    isBottomSheetVisible = true
-                }
+                )
             }
 
             item {
@@ -156,13 +193,13 @@ fun SellScreen(
                         text = "Submit Order",
                         isLoading = isLoading,
                         textLoading = "Submitting Order",
+                        hasElevation = false,
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         if (title.value.isBlank()) {
                             showError.value = true
                             return@CustomButton
                         }
-                        isLoading.value = true
 
                         val order = Order(
                             userId = FirebaseAuth.getInstance().uid.toString(),
@@ -170,9 +207,9 @@ fun SellScreen(
                             type = if (selectedDestination.value == Destination.Company) OrderType.SALE else OrderType.MARKET,
                             title = title.value.trim(),
                             description = description.value.trim(),
-                            price = price.value
+                            price = price.intValue
                         )
-                        viewModel.processIntent(SellIntent.SendOrder(order))
+                        orderToSubmit = order
                     }
 
                     Spacer(Modifier.height(innerPadding.calculateBottomPadding()))
@@ -180,30 +217,35 @@ fun SellScreen(
             }
         }
 
-        if (isBottomSheetVisible) {
+        if (isBottomSheetVisible.value) {
             ModalBottomSheet(
                 sheetState = bottomSheetState,
-                onDismissRequest = { }
+                onDismissRequest = {
+                    hideBottomSheet(
+                        scope,
+                        bottomSheetState,
+                        isBottomSheetVisible
+                    )
+                }
             ) {
                 Box(
                     modifier = Modifier
                         .height(screenHeight * 0.8f)
                         .fillMaxWidth()
                 ) {
-                    AddScrapSection(
-                        scrap = scrapToEdit,
+                    BottomSheetSection(
+                        mode = bottomSheetMode.value,
+                        scrap = currentScrap,
                         onCancelClick = {
-                            scrapToEdit.value = null
-                            scope.launch {
-                                bottomSheetState.hide()
-                            }.invokeOnCompletion {
-                                isBottomSheetVisible = false
-                            }
+                            hideBottomSheet(scope, bottomSheetState, isBottomSheetVisible)
                         },
-                        onAddClick = { scrap ->
+                        onAddScrapClick = { scrap ->
                             viewModel.processIntent(SellIntent.AddScrap(scrap))
-                            scope.launch { bottomSheetState.hide() }
-                                .invokeOnCompletion { isBottomSheetVisible = false }
+                            hideBottomSheet(scope, bottomSheetState, isBottomSheetVisible)
+                        },
+                        onUpdateScrapClick = {
+                            viewModel.processIntent(SellIntent.UpdateScrap(it))
+                            hideBottomSheet(scope, bottomSheetState, isBottomSheetVisible)
                         }
                     )
                 }
@@ -213,37 +255,16 @@ fun SellScreen(
     }
 }
 
-fun uploadImage(uri: Uri) {
-    MediaManager.get().upload(uri)
-//        .unsigned("YOUR_UPLOAD_PRESET") // For unsigned upload
-        .callback(object : UploadCallback {
-            override fun onStart(requestId: String) {
-                // upload started
-            }
-
-            override fun onProgress(requestId: String, bytes: Long, totalBytes: Long) {
-                // progress updates
-            }
-
-            override fun onSuccess(requestId: String, resultData: MutableMap<Any?, Any?>) {
-                val imageUrl = resultData["secure_url"] as String
-                // use the URL
-                Log.d("TAG", "onSuccess: url: $imageUrl")
-            }
-
-            override fun onError(
-                requestId: String?,
-                error: ErrorInfo?
-            ) {
-
-            }
-
-            override fun onReschedule(
-                requestId: String?,
-                error: ErrorInfo?
-            ) {
-
-            }
-        }).dispatch()
+@OptIn(ExperimentalMaterial3Api::class)
+private fun hideBottomSheet(
+    scope: CoroutineScope,
+    bottomSheetState: SheetState,
+    isBottomSheetVisible: MutableState<Boolean>
+) {
+    scope.launch {
+        bottomSheetState.hide()
+    }.invokeOnCompletion {
+        isBottomSheetVisible.value = false
+    }
 }
 

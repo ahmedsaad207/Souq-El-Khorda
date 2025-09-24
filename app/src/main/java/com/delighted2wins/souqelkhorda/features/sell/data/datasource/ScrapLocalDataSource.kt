@@ -1,6 +1,7 @@
 package com.delighted2wins.souqelkhorda.features.sell.data.datasource
 
 import com.delighted2wins.souqelkhorda.core.model.Scrap
+import com.delighted2wins.souqelkhorda.features.sell.data.model.ScrapEntity
 import kotlinx.coroutines.flow.Flow
 
 interface ScrapLocalDataSource {
@@ -11,4 +12,6 @@ interface ScrapLocalDataSource {
     suspend fun deleteAllScraps()
 
     fun deleteScrapById(id: Int): Flow<Int>
+
+    fun updateScrap(scrap: Scrap): Flow<Int>
 }

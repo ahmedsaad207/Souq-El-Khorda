@@ -1,7 +1,6 @@
 package com.delighted2wins.souqelkhorda.core.components
 
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -35,6 +34,7 @@ fun CustomButton(
     containerColor: Color = MaterialTheme.colorScheme.primary,
     isLoading: MutableState<Boolean> = mutableStateOf(false),
     textLoading: String = "",
+    hasElevation: Boolean = true,
     onClick: () -> Unit
 ) {
 
@@ -48,7 +48,8 @@ fun CustomButton(
         ),
         modifier = modifier
             .height(56.dp),
-        shape = RoundedCornerShape(12.dp)
+        shape = RoundedCornerShape(12.dp),
+        elevation = if (hasElevation) ButtonDefaults.elevatedButtonElevation(4.dp) else ButtonDefaults.buttonElevation()
     ) {
 
         if (isLoading.value) {
