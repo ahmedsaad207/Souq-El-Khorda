@@ -3,8 +3,6 @@ package com.delighted2wins.souqelkhorda.core.di
 import android.content.Context
 import androidx.room.Room
 import com.delighted2wins.souqelkhorda.features.sell.data.local.db.ScrapDatabase
-import com.delighted2wins.souqelkhorda.features.sell.domain.repo.OrderRepository
-import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.SendOrderUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

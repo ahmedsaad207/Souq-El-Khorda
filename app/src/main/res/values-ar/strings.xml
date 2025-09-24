@@ -42,5 +42,10 @@
     <string name="profile_address">العنوان</string>
     <string name="view_cleanup_history">عرض سجل التنظيف</string>
     <string name="logout">تسجيل الخروج</string>
+    <string name="nearest_buyer_title">المحلات القريبة\n</string>
+    <string name="nearest_buyer_sub_title">محلات ونقاط تجميع الخردة القريبة منك</string>
+    <string name="call">اتصال</string>
+    <string name="direction">الاتجاهات</string>
+    <string name="accepted_types">الاصناف المقبولة:</string>
 
 </resources>

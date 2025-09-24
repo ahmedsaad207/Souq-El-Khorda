@@ -1,7 +1,7 @@
 package com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract
 
-import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.core.model.Offer
+import com.delighted2wins.souqelkhorda.core.model.Order
 
 sealed class OrderDetailsState {
     object Loading : OrderDetailsState()
