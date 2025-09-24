@@ -23,15 +23,16 @@ import androidx.compose.ui.unit.sp
 import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
 
 @Composable
-fun StatusChip(status: OrderStatus) {
+fun StatusChip(status: String) {
     Surface(
         shape = RoundedCornerShape(50),
         tonalElevation = 2.dp,
         shadowElevation = 0.dp,
         color = when (status) {
-            OrderStatus.PENDING -> OrderStatus.PENDING.color
-            OrderStatus.COMPLETED -> OrderStatus.COMPLETED.color
-            OrderStatus.CANCELLED -> OrderStatus.CANCELLED.color
+            OrderStatus.PENDING.toString() -> OrderStatus.PENDING.color
+            OrderStatus.COMPLETED.toString() -> OrderStatus.COMPLETED.color
+            OrderStatus.CANCELLED.toString() -> OrderStatus.CANCELLED.color
+            else -> MaterialTheme.colorScheme.primary
         },
     ) {
         Row(
@@ -40,9 +41,10 @@ fun StatusChip(status: OrderStatus) {
         ) {
             Icon(
                 imageVector = when (status) {
-                    OrderStatus.PENDING -> Icons.Default.Schedule
-                    OrderStatus.COMPLETED -> Icons.Default.CheckCircle
-                    OrderStatus.CANCELLED -> Icons.Default.Close
+                    OrderStatus.PENDING.toString() -> Icons.Default.Schedule
+                    OrderStatus.COMPLETED.toString() -> Icons.Default.CheckCircle
+                    OrderStatus.CANCELLED.toString() -> Icons.Default.Close
+                    else -> Icons.Default.Schedule
                 },
                 contentDescription = null,
                 modifier = Modifier.size(16.dp),
@@ -50,7 +52,7 @@ fun StatusChip(status: OrderStatus) {
             )
             Spacer(modifier = Modifier.width(6.dp))
             Text(
-                text = status.name,
+                text = status,
                 style = MaterialTheme.typography.labelSmall.copy(
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 14.sp

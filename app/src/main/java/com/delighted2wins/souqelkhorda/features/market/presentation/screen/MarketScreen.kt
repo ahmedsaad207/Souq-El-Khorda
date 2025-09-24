@@ -208,7 +208,7 @@ fun MarketScreen(
                             ScrapCard(
                                 currentUserId = viewModel.currentUser?.id.toString(),
                                 marketUser = loadedUser,
-                                scrap = scrapData,
+                                order = scrapData,
                                 onMakeOfferClick = {
                                     selectedOrderId = scrapData.orderId
                                     isBottomSheetVisible = true

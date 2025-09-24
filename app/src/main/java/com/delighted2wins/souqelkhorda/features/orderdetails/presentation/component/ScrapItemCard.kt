@@ -1,5 +1,6 @@
 package com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component
 
+import androidx.compose.foundation.background
 import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -8,6 +9,7 @@ import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.Scale
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -23,14 +25,16 @@ fun ScrapItemCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 6.dp),
+            .padding(vertical = 2.dp, horizontal = 8.dp),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Row(
             modifier = Modifier
+                .background(MaterialTheme.colorScheme.surface)
                 .padding(12.dp)
                 .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
 
@@ -38,7 +42,7 @@ fun ScrapItemCard(
                 model = scrap.images.firstOrNull(),
                 contentDescription = "Scrap Image",
                 modifier = Modifier
-                    .size(80.dp)
+                    .size(100.dp)
                     .aspectRatio(1f)
                     .clip(RoundedCornerShape(8.dp)),
                 contentScale = ContentScale.Crop
@@ -59,7 +63,8 @@ fun ScrapItemCard(
                                 imageVector = Icons.Default.Category,
                                 contentDescription = null
                             )
-                        }
+                        },
+                        enabled = false
                     )
                     AssistChip(
                         onClick = {},
@@ -69,7 +74,8 @@ fun ScrapItemCard(
                                 imageVector = Icons.Default.Scale,
                                 contentDescription = null
                             )
-                        }
+                        },
+                        enabled = false
                     )
                 }
 
