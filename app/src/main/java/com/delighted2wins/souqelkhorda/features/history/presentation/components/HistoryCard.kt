@@ -2,6 +2,7 @@ package com.delighted2wins.souqelkhorda.features.history.presentation.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,12 +32,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.app.theme.AppTypography
 import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
 import com.delighted2wins.souqelkhorda.core.enums.OrderType
+import com.delighted2wins.souqelkhorda.core.model.Scrap
 
 @Composable
 fun HistoryCard(
@@ -45,9 +49,9 @@ fun HistoryCard(
     status: OrderStatus = OrderStatus.PENDING,
     date: String = "Dec 15, 2025",
     description: String = "Collected from recycling center.",
-    items: List<String>,
+    items: List<Scrap>,
     expanded: Boolean,
-    onExpandToggle: () -> Unit,
+    selectedTab: Int = 0,
     onViewDetails: () -> Unit
 ) {
     var isExpanded by remember { mutableStateOf(expanded) }
@@ -55,9 +59,12 @@ fun HistoryCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 6.dp),
+            .padding(horizontal = 12.dp, vertical = 6.dp)
+            .clickable { isExpanded = !isExpanded },
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onPrimaryContainer),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.onPrimaryContainer
+        ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
@@ -76,18 +83,15 @@ fun HistoryCard(
 
                 Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     StatusChip(status = status)
-                    TypeChip(type = transactionType)
+                    if (selectedTab == 0) {
+                        TypeChip(type = transactionType)
+                    }
                 }
 
-                IconButton(
-                    modifier = Modifier.size(32.dp),
-                    onClick = { isExpanded = !isExpanded }
-                ) {
-                    Icon(
-                        imageVector = if (isExpanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
-                        contentDescription = if (isExpanded) "Collapse" else "Expand"
-                    )
-                }
+                Icon(
+                    imageVector = if (isExpanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
+                    contentDescription = if (isExpanded) "Collapse" else "Expand"
+                )
             }
 
             Text(
@@ -102,7 +106,7 @@ fun HistoryCard(
             )
 
             Text(
-                text = "Date: $date",
+                text = stringResource(R.string.date, date),
                 style = AppTypography.bodySmall,
                 color = Color.Gray,
                 modifier = Modifier.padding(top = 2.dp)
@@ -117,14 +121,34 @@ fun HistoryCard(
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(8.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onSurfaceVariant),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant
+                        ),
+                        border = CardDefaults.outlinedCardBorder(),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
                         Column(modifier = Modifier.padding(8.dp)) {
-                            Text("Items:", style = AppTypography.bodyMedium.copy(fontWeight = FontWeight.Bold))
+                            Text(
+                                stringResource(R.string.items),
+                                style = AppTypography.bodyMedium.copy(
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                            )
 
-                            items.forEach {
-                                Text("• $it", style = AppTypography.bodySmall)
+                            items.forEach { scrap ->
+                                val line = buildString {
+                                    append("${scrap.amount} ${scrap.unit} of ${scrap.category}")
+                                    if (scrap.description.isNotBlank()) {
+                                        append(" - ${scrap.description.take(20)}")
+                                        if (scrap.description.length > 20) append("...")
+                                    }
+                                }
+
+                                Text(
+                                    text = "• $line",
+                                    style = AppTypography.bodySmall.copy(color = MaterialTheme.colorScheme.onSurface),
+                                )
                             }
                         }
                     }
@@ -140,7 +164,7 @@ fun HistoryCard(
                         ),
                         shape = RoundedCornerShape(6.dp)
                     ) {
-                        Text("View Order Details", style = AppTypography.bodyMedium)
+                        Text(stringResource(R.string.view_order_details), style = AppTypography.bodyMedium)
                     }
                 }
             }

@@ -8,6 +8,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -20,46 +24,35 @@ import com.delighted2wins.souqelkhorda.app.theme.AppTypography
 @Composable
 fun HistoryTabs(
     tabs: List<String>,
-    selectedTab: String,
-    onTabSelected: (String) -> Unit,
+    selectedIndex: Int,
+    onTabSelected: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 6.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        tabs.forEach { tab ->
-            TabChip(
-                text = tab,
-                selected = selectedTab == tab,
-                onClick = { onTabSelected(tab) }
+
+    TabRow(
+        selectedTabIndex = selectedIndex,
+        modifier = modifier,
+        containerColor = MaterialTheme.colorScheme.background,
+        contentColor = MaterialTheme.colorScheme.primary,
+        indicator = { tabPositions ->
+            TabRowDefaults.Indicator(
+                Modifier.tabIndicatorOffset(tabPositions[selectedIndex]),
+                color = MaterialTheme.colorScheme.primary
             )
         }
-    }
-}
-
-@Composable
-fun TabChip(
-    text: String,
-    selected: Boolean,
-    onClick: () -> Unit
-) {
-    val colors = MaterialTheme.colorScheme
-    Surface(
-        modifier = Modifier
-            .clip(RoundedCornerShape(50))
-            .clickable { onClick() },
-        color = if (selected) colors.primary else colors.onSurfaceVariant,
-        tonalElevation = if (selected) 4.dp else 0.dp,
-        shadowElevation = 0.dp
     ) {
-        Text(
-            text = text,
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
-            color = if (selected) colors.onPrimary else colors.onPrimaryContainer,
-            style = if (selected) AppTypography.labelLarge.copy(fontWeight = FontWeight.Bold) else AppTypography.labelLarge
-        )
+        tabs.forEachIndexed { index, tab ->
+            Tab(
+                selected = selectedIndex == index,
+                onClick = { onTabSelected(index) },
+                text = {
+                    Text(
+                        text = tab,
+                        style = AppTypography.labelLarge,
+                        fontWeight = if (selectedIndex == index) FontWeight.Bold else FontWeight.Normal
+                    )
+                }
+            )
+        }
     }
 }

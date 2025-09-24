@@ -10,13 +10,13 @@ interface HistoryContract {
         val completedCount: Int = 0,
         val pendingCount: Int = 0,
         val cancelledCount: Int = 0,
-        val selectedTab: String = "All",
+        val selectedTabIndex: Int = 0,
         val error: String? = null,
     )
 
     sealed interface Intent {
         data object LoadOrders : Intent
-        data class FilterOrders(val tab: String) : Intent
+        data class FilterOrders(val tab: Int) : Intent
     }
 
 }

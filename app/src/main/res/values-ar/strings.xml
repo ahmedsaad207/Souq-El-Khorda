@@ -41,4 +41,12 @@
     <string name="view_cleanup_history">عرض سجل التنظيف</string>
     <string name="logout">تسجيل الخروج</string>
 
+    <string name="transaction_history">سجل المعاملات</string>
+    <string name="all">الكل</string>
+    <string name="sale">بيع</string>
+    <string name="market">السوق</string>
+    <string name="items">العناصر:</string>
+    <string name="view_order_details">عرض تفاصيل الطلب</string>
+    <string name="date">التاريخ: %1$s</string>
+
 </resources>

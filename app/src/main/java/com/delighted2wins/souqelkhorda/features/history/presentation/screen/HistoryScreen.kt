@@ -12,13 +12,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.components.OneIconCard
 import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
 import com.delighted2wins.souqelkhorda.core.enums.OrderType
 import com.delighted2wins.souqelkhorda.core.extensions.convertNumbersToArabic
+import com.delighted2wins.souqelkhorda.core.extensions.toFormattedDate
 import com.delighted2wins.souqelkhorda.features.history.presentation.components.HistoryCard
 import com.delighted2wins.souqelkhorda.features.history.presentation.components.HistorySummaryCard
 import com.delighted2wins.souqelkhorda.features.history.presentation.components.HistoryTabs
@@ -29,6 +32,7 @@ import com.delighted2wins.souqelkhorda.features.history.presentation.viewmodel.H
 @Composable
 fun HistoryScreen(
     viewModel: HistoryViewModel = hiltViewModel(),
+    onViewDetailsClick: () -> Unit = {},
     onBackClick: () -> Unit = {},
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -46,28 +50,34 @@ fun HistoryScreen(
                 .padding(vertical = 16.dp),
             onClick = onBackClick,
             icon = Icons.AutoMirrored.Filled.ArrowBack,
-            headerTxt = "Transaction History"
+            headerTxt = stringResource(R.string.transaction_history)
         )
 
         HistorySummaryCard(
             stats = listOf(
-                Triple(state.completedCount.toString(), OrderStatus.COMPLETED.getLocalizedValue(), OrderStatus.COMPLETED.color),
-                Triple(state.pendingCount.toString(), OrderStatus.PENDING.getLocalizedValue(), OrderStatus.PENDING.color),
-                Triple(state.cancelledCount.toString(), OrderStatus.CANCELLED.getLocalizedValue(), OrderStatus.CANCELLED.color)
+                Triple(state.completedCount.toString().convertNumbersToArabic(), OrderStatus.COMPLETED.getLocalizedValue(), OrderStatus.COMPLETED.color),
+                Triple(state.pendingCount.toString().convertNumbersToArabic(), OrderStatus.PENDING.getLocalizedValue(), OrderStatus.PENDING.color),
+                Triple(state.cancelledCount.toString().convertNumbersToArabic(), OrderStatus.CANCELLED.getLocalizedValue(), OrderStatus.CANCELLED.color)
             )
         )
 
 
         HistoryTabs(
-            tabs = listOf("All", "Sale", "Market"),
-            selectedTab = state.selectedTab,
-            onTabSelected = { viewModel.handleIntent(HistoryContract.Intent.FilterOrders(it)) }
+            tabs = listOf(
+                stringResource(R.string.all),
+                stringResource(R.string.sale),
+                stringResource(R.string.market)
+            ),
+            selectedIndex = state.selectedTabIndex,
+            onTabSelected = { index ->
+                viewModel.handleIntent(HistoryContract.Intent.FilterOrders(index))
+            }
         )
 
         val filteredOrders = state.orders.filter { order ->
-            when (state.selectedTab) {
-                "Sale" -> order.type == OrderType.SALE
-                "Market" -> order.type == OrderType.MARKET
+            when (state.selectedTabIndex) {
+                1 -> order.type == OrderType.SALE
+                2 -> order.type == OrderType.MARKET
                 else -> true
             }
         }
@@ -82,10 +92,10 @@ fun HistoryScreen(
                     title = order.title,
                     transactionType = order.type,
                     status = order.status,
-                    date = order.date.toString().convertNumbersToArabic(),
-                    items = order.scraps.map { it.toString() },
+                    date = order.date.toFormattedDate().convertNumbersToArabic(),
+                    items = order.scraps,
                     expanded = false,
-                    onExpandToggle = {},
+                    selectedTab = state.selectedTabIndex,
                     onViewDetails = { }
                 )
             }
