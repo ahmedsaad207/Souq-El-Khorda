@@ -1,5 +1,6 @@
 package com.delighted2wins.souqelkhorda.features.orderdetails.data
 
+import android.annotation.SuppressLint
 import android.util.Log
 import com.delighted2wins.souqelkhorda.core.enums.OrderSource
 import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
@@ -9,23 +10,35 @@ import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.core.model.Scrap
 import com.delighted2wins.souqelkhorda.features.orderdetails.data.remote.OrderDetailsRemoteDataSource
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.gson.Gson
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class OrderDetailsRemoteDataSourceImpl @Inject constructor(
     private val firestore: FirebaseFirestore
-): OrderDetailsRemoteDataSource {
+) : OrderDetailsRemoteDataSource {
 
+    @SuppressLint("CheckResult")
     override suspend fun fetchOrderDetails(
         orderId: String,
         source: OrderSource
     ): Order? {
+        return fetchOrder(orderId, source)
+    }
+
+    override suspend fun fetchOrderDetails(
+        orderId: String,
+        ownerId: String,
+        buyerId: String?,
+        source: OrderSource
+    ): Order? {
+        return fetchOrder(orderId, source)
+    }
+
+    private suspend fun fetchOrder(orderId: String, source: OrderSource): Order? {
         return try {
-            val covert = if (source == OrderSource.COMPANY) {
-                "sale"
-            } else{
-                "market"
-            }
+            val covert = if (source == OrderSource.COMPANY) "sale" else "market"
+
             val snapshot = firestore
                 .collection("orders")
                 .document(covert)
@@ -37,11 +50,24 @@ class OrderDetailsRemoteDataSourceImpl @Inject constructor(
             val data = snapshot.data ?: return null
             Log.d("Order_Details-Debug", "Fetched order details: $data")
 
-            val scrapsList = (data["scraps"] as? List<Map<String, Any>>)?.map { scrapMap ->
-                Scrap(
-                    amount = scrapMap["amount"]?.toString() ?: ""
-                )
-            } ?: emptyList()
+            val scrapsList: List<Scrap> =
+                (data["scraps"] as? List<Map<String, Any>>)?.mapNotNull { scrapMap ->
+                    try {
+                        val scrap = Gson().fromJson(
+                            Gson().toJson(scrapMap),
+                            Scrap::class.java
+                        )
+                        Log.d("Order_Details-Debug", "Mapped scrap: $scrap")
+                        scrap
+                    } catch (e: Exception) {
+                        Log.e(
+                            "Order_Details-Debug",
+                            "Error mapping scrap: $scrapMap",
+                            e
+                        )
+                        null
+                    }
+                } ?: emptyList()
 
             Order(
                 orderId = snapshot.id,
@@ -56,60 +82,9 @@ class OrderDetailsRemoteDataSourceImpl @Inject constructor(
                 description = data["description"] as? String ?: "",
                 price = (data["price"] as? Long)?.toInt() ?: 0
             )
-
         } catch (e: Exception) {
             Log.e("Order_Details-Debug", "Error fetching order details:", e)
             null
         }
     }
-
-    override suspend fun fetchOrderDetails(
-        orderId: String,
-        ownerId: String,
-        buyerId: String?,
-        source: OrderSource,
-    ): Order? {
-        return try {
-            val covert = if (source == OrderSource.COMPANY) {
-                "sale"
-            } else {
-                source.toString().lowercase()
-            }
-            val snapshot = firestore
-                .collection("orders")
-                .document(covert)
-                .collection("items")
-                .document(orderId)
-                .get()
-                .await()
-
-            val data = snapshot.data ?: return null
-
-            val scrapsList = (data["scraps"] as? List<Map<String, Any>>)?.map { scrapMap ->
-                Scrap(
-                    amount = scrapMap["amount"]?.toString() ?: "",
-                    images = emptyList() // TODO
-                )
-            } ?: emptyList()
-
-            Order(
-                orderId = snapshot.id,
-                userId = data["userId"] as? String ?: "",
-                scraps = scrapsList,
-                type = (data["type"] as? String)?.let { OrderType.valueOf(it) } ?: OrderType.SALE,
-                status = (data["status"] as? String)?.let { OrderStatus.valueOf(it) } ?: OrderStatus.PENDING,
-                date = data["date"] as? Long ?: System.currentTimeMillis(),
-                offers = emptyList(),
-                userRole = (data["userRole"] as? String)?.let { UserRole.valueOf(it) } ?: UserRole.SELLER,
-                title = data["title"] as? String ?: "",
-                description = data["description"] as? String ?: "",
-                price = (data["price"] as? Long)?.toInt() ?: 0
-            )
-
-        } catch (e: Exception) {
-            Log.e("Order_Details-Debug", "Error fetching order details:", e)
-            null
-        }
-    }
-
 }
