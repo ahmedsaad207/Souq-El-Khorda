@@ -42,6 +42,7 @@ class MainActivity : ComponentActivity() {
     lateinit var snackBarHostState: SnackbarHostState
     lateinit var bottomBarState: MutableState<Boolean>
     lateinit var navState: MutableState<Boolean>
+    lateinit var screenNameState: MutableState<String>
 
     @Inject
     lateinit var getLanguageUseCase: GetLanguageUseCase
@@ -56,6 +57,7 @@ class MainActivity : ComponentActivity() {
             snackBarHostState = remember { SnackbarHostState() }
             bottomBarState = remember { mutableStateOf(false) }
             navState = remember { mutableStateOf(true) }
+            screenNameState = remember { mutableStateOf("") }
 
             val backStack = rememberNavBackStack(SplashScreen)
             SouqElKhordaTheme(darkTheme = isSystemInDarkTheme(), dynamicColor = false) {
@@ -74,6 +76,7 @@ class MainActivity : ComponentActivity() {
                         if (bottomBarState.value) {
                             AppTopAppBar(
                                 scrollBehavior = scrollBehavior,
+                                screenName = screenNameState.value,
                                 onProfileClick = { backStack.add(ProfileScreen) },
                                 onNotificationClick = { backStack.add(NotificationsScreen) }
                             )
@@ -92,7 +95,8 @@ class MainActivity : ComponentActivity() {
                         snackBarState = snackBarHostState,
                         backStack = backStack,
                         innerPadding = innerPadding,
-                        navState = navState
+                        navState = navState,
+                        screenNameState = screenNameState
                     )
                 }
             }
