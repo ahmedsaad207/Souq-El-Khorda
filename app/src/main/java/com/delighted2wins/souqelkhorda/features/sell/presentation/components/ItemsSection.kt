@@ -1,5 +1,9 @@
 package com.delighted2wins.souqelkhorda.features.sell.presentation.components
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,17 +28,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.delighted2wins.souqelkhorda.core.model.Scrap
-import com.delighted2wins.souqelkhorda.features.sell.presentation.contract.SellIntent
-import com.delighted2wins.souqelkhorda.features.sell.presentation.viewmodel.SellViewModel
 
 @Composable
 fun ItemsSection(
     data: List<Scrap>,
-    viewModel: SellViewModel = hiltViewModel(),
-    onEditClick: (Scrap) -> Unit,
-    onClick: () -> Unit
+    onEdit: (Scrap) -> Unit,
+    onAddItem: () -> Unit,
+    onDelete: (Scrap) -> Unit,
 ) {
     Card(
         modifier = Modifier
@@ -81,7 +82,7 @@ fun ItemsSection(
                 }
 
                 Button(
-                    onClick = onClick,
+                    onClick = onAddItem,
                     colors = ButtonDefaults.buttonColors(),
                     shape = RoundedCornerShape(12.dp),
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
@@ -106,17 +107,26 @@ fun ItemsSection(
             if (data.isEmpty()) {
                 EmptyScrapesSection()
             } else {
-                Column {
-                    data.forEach { scrap ->
-                        ScrapItem(
-                            scrap = scrap,
-                            onEdit = { onEditClick(scrap) },
-                            onDelete = {
-                                viewModel.processIntent(SellIntent.DeleteScrap(scrap))
-                            }
-                        )
+                AnimatedContent(
+                    targetState = data.sortedByDescending { it.id },
+                    transitionSpec = {
+                        fadeIn() togetherWith fadeOut()
+                    },
+                    label = "ScrapAnimation"
+                ) { animatedScrap ->
+                    Column {
+                        animatedScrap.forEach { scrap ->
+                            ScrapItem(
+                                scrap = scrap,
+                                onEdit = { onEdit(scrap) },
+                                onDelete = { onDelete(scrap) }
+                            )
+                        }
                     }
+
+
                 }
+
             }
         }
 

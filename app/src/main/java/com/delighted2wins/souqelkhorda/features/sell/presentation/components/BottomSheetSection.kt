@@ -3,7 +3,6 @@ package com.delighted2wins.souqelkhorda.features.sell.presentation.components
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -31,14 +30,13 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddBox
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.outlined.CameraAlt
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,44 +46,78 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import coil.compose.AsyncImage
 import com.delighted2wins.souqelkhorda.core.components.CustomButton
 import com.delighted2wins.souqelkhorda.core.components.CustomCard
+import com.delighted2wins.souqelkhorda.core.enums.BottomSheetMode
 import com.delighted2wins.souqelkhorda.core.enums.MeasurementType
 import com.delighted2wins.souqelkhorda.core.enums.ScrapType
 import com.delighted2wins.souqelkhorda.core.extensions.dashedBorder
 import com.delighted2wins.souqelkhorda.core.model.Scrap
-import com.delighted2wins.souqelkhorda.features.profile.presentation.contract.ProfileContract
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
-fun AddScrapSection(
-    scrap: MutableState<Scrap?>,
+fun BottomSheetSection(
+    mode: BottomSheetMode,
+    scrap: Scrap? = null,
     onCancelClick: () -> Unit,
-    onAddClick: (Scrap) -> Unit,
+    onAddScrapClick: (Scrap) -> Unit,
+    onUpdateScrapClick: (Scrap) -> Unit,
 ) {
 
-    var category by remember { mutableStateOf("") }
-    val amount = remember { mutableStateOf(if (scrap.value != null) scrap.value!!.amount else "") }
-    val description =
-        remember { mutableStateOf(if (scrap.value != null) scrap.value!!.description else "") }
+    val category = remember { mutableStateOf("") }
+    val amount = remember { mutableStateOf("") }
+    val description = remember { mutableStateOf("") }
     val selectedScrapType = remember { mutableStateOf(ScrapType.Aluminum) }
     val selectedMeasurementType = remember { mutableStateOf(MeasurementType.Weight) }
 
-    var selectedImages by remember { mutableStateOf<List<Uri>>(emptyList()) }
+    var selectedImages by remember {
+        mutableStateOf<List<Uri>>(emptyList())
+    }
+
+    LaunchedEffect(mode, scrap) {
+        if (mode == BottomSheetMode.EDIT && scrap != null) {
+
+            val type = ScrapType.entries.find { it.name == scrap.category }
+            if (type != null) {
+                selectedScrapType.value = type
+            } else {
+                category.value = scrap.category
+                selectedScrapType.value = ScrapType.CustomScrap
+            }
+
+            MeasurementType.entries.find { it.name == scrap.unit }?.let {
+                selectedMeasurementType.value = it
+            }
+
+            amount.value = scrap.amount
+            description.value = scrap.description
+            selectedImages = scrap.images?.map { it.toUri() }
+                ?: emptyList()
+        }
+    }
 
     val keyboardType = when (selectedMeasurementType.value) {
         MeasurementType.Weight -> KeyboardType.Decimal
         MeasurementType.Pieces -> KeyboardType.Number
     }
+    val context = LocalContext.current
 
     val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(),
+        contract = ActivityResultContracts.OpenDocument(),
         onResult = { uri ->
-            if (uri != null && !selectedImages.contains(uri)) {
-                selectedImages = selectedImages + uri
+            if (uri != null) {
+                context.contentResolver.takePersistableUriPermission(
+                    uri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
+                if (!selectedImages.contains(uri)) {
+                    selectedImages = selectedImages + uri
+                }
             }
         }
     )
@@ -124,7 +156,7 @@ fun AddScrapSection(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = if (scrap.value == null) "Add New Scrap" else "Edit Scrap",
+                    text = if (mode == BottomSheetMode.ADD) "Add New Scrap" else "Edit Scrap",
                     style = MaterialTheme.typography.titleLarge
                 )
                 Spacer(Modifier.height(4.dp))
@@ -134,13 +166,18 @@ fun AddScrapSection(
                 )
             }
             IconButton(
-                onClick = onCancelClick
+                onClick = onCancelClick,
+                modifier = Modifier
+                    .size(36.dp)
+                    .clip(CircleShape)
+                    .background(color = Color.LightGray.copy(0.2f))
             ) {
                 Icon(
                     imageVector = Icons.Default.Close,
                     contentDescription = "Close",
                     tint = Color.Gray
                 )
+
             }
         }
 
@@ -172,8 +209,8 @@ fun AddScrapSection(
                         CustomTextField(
                             textFieldModifier = Modifier
                                 .fillMaxWidth(),
-                            state = description,
-                            onValueChange = { category = it },
+                            state = category,
+                            onValueChange = { category.value = it },
                             placeholder = "e.g., Copper wire"
                         )
                     }
@@ -352,7 +389,7 @@ fun AddScrapSection(
                                 Spacer(Modifier.height(4.dp))
                                 OutlinedButton(
                                     onClick = {
-                                        launcher.launch("image/*")
+                                        launcher.launch(arrayOf("image/*"))
                                     },
                                     shape = RoundedCornerShape(8.dp)
                                 ) {
@@ -390,23 +427,26 @@ fun AddScrapSection(
 
             CustomButton(
                 onClick = {
-                    val scrap = Scrap(
-                        category = if (selectedScrapType.value == ScrapType.CustomScrap) category else selectedScrapType.value.label,
-                        unit = selectedMeasurementType.value.label,
+                    val newScrap = Scrap(
+                        category = if (selectedScrapType.value == ScrapType.CustomScrap) category.value else selectedScrapType.value.name,
+                        unit = selectedMeasurementType.value.name,
                         amount = amount.value,
                         description = description.value,
                         images = selectedImages.map { it.toString() }
                     )
 
-                    onAddClick(scrap)
+
+                    if (mode == BottomSheetMode.ADD) {
+                        onAddScrapClick(newScrap)
+                    } else {
+                        onUpdateScrapClick(newScrap.copy(id = scrap?.id ?: 1))
+                    }
                 },
                 modifier = Modifier.weight(1f),
-                text = if (scrap.value != null) "Update Scrap" else "Add Scrap",
+                text = if (mode == BottomSheetMode.EDIT) "Update Scrap" else "Add Scrap",
             )
         }
 
     }
-
-
 }
 
