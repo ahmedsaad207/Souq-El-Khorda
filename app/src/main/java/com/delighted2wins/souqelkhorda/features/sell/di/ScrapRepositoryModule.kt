@@ -1,7 +1,5 @@
 package com.delighted2wins.souqelkhorda.features.sell.di
 
-import com.delighted2wins.souqelkhorda.features.sell.data.datasource.ScrapLocalDataSource
-import com.delighted2wins.souqelkhorda.features.sell.data.datasource.ScrapLocalDataSourceImpl
 import com.delighted2wins.souqelkhorda.features.sell.data.repo.ScrapRepositoryImpl
 import com.delighted2wins.souqelkhorda.features.sell.domain.repo.ScrapRepository
 import dagger.Binds

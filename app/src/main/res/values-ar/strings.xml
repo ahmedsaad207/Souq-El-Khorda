@@ -42,10 +42,18 @@
     <string name="profile_address">العنوان</string>
     <string name="view_cleanup_history">عرض سجل التنظيف</string>
     <string name="logout">تسجيل الخروج</string>
+
     <string name="delete">حذف</string>
     <string name="submit">ارسال</string>
     <string name="confirm_delete">تأكيد الحذف</string>
     <string name="are_you_sure_you_want_to_delete_this_order">هل أنت متأكد من حذف الطلب؟</string>
     <string name="cancel">إلغاء</string>
+
+    <string name="nearest_buyer_title">المحلات القريبة\n</string>
+    <string name="nearest_buyer_sub_title">محلات ونقاط تجميع الخردة القريبة منك</string>
+    <string name="call">اتصال</string>
+    <string name="direction">الاتجاهات</string>
+    <string name="accepted_types">الاصناف المقبولة:</string>
+
 
 </resources>

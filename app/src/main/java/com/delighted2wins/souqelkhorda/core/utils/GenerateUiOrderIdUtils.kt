@@ -1,7 +1,8 @@
 package com.delighted2wins.souqelkhorda.core.utils
 
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 fun generateUiOrderId(orderId: String, date: Long): String {
     val shortId = if (orderId.length > 6) orderId.take(6) else orderId

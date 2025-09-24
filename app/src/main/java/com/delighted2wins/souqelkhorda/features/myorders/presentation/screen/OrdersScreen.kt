@@ -1,5 +1,6 @@
 package com.delighted2wins.souqelkhorda.features.myorders.presentation.screen
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -52,7 +53,7 @@ fun OrdersScreen(
     innerPadding: PaddingValues = PaddingValues(),
     snackBarHostState: SnackbarHostState,
     viewModel: MyOrdersViewModel = hiltViewModel(),
-    onDetailsClick: (String, String) -> Unit = { _, _ -> }
+    onDetailsClick: (orderId: String, ownerId: String, buyerId: String, source: OrderSource) -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val systemIsRtl = LocalConfiguration.current.layoutDirection == LayoutDirection.Rtl.ordinal
@@ -67,6 +68,7 @@ fun OrdersScreen(
     val isRtl: Boolean = LocalLayoutDirection.current == LayoutDirection.Rtl
     var showDeleteDialog by remember { mutableStateOf(false) }
     var orderToDelete by remember { mutableStateOf<String?>(null) }
+    var selectedChip by remember { mutableStateOf("Sells") }
 
 
     LaunchedEffect(Unit) {
@@ -160,7 +162,9 @@ fun OrdersScreen(
                     state.saleOrders,
                     state.isLoading,
                     state.error,
-                    onDetailsClick,
+                    onDetailsClick = { orderId, ownerId ->
+                        onDetailsClick(orderId, ownerId, "", OrderSource.COMPANY)
+                    },
                     onDeclineClick = { orderId ->
                         orderToDelete = orderId
                         showDeleteDialog = true
@@ -170,12 +174,22 @@ fun OrdersScreen(
                 1 -> MarketOrdersScreen(
                     state = state,
                     onChipSelected = { chip ->
+                        selectedChip = chip
                         when (chip) {
                             "Sells" -> viewModel.onIntent(MyOrdersIntents.LoadSells)
                             "Offers" -> viewModel.onIntent(MyOrdersIntents.LoadOffers)
                         }
                     },
-                    onDetailsClick,
+                    onDetailsClick = { orderId, ownerId ->
+                        val buyerId = state.currentBuyerId
+                        val source = when (selectedChip) {
+                            "Sells" -> OrderSource.SALES
+                            "Offers" -> OrderSource.OFFERS
+                            else -> OrderSource.MARKET
+                        }
+                        Log.d("OrdersScreen", "OrdersScreen: $source")
+                        onDetailsClick(orderId, ownerId, buyerId.orEmpty(), source)
+                    },
                     systemIsRtl
                 )
             }

@@ -2,23 +2,23 @@ package com.delighted2wins.souqelkhorda.features.orderdetails.presentation.viewm
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.delighted2wins.souqelkhorda.features.sell.presentation.contract.SellState
 import androidx.lifecycle.viewModelScope
 import com.delighted2wins.souqelkhorda.core.enums.OrderSource
-import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.core.model.Offer
+import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetUserDataByIdUseCase
 import com.delighted2wins.souqelkhorda.features.orderdetails.domain.usecase.GetOrderDetailsUseCase
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.OrderDetailsEffect
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.OrderDetailsIntent
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.OrderDetailsState
-import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.OrderDetailsEffect
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 @HiltViewModel
 class OrderDetailsViewModel @Inject constructor(
     private val getOrderDetails: GetOrderDetailsUseCase,
@@ -57,7 +57,13 @@ class OrderDetailsViewModel @Inject constructor(
     }
 
     private fun loadOrder(isRefresh: Boolean) {
+        Log.d("OrderDetailsViewModel", "Loading order details for order ID: $lastOrderId")
+        Log.d("OrderDetailsViewModel", "Loading order owner ID: $lastOwnerId")
+        Log.d("OrderDetailsViewModel", "Loading order buyer ID: $lastBuyerId")
+        Log.d("OrderDetailsViewModel", "--------------Loading order source: $lastSource")
+
         if (!::lastOrderId.isInitialized || !::lastOwnerId.isInitialized || !::lastSource.isInitialized) {
+            Log.e("OrderDetailsViewModel", "Missing order parameters")
             _state.value = OrderDetailsState.Error("Missing order parameters")
             return
         }
@@ -70,7 +76,9 @@ class OrderDetailsViewModel @Inject constructor(
         viewModelScope.launch {
             _state.value = if (isRefresh) OrderDetailsState.Refreshing else OrderDetailsState.Loading
             try {
-                val order = getOrderDetails(orderId, ownerId, buyerId, source)
+                Log.d("OrderDetailsViewModel", "Fetching order details for order ID: $orderId")
+                val order = getOrderDetails(orderId, source)
+                Log.d("OrderDetailsViewModel", "------------------Fetched order details: $order")
                 val successState = mapOrderToState(order, source, buyerId)
                 if (successState is OrderDetailsState.Success) {
                     lastSuccess = successState
@@ -124,7 +132,6 @@ class OrderDetailsViewModel @Inject constructor(
         if (userId.isEmpty()) {
             _orderOwner.value = null
             return
-            Log.e("OrderDetailsViewModel", "Invalid user ID: $userId")
         }
         viewModelScope.launch {
             try {
