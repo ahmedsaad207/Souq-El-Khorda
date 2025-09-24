@@ -81,7 +81,7 @@ fun OrderItemCard(
                         .padding(16.dp)
                 )
             } else {
-                ZoomableImageList(urls = listOf(item.images))
+                ZoomableImageList(urls = item.images)
             }
         }
     }

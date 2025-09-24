@@ -1,12 +1,15 @@
 package com.delighted2wins.souqelkhorda.features.sell.data.remote.firestore
 
+import com.delighted2wins.souqelkhorda.core.enums.OrderType
 import com.delighted2wins.souqelkhorda.core.model.Order
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class FirestoreOrderService @Inject constructor(
-    val firestore: FirebaseFirestore
+    val firestore: FirebaseFirestore,
+    val auth: FirebaseAuth
 ) {
 
     suspend fun sendOrder(order: Order) {
@@ -27,6 +30,24 @@ class FirestoreOrderService @Inject constructor(
             .await()
 
         firestore.collection("history")
+            .document(auth.uid.toString())
+            .collection("orders")
             .add(order)
     }
+
+    suspend fun deleteCompanyOrder(orderId: String): Boolean {
+        return try {
+            firestore.collection("orders")
+                .document(OrderType.SALE.name.lowercase())
+                .collection("items")
+                .document(orderId)
+                .delete()
+                .await()
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
 }

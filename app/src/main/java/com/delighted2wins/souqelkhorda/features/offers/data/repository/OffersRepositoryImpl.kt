@@ -18,8 +18,8 @@ class OffersRepositoryImpl @Inject constructor(
         remoteDataSource.updateOfferStatus(offerId, newStatus)
     }
 
-    override suspend fun deleteOffer(offerId: String) {
-        remoteDataSource.deleteOffer(offerId)
+    override suspend fun deleteOffer(offerId: String): Boolean {
+        return  remoteDataSource.deleteOffer(offerId)
     }
 
     override suspend fun getOfferById(offerId: String): Offer? {

@@ -34,7 +34,8 @@ class AuthenticationRemoteDataSourceImp @Inject constructor(
                     phone = signUpRequestDto.phone,
                     address = signUpRequestDto.address,
                     governorate = signUpRequestDto.governorate,
-                    imageUrl = ""
+                    imageUrl = "",
+                    area = signUpRequestDto.area
                 )
 
                 firebaseDb.collection(AppConstant.FIRESTORE_COLLECTION_NAEM)

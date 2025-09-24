@@ -65,7 +65,8 @@ fun OrderDetailsSection(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent
-            )
+            ),
+            placeholder = {Text("Short title for your order")}
         )
 
         if (showError.value && title.value.isBlank()) {
@@ -85,7 +86,8 @@ fun OrderDetailsSection(
                 .heightIn(min = 100.dp),
             state = description,
             label = "Description (Optional)",
-            onValueChange = { description.value = it }
+            onValueChange = { description.value = it },
+            placeholder = "Describe the order in detail"
         )
 
         if (selectedDestination.value == Destination.Market) {
@@ -123,7 +125,8 @@ fun OrderDetailsSection(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent
-                )
+                ),
+                placeholder = {Text("e.g., 300")}
             )
         }
     }

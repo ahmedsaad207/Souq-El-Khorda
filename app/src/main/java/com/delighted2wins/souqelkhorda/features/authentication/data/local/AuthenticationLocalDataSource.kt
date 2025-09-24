@@ -21,6 +21,7 @@ class AuthenticationLocalDataSourceImp @Inject constructor(
         saveData("user_phone",user.phone)
         saveData("user_governorate",user.governorate)
         saveData("user_address",user.address)
+        saveData("user_area",user.area)
         saveData("user_image",user.imageUrl?:"")
     }
 
@@ -32,7 +33,8 @@ class AuthenticationLocalDataSourceImp @Inject constructor(
             phone = fetchData("user_phone", ""),
             governorate = fetchData("user_governorate", ""),
             address = fetchData("user_address", ""),
-            imageUrl = fetchData("user_image", "")
+            imageUrl = fetchData("user_image", ""),
+            area = fetchData("user_area","")
         )
     }
 
@@ -43,6 +45,8 @@ class AuthenticationLocalDataSourceImp @Inject constructor(
         saveData("user_phone", "")
         saveData("user_governorate", "")
         saveData("user_address", "")
+        saveData("user_area","")
+
         saveData("user_image", "")
     }
 }

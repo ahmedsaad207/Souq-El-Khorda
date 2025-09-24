@@ -12,10 +12,10 @@ import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
 import com.delighted2wins.souqelkhorda.core.enums.OrderSource
+import com.delighted2wins.souqelkhorda.features.authentication.presentation.screen.LoginScreen
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.screen.SignUpScreen
 import com.delighted2wins.souqelkhorda.features.buyers.presentation.screen.NearestBuyersScreen
 import com.delighted2wins.souqelkhorda.features.history.presentation.screen.HistoryScreen
-import com.delighted2wins.souqelkhorda.features.login.presentation.screen.LoginScreen
 import com.delighted2wins.souqelkhorda.features.market.presentation.screen.MarketScreen
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.screen.OrdersScreen
 import com.delighted2wins.souqelkhorda.features.notification.presentation.screen.NotificationsScreen
@@ -169,6 +169,16 @@ fun NavigationRoot(
                         bottomBarState.value = true
                         OrdersScreen(
                             innerPadding,
+                            snackBarState,
+                            onDetailsClick = { orderId, ownerId ->
+                                backStack.add(
+                                    OrderDetailsKey(
+                                        orderId,
+                                        ownerId,
+                                        source = OrderSource.COMPANY
+                                    )
+                                )
+                            }
                         )
                     }
                 }

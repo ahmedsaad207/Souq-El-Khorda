@@ -8,11 +8,7 @@ sealed class SellIntent {
 
     data class AddScrap(val scrap: Scrap) : SellIntent()
 
-    data class EditScrap(val scrap: Scrap) : SellIntent()
-
     data class DeleteScrap(val scrap: Scrap) : SellIntent()
-
-    object Cancel : SellIntent()
 }
 
 data class SellState(
@@ -20,5 +16,6 @@ data class SellState(
     val data: List<Scrap> = emptyList(),
     val err: String? = null,
     val isScrapSaved: Boolean = false,
-    val isScrapDeleted: Boolean = false
+    val isScrapDeleted: Boolean = false,
+    val isOrderSubmitted: Boolean = false
 )
