@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.delighted2wins.souqelkhorda.core.enums.OrderSource
 import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.core.utils.generateUiOrderId
 import com.delighted2wins.souqelkhorda.core.utils.toTimeAgo
@@ -23,14 +24,14 @@ import com.delighted2wins.souqelkhorda.core.utils.toTimeAgo
 @Composable
 fun OrderItem(
     order: Order,
-    onDetailsClick: () -> Unit = {},
+    onDetailsClick: (String, String) -> Unit,
     systemIsRtl: Boolean = false
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 6.dp, horizontal = 8.dp)
-            .clickable { onDetailsClick() },
+            .clickable { onDetailsClick(order.orderId, order.userId)  },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface

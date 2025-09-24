@@ -8,6 +8,10 @@ import javax.inject.Inject
 class GetOrderDetailsUseCase @Inject constructor(
     private val repository: OrderDetailsRepository
 ) {
+    suspend operator fun invoke(orderId: String, source: OrderSource): Order? {
+        return repository.getOrderDetails(orderId, source)
+    }
+
     suspend operator fun invoke(orderId: String, ownerId: String, buyerId: String?, source: OrderSource): Order? {
         return repository.getOrderDetails(orderId, ownerId, buyerId, source)
     }

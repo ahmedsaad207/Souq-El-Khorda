@@ -3,6 +3,8 @@ package com.delighted2wins.souqelkhorda.features.myorders.presentation.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetCurrentUserUseCase
+import com.delighted2wins.souqelkhorda.features.myorders.domain.usecase.LoadOffersUseCase
 import com.delighted2wins.souqelkhorda.features.myorders.domain.usecase.LoadCompanyOrdersUseCase
 import com.delighted2wins.souqelkhorda.features.myorders.domain.usecase.LoadOffersUseCase
 import com.delighted2wins.souqelkhorda.features.myorders.domain.usecase.LoadSellsUseCase
@@ -23,7 +25,8 @@ class MyOrdersViewModel @Inject constructor(
     private val loadCompanyOrdersUseCase: LoadCompanyOrdersUseCase,
     private val loadSellsUseCase: LoadSellsUseCase,
     private val loadOffersUseCase: LoadOffersUseCase,
-    private val deleteCompanyOrderUseCase: DeleteOrderUseCase
+    private val deleteCompanyOrderUseCase: DeleteOrderUseCase,
+    private val getCurrentUserUseCase: GetCurrentUserUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(MyOrdersState())
@@ -31,6 +34,10 @@ class MyOrdersViewModel @Inject constructor(
 
     private val _effect = MutableSharedFlow<MyOrdersEffect>()
     val effect = _effect.asSharedFlow()
+
+    init {
+        loadCurrentUser()
+    }
 
     fun onIntent(intent: MyOrdersIntents) {
         when (intent) {
@@ -128,6 +135,21 @@ class MyOrdersViewModel @Inject constructor(
 
     private fun emitEffect(effect: MyOrdersEffect) {
         viewModelScope.launch { _effect.emit(effect) }
+    }
+
+    private fun loadCurrentUser() {
+        viewModelScope.launch {
+            try {
+                val result = getCurrentUserUseCase()
+                _state.value = _state.value.copy(
+                    currentBuyerId = result.id
+                )
+            } catch (e: Exception) {
+                _state.value = _state.value.copy(
+                    error = e.message ?: "Unknown error"
+                )
+            }
+        }
     }
 
 }

@@ -57,7 +57,13 @@ class OrderDetailsViewModel @Inject constructor(
     }
 
     private fun loadOrder(isRefresh: Boolean) {
+        Log.d("OrderDetailsViewModel", "Loading order details for order ID: $lastOrderId")
+        Log.d("OrderDetailsViewModel", "Loading order owner ID: $lastOwnerId")
+        Log.d("OrderDetailsViewModel", "Loading order buyer ID: $lastBuyerId")
+        Log.d("OrderDetailsViewModel", "--------------Loading order source: $lastSource")
+
         if (!::lastOrderId.isInitialized || !::lastOwnerId.isInitialized || !::lastSource.isInitialized) {
+            Log.e("OrderDetailsViewModel", "Missing order parameters")
             _state.value = OrderDetailsState.Error("Missing order parameters")
             return
         }
@@ -70,7 +76,9 @@ class OrderDetailsViewModel @Inject constructor(
         viewModelScope.launch {
             _state.value = if (isRefresh) OrderDetailsState.Refreshing else OrderDetailsState.Loading
             try {
-                val order = getOrderDetails(orderId, ownerId, buyerId, source)
+                Log.d("OrderDetailsViewModel", "Fetching order details for order ID: $orderId")
+                val order = getOrderDetails(orderId, source)
+                Log.d("OrderDetailsViewModel", "------------------Fetched order details: $order")
                 val successState = mapOrderToState(order, source, buyerId)
                 if (successState is OrderDetailsState.Success) {
                     lastSuccess = successState
@@ -124,7 +132,6 @@ class OrderDetailsViewModel @Inject constructor(
         if (userId.isEmpty()) {
             _orderOwner.value = null
             return
-            Log.e("OrderDetailsViewModel", "Invalid user ID: $userId")
         }
         viewModelScope.launch {
             try {
