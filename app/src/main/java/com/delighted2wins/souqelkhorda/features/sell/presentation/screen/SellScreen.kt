@@ -21,7 +21,6 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -49,9 +48,7 @@ import com.delighted2wins.souqelkhorda.features.sell.presentation.components.Ord
 import com.delighted2wins.souqelkhorda.features.sell.presentation.contract.SellIntent
 import com.delighted2wins.souqelkhorda.features.sell.presentation.viewmodel.SellViewModel
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import androidx.core.net.toUri
 
 @SuppressLint("ConfigurationScreenWidthHeight")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -77,7 +74,7 @@ fun SellScreen(
     val selectedDestination = remember { mutableStateOf(Destination.Company) }
     val title = remember { mutableStateOf("") }
     val description = remember { mutableStateOf("") }
-    val price = remember { mutableIntStateOf(0) }
+    val price = remember { mutableStateOf(0) }
     val showError = remember { mutableStateOf(false) }
     val isLoading = remember { mutableStateOf(false) }
     val scrapToEdit = remember { mutableStateOf<Scrap?>(null) }
@@ -95,6 +92,17 @@ fun SellScreen(
             viewModel.resetScrapDeletedFlag()
         }
     }
+    LaunchedEffect(uiState.isOrderSubmitted) {
+        if (uiState.isOrderSubmitted) {
+            isLoading.value = false
+            title.value = ""
+            description.value = ""
+            price.value = 0
+            viewModel.resetOrderSubmittedFlag()
+        }
+    }
+
+
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -154,7 +162,6 @@ fun SellScreen(
                             showError.value = true
                             return@CustomButton
                         }
-
                         isLoading.value = true
 
                         val order = Order(
@@ -163,18 +170,9 @@ fun SellScreen(
                             type = if (selectedDestination.value == Destination.Company) OrderType.SALE else OrderType.MARKET,
                             title = title.value.trim(),
                             description = description.value.trim(),
-                            price = price.intValue
+                            price = price.value
                         )
-
-                        scope.launch {
-                            delay(1000)
-                            isLoading.value = false
-
-                            viewModel.processIntent(SellIntent.SendOrder(order))
-                            title.value = ""
-                            description.value = ""
-                        }
-
+                        viewModel.processIntent(SellIntent.SendOrder(order))
                     }
 
                     Spacer(Modifier.height(innerPadding.calculateBottomPadding()))

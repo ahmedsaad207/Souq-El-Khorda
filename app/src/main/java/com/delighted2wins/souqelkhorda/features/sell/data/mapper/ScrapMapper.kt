@@ -11,7 +11,7 @@ fun ScrapEntity.toDomain(): Scrap {
         unit = unit,
         amount = amount,
         description = description,
-        images = listOf(images)
+        images = images
     )
 }
 
@@ -21,6 +21,6 @@ fun Scrap.toEntity(): ScrapEntity {
         unit = unit,
         amount = amount,
         description = description,
-        images = listOf(images).toString()
+        images = images
     )
 }
