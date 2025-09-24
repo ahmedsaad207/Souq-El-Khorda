@@ -21,4 +21,8 @@ class ScrapRepositoryImpl @Inject constructor(private val local: ScrapLocalDataS
     override fun deleteScrapById(id: Int): Flow<Int> {
         return local.deleteScrapById(id)
     }
+
+    override fun updateScrap(scrap: Scrap): Flow<Int> {
+        return local.updateScrap(scrap)
+    }
 }

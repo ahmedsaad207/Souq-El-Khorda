@@ -45,4 +45,9 @@
 
     <string name="area">Area</string>
     <string name="enter_your_area">Enter your area</string>
+    <string name="delete">Delete</string>
+    <string name="submit">Submit</string>
+    <string name="confirm_delete">Confirm Delete</string>
+    <string name="are_you_sure_you_want_to_delete_this_order">Are you sure you want to delete this order?</string>
+    <string name="cancel">Cancel</string>
 </resources>

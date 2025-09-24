@@ -4,6 +4,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
+import com.delighted2wins.souqelkhorda.core.model.Scrap
 import com.delighted2wins.souqelkhorda.features.sell.data.model.ScrapEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -20,4 +22,7 @@ interface ScrapDao {
 
     @Query("DELETE FROM scraps WHERE id == :id")
     fun deleteScrapById(id: Int): Int
+
+    @Update
+    fun updateScrap(scrap: ScrapEntity): Int
 }

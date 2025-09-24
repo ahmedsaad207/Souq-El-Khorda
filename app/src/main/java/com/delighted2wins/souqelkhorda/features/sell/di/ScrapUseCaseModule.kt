@@ -8,6 +8,7 @@ import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.DeleteScrapB
 import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.GetScrapesUseCase
 import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.SaveScrapUseCase
 import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.SendOrderUseCase
+import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.UpdateScrapUseCase
 import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.UploadScrapImagesUseCase
 import dagger.Module
 import dagger.Provides
@@ -47,4 +48,8 @@ object ScrapUseCaseModule {
     @Provides
     @ViewModelScoped
     fun provideUploadScrapImagesUseCase(repo: OrderRepository) = UploadScrapImagesUseCase(repo)
+
+    @Provides
+    @ViewModelScoped
+    fun provideUpdateScrapUseCase(repo: ScrapRepository) = UpdateScrapUseCase(repo)
 }

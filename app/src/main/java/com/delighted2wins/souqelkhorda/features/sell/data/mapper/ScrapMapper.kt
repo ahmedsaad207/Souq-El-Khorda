@@ -17,6 +17,7 @@ fun ScrapEntity.toDomain(): Scrap {
 
 fun Scrap.toEntity(): ScrapEntity {
     return ScrapEntity(
+        id = this.id,
         category = category,
         unit = unit,
         amount = amount,

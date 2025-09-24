@@ -34,13 +34,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.enums.OrderSource
-import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketEffect
-import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketIntent
-import com.delighted2wins.souqelkhorda.features.myorders.presentation.component.DeleteConfirmationDialog
+import com.delighted2wins.souqelkhorda.core.components.ConfirmationDialog
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.contract.MyOrdersEffect
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.contract.MyOrdersIntents
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.viewmodel.MyOrdersViewModel
@@ -181,8 +181,11 @@ fun OrdersScreen(
             }
         }
         if (showDeleteDialog) {
-            DeleteConfirmationDialog(
-                isRtl = isRtl,
+            ConfirmationDialog(
+//                isRtl = isRtl,
+                title = stringResource(R.string.confirm_delete),
+                message = stringResource(R.string.are_you_sure_you_want_to_delete_this_order),
+                confirmLabel = stringResource(R.string.delete),
                 onConfirm = {
                     orderToDelete?.let { viewModel.onIntent(MyOrdersIntents.DeleteCompanyOrder(it)) }
                     showDeleteDialog = false

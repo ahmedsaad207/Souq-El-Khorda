@@ -23,6 +23,8 @@ class OrdersRemoteDataSourceImpl @Inject constructor(
         return scraps.map { scrap ->
             val uploadedUrls = scrap.images.map { localUri ->
                 cloudinaryService.uploadImage(localUri.toUri())
+            }.filter {  image ->
+                image.isNotBlank()
             }
             scrap.copy(images = uploadedUrls)
         }
