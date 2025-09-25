@@ -42,10 +42,13 @@ class SellViewModel @Inject constructor(
     }
 
     private fun loadScraps() = viewModelScope.launch(Dispatchers.IO) {
+        Log.d("SellViewModel", "loadScraps: called")
         _state.value = _state.value.copy(isLoading = true)
         getScrapsUseCase().catch {
+            Log.e("SellViewModel", "loadScraps: ${it.message}")
             _state.value = _state.value.copy(isLoading = false, err = it.message)
         }.collect {
+            Log.d("SellViewModel", "loadScraps: ${it.size}")
             _state.value = _state.value.copy(isLoading = false, data = it)
         }
     }

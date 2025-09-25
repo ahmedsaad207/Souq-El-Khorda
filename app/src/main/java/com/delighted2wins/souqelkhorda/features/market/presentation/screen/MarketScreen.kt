@@ -144,7 +144,7 @@ fun MarketScreen(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = if (isRtl) "لا توجد عروض متاحة الآن" else "No Offers Available Now",
+                                text = if (isRtl) "لا توجد بيانات متاحة حالياً في السوق" else "No market data available at the moment",
                                 style = MaterialTheme.typography.titleLarge,
                                 color = Color.LightGray
                             )

@@ -4,26 +4,19 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
-import com.delighted2wins.souqelkhorda.features.history.presentation.components.StatusChip
+
 
 @Composable
 fun OrderInformationCard(
@@ -41,11 +34,12 @@ fun OrderInformationCard(
     ) {
         Box(modifier = Modifier
             .background(MaterialTheme.colorScheme.surface)
-            .padding(16.dp)) {
-
+            .padding(16.dp))
+        {
             Column(modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.CenterStart)) {
+                .align(Alignment.CenterStart))
+            {
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -65,7 +59,7 @@ fun OrderInformationCard(
 
                 Text(
                     text = description,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 3
                 )
@@ -74,7 +68,7 @@ fun OrderInformationCard(
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Start,
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
@@ -83,10 +77,10 @@ fun OrderInformationCard(
                             fontWeight = FontWeight.Bold,
                             fontSize = 24.sp
                         ),
-                        color = Color(0xFF2E7D32)
+                        color = MaterialTheme.colorScheme.primary
                     )
                     Spacer(modifier = Modifier.width(12.dp))
-                    StatusChip(status = status)
+                    StatusChip(status = status.name)
                 }
             }
         }

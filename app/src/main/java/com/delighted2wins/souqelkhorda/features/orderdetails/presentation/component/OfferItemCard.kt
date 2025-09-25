@@ -1,6 +1,8 @@
 package com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -15,13 +17,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.delighted2wins.souqelkhorda.core.components.CachedUserImage
 import com.delighted2wins.souqelkhorda.core.enums.OfferStatus
 import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
 import com.delighted2wins.souqelkhorda.core.model.Offer
 import com.delighted2wins.souqelkhorda.core.utils.toFormattedDate
+import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 
 @Composable
 fun OfferItemCard(
+    buyer : MarketUser,
     offer: Offer,
     onAccept: () -> Unit,
     onReject: () -> Unit,
@@ -30,68 +35,55 @@ fun OfferItemCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 6.dp),
+            .padding(vertical = 2.dp, horizontal = 8.dp),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
-            modifier = Modifier.padding(12.dp),
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(12.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                // Avatar
-                AsyncImage(
-                    model = "",
-                    contentDescription = "Buyer Avatar",
+                CachedUserImage(
+                    imageUrl = buyer.imageUrl,
                     modifier = Modifier
-                        .size(48.dp)
-                        .clip(CircleShape),
-                    contentScale = ContentScale.Crop
+                        .size(40.dp)
+                        .clip(CircleShape)
                 )
 
                 Column(modifier = Modifier.weight(1f)) {
-                    // Buyer name + status chip
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Text(
-                            text = "",
+                            text = buyer.name,
                             style = MaterialTheme.typography.bodyLarge,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            maxLines = 1,
+                            modifier = Modifier.weight(1f)
                         )
-
-                        AssistChip(
-                            onClick = {},
-                            label = { Text(offer.status.name, color = Color.White) },
-                            colors = AssistChipDefaults.assistChipColors(
-                                containerColor = when (offer.status) {
-                                    OfferStatus.PENDING -> OrderStatus.PENDING.color
-                                    OfferStatus.ACCEPTED -> OrderStatus.COMPLETED.color
-                                    OfferStatus.REJECTED -> OrderStatus.CANCELLED.color
-                                    else -> Color.Gray
-                                }
-                            )
-                        )
+                        StatusChip(status = offer.status.name)
                     }
 
-                    // Price
                     Text(
                         text = "$ ${offer.offerPrice} EGP",
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = FontWeight.Bold,
-                            color = Color(0xFF00C853)
+                            color = MaterialTheme.colorScheme.primary
                         )
                     )
                 }
             }
 
-            // Message/description
+            Spacer(modifier = Modifier.height(8.dp))
+
             Row(verticalAlignment = Alignment.CenterVertically) {
+                Spacer(modifier = Modifier.width(4.dp))
                 Icon(
                     imageVector = Icons.Default.ChatBubbleOutline,
                     contentDescription = null,
@@ -102,11 +94,11 @@ fun OfferItemCard(
                 Text(
                     text = "",
                     color = Color.Gray,
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
+                    maxLines = 3
                 )
             }
 
-            // Date + Buttons
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -122,20 +114,31 @@ fun OfferItemCard(
                     OutlinedButton(
                         onClick = onReject,
                         colors = ButtonDefaults.outlinedButtonColors(
+                            containerColor = MaterialTheme.colorScheme.surface,
                             contentColor = Color.Red
                         )
                     ) {
-                        Text("Reject")
+                        Text(
+                            "Reject",
+                            style = MaterialTheme.typography.bodyMedium.copy(
+                                fontWeight = FontWeight.Bold
+                            )
+                        )
                     }
 
                     Button(
                         onClick = onAccept,
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF4CAF50),
+                            containerColor = MaterialTheme.colorScheme.primary,
                             contentColor = Color.White
                         )
                     ) {
-                        Text("Accept")
+                        Text(
+                            "Accept",
+                            style = MaterialTheme.typography.bodyMedium.copy(
+                                fontWeight = FontWeight.Bold
+                            )
+                        )
                     }
                 }
             }

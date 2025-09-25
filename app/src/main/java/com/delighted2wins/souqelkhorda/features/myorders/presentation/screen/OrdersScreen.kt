@@ -41,7 +41,6 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.enums.OrderSource
-import com.delighted2wins.souqelkhorda.features.myorders.presentation.component.DeleteConfirmationDialog
 import com.delighted2wins.souqelkhorda.core.components.ConfirmationDialog
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.contract.MyOrdersEffect
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.contract.MyOrdersIntents

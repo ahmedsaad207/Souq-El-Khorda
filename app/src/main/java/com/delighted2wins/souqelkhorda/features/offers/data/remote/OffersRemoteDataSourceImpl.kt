@@ -14,10 +14,37 @@ class OffersRemoteDataSourceImpl @Inject constructor(
     private val offersCollection = firestore.collection("Offers")
 
     override suspend fun makeOffer(offer: Offer): String {
-        val docRef = offersCollection.document()
-        val offerWithId = offer.copy(offerId = docRef.id)
-        docRef.set(offerWithId).await()
-        return docRef.id
+        val now = System.currentTimeMillis()
+
+        val existingQuery = offersCollection
+            .whereEqualTo("orderId", offer.orderId)
+            .whereEqualTo("buyerId", offer.buyerId)
+            .get()
+            .await()
+
+        return if (!existingQuery.isEmpty) {
+            val existingDoc = existingQuery.documents.first()
+            val existingId = existingDoc.id
+
+            offersCollection.document(existingId)
+                .update(
+                    mapOf(
+                        "offerPrice" to offer.offerPrice,
+                        "date" to now
+                    )
+                )
+                .await()
+
+            existingId
+        } else {
+            val docRef = offersCollection.document()
+            val offerWithId = offer.copy(
+                offerId = docRef.id,
+                date = now
+            )
+            docRef.set(offerWithId).await()
+            docRef.id
+        }
     }
 
     override suspend fun updateOfferStatus(offerId: String, newStatus: OfferStatus) {
@@ -55,6 +82,7 @@ class OffersRemoteDataSourceImpl @Inject constructor(
             .whereEqualTo("orderId", orderId)
             .get()
             .await()
+        Log.d("OffersRemoteDataSource", "Fetched offers Count: ${snapshot.documents.size}")
         return snapshot.documents.mapNotNull { it.toObject(Offer::class.java) }
     }
 }
