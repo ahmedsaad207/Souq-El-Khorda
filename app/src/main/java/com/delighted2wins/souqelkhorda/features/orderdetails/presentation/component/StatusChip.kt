@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.delighted2wins.souqelkhorda.core.enums.OfferStatus
 import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
 
 @Composable
@@ -29,9 +30,9 @@ fun StatusChip(status: String) {
         tonalElevation = 2.dp,
         shadowElevation = 0.dp,
         color = when (status) {
-            OrderStatus.PENDING.toString() -> OrderStatus.PENDING.color
-            OrderStatus.COMPLETED.toString() -> OrderStatus.COMPLETED.color
-            OrderStatus.CANCELLED.toString() -> OrderStatus.CANCELLED.color
+            OrderStatus.PENDING.toString(),OfferStatus.PENDING.toString() -> OrderStatus.PENDING.color
+            OrderStatus.COMPLETED.toString(),OfferStatus.ACCEPTED.toString() -> OrderStatus.COMPLETED.color
+            OrderStatus.CANCELLED.toString(),OfferStatus.REJECTED.toString() -> OrderStatus.CANCELLED.color
             else -> MaterialTheme.colorScheme.primary
         },
     ) {
@@ -41,9 +42,9 @@ fun StatusChip(status: String) {
         ) {
             Icon(
                 imageVector = when (status) {
-                    OrderStatus.PENDING.toString() -> Icons.Default.Schedule
-                    OrderStatus.COMPLETED.toString() -> Icons.Default.CheckCircle
-                    OrderStatus.CANCELLED.toString() -> Icons.Default.Close
+                    OrderStatus.PENDING.toString(),OfferStatus.PENDING.toString() -> Icons.Default.Schedule
+                    OrderStatus.COMPLETED.toString(),OfferStatus.ACCEPTED.toString() -> Icons.Default.CheckCircle
+                    OrderStatus.CANCELLED.toString(),OfferStatus.REJECTED.toString() -> Icons.Default.Close
                     else -> Icons.Default.Schedule
                 },
                 contentDescription = null,

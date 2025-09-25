@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChatBubbleOutline
+import androidx.compose.material.icons.filled.Sell
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -69,14 +70,7 @@ fun OfferItemCard(
                         )
                         StatusChip(status = offer.status.name)
                     }
-
-                    Text(
-                        text = "$ ${offer.offerPrice} EGP",
-                        style = MaterialTheme.typography.bodyLarge.copy(
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    )
+                    OfferPriceTag(offer.offerPrice)
                 }
             }
 

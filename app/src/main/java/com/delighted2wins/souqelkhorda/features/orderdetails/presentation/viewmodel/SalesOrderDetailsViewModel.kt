@@ -4,9 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.delighted2wins.souqelkhorda.core.enums.OfferStatus
 import com.delighted2wins.souqelkhorda.core.enums.OrderSource
+import com.delighted2wins.souqelkhorda.core.model.Offer
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetUserDataByIdUseCase
-import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketEffect
+import com.delighted2wins.souqelkhorda.features.offers.domain.usecase.DeleteOfferUseCase
 import com.delighted2wins.souqelkhorda.features.offers.domain.usecase.GetOffersByOrderIdUseCase
 import com.delighted2wins.souqelkhorda.features.offers.domain.usecase.UpdateOfferStatusUseCase
 import com.delighted2wins.souqelkhorda.features.orderdetails.domain.usecase.GetOrderDetailsUseCase
@@ -28,6 +29,7 @@ class SalesOrderDetailsViewModel @Inject constructor(
     private val getOrderDetails: GetOrderDetailsUseCase,
     private val getOffersByOrderIdUseCase: GetOffersByOrderIdUseCase,
     private val updateOfferStatusUseCase: UpdateOfferStatusUseCase,
+    private val deleteOfferUseCase: DeleteOfferUseCase,
     private val getUserByIdUseCase: GetUserDataByIdUseCase,
 ) : ViewModel() {
 
@@ -64,8 +66,15 @@ class SalesOrderDetailsViewModel @Inject constructor(
                     }
                 }.awaitAll().filterNotNull()
 
-                val accepted = offersWithUsers.filter { it.first.status == OfferStatus.ACCEPTED }
-                val pending = offersWithUsers.filter { it.first.status == OfferStatus.PENDING }
+                val accepted = offersWithUsers
+                    .filter { it.first.status == OfferStatus.ACCEPTED }
+                    .sortedWith(compareByDescending<Pair<Offer, MarketUser>> { it.first.date }
+                        .thenByDescending { it.first.offerPrice })
+
+                val pending = offersWithUsers
+                    .filter { it.first.status == OfferStatus.PENDING }
+                    .sortedWith(compareByDescending { it.first.date })
+
 
                 _state.value = _state.value.copy(
                     order = order,
@@ -86,7 +95,12 @@ class SalesOrderDetailsViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 // call send notification to buyer (msg: offer accepted by seller)
-                updateOfferStatusUseCase(offerId, OfferStatus.ACCEPTED)
+                val result = updateOfferStatusUseCase(offerId, OfferStatus.ACCEPTED)
+                if (result){
+                    _effect.emit( SalesOrderDetailsEffect.ShowError("Offer accepted successfully"))
+                }else{
+                    _effect.emit( SalesOrderDetailsEffect.ShowError("Failed to accept offer"))
+                }
                 reloadOffers()
             } catch (e: Exception) {
                 _state.value = _state.value.copy(error = e.message ?: "Failed to accept offer")
@@ -98,10 +112,16 @@ class SalesOrderDetailsViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 // call send notification to buyer (msg: offer rejected by seller)
-                updateOfferStatusUseCase(offerId, OfferStatus.REJECTED)
+                val result = deleteOfferUseCase(offerId)
+                if (result){
+                    _effect.emit( SalesOrderDetailsEffect.ShowError("Offer rejected successfully"))
+                }else{
+                    _effect.emit( SalesOrderDetailsEffect.ShowError("Failed to reject offer"))
+                }
                 reloadOffers()
             } catch (e: Exception) {
                 _state.value = _state.value.copy(error = e.message ?: "Failed to reject offer")
+                emitEffect(SalesOrderDetailsEffect.ShowError(e.message ?: "Failed to reject offer"))
             }
         }
     }
@@ -110,10 +130,16 @@ class SalesOrderDetailsViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 // call send notification to buyer (msg: offer canceled by seller)
-                updateOfferStatusUseCase(offerId, OfferStatus.REJECTED)
+                val result = updateOfferStatusUseCase(offerId, OfferStatus.REJECTED)
+                if (result){
+                    _effect.emit( SalesOrderDetailsEffect.ShowError("Offer canceled successfully"))
+                }else{
+                    _effect.emit( SalesOrderDetailsEffect.ShowError("Failed to cancel offer"))
+                }
                 reloadOffers()
             } catch (e: Exception) {
                 _state.value = _state.value.copy(error = e.message ?: "Failed to cancel offer")
+                emitEffect(SalesOrderDetailsEffect.ShowError(e.message ?: "Failed to cancel offer"))
             }
         }
     }
@@ -126,11 +152,12 @@ class SalesOrderDetailsViewModel @Inject constructor(
 
                  // updateBuyerHistoryStatusUseCase(buyerId, OrderStatus.COMPLETED)
                 // updateOrderStatusUseCase(orderId, OrderStatus.COMPLETED)
-               // updateOfferStatusUseCase(offerId, OfferStatus.COMPLETED)
+                // updateOfferStatusUseCase(offerId, OfferStatus.COMPLETED)
 
                 reloadOffers()
             } catch (e: Exception) {
                 _state.value = _state.value.copy(error = e.message ?: "Failed to complete offer")
+                emitEffect(SalesOrderDetailsEffect.ShowError(e.message ?: "Failed to complete offer"))
             }
         }
     }
@@ -147,10 +174,16 @@ class SalesOrderDetailsViewModel @Inject constructor(
                 )
             } catch (e: Exception) {
                 _state.value = _state.value.copy(error = e.message ?: "Failed to open chat")
+                emitEffect(SalesOrderDetailsEffect.ShowError(e.message ?: "Failed to open chat"))
             }
         }
     }
 
+    private fun emitEffect(effect: SalesOrderDetailsEffect) {
+        viewModelScope.launch {
+            _effect.emit(effect)
+        }
+    }
 
     private suspend fun getUserData(userId: String): MarketUser? {
         return loadedUsers[userId] ?: try {

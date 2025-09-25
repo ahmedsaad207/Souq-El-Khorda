@@ -16,12 +16,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
+import com.delighted2wins.souqelkhorda.core.model.Scrap
+import com.delighted2wins.souqelkhorda.features.market.presentation.component.CategoryChips
 
 
 @Composable
 fun OrderInformationCard(
     title: String,
     description: String,
+    scraps: List<Scrap>,
     price: String,
     status: OrderStatus = OrderStatus.PENDING,
     modifier: Modifier = Modifier
@@ -66,6 +69,11 @@ fun OrderInformationCard(
 
                 Spacer(modifier = Modifier.height(12.dp))
 
+                if (scraps.isNotEmpty()) {
+                    CategoryChips(scraps)
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -95,6 +103,7 @@ fun OrderInformationCardPreview() {
         description = "We collect mixed metal scrap from households and small businesses. Pickup available within 20 km.",
         price = "3,500",
         status = OrderStatus.COMPLETED,
+        scraps = emptyList(),
         modifier = Modifier.padding(16.dp)
     )
 }

@@ -15,6 +15,7 @@ import com.delighted2wins.souqelkhorda.core.enums.OrderSource
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.screen.LoginScreen
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.screen.SignUpScreen
 import com.delighted2wins.souqelkhorda.features.buyers.presentation.screen.NearestBuyersScreen
+import com.delighted2wins.souqelkhorda.features.chat.ChatScreen
 import com.delighted2wins.souqelkhorda.features.history.presentation.screen.HistoryScreen
 import com.delighted2wins.souqelkhorda.features.market.presentation.screen.MarketScreen
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.screen.OrdersScreen
@@ -77,11 +78,33 @@ fun NavigationRoot(
                     NavEntry(key) {
                         bottomBarState.value = false
                         OrderDetailsScreen(
+                            snackBarHostState = snackBarState,
                             orderId = key.orderId,
                             orderOwnerId = key.orderOwnerId,
                             orderBuyerId = key.orderBuyerId,
                             source = key.source,
+                            onChatClick = { sellerId, buyerId, orderId ->
+                                backStack.add(
+                                    ChatKey(
+                                        orderId = key.orderId,
+                                        sellerId = key.orderOwnerId,
+                                        buyerId = key.orderBuyerId!!
+                                    )
+                                )
+                            },
                             onBackClick = { backStack.remove(key) }
+                        )
+                    }
+                }
+
+                is ChatKey -> {
+                    NavEntry(key) {
+                        bottomBarState.value = false
+                        ChatScreen(
+                            sellerId = key.sellerId,
+                            buyerId = key.buyerId,
+                            orderId = key.orderId,
+                            onBack = { backStack.remove(key) }
                         )
                     }
                 }

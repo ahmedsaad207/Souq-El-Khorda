@@ -38,4 +38,10 @@ data class OrderDetailsKey(
     val source: OrderSource
 ) : NavKey
 
+@Serializable
+data class ChatKey(
+    val orderId: String,
+    val sellerId: String,
+    val buyerId: String,
+) : NavKey
 

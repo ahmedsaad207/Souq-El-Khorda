@@ -24,18 +24,17 @@ fun ChatScreen(
     sellerId: String,
     buyerId: String,
     orderId: String,
-    messages: List<ChatMessage>,
-    onSendMessage: (String) -> Unit,
     onBack: () -> Unit,
-    chatTitle: String,
-    modifier: Modifier = Modifier
 ) {
     var input by remember { mutableStateOf("") }
+    val title = "Buyer Name"
+    val messages = listOf("Hi, I accepted your offer.", "Great! When can I pick it up?")
+
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(chatTitle) },
+                title = { Text(title) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(
@@ -53,7 +52,7 @@ fun ChatScreen(
         }
     ) { padding ->
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
         ) {
@@ -65,7 +64,7 @@ fun ChatScreen(
                 reverseLayout = true
             ) {
                 items(messages) { msg ->
-                    val isMe = msg.senderId == sellerId
+                    val isMe = true //msg.senderId == sellerId
                     Box(
                         modifier = Modifier.fillMaxWidth(),
                         contentAlignment = if (isMe) Alignment.CenterEnd else Alignment.CenterStart
@@ -77,7 +76,7 @@ fun ChatScreen(
                             modifier = Modifier.padding(4.dp)
                         ) {
                             Text(
-                                text = msg.text,
+                                text = "", // msg.text,
                                 color = if (isMe) Color.White else Color.Black,
                                 modifier = Modifier.padding(12.dp)
                             )
@@ -118,7 +117,7 @@ fun ChatScreen(
                 IconButton(
                     onClick = {
                         if (input.isNotBlank()) {
-                            onSendMessage(input.trim())
+                          //  onSendMessage(input.trim())  // Handle sending the message
                             input = ""
                         }
                     }
@@ -158,9 +157,6 @@ fun PreviewChatScreen() {
         sellerId = "seller123",
         buyerId = "buyer456",
         orderId = "order1",
-        messages = dummyMessages,
-        onSendMessage = {},
         onBack = {},
-        chatTitle = "Buyer Name"
     )
 }

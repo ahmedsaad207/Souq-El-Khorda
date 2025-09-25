@@ -47,10 +47,16 @@ class OffersRemoteDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateOfferStatus(offerId: String, newStatus: OfferStatus) {
-        offersCollection.document(offerId)
-            .update("status", newStatus.name)
-            .await()
+    override suspend fun updateOfferStatus(offerId: String, newStatus: OfferStatus): Boolean {
+        return try {
+            offersCollection.document(offerId)
+                .update("status", newStatus.name)
+                .await()
+            true
+        } catch (e: Exception) {
+            Log.e("OffersRemoteDataSource", "Error updating offer status", e)
+            false
+        }
     }
 
     override suspend fun deleteOffer(offerId: String): Boolean {

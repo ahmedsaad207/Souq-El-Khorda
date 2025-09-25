@@ -136,37 +136,6 @@ private fun ScrapMetaInfo(status: String, price: Int, systemIsRtl: Boolean) {
     }
 }
 
-@Composable
-private fun CategoryChips(scraps: List<Scrap>) {
-    val categories = scraps
-        .map { it.category }
-        .filter { it.isNotBlank() }
-        .distinct()
-
-    if (categories.isEmpty()) return
-
-    Row(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        categories.forEach { category ->
-            Card(
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
-                ),
-                modifier = Modifier.padding(end = 8.dp)
-            ) {
-                Text(
-                    text = category,
-                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
-                )
-            }
-        }
-    }
-}
-
 
 @Composable
 private fun ScrapActions(

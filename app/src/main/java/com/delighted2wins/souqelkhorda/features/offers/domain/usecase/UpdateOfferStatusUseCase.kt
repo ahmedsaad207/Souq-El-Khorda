@@ -7,7 +7,7 @@ import javax.inject.Inject
 class UpdateOfferStatusUseCase @Inject constructor(
     private val repository: OffersRepository
 ) {
-    suspend operator fun invoke(offerId: String, newStatus: OfferStatus) {
-        repository.updateOfferStatus(offerId, newStatus)
+    suspend operator fun invoke(offerId: String, newStatus: OfferStatus): Boolean {
+        return  repository.updateOfferStatus(offerId, newStatus)
     }
 }

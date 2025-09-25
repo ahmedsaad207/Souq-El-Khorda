@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -34,17 +35,20 @@ import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contra
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.OrderDetailsState
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.screen.CompanyOrderDetailsUI
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.screen.MarketOrderDetailsUI
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.screen.OffersOrderDetailsUI
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.screen.SalesOrderDetailsUI
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.viewmodel.OrderDetailsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OrderDetailsScreen(
+    snackBarHostState: SnackbarHostState,
     orderId: String,
     orderOwnerId: String,
     orderBuyerId: String? = null,
     source: OrderSource,
     viewModel: OrderDetailsViewModel = hiltViewModel(),
+    onChatClick: (String, String, String) -> Unit,
     onBackClick: () -> Unit = {},
 ) {
     val layoutDirectionRtl: Boolean = LocalLayoutDirection.current == LayoutDirection.Rtl
@@ -53,15 +57,8 @@ fun OrderDetailsScreen(
     val orderBuyer by viewModel.orderBuyer.collectAsStateWithLifecycle()
     val pullToRefreshState = rememberPullToRefreshState()
 
-    LaunchedEffect(Unit) {
-        Log.d("Navigation", "Navigated to OrderDetailsScreen with orderId: $orderId")
-    }
 
     LaunchedEffect(orderId, orderOwnerId, orderBuyerId) {
-        Log.d("OrderDetailsScreen", "Loading order details for order ID: $orderId")
-        Log.d("OrderDetailsScreen", "Loading order owner ID: $orderOwnerId")
-        Log.d("OrderDetailsScreen", "Loading order buyer ID: $orderBuyerId")
-
         viewModel.onIntent(
             OrderDetailsIntent.LoadOrderDetails(
                 orderId,
@@ -128,10 +125,11 @@ fun OrderDetailsScreen(
 
                 is OrderDetailsState.Success -> {
                     RenderSuccess(
+                        snackBarHostState = snackBarHostState,
                         state = uiState as OrderDetailsState.Success,
                         orderOwner = orderOwner,
-                        orderBuyer = orderBuyer,
                         isRtl = layoutDirectionRtl,
+                        onChatClick = onChatClick,
                         onBackClick = onBackClick
                     )
                 }
@@ -161,9 +159,11 @@ fun OrderDetailsScreen(
                 OrderDetailsState.Refreshing -> {
                     viewModel.cachedSuccess?.let { success ->
                         RenderSuccess(
+                            snackBarHostState = snackBarHostState,
                             state = success,
                             orderOwner = orderOwner,
                             isRtl = layoutDirectionRtl,
+                            onChatClick = onChatClick,
                             onBackClick = onBackClick
                         )
                     } ?:
@@ -182,10 +182,11 @@ fun OrderDetailsScreen(
 
 @Composable
 private fun RenderSuccess(
+    snackBarHostState: SnackbarHostState,
     state: OrderDetailsState.Success,
     orderOwner: MarketUser?,
-    orderBuyer: MarketUser? = null,
     isRtl: Boolean,
+    onChatClick: (String, String, String) -> Unit,
     onBackClick: () -> Unit
 ) {
     when (state) {
@@ -196,10 +197,10 @@ private fun RenderSuccess(
             CompanyOrderDetailsUI(state.order,orderOwner, isRtl, onBackClick)
         }
         is OrderDetailsState.Success.Sales -> {
-           SalesOrderDetailsUI(state.order, isRtl, onBackClick)
+           SalesOrderDetailsUI(snackBarHostState,state.order, isRtl, onChatClick, onBackClick)
         }
         is OrderDetailsState.Success.Offers -> {
-          //  OffersOrderDetailsUI(state.order, state.buyerOffer, isRtl, onBackClick)
+          OffersOrderDetailsUI(snackBarHostState,state.order, isRtl, onChatClick, onBackClick)
         }
     }
 }

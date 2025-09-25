@@ -7,7 +7,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,42 +17,38 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.delighted2wins.souqelkhorda.core.model.Order
+import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.ShimmerScrapCard
-import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.AcceptedOfferItemCard
-import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.OrderInformationCard
-import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.OfferItemCard
-import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.OrderDetailsTopBar
-import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.ScrapItemCard
-import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.SectionTitle
-import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.SalesOrderDetailsEffect
-import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.SalesOrderDetailsIntent
-import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.viewmodel.SalesOrderDetailsViewModel
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.*
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.OffersOrderDetailsEffect
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.OffersOrderDetailsIntent
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.viewmodel.OffersOrderDetailsViewModel
 
 @Composable
-fun SalesOrderDetailsUI(
+fun OffersOrderDetailsUI(
     snackBarHostState: SnackbarHostState,
     order: Order,
     isRtl: Boolean,
     onChatClick: (orderId: String, sellerId: String, buyerId: String) -> Unit,
     onBackClick: () -> Unit = {},
-    viewModel: SalesOrderDetailsViewModel = hiltViewModel(),
+    viewModel: OffersOrderDetailsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(order.orderId) {
-        viewModel.onIntent(SalesOrderDetailsIntent.LoadOrderDetails(order.orderId))
+        viewModel.onIntent(OffersOrderDetailsIntent.LoadOrderDetails(order.orderId))
     }
 
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                is SalesOrderDetailsEffect.NavigateToChat -> {
+                is OffersOrderDetailsEffect.NavigateToChat -> {
                     onChatClick(effect.orderId, effect.sellerId, effect.buyerId)
                 }
-                is SalesOrderDetailsEffect.ShowSuccess -> {
+                is OffersOrderDetailsEffect.ShowSuccess -> {
                     snackBarHostState.showSnackbar(effect.message)
                 }
-                is SalesOrderDetailsEffect.ShowError -> {
+                is OffersOrderDetailsEffect.ShowError -> {
                     snackBarHostState.showSnackbar(effect.message)
                 }
             }
@@ -116,55 +114,35 @@ fun SalesOrderDetailsUI(
                     }
                 }
 
-                if (state.acceptedOffers.isNotEmpty()) {
+                state.buyerOffer?.let { (offer, seller) ->
                     item {
                         SectionTitle(
                             icon = Icons.Filled.AttachMoney,
-                            title = if (isRtl) "مناقشة العروض" else "Discussion Offers",
-                            count = state.acceptedOffers.size,
+                            title = if (isRtl) "عرضي" else "My Offer",
+                            count = 0,
                             modifier = Modifier.padding(horizontal = 8.dp)
                         )
                     }
 
-                    items(state.acceptedOffers) { (offer, user) ->
-                        AcceptedOfferItemCard(
-                            buyer = user,
+                    item {
+                        BuyerOfferCard(
+                            seller = seller,
                             offer = offer,
                             onChat = {
                                 viewModel.onIntent(
-                                    SalesOrderDetailsIntent.ChatWithBuyer(
-                                        order.userId,
-                                        offer.buyerId,
-                                        offer.orderId
+                                    OffersOrderDetailsIntent.ChatWithSeller(
+                                        offer.orderId,
+                                        seller.id,
+                                        offer.buyerId
                                     )
                                 )
                             },
-                            onCompleted = {
-                                viewModel.onIntent(SalesOrderDetailsIntent.CompleteOffer(offer.offerId))
+                            onMarkReceived = {
+                                viewModel.onIntent(OffersOrderDetailsIntent.MarkAsReceived(offer.offerId))
                             },
                             onCancel = {
-                                viewModel.onIntent(SalesOrderDetailsIntent.CancelOffer(offer.offerId))
+                                viewModel.onIntent(OffersOrderDetailsIntent.CancelOffer(offer.offerId))
                             }
-                        )
-                    }
-                }
-
-                if (state.pendingOffers.isNotEmpty()) {
-                    item {
-                        SectionTitle(
-                            icon = Icons.Filled.AttachMoney,
-                            title = if (isRtl) "العروض" else "Offers",
-                            count = state.pendingOffers.size,
-                            modifier = Modifier.padding(horizontal = 8.dp)
-                        )
-                    }
-
-                    items(state.pendingOffers) { (offer, user) ->
-                        OfferItemCard(
-                            buyer = user,
-                            offer = offer,
-                            onAccept = { viewModel.onIntent(SalesOrderDetailsIntent.AcceptOffer(offer.offerId)) },
-                            onReject = { viewModel.onIntent(SalesOrderDetailsIntent.RejectOffer(offer.offerId)) }
                         )
                     }
                 }
@@ -172,6 +150,7 @@ fun SalesOrderDetailsUI(
                 item { Spacer(modifier = Modifier.height(24.dp)) }
             }
         }
+
         else -> {
             Box(
                 modifier = Modifier.fillMaxSize(),

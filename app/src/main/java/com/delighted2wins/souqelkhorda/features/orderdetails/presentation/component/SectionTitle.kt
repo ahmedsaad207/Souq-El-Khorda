@@ -58,7 +58,7 @@ fun SectionTitle(
                     Text(
                         text = count.toString(),
                         style = MaterialTheme.typography.labelMedium.copy(
-                            fontWeight = FontWeight.Bold,
+                            fontWeight = FontWeight.ExtraBold,
                             color = MaterialTheme.colorScheme.primary
                         )
                     )
