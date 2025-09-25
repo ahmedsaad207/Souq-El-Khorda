@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetCurrentUserUseCase
 import com.delighted2wins.souqelkhorda.features.myorders.domain.usecase.LoadCompanyOrdersUseCase
+import com.delighted2wins.souqelkhorda.features.myorders.domain.usecase.LoadOffersUseCase
 import com.delighted2wins.souqelkhorda.features.myorders.domain.usecase.LoadSellsUseCase
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.contract.MyOrdersEffect
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.contract.MyOrdersIntents
@@ -42,8 +43,6 @@ class MyOrdersViewModel @Inject constructor(
             is MyOrdersIntents.LoadSaleOrders -> loadCompanyOrders()
             is MyOrdersIntents.LoadSells -> loadSells()
             is MyOrdersIntents.LoadOffers -> loadOffers()
-            is MyOrdersIntents.DeclineOffer -> declineMyOffer(intent.offerId)
-            is MyOrdersIntents.DeclineSell -> declineMySell(intent.orderId)
             is MyOrdersIntents.DeleteCompanyOrder -> deleteCompanyOrder(intent.orderId)
         }
     }
@@ -128,9 +127,6 @@ class MyOrdersViewModel @Inject constructor(
             }
         }
     }
-
-    private fun declineMyOffer(offerId: String) {}
-    private fun declineMySell(orderId: String) {}
 
     private fun emitEffect(effect: MyOrdersEffect) {
         viewModelScope.launch { _effect.emit(effect) }

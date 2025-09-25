@@ -37,13 +37,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.delighted2wins.souqelkhorda.app.theme.Til
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
+import com.delighted2wins.souqelkhorda.core.enums.BottomSheetActionType
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.ScrapCard
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.SearchBar
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.ShimmerScrapCard
 import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketEffect
 import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketIntent
-import com.delighted2wins.souqelkhorda.features.offers.component.MakeOfferBottomSheet
+import com.delighted2wins.souqelkhorda.features.offers.UserActionsBottomSheet
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -72,7 +73,14 @@ fun MarketScreen(
             when (effect) {
                 is MarketEffect.NavigateToOrderDetails -> onDetailsClick(effect.orderId, effect.ownerId)
                 is MarketEffect.ShowSuccess -> {
-                    coroutineScope.launch { snackBarHostState.showSnackbar(message = effect.message,) }
+                    if (isBottomSheetVisible) {
+                        sheetState.hide()
+                        isBottomSheetVisible = false
+                        selectedOrderId = ""
+                    }
+                    coroutineScope.launch {
+                        snackBarHostState.showSnackbar(effect.message)
+                    }
                 }
                 is MarketEffect.ShowError -> {
                     coroutineScope.launch {
@@ -226,23 +234,28 @@ fun MarketScreen(
         }
     }
 
-    if (isBottomSheetVisible && selectedOrderId.isNotEmpty()) {
+    if (isBottomSheetVisible && selectedOrderId.isNotEmpty() && viewModel.currentUser != null) {
         ModalBottomSheet(
-            onDismissRequest = { isBottomSheetVisible = false },
+            onDismissRequest = {
+                coroutineScope.launch {
+                    sheetState.hide()
+                    isBottomSheetVisible = false
+                    selectedOrderId = ""
+                }
+            },
             sheetState = sheetState
         ) {
-            MakeOfferBottomSheet(
+            UserActionsBottomSheet(
                 orderId = selectedOrderId,
-                offerMaker = viewModel.currentUser!!,
+                offerMaker = viewModel.currentUser,
                 sheetState = sheetState,
                 coroutineScope = coroutineScope,
-                onSubmitOffer = { offer ->
+                onConfirmAction = { offer ->
                     viewModel.onIntent(MarketIntent.MakeOffer(offer))
-                    selectedOrderId = ""
-                    isBottomSheetVisible = false
-                    coroutineScope.launch { sheetState.hide() }
                 },
-                isRtl = isRtl
+                isSubmittingOffer = viewModel.state.isSubmittingOffer,
+                isRtl = isRtl,
+                actionType = BottomSheetActionType.MAKE_OFFER
             )
         }
     }

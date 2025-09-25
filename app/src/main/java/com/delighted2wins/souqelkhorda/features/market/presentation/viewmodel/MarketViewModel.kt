@@ -131,6 +131,7 @@ class MarketViewModel @Inject constructor(
 
     private fun makeOffer(offer: Offer) {
         viewModelScope.launch {
+            state = state.copy(isSubmittingOffer = true)
             try {
                 val offerId = makeOfferUseCase(offer)
                 if (offerId.isNotEmpty()) {
@@ -139,8 +140,11 @@ class MarketViewModel @Inject constructor(
             } catch (e: Exception) {
                 val errorMsg = e.message ?: "Network error"
                 emitEffect(MarketEffect.ShowError(errorMsg))
+            } finally {
+                state = state.copy(isSubmittingOffer = false)
             }
         }
     }
+
 
 }

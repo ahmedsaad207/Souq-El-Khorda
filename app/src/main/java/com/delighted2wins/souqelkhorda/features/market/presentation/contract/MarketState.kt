@@ -9,5 +9,8 @@ data class MarketState(
     val successfulOrders: List<Order> = emptyList(),
     val query: String = "",
     val error: String? = null,
-    val isEmpty: Boolean = false
+    val isEmpty: Boolean = false,
+    val isSubmittingOffer: Boolean = false
 )
+
+
