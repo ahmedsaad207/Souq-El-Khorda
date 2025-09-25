@@ -26,15 +26,6 @@ class OrderDetailsRemoteDataSourceImpl @Inject constructor(
         return fetchOrder(orderId, source)
     }
 
-    override suspend fun fetchOrderDetails(
-        orderId: String,
-        ownerId: String,
-        buyerId: String?,
-        source: OrderSource
-    ): Order? {
-        return fetchOrder(orderId, source)
-    }
-
     private suspend fun fetchOrder(orderId: String, source: OrderSource): Order? {
         return try {
             val covert = if (source == OrderSource.COMPANY) "sale" else "market"
@@ -53,18 +44,22 @@ class OrderDetailsRemoteDataSourceImpl @Inject constructor(
             val scrapsList: List<Scrap> =
                 (data["scraps"] as? List<Map<String, Any>>)?.mapNotNull { scrapMap ->
                     try {
-                        val scrap = Gson().fromJson(
-                            Gson().toJson(scrapMap),
-                            Scrap::class.java
-                        )
-                        Log.d("Order_Details-Debug", "Mapped scrap: $scrap")
-                        scrap
+                        val images = when (val img = scrapMap["images"]) {
+                            is List<*> -> img.filterIsInstance<String>()
+                            is String -> listOf(img)
+                            else -> emptyList()
+                        }
+
+                        Scrap(
+                            id = (scrapMap["id"] as? Double)?.toInt() ?: 0,
+                            category = scrapMap["category"] as? String ?: "",
+                            unit = scrapMap["unit"] as? String ?: "",
+                            amount = scrapMap["amount"]?.toString() ?: "0",
+                            description = scrapMap["description"] as? String ?: "",
+                            images = images
+                        ).also { Log.d("Order_Details-Debug", "Mapped scrap: $it") }
                     } catch (e: Exception) {
-                        Log.e(
-                            "Order_Details-Debug",
-                            "Error mapping scrap: $scrapMap",
-                            e
-                        )
+                        Log.e("Order_Details-Debug", "Error mapping scrap: $scrapMap", e)
                         null
                     }
                 } ?: emptyList()
