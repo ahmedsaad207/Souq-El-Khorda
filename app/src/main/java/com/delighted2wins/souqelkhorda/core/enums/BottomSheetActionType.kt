@@ -19,7 +19,7 @@ enum class BottomSheetActionType(
         enValue = "Make an Offer",
         arValue = "تقديم عرض",
         color = Color(0xFF4CAF50),
-        warningColor = Color(0xFF4CAF50),
+        warningColor = Color(0xFFB8EFBA),
         warnings = listOf(
             "The offer amount must be greater than zero. Please verify before submitting." to
                     "يجب أن يكون مبلغ العرض أكبر من صفر. يرجى التحقق قبل الإرسال.",
@@ -31,8 +31,8 @@ enum class BottomSheetActionType(
         code = 1,
         enValue = "Update Status",
         arValue = "تحديث الحالة",
-        color = Color(0xFF2196F3),
-        warningColor = Color(0xFFFFC107),
+        color = Color(0xFF4CAF50),
+        warningColor = Color(0xFFB8EFBA),
         warnings = listOf(
             "Updating the order status will notify all participants immediately." to
                     "تحديث حالة الطلب سيخطر جميع المشاركين على الفور.",
@@ -40,10 +40,10 @@ enum class BottomSheetActionType(
                     "تأكد من اختيار الحالة الصحيحة لتجنب الالتباس."
         )
     ),
-    DELETE(
+    DELETE_OFFER(
         code = 2,
-        enValue = "Delete",
-        arValue = "حذف",
+        enValue = "Confirm Delete",
+        arValue = "تأكيد الحذف",
         color = Color(0xFFF44336),
         warningColor = Color(0xFFFFCDD2),
         warnings = listOf(
@@ -53,10 +53,10 @@ enum class BottomSheetActionType(
                     "لا يمكن التراجع عن هذا الإجراء، يرجى التأكد قبل المتابعة."
         )
     ),
-    CANCEL(
+    CANCEL_COMPANY_ORDER(
         code = 3,
-        enValue = "Cancel",
-        arValue = "إلغاء",
+        enValue = "Confirm",
+        arValue = "تأكيد الالغاء",
         color = Color(0xFFF44336),
         warningColor = Color(0xFFFFCDD2),
         warnings = listOf(
@@ -65,5 +65,5 @@ enum class BottomSheetActionType(
             "You will not be able to reactivate this order once cancelled." to
                     "لن تتمكن من إعادة تنشيط هذا الطلب بعد الإلغاء."
         )
-    )
+    ),
 }

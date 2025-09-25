@@ -2,6 +2,7 @@ package com.delighted2wins.souqelkhorda.features.offers
 
 import WarningCard
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -26,147 +27,135 @@ fun UserActionsBottomSheet(
     offerMaker: MarketUser?,
     sheetState: SheetState,
     coroutineScope: CoroutineScope,
-    onConfirmAction: suspend (Offer) -> Unit,
-    isSubmittingOffer: Boolean,
+    onConfirmAction: suspend (Any) -> Unit,
+    isSubmitting: Boolean,
     isRtl: Boolean,
     actionType: BottomSheetActionType
 ) {
-    offerMaker?.let { user ->
-        var offerAmount by remember { mutableStateOf("") }
-        var errorMessage by remember { mutableStateOf("") }
+    var offerAmount by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf("") }
 
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
+            Text(
+                text = if (isRtl) actionType.arValue else actionType.enValue,
+                style = MaterialTheme.typography.titleLarge,
+                color = actionType.color
+            )
+        }
 
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = if (isRtl) actionType.arValue else actionType.enValue,
-                    style = MaterialTheme.typography.titleLarge,
-                    color = actionType.color,
-                )
-//                IconButton(
-//                    onClick = { coroutineScope.launch { sheetState.hide() } },
-//                    enabled = !isSubmittingOffer
-//                ) {
-//                    Icon(
-//                        Icons.Default.Close,
-//                        contentDescription = "Close",
-//                        tint = Color.Black
-//                    )
-//                }
-            }
+        Spacer(modifier = Modifier.height(8.dp))
 
+        actionType.warnings.forEach { (enMsg, arMsg) ->
+            WarningCard(
+                message = if (isRtl) arMsg else enMsg,
+                warningColor = actionType.warningColor,
+                icon = {
+                    Icon(
+                        imageVector = actionType.warningIcon,
+                        contentDescription = "Warning",
+                        tint = Color.White,
+                        modifier = Modifier.size(36.dp)
+                    )
+                }
+            )
             Spacer(modifier = Modifier.height(8.dp))
+        }
 
-            actionType.warnings.forEach { (enMsg, arMsg) ->
-                WarningCard(
-                    message = if (isRtl) arMsg else enMsg,
-                    warningColor = actionType.warningColor,
-                    icon = {
-                        Icon(
-                            imageVector = actionType.warningIcon,
-                            contentDescription = "Warning",
-                            tint = Color.White,
-                            modifier = Modifier.size(36.dp)
-                        )
-                    }
+        Spacer(modifier = Modifier.height(16.dp))
+
+        if ((actionType == BottomSheetActionType.MAKE_OFFER || actionType == BottomSheetActionType.UPDATE_STATUS_OFFER) && offerMaker != null) {
+            OutlinedTextField(
+                value = offerAmount,
+                onValueChange = { input ->
+                    offerAmount = input.filter { it.isDigit() }
+                    errorMessage = ""
+                },
+                label = { Text(if (isRtl) "المبلغ" else "Amount") },
+                isError = errorMessage.isNotEmpty(),
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
+                )
+            )
+
+            if (errorMessage.isNotEmpty()) {
+                Text(
+                    text = errorMessage,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(top = 4.dp)
                 )
             }
 
             Spacer(modifier = Modifier.height(16.dp))
+        }
 
-            if (actionType == BottomSheetActionType.MAKE_OFFER ||
-                actionType == BottomSheetActionType.UPDATE_STATUS_OFFER
-            ) {
-                OutlinedTextField(
-                    value = offerAmount,
-                    onValueChange = { input ->
-                        offerAmount = input.filter { it.isDigit() }
-                        errorMessage = ""
-                    },
-                    label = { Text(if (isRtl) "المبلغ" else "Amount") },
-                    isError = errorMessage.isNotEmpty(),
-                    modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        keyboardType = KeyboardType.Number,
-                        imeAction = ImeAction.Done
-                    )
-                )
-
-                if (errorMessage.isNotEmpty()) {
-                    Text(
-                        text = errorMessage,
-                        color = MaterialTheme.colorScheme.error,
-                        style = MaterialTheme.typography.bodySmall,
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-
-            Button(
-                onClick = {
-                    if (actionType == BottomSheetActionType.MAKE_OFFER ||
-                        actionType == BottomSheetActionType.UPDATE_STATUS_OFFER
-                    ) {
-                        val amount = offerAmount.toIntOrNull()
-                        when {
-                            offerAmount.isBlank() -> errorMessage =
-                                if (isRtl) "الرجاء إدخال المبلغ" else "Please enter an amount"
-                            amount == null -> errorMessage =
-                                if (isRtl) "المبلغ غير صالح" else "Invalid amount"
-                            amount <= 0 -> errorMessage =
-                                if (isRtl) "المبلغ يجب أن يكون أكبر من صفر" else "Amount must be greater than zero"
-                            else -> coroutineScope.launch {
-                                onConfirmAction(
-                                    Offer(
-                                        offerId = "",
-                                        orderId = orderId,
-                                        buyerId = user.id,
-                                        offerPrice = amount,
-                                        status = OfferStatus.PENDING,
-                                        date = System.currentTimeMillis()
+        Button(
+            onClick = {
+                coroutineScope.launch {
+                    when (actionType) {
+                        BottomSheetActionType.MAKE_OFFER, BottomSheetActionType.UPDATE_STATUS_OFFER -> {
+                            val amount = offerAmount.toIntOrNull()
+                            when {
+                                offerAmount.isBlank() -> errorMessage =
+                                    if (isRtl) "الرجاء إدخال المبلغ" else "Please enter an amount"
+                                amount == null -> errorMessage =
+                                    if (isRtl) "المبلغ غير صالح" else "Invalid amount"
+                                amount <= 0 -> errorMessage =
+                                    if (isRtl) "المبلغ يجب أن يكون أكبر من صفر" else "Amount must be greater than zero"
+                                else -> offerMaker?.let { user ->
+                                    onConfirmAction(
+                                        Offer(
+                                            offerId = "",
+                                            orderId = orderId,
+                                            buyerId = user.id,
+                                            offerPrice = amount,
+                                            status = OfferStatus.PENDING,
+                                            date = System.currentTimeMillis()
+                                        )
                                     )
-                                )
+                                }
                             }
                         }
-                    } else {
-                        coroutineScope.launch {
-                            onConfirmAction(
-                                Offer(
-                                    offerId = "",
-                                    orderId = orderId,
-                                    buyerId = user.id,
-                                    offerPrice = 0,
-                                    status = OfferStatus.PENDING,
-                                    date = System.currentTimeMillis()
-                                )
-                            )
+
+                        BottomSheetActionType.DELETE_OFFER -> {
+                            coroutineScope.launch {
+                                onConfirmAction(Unit)
+                            }
+                        }
+                        BottomSheetActionType.CANCEL_COMPANY_ORDER -> {
+                            coroutineScope.launch {
+                                onConfirmAction(Unit)
+                            }
                         }
                     }
-                },
-                modifier = Modifier.fillMaxWidth(),
-                enabled = !isSubmittingOffer,
-                colors = ButtonDefaults.buttonColors(containerColor = actionType.color)
-            ) {
-                if (isSubmittingOffer) {
-                    DotLoadingIndicator()
-                } else {
-                    Text(
-                        text = if (isRtl) actionType.arValue else actionType.enValue,
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
                 }
+            },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !isSubmitting,
+            colors = ButtonDefaults.buttonColors(containerColor = actionType.color)
+        ) {
+            if (isSubmitting) {
+                DotLoadingIndicator()
+            } else {
+                Text(
+                    text = if (isRtl) actionType.arValue else actionType.enValue,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = Color.White
+                )
             }
         }
     }
 }
+

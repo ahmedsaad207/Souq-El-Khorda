@@ -10,7 +10,7 @@ data class MarketState(
     val query: String = "",
     val error: String? = null,
     val isEmpty: Boolean = false,
-    val isSubmittingOffer: Boolean = false
+    val isSubmitting: Boolean = false
 )
 
 

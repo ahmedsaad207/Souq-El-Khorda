@@ -38,6 +38,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.delighted2wins.souqelkhorda.app.theme.Til
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
 import com.delighted2wins.souqelkhorda.core.enums.BottomSheetActionType
+import com.delighted2wins.souqelkhorda.core.model.Offer
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.ScrapCard
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.SearchBar
@@ -78,9 +79,7 @@ fun MarketScreen(
                         isBottomSheetVisible = false
                         selectedOrderId = ""
                     }
-                    coroutineScope.launch {
-                        snackBarHostState.showSnackbar(effect.message)
-                    }
+                    coroutineScope.launch { snackBarHostState.showSnackbar(effect.message) }
                 }
                 is MarketEffect.ShowError -> {
                     coroutineScope.launch {
@@ -250,10 +249,10 @@ fun MarketScreen(
                 offerMaker = viewModel.currentUser,
                 sheetState = sheetState,
                 coroutineScope = coroutineScope,
-                onConfirmAction = { offer ->
-                    viewModel.onIntent(MarketIntent.MakeOffer(offer))
+                onConfirmAction = {
+                    viewModel.onIntent(MarketIntent.MakeOffer(it as Offer))
                 },
-                isSubmittingOffer = viewModel.state.isSubmittingOffer,
+                isSubmitting = viewModel.state.isSubmitting,
                 isRtl = isRtl,
                 actionType = BottomSheetActionType.MAKE_OFFER
             )
