@@ -1,6 +1,10 @@
 package com.delighted2wins.souqelkhorda.features.profile.presentation.screen
 
 import CustomTextFieldWithIcon
+import android.content.Intent
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,6 +33,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -50,6 +57,7 @@ import com.delighted2wins.souqelkhorda.features.profile.presentation.component.P
 import com.delighted2wins.souqelkhorda.features.profile.presentation.component.ProfileStats
 import com.delighted2wins.souqelkhorda.features.profile.presentation.contract.ProfileContract
 import com.delighted2wins.souqelkhorda.features.profile.presentation.viewmodel.ProfileViewModel
+import kotlin.collections.plus
 
 @Preview(showBackground = true)
 @Composable
@@ -73,6 +81,20 @@ fun ProfileScreen(
         }
     }
 
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument(),
+        onResult = { uri ->
+            if (uri != null) {
+                context.contentResolver.takePersistableUriPermission(
+                    uri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
+                viewModel.handleIntent(ProfileContract.Intent.ChangeImageUrl(uri.toString()))
+                viewModel.handleIntent(ProfileContract.Intent.SaveImageUrl)
+            }
+        }
+    )
+
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier.verticalScroll(rememberScrollState())
@@ -82,7 +104,10 @@ fun ProfileScreen(
                 ProfileHeader(
                     email = state.email.value,
                     name = state.name.value,
-                    onEditAvatar = {  }
+                    imageUrl = state.imageUrl.value,
+                    onEditAvatar = {
+                        launcher.launch(arrayOf("image/*"))
+                    }
                 )
                 TowIconAppBar(
                     onStartClick = { onBackClick() },

@@ -30,7 +30,7 @@ class ProfileViewModel @Inject constructor(
     private val logoutUseCase: LogoutUseCase,
     private val freeUserCase: FreeUserCase,
     private val setLanguageUseCase: SetLanguageUseCase,
-    private val getUserOrdersUseCase: GetUserOrdersUseCase
+    private val getUserOrdersUseCase: GetUserOrdersUseCase,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ProfileContract.State())
@@ -60,9 +60,16 @@ class ProfileViewModel @Inject constructor(
             is ProfileContract.Intent.SavePhone -> updatePhone()
             is ProfileContract.Intent.SaveGovernorate -> updateGovernorate()
             is ProfileContract.Intent.SaveAddress -> updateAddress()
-            is ProfileContract.Intent.SaveImageUrl -> updateImageUrl()
-            is ProfileContract.Intent.StartEditing -> startEditing(intent.fieldSelector, intent.fieldSetter)
-            is ProfileContract.Intent.CancelEditing -> cancelEditing(intent.fieldSelector, intent.fieldSetter)
+            is ProfileContract.Intent.SaveImageUrl -> uploadAndUpdateUserImage()
+            is ProfileContract.Intent.StartEditing -> startEditing(
+                intent.fieldSelector,
+                intent.fieldSetter
+            )
+
+            is ProfileContract.Intent.CancelEditing -> cancelEditing(
+                intent.fieldSelector,
+                intent.fieldSetter
+            )
 
             is ProfileContract.Intent.ChangeLanguage -> setLanguageUseCase(intent.lang)
 
@@ -71,6 +78,7 @@ class ProfileViewModel @Inject constructor(
                 freeUserCase()
                 sendEffect(ProfileContract.Effect.Logout)
             }
+
             is ProfileContract.Intent.NavigateToHistory -> sendEffect(ProfileContract.Effect.NavigateToHistory)
         }
     }
@@ -123,8 +131,6 @@ class ProfileViewModel @Inject constructor(
     }
 
 
-
-
     private fun changeName(newName: String) {
         _state.update { it.copy(name = it.name.copy(value = newName)) }
     }
@@ -158,9 +164,22 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val result = update()
             result.onSuccess {
-                _state.update { setFieldValue(it, current.copy(isEditing = false, isLoading = false, success = true)) }
+                _state.update {
+                    setFieldValue(
+                        it,
+                        current.copy(isEditing = false, isLoading = false, success = true)
+                    )
+                }
             }.onFailure { throwable ->
-                _state.update { setFieldValue(it, current.copy(isLoading = false, error = throwable.message ?: ProfileMessagesEnum.UNKNOWN.getMsg())) }
+                _state.update {
+                    setFieldValue(
+                        it,
+                        current.copy(
+                            isLoading = false,
+                            error = throwable.message ?: ProfileMessagesEnum.UNKNOWN.getMsg()
+                        )
+                    )
+                }
             }
         }
     }
@@ -169,14 +188,24 @@ class ProfileViewModel @Inject constructor(
         field: (ProfileContract.State) -> ProfileContract.ProfileFieldState,
         setFieldValue: (ProfileContract.State, ProfileContract.ProfileFieldState) -> ProfileContract.State
     ) {
-        _state.update { setFieldValue(it, field(it).copy(isEditing = true, success = false, error = null)) }
+        _state.update {
+            setFieldValue(
+                it,
+                field(it).copy(isEditing = true, success = false, error = null)
+            )
+        }
     }
 
     private fun cancelEditing(
         field: (ProfileContract.State) -> ProfileContract.ProfileFieldState,
         setFieldValue: (ProfileContract.State, ProfileContract.ProfileFieldState) -> ProfileContract.State
     ) {
-        _state.update { setFieldValue(it, field(it).copy(isEditing = false, success = false, error = null)) }
+        _state.update {
+            setFieldValue(
+                it,
+                field(it).copy(isEditing = false, success = false, error = null)
+            )
+        }
     }
 
     private fun updateName() {
@@ -202,21 +231,27 @@ class ProfileViewModel @Inject constructor(
 
     private fun updateGovernorate() {
         val governorate = _state.value.governorate
-        updateField(governorate, { updateUserProfileUseCase.updateGovernorate(governorate.value) }) { state, field ->
+        updateField(
+            governorate,
+            { updateUserProfileUseCase.updateGovernorate(governorate.value) }) { state, field ->
             state.copy(governorate = field)
         }
     }
 
     private fun updateAddress() {
         val address = _state.value.address
-        updateField(address, { updateUserProfileUseCase.updateAddress(address.value) }) { state, field ->
+        updateField(
+            address,
+            { updateUserProfileUseCase.updateAddress(address.value) }) { state, field ->
             state.copy(address = field)
         }
     }
 
-    private fun updateImageUrl() {
+    private fun uploadAndUpdateUserImage() {
         val imageUrl = _state.value.imageUrl
-        updateField(imageUrl, { updateUserProfileUseCase.updateImageUrl(imageUrl.value) }) { state, field ->
+        updateField(
+            imageUrl,
+            { updateUserProfileUseCase.uploadAndUpdateUserImage(imageUrl.value) }) { state, field ->
             state.copy(imageUrl = field)
         }
     }
