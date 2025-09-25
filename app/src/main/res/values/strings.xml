@@ -45,15 +45,26 @@
 
     <string name="area">Area</string>
     <string name="enter_your_area">Enter your area</string>
-    <string name="nearest_buyer_title">Nearby Shops\n</string>
-    <string name="nearest_buyer_sub_title">Scrap collection points nearby</string>
-    <string name="call">call</string>
-    <string name="direction">Direction</string>
-    <string name="accepted_types">Accepted Types:</string>
+
+    <string name="transaction_history">Transaction History</string>
+    <string name="all">All</string>
+    <string name="sale">Sale</string>
+    <string name="market">Market</string>
+    <string name="items">Items:</string>
+    <string name="view_order_details">View Order Details</string>
+    <string name="date">Date: %1$s</string>
+
     <string name="delete">Delete</string>
     <string name="submit">Submit</string>
     <string name="confirm_delete">Confirm Delete</string>
     <string name="are_you_sure_you_want_to_delete_this_order">Are you sure you want to delete this order?</string>
     <string name="cancel">Cancel</string>
+
+
+    <string name="nearest_buyer_title">Nearby Shops\n</string>
+    <string name="nearest_buyer_sub_title">Scrap collection points nearby</string>
+    <string name="call">call</string>
+    <string name="direction">Direction</string>
+    <string name="accepted_types">Accepted Types:</string>
 
 </resources>

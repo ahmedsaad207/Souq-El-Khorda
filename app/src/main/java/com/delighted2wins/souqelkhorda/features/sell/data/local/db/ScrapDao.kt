@@ -4,9 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.delighted2wins.souqelkhorda.core.model.Scrap
 import com.delighted2wins.souqelkhorda.features.sell.data.model.ScrapEntity
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ScrapDao {

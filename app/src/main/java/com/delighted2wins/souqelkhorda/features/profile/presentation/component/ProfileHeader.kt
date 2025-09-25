@@ -1,6 +1,5 @@
 package com.delighted2wins.souqelkhorda.features.profile.presentation.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -23,8 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.app.theme.AppTypography
 
@@ -32,6 +31,7 @@ import com.delighted2wins.souqelkhorda.app.theme.AppTypography
 fun ProfileHeader(
     email: String = "abdelazizmaher@gmail.com",
     name: String = "Abdelaziz Maher",
+    imageUrl: String = "",
     onEditAvatar: () -> Unit = {},
 ) {
     Column(
@@ -45,8 +45,8 @@ fun ProfileHeader(
             modifier = Modifier.size(130.dp),
             contentAlignment = Alignment.BottomEnd
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.avatar),
+            AsyncImage(
+                model = imageUrl.ifEmpty { R.drawable.avatar },
                 contentDescription = "Profile Image",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier

@@ -2,8 +2,10 @@ package com.delighted2wins.souqelkhorda.features.profile.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.FreeUserCase
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.LogoutUseCase
+import com.delighted2wins.souqelkhorda.features.history.domain.usecase.GetUserOrdersUseCase
 import com.delighted2wins.souqelkhorda.features.profile.domain.entity.ProfileMessagesEnum
 import com.delighted2wins.souqelkhorda.features.profile.domain.usecase.GetUserProfileUseCase
 import com.delighted2wins.souqelkhorda.features.profile.domain.usecase.SetLanguageUseCase
@@ -27,7 +29,8 @@ class ProfileViewModel @Inject constructor(
     private val updateUserEmailUseCase: UpdateUserEmailUseCase,
     private val logoutUseCase: LogoutUseCase,
     private val freeUserCase: FreeUserCase,
-    private val setLanguageUseCase: SetLanguageUseCase
+    private val setLanguageUseCase: SetLanguageUseCase,
+    private val getUserOrdersUseCase: GetUserOrdersUseCase,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ProfileContract.State())
@@ -38,11 +41,14 @@ class ProfileViewModel @Inject constructor(
 
     init {
         loadProfile()
+        loadOrders()
     }
 
     fun handleIntent(intent: ProfileContract.Intent) {
         when (intent) {
             is ProfileContract.Intent.LoadProfile -> loadProfile()
+            is ProfileContract.Intent.LoadOrders -> loadOrders()
+
             is ProfileContract.Intent.ChangeName -> changeName(intent.name)
             is ProfileContract.Intent.ChangeEmail -> changeEmail(intent.email)
             is ProfileContract.Intent.ChangePhone -> changePhone(intent.phone)
@@ -54,9 +60,16 @@ class ProfileViewModel @Inject constructor(
             is ProfileContract.Intent.SavePhone -> updatePhone()
             is ProfileContract.Intent.SaveGovernorate -> updateGovernorate()
             is ProfileContract.Intent.SaveAddress -> updateAddress()
-            is ProfileContract.Intent.SaveImageUrl -> updateImageUrl()
-            is ProfileContract.Intent.StartEditing -> startEditing(intent.fieldSelector, intent.fieldSetter)
-            is ProfileContract.Intent.CancelEditing -> cancelEditing(intent.fieldSelector, intent.fieldSetter)
+            is ProfileContract.Intent.SaveImageUrl -> uploadAndUpdateUserImage()
+            is ProfileContract.Intent.StartEditing -> startEditing(
+                intent.fieldSelector,
+                intent.fieldSetter
+            )
+
+            is ProfileContract.Intent.CancelEditing -> cancelEditing(
+                intent.fieldSelector,
+                intent.fieldSetter
+            )
 
             is ProfileContract.Intent.ChangeLanguage -> setLanguageUseCase(intent.lang)
 
@@ -65,6 +78,7 @@ class ProfileViewModel @Inject constructor(
                 freeUserCase()
                 sendEffect(ProfileContract.Effect.Logout)
             }
+
             is ProfileContract.Intent.NavigateToHistory -> sendEffect(ProfileContract.Effect.NavigateToHistory)
         }
     }
@@ -95,6 +109,27 @@ class ProfileViewModel @Inject constructor(
             }
         }
     }
+
+    private fun loadOrders() {
+        _state.update { it.copy(isLoadingOrders = true) }
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = getUserOrdersUseCase()
+            result.onSuccess { history ->
+                val orders = history.orders
+                _state.update {
+                    it.copy(
+                        isLoadingOrders = false,
+                        completedCount = orders.count { order -> order.status == OrderStatus.COMPLETED },
+                        pendingCount = orders.count { order -> order.status == OrderStatus.PENDING },
+                        cancelledCount = orders.count { order -> order.status == OrderStatus.CANCELLED }
+                    )
+                }
+            }.onFailure { throwable ->
+                _state.update { it.copy(isLoadingOrders = false, generalError = throwable.message) }
+            }
+        }
+    }
+
 
     private fun changeName(newName: String) {
         _state.update { it.copy(name = it.name.copy(value = newName)) }
@@ -129,9 +164,22 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val result = update()
             result.onSuccess {
-                _state.update { setFieldValue(it, current.copy(isEditing = false, isLoading = false, success = true)) }
+                _state.update {
+                    setFieldValue(
+                        it,
+                        current.copy(isEditing = false, isLoading = false, success = true)
+                    )
+                }
             }.onFailure { throwable ->
-                _state.update { setFieldValue(it, current.copy(isLoading = false, error = throwable.message ?: ProfileMessagesEnum.UNKNOWN.getMsg())) }
+                _state.update {
+                    setFieldValue(
+                        it,
+                        current.copy(
+                            isLoading = false,
+                            error = throwable.message ?: ProfileMessagesEnum.UNKNOWN.getMsg()
+                        )
+                    )
+                }
             }
         }
     }
@@ -140,14 +188,24 @@ class ProfileViewModel @Inject constructor(
         field: (ProfileContract.State) -> ProfileContract.ProfileFieldState,
         setFieldValue: (ProfileContract.State, ProfileContract.ProfileFieldState) -> ProfileContract.State
     ) {
-        _state.update { setFieldValue(it, field(it).copy(isEditing = true, success = false, error = null)) }
+        _state.update {
+            setFieldValue(
+                it,
+                field(it).copy(isEditing = true, success = false, error = null)
+            )
+        }
     }
 
     private fun cancelEditing(
         field: (ProfileContract.State) -> ProfileContract.ProfileFieldState,
         setFieldValue: (ProfileContract.State, ProfileContract.ProfileFieldState) -> ProfileContract.State
     ) {
-        _state.update { setFieldValue(it, field(it).copy(isEditing = false, success = false, error = null)) }
+        _state.update {
+            setFieldValue(
+                it,
+                field(it).copy(isEditing = false, success = false, error = null)
+            )
+        }
     }
 
     private fun updateName() {
@@ -173,21 +231,27 @@ class ProfileViewModel @Inject constructor(
 
     private fun updateGovernorate() {
         val governorate = _state.value.governorate
-        updateField(governorate, { updateUserProfileUseCase.updateGovernorate(governorate.value) }) { state, field ->
+        updateField(
+            governorate,
+            { updateUserProfileUseCase.updateGovernorate(governorate.value) }) { state, field ->
             state.copy(governorate = field)
         }
     }
 
     private fun updateAddress() {
         val address = _state.value.address
-        updateField(address, { updateUserProfileUseCase.updateAddress(address.value) }) { state, field ->
+        updateField(
+            address,
+            { updateUserProfileUseCase.updateAddress(address.value) }) { state, field ->
             state.copy(address = field)
         }
     }
 
-    private fun updateImageUrl() {
+    private fun uploadAndUpdateUserImage() {
         val imageUrl = _state.value.imageUrl
-        updateField(imageUrl, { updateUserProfileUseCase.updateImageUrl(imageUrl.value) }) { state, field ->
+        updateField(
+            imageUrl,
+            { updateUserProfileUseCase.uploadAndUpdateUserImage(imageUrl.value) }) { state, field ->
             state.copy(imageUrl = field)
         }
     }

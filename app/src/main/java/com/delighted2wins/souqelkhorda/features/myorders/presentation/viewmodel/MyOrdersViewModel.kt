@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetCurrentUserUseCase
-import com.delighted2wins.souqelkhorda.features.myorders.domain.usecase.LoadOffersUseCase
 import com.delighted2wins.souqelkhorda.features.myorders.domain.usecase.LoadCompanyOrdersUseCase
 import com.delighted2wins.souqelkhorda.features.myorders.domain.usecase.LoadSellsUseCase
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.contract.MyOrdersEffect
@@ -129,6 +128,7 @@ class MyOrdersViewModel @Inject constructor(
             }
         }
     }
+
     private fun declineMyOffer(offerId: String) {}
     private fun declineMySell(orderId: String) {}
 
