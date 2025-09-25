@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
 import com.delighted2wins.souqelkhorda.core.model.Offer
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetCurrentUserUseCase
@@ -105,7 +106,7 @@ class MarketViewModel @Inject constructor(
                 error = null
             )
             try {
-                val orders = fetchMarketOrders()
+                val orders =  fetchMarketOrders().filter { it.status == OrderStatus.PENDING }
                 state = state.copy(
                     isLoading = false,
                     isRefreshing = false,
@@ -130,6 +131,7 @@ class MarketViewModel @Inject constructor(
 
     private fun makeOffer(offer: Offer) {
         viewModelScope.launch {
+            state = state.copy(isSubmitting = true)
             try {
                 val offerId = makeOfferUseCase(offer)
                 if (offerId.isNotEmpty()) {
@@ -138,8 +140,11 @@ class MarketViewModel @Inject constructor(
             } catch (e: Exception) {
                 val errorMsg = e.message ?: "Network error"
                 emitEffect(MarketEffect.ShowError(errorMsg))
+            } finally {
+                state = state.copy(isSubmitting = false)
             }
         }
     }
+
 
 }

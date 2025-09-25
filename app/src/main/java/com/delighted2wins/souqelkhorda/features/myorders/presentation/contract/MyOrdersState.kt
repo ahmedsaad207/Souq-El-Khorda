@@ -4,6 +4,7 @@ import com.delighted2wins.souqelkhorda.core.model.Order
 
 data class MyOrdersState(
     val isLoading: Boolean = false,
+    val isSubmitting: Boolean = false,
     val saleOrders: List<Order> = emptyList(),
     val offers: List<Order> = emptyList(),
     val sells: List<Order> = emptyList(),

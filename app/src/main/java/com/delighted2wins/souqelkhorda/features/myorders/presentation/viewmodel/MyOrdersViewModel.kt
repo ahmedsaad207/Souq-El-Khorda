@@ -43,8 +43,6 @@ class MyOrdersViewModel @Inject constructor(
             is MyOrdersIntents.LoadSaleOrders -> loadCompanyOrders()
             is MyOrdersIntents.LoadSells -> loadSells()
             is MyOrdersIntents.LoadOffers -> loadOffers()
-            is MyOrdersIntents.DeclineOffer -> declineMyOffer(intent.offerId)
-            is MyOrdersIntents.DeclineSell -> declineMySell(intent.orderId)
             is MyOrdersIntents.DeleteCompanyOrder -> deleteCompanyOrder(intent.orderId)
         }
     }
@@ -109,11 +107,12 @@ class MyOrdersViewModel @Inject constructor(
 
     private fun deleteCompanyOrder(orderId: String) {
         viewModelScope.launch {
-            _state.value = _state.value.copy(isLoading = true, error = null)
+            _state.value = _state.value.copy(isLoading = true, error = null, isSubmitting = true)
             try {
                 val isOrderDeclined = deleteCompanyOrderUseCase(orderId)
                 _state.value = _state.value.copy(
                     isLoading = false,
+                    isSubmitting = false,
                     error = null
                 )
                 loadCompanyOrders()
@@ -123,15 +122,15 @@ class MyOrdersViewModel @Inject constructor(
             } catch (e: Exception) {
                 _state.value = _state.value.copy(
                     isLoading = false,
+                    isSubmitting = false,
                     error = e.message ?: "Unknown error"
                 )
                 emitEffect(MyOrdersEffect.ShowError(e.message ?: "Unknown error"))
+            }finally {
+                _state.value = _state.value.copy(isSubmitting = false)
             }
         }
     }
-
-    private fun declineMyOffer(offerId: String) {}
-    private fun declineMySell(orderId: String) {}
 
     private fun emitEffect(effect: MyOrdersEffect) {
         viewModelScope.launch { _effect.emit(effect) }

@@ -20,6 +20,8 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Receipt
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.outlined.Inventory2
+import androidx.compose.material3.*
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -28,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -37,6 +40,8 @@ import com.delighted2wins.souqelkhorda.core.model.Scrap
 import com.delighted2wins.souqelkhorda.core.utils.generateUiOrderId
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.OrderDetailsTopBar
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.ScrapItemCard
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.SectionTitle
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -189,15 +194,27 @@ fun CompanyOrderDetailsUI(
         }
 
         item {
-            DirectionalText(
-                modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
-                text = if (isRtl) "العناصر" else "Items",
-                style = MaterialTheme.typography.titleLarge,
-                contentIsRtl = isRtl
+            SectionTitle(
+                icon = Icons.Outlined.Inventory2,
+                title = "Scraps",
+                count = order.scraps.size,
+                modifier = Modifier.padding(horizontal = 12.dp)
             )
         }
-        items(order.scraps) { scrap ->
-            ScrapItemRow(scrap = scrap, isRtl = isRtl)
+
+        if (order.scraps.isNotEmpty()) {
+            items(order.scraps) { scrap -> ScrapItemCard(scrap = scrap) }
+        } else {
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("No Scraps Item Found", color = Color.Gray)
+                }
+            }
         }
 
         item {

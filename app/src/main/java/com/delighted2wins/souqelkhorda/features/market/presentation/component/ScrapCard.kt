@@ -1,5 +1,6 @@
 package com.delighted2wins.souqelkhorda.features.market.presentation.component
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -25,17 +27,18 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
 import com.delighted2wins.souqelkhorda.core.model.Order
+import com.delighted2wins.souqelkhorda.core.model.Scrap
 import com.delighted2wins.souqelkhorda.core.utils.isArabic
 import com.delighted2wins.souqelkhorda.core.utils.toFormattedDate
-import com.delighted2wins.souqelkhorda.core.utils.toTimeAgo
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.StatusChip
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.UserSection
 
 @Composable
 fun ScrapCard(
     currentUserId: String?,
     marketUser: MarketUser?,
-    scrap: Order,
+    order: Order,
     onMakeOfferClick: () -> Unit = {},
     onDetailsClick: (String, String) -> Unit,
     systemIsRtl: Boolean = false
@@ -51,31 +54,37 @@ fun ScrapCard(
         marketUser?.let {
             UserSection(
                 marketUserData = it,
-                date = scrap.date.toFormattedDate(),
+                date = order.date.toFormattedDate(),
                 systemIsRtl = systemIsRtl
             )
         }
 
         Column(modifier = Modifier.padding(16.dp)) {
 
-            ScrapTitle(scrap.title)
+            ScrapTitle(order.title)
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            ScrapDescription(scrap.description)
+            ScrapDescription(order.description)
 
             Spacer(modifier = Modifier.height(16.dp))
 
+
+            if (order.scraps.isNotEmpty()) {
+                CategoryChips(order.scraps)
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+
             ScrapMetaInfo(
-                date = scrap.date.toTimeAgo(systemIsRtl),
-                price = scrap.price,
+                status = order.status.name,
+                price = order.price,
                 systemIsRtl = systemIsRtl
             )
 
             ScrapActions(
                 systemIsRtl = systemIsRtl,
                 currentUserId = currentUserId,
-                scrap = scrap,
+                scrap = order,
                 onMakeOfferClick = onMakeOfferClick,
                 onDetailsClick = onDetailsClick
             )
@@ -110,30 +119,23 @@ private fun ScrapDescription(description: String) {
 }
 
 @Composable
-private fun ScrapMetaInfo(date: String, price: Int, systemIsRtl: Boolean) {
+private fun ScrapMetaInfo(status: String, price: Int, systemIsRtl: Boolean) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier.fillMaxWidth()
     ) {
         DirectionalText(
-            text = date,
-            contentIsRtl = systemIsRtl,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-            textAlign = TextAlign.Start,
-            modifier = Modifier.weight(1f)
-        )
-
-        DirectionalText(
             text = if (systemIsRtl) "السعر: $price ج.م" else "Price: $price EGP",
             contentIsRtl = systemIsRtl,
-            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
             color = MaterialTheme.colorScheme.primary,
             textAlign = TextAlign.End,
             modifier = Modifier.weight(1f)
         )
+        StatusChip(status = status)
     }
 }
+
 
 @Composable
 private fun ScrapActions(

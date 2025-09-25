@@ -1,10 +1,12 @@
 package com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -62,36 +64,35 @@ fun UserSection(
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                Column {
-                    Text(
-                        text = marketUserData.name,
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                        color = Color.White,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                Column(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = marketUserData.name,
+                            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                            color = Color.White,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                        Text(
+                            text = date,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.75f),
+                            maxLines = 1,
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = marketUserData.location,
                         style = MaterialTheme.typography.titleSmall,
                         color = Color.LightGray,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
-                    )
-                }
-                Spacer(Modifier.weight(1f))
-
-                Box(
-                    modifier = Modifier.wrapContentWidth()
-                ){
-                    DirectionalText(
-                        text = getTimeAgo(date, systemIsRtl),
-                        contentIsRtl = systemIsRtl,
-                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-                        color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.75f),
-                        textAlign = TextAlign.End,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.align(Alignment.CenterEnd)
                     )
                 }
             }
