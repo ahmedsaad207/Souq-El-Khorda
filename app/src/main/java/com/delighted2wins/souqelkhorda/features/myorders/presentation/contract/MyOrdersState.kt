@@ -7,7 +7,8 @@ data class MyOrdersState(
     val saleOrders: List<Order> = emptyList(),
     val offers: List<Order> = emptyList(),
     val sells: List<Order> = emptyList(),
-    val error: String? = null
+    val error: String? = null,
+    val currentBuyerId: String? = null
 ) {
     val saleCount: Int get() = saleOrders.size
     val offersCount: Int get() = offers.size

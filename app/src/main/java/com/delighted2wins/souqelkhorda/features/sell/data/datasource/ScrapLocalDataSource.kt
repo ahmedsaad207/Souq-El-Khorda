@@ -11,4 +11,6 @@ interface ScrapLocalDataSource {
     suspend fun deleteAllScraps()
 
     fun deleteScrapById(id: Int): Flow<Int>
+
+    fun updateScrap(scrap: Scrap): Flow<Int>
 }

@@ -4,16 +4,15 @@ import ShimmerOrderCard
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.typography
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
+import com.delighted2wins.souqelkhorda.core.enums.OrderSource
 import com.delighted2wins.souqelkhorda.core.model.Order
 
 @Composable
@@ -65,7 +64,7 @@ fun CompanyOrdersScreen(
                     items(orders) { order ->
                         CompanyOrderCard(
                             order = order,
-                            onDetailsClick = { orderId, userId -> onDetailsClick(orderId, userId) },
+                            onDetailsClick = { orderId, userId, -> onDetailsClick(orderId, userId) },
                             onDeclineClick = { orderId -> onDeclineClick(orderId) },
                             systemIsRtl = systemIsRtl
                         )

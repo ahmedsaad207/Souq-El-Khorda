@@ -93,7 +93,9 @@ fun NavigationRoot(
                     NavEntry(key) {
                         bottomBarState.value = true
                         screenNameState.value = "Nearest Buyers"
-                        NearestBuyersScreen()
+                        NearestBuyersScreen(
+                            innerPadding = innerPadding,
+                            )
                     }
                 }
 
@@ -173,15 +175,11 @@ fun NavigationRoot(
                         bottomBarState.value = true
                         screenNameState.value = "Orders"
                         OrdersScreen(
-                            innerPadding,
-                            snackBarState,
-                            onDetailsClick = { orderId, ownerId ->
+                            innerPadding = innerPadding,
+                            snackBarHostState = snackBarState,
+                            onDetailsClick = { orderId, ownerId, buyerId, source ->
                                 backStack.add(
-                                    OrderDetailsKey(
-                                        orderId,
-                                        ownerId,
-                                        source = OrderSource.COMPANY
-                                    )
+                                    OrderDetailsKey(orderId, ownerId, buyerId, source)
                                 )
                             }
                         )

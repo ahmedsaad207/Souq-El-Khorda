@@ -5,10 +5,9 @@ import com.delighted2wins.souqelkhorda.core.model.Scrap
 
 sealed class SellIntent {
     data class SendOrder(val order: Order) : SellIntent()
-
     data class AddScrap(val scrap: Scrap) : SellIntent()
-
     data class DeleteScrap(val scrap: Scrap) : SellIntent()
+    data class UpdateScrap(val scrap: Scrap) : SellIntent()
 }
 
 data class SellState(

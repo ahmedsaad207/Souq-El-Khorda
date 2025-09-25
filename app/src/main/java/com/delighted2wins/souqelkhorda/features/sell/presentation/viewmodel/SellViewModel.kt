@@ -1,5 +1,6 @@
 package com.delighted2wins.souqelkhorda.features.sell.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.delighted2wins.souqelkhorda.core.model.Order
@@ -9,6 +10,7 @@ import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.DeleteScrapB
 import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.GetScrapesUseCase
 import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.SaveScrapUseCase
 import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.SendOrderUseCase
+import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.UpdateScrapUseCase
 import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.UploadScrapImagesUseCase
 import com.delighted2wins.souqelkhorda.features.sell.presentation.contract.SellIntent
 import com.delighted2wins.souqelkhorda.features.sell.presentation.contract.SellState
@@ -29,6 +31,7 @@ class SellViewModel @Inject constructor(
     private val saveScrapUseCase: SaveScrapUseCase,
     private val deleteScrapByIdUseCase: DeleteScrapByIdUseCase,
     private val uploadScrapImagesUseCase: UploadScrapImagesUseCase,
+    private val updateScrapUseCase: UpdateScrapUseCase,
 ) : ViewModel() {
 
     private var _state = MutableStateFlow(SellState())
@@ -41,33 +44,32 @@ class SellViewModel @Inject constructor(
     private fun loadScraps() = viewModelScope.launch(Dispatchers.IO) {
         _state.value = _state.value.copy(isLoading = true)
         getScrapsUseCase().catch {
-                _state.value = _state.value.copy(isLoading = false, err = it.message)
-            }.collect {
-                _state.value = _state.value.copy(isLoading = false, data = it)
-            }
+            _state.value = _state.value.copy(isLoading = false, err = it.message)
+        }.collect {
+            _state.value = _state.value.copy(isLoading = false, data = it)
+        }
     }
 
     fun processIntent(intent: SellIntent) {
         when (intent) {
             is SellIntent.SendOrder -> submitOrder(intent.order)
-
             is SellIntent.AddScrap -> saveScrap(intent.scrap)
-
             is SellIntent.DeleteScrap -> deleteScrapById(intent.scrap.id)
+            is SellIntent.UpdateScrap -> updateScrap(intent.scrap)
         }
     }
 
     private fun deleteScrapById(id: Int) = viewModelScope.launch(Dispatchers.IO) {
         deleteScrapByIdUseCase(id).catch {
-                _state.emit(_state.value.copy(err = it.message))
-            }.collect {
-                if (it != 0) {
-                    _state.emit(_state.value.copy(isScrapDeleted = true))
-                    loadScraps()
-                } else {
-                    _state.emit(_state.value.copy(err = "Scrap not found"))
-                }
+            _state.emit(_state.value.copy(err = it.message))
+        }.collect {
+            if (it != 0) {
+                _state.emit(_state.value.copy(isScrapDeleted = true))
+                loadScraps()
+            } else {
+                _state.emit(_state.value.copy(err = "Scrap not found"))
             }
+        }
     }
 
     private fun saveScrap(scrap: Scrap) = viewModelScope.launch {
@@ -95,6 +97,15 @@ class SellViewModel @Inject constructor(
         }
     }
 
+    private fun updateScrap(scrap: Scrap) = viewModelScope.launch(Dispatchers.IO) {
+        updateScrapUseCase(scrap)
+            .catch { }
+            .collect {
+                Log.i("TAG", "updateScrap: updated rows: $it")
+                loadScraps()
+            }
+    }
+
     private fun clearOrder() = viewModelScope.launch {
         deleteAllScrapsUseCase()
         _state.value = _state.value.copy(data = emptyList(), isOrderSubmitted = true)
@@ -111,5 +122,4 @@ class SellViewModel @Inject constructor(
     fun resetOrderSubmittedFlag() {
         _state.value = _state.value.copy(isOrderSubmitted = false)
     }
-
 }
