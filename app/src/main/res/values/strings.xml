@@ -46,6 +46,14 @@
     <string name="area">Area</string>
     <string name="enter_your_area">Enter your area</string>
 
+    <string name="transaction_history">Transaction History</string>
+    <string name="all">All</string>
+    <string name="sale">Sale</string>
+    <string name="market">Market</string>
+    <string name="items">Items:</string>
+    <string name="view_order_details">View Order Details</string>
+    <string name="date">Date: %1$s</string>
+
     <string name="delete">Delete</string>
     <string name="submit">Submit</string>
     <string name="confirm_delete">Confirm Delete</string>

@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.delighted2wins.souqelkhorda.app.theme.AppTypography
+import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
 
 @Composable
 fun HistorySummaryCard(
@@ -96,9 +97,9 @@ fun SummaryStat(
                 contentAlignment = Alignment.Center
             ) {
                 val icon = when (label) {
-                    "Completed" -> Icons.Default.Check
-                    "Pending" -> Icons.Default.AccessTime
-                    "Cancelled" -> Icons.Default.Close
+                    OrderStatus.COMPLETED.getLocalizedValue()-> Icons.Default.Check
+                    OrderStatus.PENDING.getLocalizedValue() -> Icons.Default.AccessTime
+                    OrderStatus.CANCELLED.getLocalizedValue() -> Icons.Default.Close
                     else -> Icons.Default.Info
                 }
 
@@ -120,6 +121,8 @@ fun SummaryStat(
                 fontSize = 18.sp
             )
         )
+
+        Spacer(modifier = Modifier.height(6.dp))
 
         Text(
             text = label,

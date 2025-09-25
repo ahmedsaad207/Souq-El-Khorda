@@ -31,7 +31,8 @@ fun NavigationRoot(
     snackBarState: SnackbarHostState,
     backStack: NavBackStack,
     innerPadding: PaddingValues,
-    navState: MutableState<Boolean>
+    navState: MutableState<Boolean>,
+    screenNameState: MutableState<String>
 ) {
     NavDisplay(
         modifier = modifier, backStack = backStack, entryDecorators = listOf(
@@ -48,6 +49,7 @@ fun NavigationRoot(
             when (key) {
                 is DirectSaleScreen -> {
                     navState.value = false
+                    screenNameState.value = "Direct Sale"
                     NavEntry(key) {
                         bottomBarState.value = true
                         SellScreen(innerPadding)
@@ -57,6 +59,7 @@ fun NavigationRoot(
                 is MarketScreen -> {
                     NavEntry(key) {
                         bottomBarState.value = true
+                        screenNameState.value = "Market"
                         MarketScreen(
                             innerPadding,
                             snackBarHostState = snackBarState,
@@ -89,6 +92,7 @@ fun NavigationRoot(
                 is NearestBuyersScreen -> {
                     NavEntry(key) {
                         bottomBarState.value = true
+                        screenNameState.value = "Nearest Buyers"
                         NearestBuyersScreen(
                             innerPadding = innerPadding,
                             )
@@ -165,9 +169,11 @@ fun NavigationRoot(
                         )
                     }
                 }
+
                 is OrdersScreen -> {
                     NavEntry(key) {
                         bottomBarState.value = true
+                        screenNameState.value = "Orders"
                         OrdersScreen(
                             innerPadding = innerPadding,
                             snackBarHostState = snackBarState,
