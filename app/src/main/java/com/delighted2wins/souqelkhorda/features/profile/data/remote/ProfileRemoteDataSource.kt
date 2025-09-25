@@ -8,6 +8,6 @@ interface ProfileRemoteDataSource {
     suspend fun updatePhone(userId: String, phone: String): Result<Unit>
     suspend fun updateGovernorate(userId: String, governorate: String): Result<Unit>
     suspend fun updateAddress(userId: String, address: String): Result<Unit>
-    suspend fun updateImageUrl(userId: String, imageUrl: String): Result<Unit>
     suspend fun getUserProfile(userId: String): Result<AuthUser>
+    suspend fun uploadAndUpdateUserImage(userId: String, imageUri: String): Result<Unit>
 }

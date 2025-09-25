@@ -53,9 +53,9 @@ class ProfileRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateImageUrl(imageUrl: String): Result<Unit> {
+    override suspend fun uploadAndUpdateUserImage(imageUrl: String): Result<Unit> {
         val userId = authLocalDataSource.getCashedUser().id
-        return profileRemoteDataSource.updateImageUrl(userId, imageUrl).onSuccess {
+        return profileRemoteDataSource.uploadAndUpdateUserImage(userId, imageUrl).onSuccess {
             val cachedUser = authLocalDataSource.getCashedUser()
             authLocalDataSource.cashUserData(cachedUser.copy(imageUrl = imageUrl))
         }

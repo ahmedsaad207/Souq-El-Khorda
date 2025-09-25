@@ -41,10 +41,10 @@ class UpdateUserProfileUseCase @Inject constructor(
         return repository.updateAddress(address)
     }
 
-    suspend fun updateImageUrl(imageUrl: String): Result<Unit> {
+    suspend fun uploadAndUpdateUserImage(imageUrl: String): Result<Unit> {
         if (imageUrl.isBlank()) {
             return Result.failure(IllegalArgumentException(ProfileMessagesEnum.IMAGE_INVALID.getMsg()))
         }
-        return repository.updateImageUrl(imageUrl)
+        return repository.uploadAndUpdateUserImage(imageUrl)
     }
 }

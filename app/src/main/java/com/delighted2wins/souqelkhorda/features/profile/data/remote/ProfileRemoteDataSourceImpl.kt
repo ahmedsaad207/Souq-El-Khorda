@@ -1,6 +1,8 @@
 package com.delighted2wins.souqelkhorda.features.profile.data.remote
 
+import androidx.core.net.toUri
 import com.delighted2wins.souqelkhorda.features.authentication.data.model.AuthUser
+import com.delighted2wins.souqelkhorda.features.sell.data.remote.cloudinary.CloudinaryService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
@@ -8,7 +10,8 @@ import javax.inject.Inject
 
 class ProfileRemoteDataSourceImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
-    private val firebaseDb: FirebaseFirestore
+    firebaseDb: FirebaseFirestore,
+    private val cloudinaryService: CloudinaryService,
 ): ProfileRemoteDataSource {
 
     private val userCollection = firebaseDb.collection("users")
@@ -54,13 +57,6 @@ class ProfileRemoteDataSourceImpl @Inject constructor(
         return updateUserField(userId, "address", address)
     }
 
-    override suspend fun updateImageUrl(
-        userId: String,
-        imageUrl: String
-    ): Result<Unit> {
-        return updateUserField(userId, "imageUrl", imageUrl)
-    }
-
     override suspend fun getUserProfile(userId: String): Result<AuthUser> {
         return try {
             val snapshot = userCollection.document(userId).get().await()
@@ -73,6 +69,14 @@ class ProfileRemoteDataSourceImpl @Inject constructor(
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    override suspend fun uploadAndUpdateUserImage(
+        userId: String,
+        imageUri: String
+    ): Result<Unit> {
+        val imageUrl = cloudinaryService.uploadImage(imageUri.toUri())
+        return updateUserField(userId, "imageUrl", imageUrl)
     }
 
     private suspend fun updateUserField(userId: String, field: String, value: Any): Result<Unit> {
