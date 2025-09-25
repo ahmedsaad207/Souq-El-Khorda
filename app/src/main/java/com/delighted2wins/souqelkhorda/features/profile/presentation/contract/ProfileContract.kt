@@ -19,11 +19,18 @@ interface ProfileContract {
         val address: ProfileFieldState = ProfileFieldState(),
         val imageUrl: ProfileFieldState = ProfileFieldState(),
         val isLoadingProfile: Boolean = false,
+
+        val isLoadingOrders: Boolean = false,
+        val completedCount: Int = 0,
+        val pendingCount: Int = 0,
+        val cancelledCount: Int = 0,
+
         val generalError: String? = null
     )
 
     sealed class Intent {
         data object LoadProfile : Intent()
+        object LoadOrders : Intent()
 
         data class ChangeName(val name: String) : Intent()
         data class ChangeEmail(val email: String) : Intent()

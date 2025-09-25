@@ -40,6 +40,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.components.TowIconAppBar
+import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
+import com.delighted2wins.souqelkhorda.core.extensions.convertNumbersToArabic
 import com.delighted2wins.souqelkhorda.core.extensions.restartActivity
 import com.delighted2wins.souqelkhorda.features.profile.presentation.component.HistoryButton
 import com.delighted2wins.souqelkhorda.features.profile.presentation.component.LogoutButton
@@ -101,13 +103,23 @@ fun ProfileScreen(
                     .fillMaxWidth()
                     .padding(16.dp)
             ) {
-                ProfileStats(
-                    stats = listOf(
-                        "47" to "Completed",
-                        "1.2k" to "Pending",
-                        "23" to "Canceled"
+                if (state.isLoadingOrders) {
+                    ProfileStats(
+                        stats = listOf(
+                            null to OrderStatus.COMPLETED.getLocalizedValue(),
+                            null to OrderStatus.PENDING.getLocalizedValue(),
+                            null to OrderStatus.CANCELLED.getLocalizedValue()
+                        )
                     )
-                )
+                } else {
+                    ProfileStats(
+                        stats = listOf(
+                            state.cancelledCount.toString().convertNumbersToArabic() to OrderStatus.CANCELLED.getLocalizedValue(),
+                            state.pendingCount.toString().convertNumbersToArabic() to OrderStatus.PENDING.getLocalizedValue(),
+                            state.completedCount.toString().convertNumbersToArabic() to OrderStatus.COMPLETED.getLocalizedValue()
+                        )
+                    )
+                }
 
                 Divider(
                     modifier = Modifier.fillMaxWidth(),
