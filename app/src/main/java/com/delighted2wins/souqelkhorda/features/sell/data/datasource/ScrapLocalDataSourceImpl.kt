@@ -1,13 +1,11 @@
 package com.delighted2wins.souqelkhorda.features.sell.data.datasource
 
-import android.util.Log
 import com.delighted2wins.souqelkhorda.core.model.Scrap
 import com.delighted2wins.souqelkhorda.features.sell.data.local.db.ScrapDao
 import com.delighted2wins.souqelkhorda.features.sell.data.mapper.toDomain
 import com.delighted2wins.souqelkhorda.features.sell.data.mapper.toEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class ScrapLocalDataSourceImpl @Inject constructor(
@@ -31,7 +29,7 @@ class ScrapLocalDataSourceImpl @Inject constructor(
         emit(dao.deleteScrapById(id))
     }
 
-    override fun updateScrap(scrap: Scrap): Flow<Int> = flow{
+    override fun updateScrap(scrap: Scrap): Flow<Int> = flow {
         val updatedRows = dao.updateScrap(scrap.toEntity())
         emit(updatedRows)
     }

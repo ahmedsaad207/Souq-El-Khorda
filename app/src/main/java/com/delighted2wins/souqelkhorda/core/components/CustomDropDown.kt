@@ -1,4 +1,4 @@
-package com.delighted2wins.souqelkhorda.features.sell.presentation.components
+package com.delighted2wins.souqelkhorda.core.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
