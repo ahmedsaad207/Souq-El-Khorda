@@ -41,7 +41,7 @@ fun BuyerOfferCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(horizontal = 8.dp),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(6.dp)
     ) {
@@ -64,23 +64,13 @@ fun BuyerOfferCard(
                 Spacer(Modifier.width(8.dp))
                 Text(
                     text = "${offer.offerPrice} EGP",
-                    style = MaterialTheme.typography.bodyLarge.copy(
+                    style = MaterialTheme.typography.headlineLarge.copy(
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
                     ),
                 )
                 Spacer(Modifier.weight(1f))
-                Text(
-                    text = offer.status.name,
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
-                        color = when (offer.status) {
-                            OfferStatus.PENDING -> Color.Red
-                            OfferStatus.ACCEPTED -> Color.Green
-                            else -> Color.Gray
-                        }
-                    ),
-                )
+                StatusChip(status = offer.status.name)
             }
 
             Spacer(Modifier.height(12.dp))
@@ -108,12 +98,6 @@ fun BuyerOfferCard(
                     OfferStatus.ACCEPTED -> {
                         Button(
                             onClick = onMarkReceived,
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Text("Chat")
-                        }
-                        Button(
-                            onClick = {},
                             modifier = Modifier.weight(1f)
                         ) {
                             Text("Received")

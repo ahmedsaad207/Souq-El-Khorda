@@ -26,7 +26,7 @@ fun SectionTitle(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier.padding(start = 8.dp, end = 2.dp, top = 12.dp),
+        modifier = modifier.padding(start = 8.dp, end = 2.dp, top = 12.dp, bottom = 2.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
