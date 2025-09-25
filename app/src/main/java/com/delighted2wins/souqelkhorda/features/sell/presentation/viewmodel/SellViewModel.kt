@@ -122,5 +122,4 @@ class SellViewModel @Inject constructor(
     fun resetOrderSubmittedFlag() {
         _state.value = _state.value.copy(isOrderSubmitted = false)
     }
-
 }

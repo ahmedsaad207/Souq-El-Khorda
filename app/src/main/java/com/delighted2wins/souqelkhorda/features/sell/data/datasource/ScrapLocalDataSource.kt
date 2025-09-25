@@ -1,7 +1,6 @@
 package com.delighted2wins.souqelkhorda.features.sell.data.datasource
 
 import com.delighted2wins.souqelkhorda.core.model.Scrap
-import com.delighted2wins.souqelkhorda.features.sell.data.model.ScrapEntity
 import kotlinx.coroutines.flow.Flow
 
 interface ScrapLocalDataSource {

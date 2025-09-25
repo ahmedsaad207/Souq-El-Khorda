@@ -28,7 +28,12 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddBox
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Image
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Stars
+import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material.icons.outlined.CameraAlt
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -48,11 +53,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import coil.compose.AsyncImage
 import com.delighted2wins.souqelkhorda.core.components.CustomButton
 import com.delighted2wins.souqelkhorda.core.components.CustomCard
+import com.delighted2wins.souqelkhorda.core.components.CustomDropDown
 import com.delighted2wins.souqelkhorda.core.enums.BottomSheetMode
 import com.delighted2wins.souqelkhorda.core.enums.MeasurementType
 import com.delighted2wins.souqelkhorda.core.enums.ScrapType
@@ -96,8 +103,7 @@ fun BottomSheetSection(
 
             amount.value = scrap.amount
             description.value = scrap.description
-            selectedImages = scrap.images?.map { it.toUri() }
-                ?: emptyList()
+            selectedImages = scrap.images.map { it.toUri() }
         }
     }
 
@@ -405,6 +411,47 @@ fun BottomSheetSection(
                                 }
                             }
                         }
+                    }
+                }
+            }
+
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            color = Color.White.copy(0.1f),
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.CheckCircle,
+                            contentDescription = null,
+                            modifier = Modifier.size(36.dp),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+
+                        Text(
+                            text = "Almost There!",
+                            style = MaterialTheme.typography.titleMedium.copy(
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        )
+                        Text(
+                            text = "Upload clear, high-quality photos of your scrap to attract the best offers",
+                            style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.primary).copy(
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            ),
+                            textAlign = TextAlign.Center
+                        )
+
                     }
                 }
             }
