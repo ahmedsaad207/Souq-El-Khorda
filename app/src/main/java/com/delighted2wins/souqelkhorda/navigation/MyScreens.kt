@@ -45,3 +45,5 @@ data class ChatKey(
     val buyerId: String,
 ) : NavKey
 
+data object BuyerRegistration: NavKey
+

@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.delighted2wins.souqelkhorda.R
@@ -34,7 +35,8 @@ fun CustomCartBtn(
     ),
     color: Color = Color.White,
     textColor: Color = MaterialTheme.colorScheme.surface,
-    btnWidth: Double = 0.0
+    btnWidth: Double = 0.0,
+    fontSize: Double = 16.0
 ) {
     Button(
         onClick = {
@@ -57,7 +59,8 @@ fun CustomCartBtn(
             Text(
                 text = msg,
                 color = textColor,
-                fontSize = 18.sp,
+                fontSize = fontSize.sp,
+                fontWeight = FontWeight.Bold
             )
             Spacer(Modifier.size(ButtonDefaults.IconSpacing))
             Icon(imageVector = imageVictor, contentDescription = "", tint = textColor)

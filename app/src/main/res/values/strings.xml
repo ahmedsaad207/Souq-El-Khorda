@@ -66,5 +66,38 @@
     <string name="call">call</string>
     <string name="direction">Direction</string>
     <string name="accepted_types">Accepted Types:</string>
+    <string name="the_nearset_buyer">Nearest buyers\n</string>
+    <string name="nearst_buyer_sub_title">Find the best\nbuyers in your area</string>
+    <string name="register_shop">Register shop</string>
+    <string name="all_buyer">Total buyers</string>
+    <string name="online_now">Active now</string>
+    <string name="registerd_buyer">Registered buyer</string>
+    <string name="monthely_deal">Monthly deal</string>
+    <string name="buyer_secoun_screen_sub_title">Register your shop and get the best offers</string>
+    <string name="buyer_secoun_screen_title">Join the scrap traders network\n</string>
+    <string name="register_your_shop">Register your Shop</string>
+    <string name="why_choose_us">Why choose our platform?</string>
+    <string name="best_price">Best prices</string>
+    <string name="first_description">Get the best prices from trusted sellers</string>
+    <string name="secound_description">Connect with buyers in your area</string>
+    <string name="third_description">All transactions are secure and protected</string>
+    <string name="fourth_description">Enter your shop details and available scrap types</string>
+    <string name="fifth_description">We will contact you to verify the data</string>
+    <string name="sixsety_description">Receive offers from buyers instantly</string>
+    <string name="wide_domain">Wide network</string>
+    <string name="good_security">Guaranteed security</string>
+    <string name="steps_ofRegister">Simple registration steps</string>
+    <string name="fill_data">Fill in the data</string>
+    <string name="identity_encurance">Identity verification</string>
+    <string name="start_immediatly">Start selling immediately</string>
+    <string name="enter_your_location">Enter your Location:</string>
+    <string name="location_is">Location is:</string>
+    <string name="pick">Pick</string>
+    <string name="select_items">Select items</string>
+    <string name="register_shop_form">Scrap shop registration</string>
+    <string name="form_sub_title">Join the scrap traders network and get the best offers from buyers</string>
+    <string name="shop_info">Basic information</string>
+    <string name="korda_available_type">Available scrap types</string>
+
 
 </resources>
