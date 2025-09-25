@@ -14,6 +14,7 @@ import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
 import com.delighted2wins.souqelkhorda.core.enums.OrderSource
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.screen.LoginScreen
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.screen.SignUpScreen
+import com.delighted2wins.souqelkhorda.features.buyers.presentation.screen.BuyerRegistrationScreen
 import com.delighted2wins.souqelkhorda.features.buyers.presentation.screen.NearestBuyersScreen
 import com.delighted2wins.souqelkhorda.features.history.presentation.screen.HistoryScreen
 import com.delighted2wins.souqelkhorda.features.market.presentation.screen.MarketScreen
@@ -95,7 +96,10 @@ fun NavigationRoot(
                         screenNameState.value = "Nearest Buyers"
                         NearestBuyersScreen(
                             innerPadding = innerPadding,
-                            )
+                            onBuyerClick = {
+                                backStack.add(element = BuyerRegistration)
+                            }
+                        )
                     }
                 }
 
@@ -204,6 +208,18 @@ fun NavigationRoot(
                     }
                 }
 
+                is BuyerRegistration -> {
+                    NavEntry(key) {
+                        bottomBarState.value = false
+                        BuyerRegistrationScreen(
+                            innerPadding = innerPadding,
+                            snackBarHostState = snackBarState,
+                            onBackClick = {
+                                backStack.remove(key)
+                            }
+                        )
+                    }
+                }
 
                 else -> error("Unknown screen $key")
             }

@@ -62,6 +62,38 @@
     <string name="call">اتصال</string>
     <string name="direction">الاتجاهات</string>
     <string name="accepted_types">الاصناف المقبولة:</string>
+    <string name="the_nearset_buyer">أقرب المشترين\n</string>
+    <string name="nearst_buyer_sub_title">اعثر على أفضل\nالمشترين في منطقتك</string>
+    <string name="register_shop">سجل محلك</string>
+    <string name="all_buyer">إجمالي المشترين</string>
+    <string name="online_now">نشط الان</string>
+    <string name="registerd_buyer">تاجر مسجل</string>
+    <string name="monthely_deal">صفقة شهرية</string>
+    <string name="buyer_secoun_screen_sub_title">سجل محلك واحصل على أفضل\nالعروض</string>
+    <string name="buyer_secoun_screen_title">انضم إلى شبكة تجار الخردة\n</string>
+    <string name="register_your_shop">سجّل متجرك</string>
+    <string name="why_choose_us">لماذا تختار منصتنا؟</string>
+    <string name="best_price">أسعار أفضل</string>
+    <string name="first_description">احصل على أفض`ل الأسعار من المشنرين المساهمين</string>
+    <string name="secound_description">تواصل مع منات المشترين في منطقتك</string>
+    <string name="third_description">جميع المعاملات محمية ومؤمنة</string>
+    <string name="fourth_description">أدخل معلومات محلك وأنواع الخردة المتاحة</string>
+    <string name="fifth_description">سنتواصل معك لتأكيد البيانات</string>
+    <string name="sixsety_description">ستتلفي عروض من المشترين فورا</string>
+    <string name="wide_domain">شبكة واسعة</string>
+    <string name="good_security">أمان مضمون</string>
+    <string name="steps_ofRegister">خطوات التسجيل البسيطة</string>
+    <string name="fill_data">املا البيانات</string>
+    <string name="identity_encurance">تأكيد الهوية</string>
+    <string name="start_immediatly">إبدأ البيع فورا</string>
+    <string name="enter_your_location">أدخل موقعك:</string>
+    <string name="location_is">الموقع هو:</string>
+    <string name="pick">اختر</string>
+    <string name="select_items">أختر الاصناف</string>
+    <string name="register_shop_form">تسجيل محل خردة</string>
+    <string name="form_sub_title">انضم إلى شبكة تجار الخردة واحصل على أفضل العروض من المشترين</string>
+    <string name="shop_info">المعلومات الاساسية</string>
+    <string name="korda_available_type">أنواع الخردة المتاحة</string>
 
 
 </resources>

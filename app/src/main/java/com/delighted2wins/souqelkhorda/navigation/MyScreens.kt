@@ -38,4 +38,6 @@ data class OrderDetailsKey(
     val source: OrderSource
 ) : NavKey
 
+@Serializable
+data object BuyerRegistration: NavKey
 

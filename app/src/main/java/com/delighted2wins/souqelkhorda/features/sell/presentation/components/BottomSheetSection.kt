@@ -30,10 +30,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddBox
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Image
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.Stars
-import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material.icons.outlined.CameraAlt
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
