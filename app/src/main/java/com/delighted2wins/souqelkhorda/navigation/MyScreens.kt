@@ -30,12 +30,27 @@ data object ProfileScreen: NavKey
 data object NotificationsScreen: NavKey
 @Serializable
 data object HistoryScreen: NavKey
+
 @Serializable
-data class OrderDetailsKey(
+data class MarketOrderDetailsKey(
     val orderId: String,
-    val orderOwnerId: String,
-    val orderBuyerId: String? = null,
-    val source: OrderSource
+    val orderOwnerId: String
+) : NavKey
+
+@Serializable
+data class CompanyOrderDetailsKey(
+    val orderId: String,
+    val orderOwnerId: String
+) : NavKey
+
+@Serializable
+data class SalesOrderDetailsKey(
+    val orderId: String,
+) : NavKey
+
+@Serializable
+data class OffersOrderDetailsKey(
+    val orderId: String,
 ) : NavKey
 
 @Serializable

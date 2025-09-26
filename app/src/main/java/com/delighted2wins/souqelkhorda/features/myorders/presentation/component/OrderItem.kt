@@ -23,14 +23,14 @@ import com.delighted2wins.souqelkhorda.core.utils.toTimeAgo
 @Composable
 fun OrderItem(
     order: Order,
-    onDetailsClick: (String, String) -> Unit,
+    onDetailsClick: (String) -> Unit,
     systemIsRtl: Boolean = false
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 6.dp, horizontal = 8.dp)
-            .clickable { onDetailsClick(order.orderId, order.userId)  },
+            .clickable { onDetailsClick(order.orderId)  },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
