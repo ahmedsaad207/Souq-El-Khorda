@@ -25,8 +25,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.delighted2wins.souqelkhorda.R
+import com.delighted2wins.souqelkhorda.core.enums.MeasurementType
+import com.delighted2wins.souqelkhorda.core.enums.ScrapType
 import com.delighted2wins.souqelkhorda.core.model.Scrap
 
 @Composable
@@ -42,11 +47,11 @@ fun ScrapItem(
             .padding(vertical = 8.dp, horizontal = 12.dp)
             .border(
                 width = 1.dp,
-                color = Color.LightGray.copy(alpha = 0.5f),
+                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
                 shape = RoundedCornerShape(12.dp)
             )
             .background(
-                color = Color.White,
+                color = MaterialTheme.colorScheme.surface,
                 shape = RoundedCornerShape(12.dp),
             )
             .padding(12.dp),
@@ -54,35 +59,39 @@ fun ScrapItem(
         horizontalArrangement = Arrangement.SpaceBetween
 
     ) {
-
         Icon(
             imageVector = Icons.Default.Place,
             contentDescription = scrap.category,
             modifier = Modifier
                 .size(40.dp)
-                .clip(RoundedCornerShape(8.dp))
+                .clip(RoundedCornerShape(8.dp)),
+            tint = MaterialTheme.colorScheme.primary
         )
         Spacer(Modifier.width(12.dp))
         Column(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = scrap.category,
+                text = ScrapType.entries.find { it.name == scrap.category }.run {
+                    if (this != null) {
+                        ScrapType.valueOf(scrap.category).getLabel(LocalContext.current)
+                    } else scrap.category
+                },
                 style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Black),
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onSurface
             )
             Spacer(modifier = Modifier.height(4.dp))
             Row {
                 Text(
                     text = scrap.amount.toString(),
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Black),
-                    color = Color.Black
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = scrap.unit,
+                    text = MeasurementType.valueOf(scrap.unit).getLabel(LocalContext.current),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
@@ -93,8 +102,8 @@ fun ScrapItem(
             ) {
                 Icon(
                     imageVector = Icons.Default.Edit,
-                    contentDescription = "Edit",
-                    tint = Color.Gray
+                    contentDescription = stringResource(R.string.edit),
+                    tint = MaterialTheme.colorScheme.tertiary
                 )
             }
             IconButton(
@@ -102,8 +111,8 @@ fun ScrapItem(
             ) {
                 Icon(
                     imageVector = Icons.Default.Delete,
-                    contentDescription = "Delete",
-                    tint = Color.Red
+                    contentDescription = stringResource(R.string.delete),
+                    tint = MaterialTheme.colorScheme.error
                 )
             }
         }

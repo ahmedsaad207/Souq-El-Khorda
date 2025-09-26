@@ -47,7 +47,7 @@
     <string name="all">الكل</string>
     <string name="sale">بيع</string>
     <string name="market">السوق</string>
-    <string name="items">العناصر:</string>
+    <string name="items">الخرده:</string>
     <string name="view_order_details">عرض تفاصيل الطلب</string>
     <string name="date">التاريخ: %1$s</string>
 
@@ -62,6 +62,65 @@
     <string name="call">اتصال</string>
     <string name="direction">الاتجاهات</string>
     <string name="accepted_types">الاصناف المقبولة:</string>
+
+    <string name="scrap_added_successfully">تمت إضافة الخردة بنجاح!</string>
+    <string name="scrap_deleted_successfully">تم حذف الخردة بنجاح!</string>
+    <string name="are_you_sure_you_want_to_delete_this_scrap">هل أنت متأكد من حذف هذه الخردة؟</string>
+    <string name="submit_order">إرسال الطلب</string>
+    <string name="are_you_sure_you_want_to_submit_this_order">هل أنت متأكد من إرسال هذا الطلب؟</string>
+    <string name="order_details">تفاصيل الطلب</string>
+    <string name="add_scrap">"إضافة خردة "</string>
+    <string name="update_scrap">تعديل الخردة</string>
+    <string name="add_new_scrap">إضافة خردة جديدة</string>
+    <string name="edit_scrap">تعديل الخردة</string>
+    <string name="add_to_your_recycling_order">أضف إلى طلب إعادة التدوير</string>
+    <string name="close">إغلاق</string>
+    <string name="scrap_type">نوع الخردة</string>
+    <string name="custom_scrap_name">"اسم الخردة "</string>
+    <string name="e_g_copper_wire">مثال: سلك نحاس</string>
+    <string name="quantity_measurement"><![CDATA["الكمية والقياس "]]></string>
+    <string name="measurement_type">نوع القياس</string>
+    <string name="quantity">الكمية</string>
+    <string name="eg_10">مثال: ١٠</string>
+    <string name="description">الوصف</string>
+    <string name="optional">(اختياري)</string>
+    <string name="details_about_the_item">تفاصيل عن العنصر</string>
+    <string name="photos">الصور</string>
+    <string name="up_to_5_images">(حتى ٥ صور)</string>
+    <string name="_5">%1$d/٥</string>
+    <string name="selected_image">الصورة المحددة</string>
+    <string name="remove_image">إزالة الصورة</string>
+    <string name="camera">الكاميرا</string>
+    <string name="tap_to_add_image">اضغط لإضافة صورة</string>
+    <string name="add">إضافة</string>
+    <string name="add_photos">إضافة صور</string>
+    <string name="upload_clear_high_quality_photos_of_your_scrap_to_attract_the_best_offers">قم رفع صور واضحة وعالية الجودة لخردتك للحصول على أفضل العروض</string>
+    <string name="box">صندوق</string>
+    <string name="ready_to_start_recycling">هل أنت مستعد لكسب المال؟</string>
+    <string name="add_your_first_item_and_join_thousands_making_a_positive_environmental_impact">أضف أول خرده لك وانضم إلى آلاف الأشخاص الذين يساهمون في أثر بيئي إيجابي</string>
+    <string name="item_s">%1$d خردوات</string>
+    <string name="add_item">اضف خرده</string>
+    <string name="order_destination">وجهة الطلب</string>
+    <string name="to_market">إلى السوق</string>
+    <string name="direct_to_company">مباشرة إلى الشركة</string>
+    <string name="order_title">عنوان الطلب *</string>
+    <string name="short_title_for_your_order">عنوان قصير لطلبك</string>
+    <string name="title_is_required">العنوان مطلوب</string>
+    <string name="description_optional">الوصف (اختياري)</string>
+    <string name="describe_the_order_in_detail">صف الطلب بالتفصيل</string>
+    <string name="suggested_price_optional">السعر المقترح (اختياري)</string>
+    <string name="e_g_300">مثال: ٣٠٠</string>
+    <string name="edit">تعديل</string>
+    <string name="items_section">الخرده</string>
+    <string name="almost_there">أوشكت على الانتهاء!</string>
+    <string name="aluminum">ألمنيوم</string>
+    <string name="paper">ورق</string>
+    <string name="glass">زجاج</string>
+    <string name="plastic">بلاستيك</string>
+    <string name="custom_item">خردة اخرى</string>
+    <string name="weight_kg">الوزن (كجم)</string>
+    <string name="pieces">قطع(ه)</string>
+
     <string name="the_nearset_buyer">أقرب المشترين\n</string>
     <string name="nearst_buyer_sub_title">اعثر على أفضل\nالمشترين في منطقتك</string>
     <string name="register_shop">سجل محلك</string>
@@ -94,6 +153,7 @@
     <string name="form_sub_title">انضم إلى شبكة تجار الخردة واحصل على أفضل العروض من المشترين</string>
     <string name="shop_info">المعلومات الاساسية</string>
     <string name="korda_available_type">أنواع الخردة المتاحة</string>
+
 
 
 </resources>

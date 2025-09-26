@@ -16,7 +16,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.enums.Destination
 
 @Composable
@@ -27,17 +29,15 @@ fun OrderDetailsSection(
     selectedDestination: MutableState<Destination>,
     price: MutableState<Int>
 ) {
-
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
     ) {
 
         Text(
-            text = "Order Title *",
+            text = stringResource(R.string.order_title),
             style = MaterialTheme.typography.bodyMedium,
-            color = Color.Black
+            color = MaterialTheme.colorScheme.onSurface
         )
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -51,7 +51,8 @@ fun OrderDetailsSection(
                 .fillMaxWidth()
                 .border(
                     width = 1.dp,
-                    color = if (showError.value && title.value.isBlank()) Color.Red else Color.Gray.copy(
+                    color = if (showError.value && title.value.isBlank()) MaterialTheme.colorScheme.error
+                    else MaterialTheme.colorScheme.onSurfaceVariant.copy(
                         alpha = 0.5f
                     ),
                     shape = RoundedCornerShape(12.dp)
@@ -59,19 +60,20 @@ fun OrderDetailsSection(
             shape = RoundedCornerShape(12.dp),
             singleLine = true,
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color.White,
-                unfocusedContainerColor = Color.White,
-                disabledContainerColor = Color.White,
+                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                disabledContainerColor = MaterialTheme.colorScheme.surface,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent
             ),
-            placeholder = {Text("Short title for your order")}
+            placeholder = { Text(stringResource(R.string.short_title_for_your_order),
+                color = MaterialTheme.colorScheme.onSurfaceVariant) }
         )
 
         if (showError.value && title.value.isBlank()) {
             Text(
-                text = "Title is required",
+                text = stringResource(R.string.title_is_required),
                 color = Color.Red,
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(start = 16.dp, top = 4.dp)
@@ -85,17 +87,17 @@ fun OrderDetailsSection(
                 .fillMaxWidth()
                 .heightIn(min = 100.dp),
             state = description,
-            label = "Description (Optional)",
+            label = stringResource(R.string.description_optional),
             onValueChange = { description.value = it },
-            placeholder = "Describe the order in detail"
+            placeholder = stringResource(R.string.describe_the_order_in_detail)
         )
 
         if (selectedDestination.value == Destination.Market) {
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "Suggested Price (Optional)",
+                text = stringResource(R.string.suggested_price_optional),
                 style = MaterialTheme.typography.bodyMedium,
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -119,14 +121,14 @@ fun OrderDetailsSection(
                 shape = RoundedCornerShape(12.dp),
                 singleLine = true,
                 colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
-                    disabledContainerColor = Color.White,
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    disabledContainerColor = MaterialTheme.colorScheme.surface,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent
                 ),
-                placeholder = {Text("e.g., 300")}
+                placeholder = { Text(stringResource(R.string.e_g_300)) }
             )
         }
     }

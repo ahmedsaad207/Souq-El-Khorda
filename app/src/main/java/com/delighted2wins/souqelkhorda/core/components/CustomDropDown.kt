@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -50,7 +51,9 @@ fun <T : Enum<T>> CustomDropDown(
             modifier = Modifier
                 .fillMaxWidth()
                 .border(
-                    width = 1.dp, color = Color.Gray.copy(0.5f), shape = RoundedCornerShape(12.dp)
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.outline.copy(0.5f),
+                    shape = RoundedCornerShape(12.dp)
                 )
                 .clickable { expanded = !expanded }
                 .padding(horizontal = 12.dp, vertical = 16.dp)
@@ -59,11 +62,13 @@ fun <T : Enum<T>> CustomDropDown(
                 }
         ) {
             Text(
-                text = labelMapper(selectedOption)
+                text = labelMapper(selectedOption),
+                color = MaterialTheme.colorScheme.onSurface
             )
             Icon(
                 imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                contentDescription = null
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
 
@@ -71,18 +76,27 @@ fun <T : Enum<T>> CustomDropDown(
             expanded = expanded,
             onDismissRequest = { expanded = false },
             modifier = Modifier
-                .width(with(LocalDensity.current) {rowWidth.toDp() + 24.dp})
-                .background(color = Color.White, shape = RoundedCornerShape(12.dp))
+                .width(with(LocalDensity.current) { rowWidth.toDp() + 24.dp })
+                .background(
+                    color = MaterialTheme.colorScheme.surface,
+                    shape = RoundedCornerShape(12.dp)
+                )
                 .border(
                     1.dp,
-                    color = Color.Gray.copy(0.5f),
+                    color = MaterialTheme.colorScheme.outline.copy(0.5f),
                     shape = RoundedCornerShape(12.dp)
-                )   ,
+                )
+            ,
             containerColor = Color.Transparent,
-            shadowElevation = 0.dp,
+            shadowElevation = 4.dp,
         ) {
             options.forEach { option ->
-                DropdownMenuItem(text = { Text(labelMapper(option)) }, onClick = {
+                DropdownMenuItem(text = {
+                    Text(
+                        labelMapper(option),
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }, onClick = {
                     onOptionSelected(option)
                     expanded = false
                 })

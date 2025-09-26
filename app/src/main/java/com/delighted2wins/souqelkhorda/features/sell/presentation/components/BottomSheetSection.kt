@@ -48,11 +48,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import coil.compose.AsyncImage
+import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.components.CustomButton
 import com.delighted2wins.souqelkhorda.core.components.CustomCard
 import com.delighted2wins.souqelkhorda.core.components.CustomDropDown
@@ -158,13 +160,16 @@ fun BottomSheetSection(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = if (mode == BottomSheetMode.ADD) "Add New Scrap" else "Edit Scrap",
-                    style = MaterialTheme.typography.titleLarge
+                    text = if (mode == BottomSheetMode.ADD) stringResource(R.string.add_new_scrap) else stringResource(
+                        R.string.edit_scrap
+                    ),
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    "Add to your recycling order",
-                    style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.primary)
+                    stringResource(R.string.add_to_your_recycling_order),
+                    style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.onSurfaceVariant)
                 )
             }
             IconButton(
@@ -172,12 +177,13 @@ fun BottomSheetSection(
                 modifier = Modifier
                     .size(36.dp)
                     .clip(CircleShape)
-                    .background(color = Color.LightGray.copy(0.2f))
+                    .background(color = MaterialTheme.colorScheme.surfaceVariant)
             ) {
                 Icon(
                     imageVector = Icons.Default.Close,
-                    contentDescription = "Close",
-                    tint = Color.Gray
+                    contentDescription = stringResource(R.string.close),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(20.dp)
                 )
 
             }
@@ -189,7 +195,7 @@ fun BottomSheetSection(
 
             item {
                 CustomCard(
-                    title = "Scrap type",
+                    title = stringResource(R.string.scrap_type),
                     color = Color.Blue
                 ) {
                     CustomDropDown(
@@ -197,7 +203,7 @@ fun BottomSheetSection(
                         options = ScrapType.entries.toTypedArray(),
                         selectedOption = selectedScrapType.value,
                         onOptionSelected = { selectedScrapType.value = it },
-                        labelMapper = { it.label }
+                        labelMapper = { it.getLabel(context) }
                     )
                 }
             }
@@ -205,7 +211,7 @@ fun BottomSheetSection(
             item {
                 if (selectedScrapType.value == ScrapType.CustomScrap) {
                     CustomCard(
-                        title = "Custom scrap name ",
+                        title = stringResource(R.string.custom_scrap_name),
                         color = Color.Blue
                     ) {
                         CustomTextField(
@@ -213,7 +219,7 @@ fun BottomSheetSection(
                                 .fillMaxWidth(),
                             state = category,
                             onValueChange = { category.value = it },
-                            placeholder = "e.g., Copper wire"
+                            placeholder = stringResource(R.string.e_g_copper_wire)
                         )
                     }
                 }
@@ -221,7 +227,7 @@ fun BottomSheetSection(
 
             item {
                 CustomCard(
-                    title = "Quantity & Measurement ",
+                    title = stringResource(R.string.quantity_measurement),
                     color = Color.Magenta
                 ) {
                     Row(
@@ -231,19 +237,19 @@ fun BottomSheetSection(
                         Column(
                             modifier = Modifier.weight(1f),
                         ) {
-                            CustomTextFieldLabel("Measurement Type")
+                            CustomTextFieldLabel(stringResource(R.string.measurement_type))
                             CustomDropDown(
                                 options = MeasurementType.entries.toTypedArray(),
                                 selectedOption = selectedMeasurementType.value,
                                 onOptionSelected = { selectedMeasurementType.value = it },
-                                labelMapper = { it.label }
+                                labelMapper = { it.getLabel(context) }
                             )
                         }
 
                         CustomTextField(
                             modifier = Modifier.weight(1f),
                             state = amount,
-                            label = "Quantity",
+                            label = stringResource(R.string.quantity),
                             onValueChange = { newValue ->
                                 when (selectedMeasurementType.value) {
                                     MeasurementType.Weight -> {
@@ -262,7 +268,7 @@ fun BottomSheetSection(
                                 }
                             },
                             keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-                            placeholder = "eg, 10"
+                            placeholder = stringResource(R.string.eg_10)
                         )
                     }
                 }
@@ -270,9 +276,9 @@ fun BottomSheetSection(
 
             item {
                 CustomCard(
-                    title = "Description ",
+                    title = stringResource(R.string.description),
                     color = Color.Blue,
-                    subTitle = "(Optional)"
+                    subTitle = stringResource(R.string.optional)
                 ) {
                     CustomTextField(
                         textFieldModifier = Modifier
@@ -280,16 +286,16 @@ fun BottomSheetSection(
                             .heightIn(min = 100.dp),
                         state = description,
                         onValueChange = { description.value = it },
-                        placeholder = "Details about the item"
+                        placeholder = stringResource(R.string.details_about_the_item)
                     )
                 }
             }
 
             item {
                 CustomCard(
-                    title = "Photos ",
+                    title = stringResource(R.string.photos),
                     color = Color(0xFFFF1493),
-                    subTitle = "(Up to 5 images)",
+                    subTitle = stringResource(R.string.up_to_5_images),
                     icon = Icons.Outlined.CameraAlt,
                     iconTint = Color(0xFFFF69B4)
                 ) {
@@ -299,9 +305,10 @@ fun BottomSheetSection(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        CustomTextFieldLabel(label = "Photos")
+                        CustomTextFieldLabel(label = stringResource(R.string.photos))
                         Text(
-                            text = "${selectedImages.size}/5"
+                            text = stringResource(R.string._5, selectedImages.size),
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
                     Spacer(modifier = Modifier.height(12.dp))
@@ -327,7 +334,7 @@ fun BottomSheetSection(
                                 ) {
                                     AsyncImage(
                                         model = uri,
-                                        contentDescription = "Selected Image",
+                                        contentDescription = context.getString(R.string.selected_image),
                                         modifier = Modifier.fillMaxSize(),
                                         contentScale = ContentScale.Crop
                                     )
@@ -339,15 +346,15 @@ fun BottomSheetSection(
                                         modifier = Modifier
                                             .align(Alignment.TopEnd)
                                             .background(
-                                                color = Color.Black.copy(0.5f),
+                                                color = MaterialTheme.colorScheme.surfaceVariant.copy(0.7f),
                                                 shape = CircleShape
                                             )
                                             .size(24.dp)
                                     ) {
                                         Icon(
                                             imageVector = Icons.Default.Close,
-                                            contentDescription = "Remove Image",
-                                            tint = Color.White
+                                            contentDescription = stringResource(R.string.remove_image),
+                                            tint = MaterialTheme.colorScheme.onSurfaceVariant
                                         )
                                     }
                                 }
@@ -362,7 +369,7 @@ fun BottomSheetSection(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .dashedBorder(
-                                    color = Color.Gray,
+                                    color = MaterialTheme.colorScheme.outline.copy(0.5f),
                                     strokeWidth = 2.dp,
                                     cornerRadius = 12.dp,
                                     dashLength = 20f,
@@ -379,14 +386,16 @@ fun BottomSheetSection(
                             ) {
                                 Icon(
                                     imageVector = Icons.Outlined.CameraAlt,
-                                    contentDescription = "Camera",
-                                    tint = Color.Black.copy(0.5f),
+                                    contentDescription = stringResource(R.string.camera),
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                     modifier = Modifier.size(48.dp)
                                 )
                                 Spacer(Modifier.height(4.dp))
                                 Text(
-                                    text = "Tap to add image",
-                                    style = MaterialTheme.typography.bodyLarge
+                                    text = stringResource(R.string.tap_to_add_image),
+                                    style = MaterialTheme.typography.bodyLarge.copy(
+                                        MaterialTheme.colorScheme.onSurface
+                                    )
                                 )
                                 Spacer(Modifier.height(4.dp))
                                 OutlinedButton(
@@ -397,12 +406,12 @@ fun BottomSheetSection(
                                 ) {
                                     Icon(
                                         imageVector = Icons.Default.Add,
-                                        contentDescription = "Add",
-                                        tint = Color.Black
+                                        contentDescription = stringResource(R.string.add),
+                                        tint = MaterialTheme.colorScheme.primary
                                     )
                                     Text(
-                                        text = "Add Photos",
-                                        color = Color.Black
+                                        text = stringResource(R.string.add_photos),
+                                        color = MaterialTheme.colorScheme.primary
                                     )
                                 }
                             }
@@ -416,7 +425,7 @@ fun BottomSheetSection(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
-                            color = Color.White.copy(0.1f),
+                            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
                             shape = RoundedCornerShape(12.dp)
                         )
                 ) {
@@ -435,16 +444,17 @@ fun BottomSheetSection(
                         )
 
                         Text(
-                            text = "Almost There!",
+                            text = stringResource(R.string.almost_there),
                             style = MaterialTheme.typography.titleMedium.copy(
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                         )
                         Text(
-                            text = "Upload clear, high-quality photos of your scrap to attract the best offers",
-                            style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.primary).copy(
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            ),
+                            text = stringResource(R.string.upload_clear_high_quality_photos_of_your_scrap_to_attract_the_best_offers),
+                            style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.primary)
+                                .copy(
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                ),
                             textAlign = TextAlign.Center
                         )
 
@@ -463,7 +473,7 @@ fun BottomSheetSection(
             CustomButton(
                 onClick = onCancelClick,
                 modifier = Modifier.weight(1f),
-                text = "Cancel",
+                text = stringResource(R.string.cancel),
                 textColor = Color.Black,
                 containerColor = Color.White
             )
@@ -486,7 +496,9 @@ fun BottomSheetSection(
                     }
                 },
                 modifier = Modifier.weight(1f),
-                text = if (mode == BottomSheetMode.EDIT) "Update Scrap" else "Add Scrap",
+                text = if (mode == BottomSheetMode.EDIT) stringResource(R.string.update_scrap) else stringResource(
+                    R.string.add_scrap
+                ),
             )
         }
 

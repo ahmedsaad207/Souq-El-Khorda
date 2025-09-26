@@ -20,9 +20,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.delighted2wins.souqelkhorda.R
 
 @Composable
 fun EmptyScrapesSection() {
@@ -46,19 +48,19 @@ fun EmptyScrapesSection() {
         ) {
             Icon(
                 imageVector = Icons.Default.Inventory2,
-                contentDescription = "Box",
+                contentDescription = stringResource(R.string.box),
                 modifier = Modifier.size(48.dp),
                 tint = Color.Gray
             )
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = "Ready to start recycling?",
+                text = stringResource(R.string.ready_to_start_recycling),
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.colorScheme.onBackground
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Add your first item and join thousands making a positive environmental impact",
+                text = stringResource(R.string.add_your_first_item_and_join_thousands_making_a_positive_environmental_impact),
                 style = MaterialTheme.typography.bodySmall,
                 color = Color.Gray,
                 textAlign = TextAlign.Center

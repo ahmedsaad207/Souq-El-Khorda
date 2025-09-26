@@ -63,7 +63,7 @@ fun SellScreen(
 
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
-    val ctx = LocalContext.current
+    val context = LocalContext.current
 
     val bottomSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
@@ -87,14 +87,16 @@ fun SellScreen(
 
     LaunchedEffect(uiState.isScrapSaved) {
         if (uiState.isScrapSaved) {
-            Toast.makeText(ctx, "Scrap added successfully!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context,
+                context.getString(R.string.scrap_added_successfully), Toast.LENGTH_SHORT).show()
             viewModel.resetScrapSavedFlag()
         }
     }
 
     LaunchedEffect(uiState.isScrapDeleted) {
         if (uiState.isScrapDeleted) {
-            Toast.makeText(ctx, "Scrap deleted successfully!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context,
+                context.getString(R.string.scrap_deleted_successfully), Toast.LENGTH_SHORT).show()
             viewModel.resetScrapDeletedFlag()
         }
     }
@@ -111,7 +113,7 @@ fun SellScreen(
     if (scrapToDelete != null) {
         ConfirmationDialog(
             title =stringResource(R.string.confirm_delete),
-            message = "Are you sure you want to delete this scrap?",
+            message = stringResource(R.string.are_you_sure_you_want_to_delete_this_scrap),
             confirmLabel = stringResource(R.string.delete),
             onConfirm = {
                 viewModel.processIntent(SellIntent.DeleteScrap(scrapToDelete!!))
@@ -123,8 +125,8 @@ fun SellScreen(
 
     if (orderToSubmit != null) {
         ConfirmationDialog(
-            title = "Submit Order",
-            message = "Are you sure you want to submit this order?",
+            title = stringResource(R.string.submit_order),
+            message = stringResource(R.string.are_you_sure_you_want_to_submit_this_order),
             confirmLabel = stringResource(R.string.submit),
             onConfirm = {
                 isLoading.value = true
@@ -175,7 +177,7 @@ fun SellScreen(
             item {
                 if (uiState.data.isNotEmpty()) {
                     CustomCard(
-                        title = "Order Details",
+                        title = stringResource(R.string.order_details),
                         color = Color(0xFF9144d4)
                     ) {
                         OrderDetailsSection(
@@ -189,10 +191,10 @@ fun SellScreen(
 
                     CustomButton(
                         icon = Icons.Default.Sync,
-                        contentDescription = "Submit Order",
-                        text = "Submit Order",
+                        contentDescription = stringResource(R.string.submit_order),
+                        text = stringResource(R.string.submit_order),
                         isLoading = isLoading,
-                        textLoading = "Submitting Order",
+                        textLoading = "",
                         hasElevation = false,
                         modifier = Modifier.fillMaxWidth()
                     ) {

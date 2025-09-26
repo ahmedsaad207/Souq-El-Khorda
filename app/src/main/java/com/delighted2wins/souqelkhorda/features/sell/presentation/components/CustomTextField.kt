@@ -4,6 +4,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -35,20 +36,20 @@ fun CustomTextField(
             modifier = textFieldModifier
                 .border(
                     width = 1.dp,
-                    color = Color.Gray.copy(alpha = 0.5f),
+                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
                     shape = RoundedCornerShape(12.dp)
                 ),
             shape = RoundedCornerShape(12.dp),
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color.White,
-                unfocusedContainerColor = Color.White,
-                disabledContainerColor = Color.White,
+                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                disabledContainerColor = MaterialTheme.colorScheme.surface,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent
             ),
             keyboardOptions = keyboardOptions,
-            placeholder = { Text(placeholder) }
+            placeholder = { Text(placeholder, color = MaterialTheme.colorScheme.onSurfaceVariant) }
         )
     }
 }

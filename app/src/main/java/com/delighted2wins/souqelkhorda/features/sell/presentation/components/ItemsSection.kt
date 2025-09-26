@@ -22,12 +22,15 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.model.Scrap
 
 @Composable
@@ -44,11 +47,11 @@ fun ItemsSection(
         shape = RoundedCornerShape(12.dp),
         border = BorderStroke(
             width = 1.dp,
-            color = Color.LightGray.copy(0.5f)
+            color = MaterialTheme.colorScheme.outline.copy(0.5f)
         ),
         elevation = CardDefaults.cardElevation(2.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.surface
         )
     )
     {
@@ -72,30 +75,35 @@ fun ItemsSection(
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     TitleSection(
-                        text = "Items",
+                        text = stringResource(R.string.items_section),
                         color = Color(0xFF3b71dd)
                     )
                     Text(
-                        text = "${data.size} items"
+                        text = stringResource(R.string.item_s, data.size,),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
 
                 }
 
                 Button(
                     onClick = onAddItem,
-                    colors = ButtonDefaults.buttonColors(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
+                    ),
                     shape = RoundedCornerShape(12.dp),
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                     elevation = ButtonDefaults.elevatedButtonElevation(4.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Add,
-                        contentDescription = "add item",
+                        contentDescription = stringResource(R.string.add_item),
                         tint = Color.White
                     )
                     Spacer(Modifier.width(4.dp))
                     Text(
-                        text = "Add Item",
+                        text = stringResource(R.string.add_item),
                         color = Color.White
                     )
                 }
@@ -129,7 +137,5 @@ fun ItemsSection(
 
             }
         }
-
-
     }
 }

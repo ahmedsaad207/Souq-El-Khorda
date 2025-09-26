@@ -69,7 +69,8 @@ fun TitleSection(
             text = text,
             style = MaterialTheme.typography.titleLarge.copy(
                 fontWeight = FontWeight.Bold
-            )
+            ),
+            color = MaterialTheme.colorScheme.onSurface
         )
 
         Spacer(modifier = Modifier.width(4.dp))
@@ -79,7 +80,7 @@ fun TitleSection(
             text = subTitle,
             style = MaterialTheme.typography.titleMedium.copy(
                 fontWeight = FontWeight.Normal,
-                color = Color.DarkGray
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         )
     }

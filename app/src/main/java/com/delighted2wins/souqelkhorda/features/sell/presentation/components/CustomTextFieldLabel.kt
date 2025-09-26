@@ -14,7 +14,7 @@ fun CustomTextFieldLabel(label: String) {
     Text(
         text = label,
         style = MaterialTheme.typography.bodyMedium,
-        color = Color.Black
+        color = MaterialTheme.colorScheme.onSurface
     )
     Spacer(modifier = Modifier.height(8.dp))
 }
