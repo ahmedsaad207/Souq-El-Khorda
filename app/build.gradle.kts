@@ -70,6 +70,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
     implementation(libs.kotlinx.serialization.core)
 
+
+    //lotti
+    implementation("com.airbnb.android:lottie-compose:6.6.3")
+
     //icon
     implementation ("androidx.compose.material:material-icons-extended")
 
@@ -112,4 +116,9 @@ dependencies {
     // gson
     implementation("com.google.code.gson:gson:2.13.2")
 
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.34.0")}
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.34.0")
+//location services
+    implementation("com.google.android.gms:play-services-location:21.1.0")
+
+}
+
