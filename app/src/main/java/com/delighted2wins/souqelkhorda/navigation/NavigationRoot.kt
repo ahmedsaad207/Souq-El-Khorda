@@ -123,8 +123,10 @@ fun NavigationRoot(
                             innerPadding = innerPadding,
                             onBuyerClick = {
                                 backStack.add(element = BuyerRegistration)
-                            }
-                        )
+                            },
+                            snackBarHostState = snackBarState,
+
+                            )
                     }
                 }
 

@@ -10,9 +10,9 @@ import com.delighted2wins.souqelkhorda.features.offers.domain.usecase.GetOffersB
 import com.delighted2wins.souqelkhorda.features.offers.domain.usecase.MakeOfferUseCase
 import com.delighted2wins.souqelkhorda.features.offers.domain.usecase.UpdateOfferStatusUseCase
 import com.delighted2wins.souqelkhorda.features.orderdetails.domain.usecase.GetOrderDetailsUseCase
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.OffersOrderDetailsEffect
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.OffersOrderDetailsIntent
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.OffersOrderDetailsState
-import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.OffersOrderDetailsEffect
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
