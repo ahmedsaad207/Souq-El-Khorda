@@ -3,7 +3,11 @@ package com.delighted2wins.souqelkhorda.core.extensions
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.os.Build
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import java.util.Locale
 
 fun Context.applyLanguage(languageCode: String): Context {

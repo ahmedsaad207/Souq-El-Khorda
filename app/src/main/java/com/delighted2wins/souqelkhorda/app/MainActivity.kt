@@ -26,6 +26,7 @@ import com.delighted2wins.souqelkhorda.core.components.AppTopAppBar
 import com.delighted2wins.souqelkhorda.core.enums.LanguageEnum
 import com.delighted2wins.souqelkhorda.core.extensions.applyLanguage
 import com.delighted2wins.souqelkhorda.core.extensions.configureSystemUI
+import com.delighted2wins.souqelkhorda.core.extensions.requestNotificationPermission
 import com.delighted2wins.souqelkhorda.features.profile.di.MainActivityEntryPoint
 import com.delighted2wins.souqelkhorda.features.profile.domain.usecase.GetLanguageUseCase
 import com.delighted2wins.souqelkhorda.navigation.NavigationRoot
@@ -51,6 +52,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        requestNotificationPermission()
         setContent {
             configureSystemUI(isSystemInDarkTheme())
 

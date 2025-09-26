@@ -3,8 +3,11 @@ package com.delighted2wins.souqelkhorda.features.sell.presentation.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.delighted2wins.souqelkhorda.core.enums.NotificationMessagesEnum
 import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.core.model.Scrap
+import com.delighted2wins.souqelkhorda.core.notification.domain.entity.NotificationRequest
+import com.delighted2wins.souqelkhorda.core.notification.domain.usecases.SendNotificationUseCase
 import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.DeleteAllScrapsUseCase
 import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.DeleteScrapByIdUseCase
 import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.GetScrapesUseCase
@@ -32,6 +35,7 @@ class SellViewModel @Inject constructor(
     private val deleteScrapByIdUseCase: DeleteScrapByIdUseCase,
     private val uploadScrapImagesUseCase: UploadScrapImagesUseCase,
     private val updateScrapUseCase: UpdateScrapUseCase,
+    private val sendNotificationUseCase: SendNotificationUseCase
 ) : ViewModel() {
 
     private var _state = MutableStateFlow(SellState())
@@ -90,6 +94,11 @@ class SellViewModel @Inject constructor(
         _state.value = _state.value.copy(isOrderSubmitted = false)
         try {
             val updatedScraps = uploadScrapImagesUseCase(order.scraps)
+            sendNotificationUseCase(
+                NotificationRequest(
+                    message = NotificationMessagesEnum.OFFER_SENT_PENDING.getMessage()
+                )
+            )
             val updatedOrder = order.copy(scraps = updatedScraps)
             sendOrderUseCase(updatedOrder)
             delay(500)

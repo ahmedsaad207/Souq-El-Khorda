@@ -1,4 +1,4 @@
-package com.delighted2wins.souqelkhorda.features.history.data
+package com.delighted2wins.souqelkhorda.features.history.data.repository
 
 import com.delighted2wins.souqelkhorda.features.authentication.data.local.IAuthenticationLocalDataSource
 import com.delighted2wins.souqelkhorda.features.history.data.mapper.toDomain
