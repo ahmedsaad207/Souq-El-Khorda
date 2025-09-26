@@ -2,9 +2,12 @@ package com.delighted2wins.souqelkhorda.features.orderdetails.presentation.viewm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.delighted2wins.souqelkhorda.core.enums.NotificationMessagesEnum
 import com.delighted2wins.souqelkhorda.core.enums.OfferStatus
 import com.delighted2wins.souqelkhorda.core.enums.OrderSource
 import com.delighted2wins.souqelkhorda.core.model.Offer
+import com.delighted2wins.souqelkhorda.core.notification.domain.entity.NotificationRequest
+import com.delighted2wins.souqelkhorda.core.notification.domain.usecases.SendNotificationUseCase
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetUserDataByIdUseCase
 import com.delighted2wins.souqelkhorda.features.offers.domain.usecase.DeleteOfferUseCase
@@ -31,6 +34,7 @@ class SalesOrderDetailsViewModel @Inject constructor(
     private val updateOfferStatusUseCase: UpdateOfferStatusUseCase,
     private val deleteOfferUseCase: DeleteOfferUseCase,
     private val getUserByIdUseCase: GetUserDataByIdUseCase,
+    private val sendNotificationUseCase: SendNotificationUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(SalesOrderDetailsState())
@@ -44,10 +48,10 @@ class SalesOrderDetailsViewModel @Inject constructor(
     fun onIntent(intent: SalesOrderDetailsIntent) {
         when (intent) {
             is SalesOrderDetailsIntent.LoadOrderDetails -> loadOrderDetails(intent.orderId)
-            is SalesOrderDetailsIntent.AcceptOffer -> acceptOffer(intent.offerId)
-            is SalesOrderDetailsIntent.RejectOffer -> rejectOffer(intent.offerId)
-            is SalesOrderDetailsIntent.CancelOffer -> cancelOffer(intent.offerId)
-            is SalesOrderDetailsIntent.CompleteOffer -> completeOffer(intent.offerId)
+            is SalesOrderDetailsIntent.AcceptOffer -> acceptOffer(intent.offerId, intent.buyerId)
+            is SalesOrderDetailsIntent.RejectOffer -> rejectOffer(intent.offerId, intent.buyerId)
+            is SalesOrderDetailsIntent.CancelOffer -> cancelOffer(intent.offerId, intent.buyerId)
+            is SalesOrderDetailsIntent.CompleteOffer -> completeOffer(intent.offerId, intent.buyerId)
             is SalesOrderDetailsIntent.ChatWithBuyer -> openChat(
                 intent.orderId,
                 intent.sellerId,
@@ -96,12 +100,17 @@ class SalesOrderDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun acceptOffer(offerId: String) {
+    private fun acceptOffer(offerId: String, buyerId: String) {
         viewModelScope.launch {
             try {
-                // call send notification to buyer (msg: offer accepted by seller)
                 val result = updateOfferStatusUseCase(offerId, OfferStatus.ACCEPTED)
                 if (result){
+                    sendNotificationUseCase(
+                        request = NotificationRequest(
+                            toUserId = buyerId,
+                            message = NotificationMessagesEnum.OFFER_ACCEPTED.getMessage(),
+                        )
+                    )
                     _effect.emit( SalesOrderDetailsEffect.ShowError("Offer accepted successfully"))
                 }else{
                     _effect.emit( SalesOrderDetailsEffect.ShowError("Failed to accept offer"))
@@ -113,12 +122,17 @@ class SalesOrderDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun rejectOffer(offerId: String) {
+    private fun rejectOffer(offerId: String, buyerId: String) {
         viewModelScope.launch {
             try {
-                // call send notification to buyer (msg: offer rejected by seller)
                 val result = deleteOfferUseCase(offerId)
                 if (result){
+                    sendNotificationUseCase(
+                        request = NotificationRequest(
+                            toUserId = buyerId,
+                            message = NotificationMessagesEnum.OFFER_REJECTED.getMessage(),
+                        )
+                    )
                     _effect.emit( SalesOrderDetailsEffect.ShowError("Offer rejected successfully"))
                 }else{
                     _effect.emit( SalesOrderDetailsEffect.ShowError("Failed to reject offer"))
@@ -131,12 +145,17 @@ class SalesOrderDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun cancelOffer(offerId: String) {
+    private fun cancelOffer(offerId: String, buyerId: String) {
         viewModelScope.launch {
             try {
-                // call send notification to buyer (msg: offer canceled by seller)
                 val result = updateOfferStatusUseCase(offerId, OfferStatus.REJECTED)
                 if (result){
+                    sendNotificationUseCase(
+                        request = NotificationRequest(
+                            toUserId = buyerId,
+                            message = NotificationMessagesEnum.OFFER_DISCUSSION_CANCELED.getMessage(),
+                        )
+                    )
                     _effect.emit( SalesOrderDetailsEffect.ShowError("Offer canceled successfully"))
                 }else{
                     _effect.emit( SalesOrderDetailsEffect.ShowError("Failed to cancel offer"))
@@ -149,10 +168,15 @@ class SalesOrderDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun completeOffer(offerId: String) {
+    private fun completeOffer(offerId: String, buyerId: String) {
         viewModelScope.launch {
             try {
-                 // call send notification to buyer (msg: offer completed by seller)
+                sendNotificationUseCase(
+                    request = NotificationRequest(
+                        toUserId = buyerId,
+                        message = NotificationMessagesEnum.OFFER_COMPLETED.getMessage(),
+                    )
+                )
                 // handel order status to completed and history
 
                  // updateBuyerHistoryStatusUseCase(buyerId, OrderStatus.COMPLETED)

@@ -2,13 +2,15 @@ package com.delighted2wins.souqelkhorda.features.orderdetails.presentation.viewm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.delighted2wins.souqelkhorda.core.enums.NotificationMessagesEnum
 import com.delighted2wins.souqelkhorda.core.enums.OrderSource
+import com.delighted2wins.souqelkhorda.core.notification.domain.entity.NotificationRequest
+import com.delighted2wins.souqelkhorda.core.notification.domain.usecases.SendNotificationUseCase
 import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetCurrentUserUseCase
 import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetUserDataByIdUseCase
 import com.delighted2wins.souqelkhorda.features.offers.domain.usecase.DeleteOfferUseCase
 import com.delighted2wins.souqelkhorda.features.offers.domain.usecase.GetOffersByOrderIdUseCase
 import com.delighted2wins.souqelkhorda.features.offers.domain.usecase.MakeOfferUseCase
-import com.delighted2wins.souqelkhorda.features.offers.domain.usecase.UpdateOfferStatusUseCase
 import com.delighted2wins.souqelkhorda.features.orderdetails.domain.usecase.GetOrderDetailsUseCase
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.OffersOrderDetailsIntent
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.OffersOrderDetailsState
@@ -26,11 +28,11 @@ class OffersOrderDetailsViewModel @Inject constructor(
     private val getOrderDetails: GetOrderDetailsUseCase,
     private val getOffersByOrderIdUseCase: GetOffersByOrderIdUseCase,
     private val makeOfferUseCase: MakeOfferUseCase,
-    private val updateOfferStatusUseCase: UpdateOfferStatusUseCase,
     private val deleteOfferUseCase: DeleteOfferUseCase,
     private val getUserByIdUseCase: GetUserDataByIdUseCase,
-    private val getCurrentUserUseCase: GetCurrentUserUseCase
-) : ViewModel() {
+    private val getCurrentUserUseCase: GetCurrentUserUseCase,
+    private val sendNotificationUseCase: SendNotificationUseCase,
+    ) : ViewModel() {
 
     private val _state = MutableStateFlow(OffersOrderDetailsState())
     val state: StateFlow<OffersOrderDetailsState> = _state
@@ -47,9 +49,9 @@ class OffersOrderDetailsViewModel @Inject constructor(
                 intent.buyerId,
                 intent.offerId
                 )
-            is OffersOrderDetailsIntent.UpdateOffer ->  updateOffer(intent.offerId, intent.newPrice)
-            is OffersOrderDetailsIntent.CancelOffer -> cancelOffer(intent.offerId)
-            is OffersOrderDetailsIntent.MarkAsReceived -> markAsReceived(intent.offerId)
+            is OffersOrderDetailsIntent.UpdateOffer ->  updateOffer(intent.offerId, intent.newPrice ,intent.sellerId)
+            is OffersOrderDetailsIntent.CancelOffer -> cancelOffer(intent.offerId, intent.sellerId)
+            is OffersOrderDetailsIntent.MarkAsReceived -> markAsReceived(intent.offerId, intent.sellerId)
         }
     }
 
@@ -74,7 +76,7 @@ class OffersOrderDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun updateOffer(offerId: String, price: String) {
+    private fun updateOffer(offerId: String, price: String, sellerId: String) {
         viewModelScope.launch {
             try {
                 val currentOffer = _state.value.buyerOffer?.first ?: return@launch
@@ -82,6 +84,12 @@ class OffersOrderDetailsViewModel @Inject constructor(
                     offer = currentOffer.copy(offerId = offerId, offerPrice = price.toInt())
                 )
                 if (result.isNotEmpty()) {
+                    sendNotificationUseCase(
+                        request = NotificationRequest(
+                            toUserId = sellerId,
+                            message = NotificationMessagesEnum.BUYER_UPDATED_OFFER.getMessage(),
+                        )
+                    )
                     _effect.emit(OffersOrderDetailsEffect.ShowSuccess("Offer updated successfully"))
                     reloadOffer(offerId)
                 }else{
@@ -92,11 +100,17 @@ class OffersOrderDetailsViewModel @Inject constructor(
             }
         }
     }
-    private fun cancelOffer(offerId: String) {
+    private fun cancelOffer(offerId: String, sellerId: String) {
         viewModelScope.launch {
             try {
                 val result = deleteOfferUseCase(offerId)
                 if (result) {
+                    sendNotificationUseCase(
+                        request = NotificationRequest(
+                            toUserId = sellerId,
+                            message = NotificationMessagesEnum.BUYER_CANCELED_OFFER.getMessage(),
+                        )
+                    )
                     _effect.emit(OffersOrderDetailsEffect.ShowSuccess("Offer canceled successfully"))
                     _state.value = _state.value.copy(buyerOffer = null)
                 } else {
@@ -108,11 +122,17 @@ class OffersOrderDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun markAsReceived(offerId: String) {
+    private fun markAsReceived(offerId: String, sellerId: String) {
         viewModelScope.launch {
             try {
 //                val result = updateOfferStatusUseCase(offerId, OfferStatus.COMPLETED)
 //                if (result) {
+                    sendNotificationUseCase(
+                        request = NotificationRequest(
+                            toUserId = sellerId,
+                            message = NotificationMessagesEnum.BUYER_MARKED_RECEIVED.getMessage(),
+                        )
+                    )
 //                    _effect.emit(BuyerOrderDetailsEffect.ShowSuccess("Order marked as received"))
 //                    reloadOffer(offerId)
 //                } else {

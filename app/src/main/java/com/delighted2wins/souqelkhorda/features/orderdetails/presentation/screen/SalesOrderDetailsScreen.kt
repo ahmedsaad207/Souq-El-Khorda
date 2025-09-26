@@ -96,11 +96,17 @@ fun SalesOrderDetailsScreen(
                         )
                     )
                 },
-                onCompleted = { offerId ->
-                    viewModel.onIntent(SalesOrderDetailsIntent.CompleteOffer(offerId))
+                onAccept = { offerId, buyerId ->
+                    viewModel.onIntent(SalesOrderDetailsIntent.AcceptOffer(offerId,buyerId))
                 },
-                onCancel = { offerId ->
-                    viewModel.onIntent(SalesOrderDetailsIntent.CancelOffer(offerId))
+                onReject = { offerId, buyerId ->
+                    viewModel.onIntent(SalesOrderDetailsIntent.RejectOffer(offerId,buyerId))
+                },
+                onCompleted = { offerId, buyerId ->
+                    viewModel.onIntent(SalesOrderDetailsIntent.CompleteOffer(offerId,buyerId))
+                },
+                onCancel = { offerId, buyerId ->
+                    viewModel.onIntent(SalesOrderDetailsIntent.CancelOffer(offerId, buyerId))
                 }
             )
         }
@@ -128,8 +134,10 @@ private fun SalesOrderDetailsUI(
     pendingOffers: List<Pair<Offer, MarketUser>>,
     onBackClick: () -> Unit = {},
     onChatClick: (sellerId: String, buyerId: String, orderId: String, offerId: String) -> Unit,
-    onCompleted: (offerId: String) -> Unit,
-    onCancel: (offerId: String) -> Unit
+    onAccept: (offerId: String, buyerId: String) -> Unit,
+    onReject: (offerId: String, buyerId: String) -> Unit,
+    onCompleted: (offerId: String, buyerId: String) -> Unit,
+    onCancel: (offerId: String, buyerId: String) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -193,8 +201,8 @@ private fun SalesOrderDetailsUI(
                     buyer = user,
                     offer = offer,
                     onChat = { onChatClick(order.userId, offer.buyerId, offer.orderId, offer.offerId) },
-                    onCompleted = { onCompleted(offer.offerId) },
-                    onCancel = { onCancel(offer.offerId) }
+                    onCompleted = { onCompleted(offer.offerId, offer.buyerId) },
+                    onCancel = { onCancel(offer.offerId, offer.buyerId) }
                 )
             }
         }
@@ -213,8 +221,8 @@ private fun SalesOrderDetailsUI(
                 OfferItemCard(
                     buyer = user,
                     offer = offer,
-                    onAccept = { onCompleted(offer.offerId) },
-                    onReject = { onCancel(offer.offerId) }
+                    onAccept = { onAccept(offer.offerId, offer.buyerId) },
+                    onReject = { onReject(offer.offerId, offer.buyerId) }
                 )
             }
         }
