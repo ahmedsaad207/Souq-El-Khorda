@@ -157,7 +157,8 @@
     <string name="form_sub_title">Join the scrap traders network and get the best offers from buyers</string>
     <string name="shop_info">Basic information</string>
     <string name="korda_available_type">Available scrap types</string>
-
+    <string name="load">load..</string>
+    <string name="u_have_no_buyer">No buyers near you</string>
 
 
 </resources>
