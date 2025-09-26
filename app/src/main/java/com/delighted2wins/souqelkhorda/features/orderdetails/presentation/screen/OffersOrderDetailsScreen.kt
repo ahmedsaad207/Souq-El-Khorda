@@ -86,8 +86,14 @@ fun OffersOrderDetailsScreen(
                 isRtl = isRtl,
                 onBackClick = onBackClick,
                 onChatClick = onChatClick,
-                onMarkReceived = { offerId -> viewModel.onIntent(OffersOrderDetailsIntent.MarkAsReceived(offerId)) },
-                onCancel = { offerId -> viewModel.onIntent(OffersOrderDetailsIntent.CancelOffer(offerId)) }
+                onMarkReceived = { offerId -> viewModel.onIntent(
+                    OffersOrderDetailsIntent.MarkAsReceived(orderId, offerId, state.order!!.userId)
+                    )
+                },
+                onCancel = { offerId -> viewModel.onIntent(
+                    OffersOrderDetailsIntent.CancelOffer(orderId, offerId, state.order!!.userId)
+                    )
+                }
             )
         }
 

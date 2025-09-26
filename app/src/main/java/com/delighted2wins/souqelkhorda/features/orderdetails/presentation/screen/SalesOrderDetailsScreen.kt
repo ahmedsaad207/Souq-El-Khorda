@@ -102,11 +102,11 @@ fun SalesOrderDetailsScreen(
                 onReject = { offerId, buyerId ->
                     viewModel.onIntent(SalesOrderDetailsIntent.RejectOffer(offerId,buyerId))
                 },
-                onCompleted = { offerId, buyerId ->
-                    viewModel.onIntent(SalesOrderDetailsIntent.CompleteOffer(offerId,buyerId))
+                onCompleted = { orderId, offerId, buyerId ->
+                    viewModel.onIntent(SalesOrderDetailsIntent.CompleteOffer(orderId, offerId, buyerId))
                 },
-                onCancel = { offerId, buyerId ->
-                    viewModel.onIntent(SalesOrderDetailsIntent.CancelOffer(offerId, buyerId))
+                onCancel = { orderId, offerId, buyerId ->
+                    viewModel.onIntent(SalesOrderDetailsIntent.CancelOffer(orderId, offerId, buyerId))
                 }
             )
         }
@@ -136,8 +136,8 @@ private fun SalesOrderDetailsUI(
     onChatClick: (sellerId: String, buyerId: String, orderId: String, offerId: String) -> Unit,
     onAccept: (offerId: String, buyerId: String) -> Unit,
     onReject: (offerId: String, buyerId: String) -> Unit,
-    onCompleted: (offerId: String, buyerId: String) -> Unit,
-    onCancel: (offerId: String, buyerId: String) -> Unit
+    onCompleted: (orderId: String, offerId: String, buyerId: String) -> Unit,
+    onCancel: (orderId: String, offerId: String, buyerId: String) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -201,8 +201,8 @@ private fun SalesOrderDetailsUI(
                     buyer = user,
                     offer = offer,
                     onChat = { onChatClick(order.userId, offer.buyerId, offer.orderId, offer.offerId) },
-                    onCompleted = { onCompleted(offer.offerId, offer.buyerId) },
-                    onCancel = { onCancel(offer.offerId, offer.buyerId) }
+                    onCompleted = { onCompleted(offer.orderId,offer.offerId, offer.buyerId) },
+                    onCancel = { onCancel(offer.orderId, offer.offerId, offer.buyerId) }
                 )
             }
         }

@@ -4,6 +4,7 @@ import com.delighted2wins.souqelkhorda.features.chat.domain.entity.Message
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class ChatRemoteDataSourceImpl @Inject constructor(
@@ -31,4 +32,22 @@ class ChatRemoteDataSourceImpl @Inject constructor(
                 }
             }
     }
+
+    override suspend fun deleteChat(orderId: String, offerId: String): Boolean {
+        return try {
+            val chatCollection = firestore.collection("chats")
+                .document(orderId)
+                .collection(offerId)
+
+            val snapshots = chatCollection.get().await()
+            for (doc in snapshots.documents) {
+                doc.reference.delete().await()
+            }
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
 }

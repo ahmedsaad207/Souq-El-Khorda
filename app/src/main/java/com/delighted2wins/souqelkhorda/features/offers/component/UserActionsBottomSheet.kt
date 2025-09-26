@@ -97,7 +97,6 @@ fun UserActionsBottomSheet(
                     modifier = Modifier.padding(top = 4.dp)
                 )
             }
-
             Spacer(modifier = Modifier.height(16.dp))
         }
 

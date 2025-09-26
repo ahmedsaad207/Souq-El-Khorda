@@ -10,7 +10,7 @@ import com.delighted2wins.souqelkhorda.features.myorders.domain.usecase.LoadSell
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.contract.MyOrdersEffect
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.contract.MyOrdersIntents
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.contract.MyOrdersState
-import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.DeleteOrderUseCase
+import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.DeleteCompanyOrderUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,7 +24,7 @@ class MyOrdersViewModel @Inject constructor(
     private val loadCompanyOrdersUseCase: LoadCompanyOrdersUseCase,
     private val loadSellsUseCase: LoadSellsUseCase,
     private val loadOffersUseCase: LoadOffersUseCase,
-    private val deleteCompanyOrderUseCase: DeleteOrderUseCase,
+    private val deleteCompanyOrderUseCase: DeleteCompanyOrderUseCase,
     private val getCurrentUserUseCase: GetCurrentUserUseCase
 ) : ViewModel() {
 

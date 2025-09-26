@@ -1,5 +1,6 @@
 package com.delighted2wins.souqelkhorda.features.history.data.remote
 
+import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
 import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.features.history.data.model.HistoryDto
 import com.google.firebase.firestore.FirebaseFirestore
@@ -24,5 +25,40 @@ class HistoryRemoteDataSourceImpl @Inject constructor(
             Result.failure(e)
         }
 
+    }
+
+    override suspend fun addOrder(order: Order): Boolean {
+        return try {
+            firebaseFirestore
+                .collection("history")
+                .document(order.userId)
+                .collection("orders")
+                .document(order.orderId)
+                .set(order)
+                .await()
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+    override suspend fun updateOrderStatus(orderId: String, userId: String, status: OrderStatus): Boolean {
+        return try {
+            val orderRef = firebaseFirestore
+                .collection("history")
+                .document(userId)
+                .collection("orders")
+                .document(orderId)
+
+            val snapshot = orderRef.get().await()
+            if (!snapshot.exists()) return false
+
+            orderRef.update("status", status.name).await()
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
     }
 }

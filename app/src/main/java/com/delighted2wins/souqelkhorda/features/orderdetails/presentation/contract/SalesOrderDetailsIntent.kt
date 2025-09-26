@@ -4,8 +4,8 @@ sealed class SalesOrderDetailsIntent {
     data class LoadOrderDetails(val orderId: String) : SalesOrderDetailsIntent()
     data class AcceptOffer(val offerId: String, val buyerId: String) : SalesOrderDetailsIntent()
     data class RejectOffer(val offerId: String, val buyerId: String) : SalesOrderDetailsIntent()
-    data class CancelOffer(val offerId: String, val buyerId: String) : SalesOrderDetailsIntent()
-    data class CompleteOffer(val offerId: String, val buyerId: String) : SalesOrderDetailsIntent()
+    data class CancelOffer(val orderId: String, val offerId: String, val buyerId: String) : SalesOrderDetailsIntent()
+    data class CompleteOffer(val orderId: String, val offerId: String, val buyerId: String) : SalesOrderDetailsIntent()
     data class ChatWithBuyer(
         val sellerId: String,
         val buyerId: String,
