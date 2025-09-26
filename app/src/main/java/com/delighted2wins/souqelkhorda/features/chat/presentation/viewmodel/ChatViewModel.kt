@@ -107,11 +107,14 @@ class ChatViewModel @Inject constructor(
                 getMessagesUseCase(orderId, offerId) { message ->
                     val currentMessages = _state.value.messages
                     _state.value = _state.value.copy(isLoading = false)
+
                     if (currentMessages.none { it.timestamp == message.timestamp && it.senderId == message.senderId }) {
-                        _state.value = _state.value.copy(messages = currentMessages + message)
+                        _state.value = _state.value.copy(
+                            messages = listOf(message) + currentMessages
+                        )
                     }
                 }
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 _state.value = _state.value.copy(error = e.message, isLoading = false)
             }
         }

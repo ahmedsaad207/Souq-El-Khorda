@@ -52,7 +52,7 @@ fun ChatScreen(
     }
     LaunchedEffect(state.messages.size) {
         if (state.messages.isNotEmpty()) {
-            listState.animateScrollToItem(0)
+            listState.animateScrollToItem(state.messages.lastIndex)
         }
     }
 
@@ -107,6 +107,7 @@ fun ChatScreen(
                 .padding(padding)
         ) {
             LazyColumn(
+                state = listState,
                 modifier = Modifier.weight(1f).fillMaxWidth().padding(8.dp),
                 reverseLayout = true
             ) {
