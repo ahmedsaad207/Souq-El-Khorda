@@ -8,5 +8,6 @@ data class OffersOrderDetailsState(
     val isLoading: Boolean = false,
     val order: Order? = null,
     val buyerOffer: Pair<Offer, MarketUser>? = null,
-    val isRefreshing: Boolean = false
+    val isRefreshing: Boolean = false,
+    val errorMessage: String? = null
 )

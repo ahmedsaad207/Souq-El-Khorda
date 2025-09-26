@@ -22,7 +22,7 @@ fun CompanyOrdersScreen(
     orders: List<Order>,
     isLoading: Boolean,
     error: String?,
-    onDetailsClick: (String, String) -> Unit,
+    onCompanyDetailsClick: (String, String) -> Unit,
     onDeclineClick: (String) -> Unit,
     systemIsRtl: Boolean
 ) {
@@ -66,7 +66,7 @@ fun CompanyOrdersScreen(
                     items(orders) { order ->
                         CompanyOrderCard(
                             order = order,
-                            onDetailsClick = { orderId, userId, -> onDetailsClick(orderId, userId) },
+                            onDetailsClick = { orderId, userId, -> onCompanyDetailsClick(orderId, userId) },
                             onDeclineClick = { orderId -> onDeclineClick(orderId) },
                             systemIsRtl = systemIsRtl
                         )

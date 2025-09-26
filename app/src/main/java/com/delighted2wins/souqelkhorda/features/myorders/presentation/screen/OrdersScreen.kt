@@ -55,7 +55,9 @@ fun OrdersScreen(
     innerPadding: PaddingValues = PaddingValues(),
     snackBarHostState: SnackbarHostState,
     viewModel: MyOrdersViewModel = hiltViewModel(),
-    onDetailsClick: (orderId: String, ownerId: String, buyerId: String, source: OrderSource) -> Unit,
+    onCompanyDetailsClick: (orderId: String, ownerId: String) -> Unit,
+    onSaleDetailsClick: (orderId: String) -> Unit,
+    onOfferDetailsClick: (orderId: String) -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val systemIsRtl = LocalConfiguration.current.layoutDirection == LayoutDirection.Rtl.ordinal
@@ -171,8 +173,8 @@ fun OrdersScreen(
                     state.saleOrders,
                     state.isLoading,
                     state.error,
-                    onDetailsClick = { orderId, ownerId ->
-                        onDetailsClick(orderId, ownerId, "", OrderSource.COMPANY)
+                    onCompanyDetailsClick = { orderId, ownerId ->
+                        onCompanyDetailsClick(orderId, ownerId)
                     },
                     onDeclineClick = { orderId ->
                         selectedOrderId = orderId
@@ -190,16 +192,8 @@ fun OrdersScreen(
                             "Offers" -> viewModel.onIntent(MyOrdersIntents.LoadOffers)
                         }
                     },
-                    onDetailsClick = { orderId, ownerId ->
-                        val buyerId = state.currentBuyerId
-                        val source = when (selectedChip) {
-                            "Sells" -> OrderSource.SALES
-                            "Offers" -> OrderSource.OFFERS
-                            else -> OrderSource.MARKET
-                        }
-                        Log.d("OrdersScreen", "OrdersScreen: $source")
-                        onDetailsClick(orderId, ownerId, buyerId.orEmpty(), source)
-                    },
+                    onSaleDetailsClick = onSaleDetailsClick,
+                    onOfferDetailsClick = onOfferDetailsClick,
                     systemIsRtl
                 )
             }

@@ -3,6 +3,7 @@ package com.delighted2wins.souqelkhorda.features.orderdetails.presentation.scree
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,27 +29,91 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
 import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.core.model.Scrap
 import com.delighted2wins.souqelkhorda.core.utils.generateUiOrderId
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
+import com.delighted2wins.souqelkhorda.features.market.presentation.component.ShimmerScrapCard
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.OrderDetailsTopBar
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.ScrapItemCard
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.SectionTitle
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.CompanyOrderDetailsIntent
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.CompanyOrderDetailsState
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.viewmodel.CompanyOrderDetailsViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 @Composable
-fun CompanyOrderDetailsUI(
+fun CompanyOrderDetailsScreen(
+    orderId: String,
+    orderOwnerId: String,
+    onBackClick: () -> Unit,
+    viewModel: CompanyOrderDetailsViewModel = hiltViewModel()
+) {
+    val state = viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(orderId, orderOwnerId) {
+        viewModel.onIntent(CompanyOrderDetailsIntent.LoadOrder(orderId, orderOwnerId))
+    }
+
+    when (val uiState = state.value) {
+        is CompanyOrderDetailsState.Loading -> {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                items(10) { ShimmerScrapCard(false) }
+            }
+        }
+
+        is CompanyOrderDetailsState.Error -> {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = uiState.message,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+        }
+
+        is CompanyOrderDetailsState.Success -> {
+            CompanyOrderDetailsUI(
+                order = uiState.order,
+                seller = uiState.seller,
+                isRtl = false,
+                onBackClick = onBackClick
+            )
+        }
+
+        CompanyOrderDetailsState.Empty -> {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("No order details found")
+            }
+        }
+    }
+}
+
+@Composable
+private fun CompanyOrderDetailsUI(
     order: Order,
     seller: MarketUser?,
     isRtl: Boolean,
@@ -335,6 +400,6 @@ private fun ScrapItemRow(scrap: Scrap, isRtl: Boolean) {
 }
 
 private fun Long.toFormattedDate(): String {
-    val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+    val sdf = SimpleDateFormat("dd/M/yyyy", Locale.getDefault())
     return sdf.format(Date(this))
 }

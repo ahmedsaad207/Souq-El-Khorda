@@ -32,7 +32,8 @@ import com.delighted2wins.souqelkhorda.features.myorders.presentation.contract.M
 fun MarketOrdersScreen(
     state: MyOrdersState,
     onChipSelected: (String) -> Unit,
-    onDetailsClick: (String, String) -> Unit,
+    onSaleDetailsClick: (String) -> Unit,
+    onOfferDetailsClick: (String) -> Unit,
     systemIsRtl: Boolean
 ) {
     var selectedFilter by remember { mutableStateOf("Sells") }
@@ -90,7 +91,7 @@ fun MarketOrdersScreen(
                                 orders = state.sells,
                                 isLoading = state.isLoading,
                                 error = state.error,
-                                onDetailsClick = onDetailsClick,
+                                onDetailsClick = onSaleDetailsClick,
                                 systemIsRtl = systemIsRtl
                             )
                         }
@@ -111,7 +112,7 @@ fun MarketOrdersScreen(
                                 orders = state.offers,
                                 isLoading = state.isLoading,
                                 error = state.error,
-                                onDetailsClick = onDetailsClick,
+                                onDetailsClick = onOfferDetailsClick,
                                 systemIsRtl = systemIsRtl
                             )
                         }
