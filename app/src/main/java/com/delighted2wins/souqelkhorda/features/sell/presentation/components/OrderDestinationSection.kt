@@ -26,9 +26,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.enums.Destination
 
 @Composable
@@ -42,7 +44,7 @@ fun OrderDestinationSection(
     ) {
 
         TitleSection(
-            text = "Order Destination",
+            text = stringResource(R.string.order_destination),
             color = MaterialTheme.colorScheme.primary
         )
 
@@ -56,7 +58,7 @@ fun OrderDestinationSection(
             // Direct to Company
             DestinationButton(
                 modifier = Modifier.weight(1f),
-                text = "Direct to Company",
+                text = stringResource(R.string.direct_to_company),
                 icon = Icons.Default.Apartment,
                 isSelected = selectedDestination.value == Destination.Company,
                 onClick = { selectedDestination.value = Destination.Company }
@@ -66,7 +68,7 @@ fun OrderDestinationSection(
             DestinationButton(
                 modifier = Modifier.weight(1f),
                 icon = Icons.Default.Store,
-                text = "To Market",
+                text = stringResource(R.string.to_market),
                 isSelected = selectedDestination.value == Destination.Market,
                 onClick = { selectedDestination.value = Destination.Market }
             )
@@ -88,7 +90,8 @@ fun DestinationButton(
 ) {
 
     val borderColor =
-        if (isSelected) MaterialTheme.colorScheme.primary else Color.Black.copy(alpha = 0.2f)
+        if (isSelected) MaterialTheme.colorScheme.primary.copy(0.8f)
+        else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
 
     Column(
         modifier = modifier
@@ -99,7 +102,10 @@ fun DestinationButton(
                 shape = RoundedCornerShape(12.dp)
             )
             .clickable { onClick() }
-            .background(if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.1f) else Color.Transparent)
+            .background(
+                if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                else MaterialTheme.colorScheme.surfaceVariant.copy(0.1f)
+            )
             .padding(vertical = 16.dp, horizontal = 4.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -107,14 +113,15 @@ fun DestinationButton(
             imageVector = icon,
             contentDescription = text,
             modifier = Modifier.size(32.dp),
-            tint = if (isSelected) MaterialTheme.colorScheme.primary else LocalContentColor.current
+            tint = if (isSelected) MaterialTheme.colorScheme.primary
+            else MaterialTheme.colorScheme.onSurface.copy(0.7f)
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = text,
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyMedium,
-            color = if (isSelected) MaterialTheme.colorScheme.primary else LocalContentColor.current,
+            color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Medium
         )
     }
