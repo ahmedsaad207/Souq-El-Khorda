@@ -153,7 +153,8 @@
     <string name="form_sub_title">انضم إلى شبكة تجار الخردة واحصل على أفضل العروض من المشترين</string>
     <string name="shop_info">المعلومات الاساسية</string>
     <string name="korda_available_type">أنواع الخردة المتاحة</string>
-
+    <string name="load">تحم..</string>
+    <string name="u_have_no_buyer">لا يوجد مشترين بالقرب منك</string>
 
 
 </resources>

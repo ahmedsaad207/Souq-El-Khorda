@@ -56,12 +56,12 @@ fun BuyerMainScreenCard(
     cardSubTitle: String =  stringResource(R.string.nearst_buyer_sub_title),
     firstSpanStyle: SpanStyle = SpanStyle(
         color = Color.White,
-        fontSize = 18.sp,
+        fontSize = 16.sp,
         fontWeight = FontWeight.Bold,
     ),
     secondSpanStyle: SpanStyle = SpanStyle(
         color = Color.White.copy(alpha = 0.8f),
-        fontSize = 16.sp,
+        fontSize = 14.sp,
         fontWeight = FontWeight.Normal
     )
     ) {
@@ -113,12 +113,12 @@ fun BuyerMainScreenCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 16.dp, horizontal = 8.dp),
-                horizontalArrangement = Arrangement.SpaceAround,
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(
                     modifier = Modifier
-                        .size(48.dp)
+                        .size(40.dp)
                         .clip(CircleShape)
                         .background(Color.White.copy(alpha = 0.2f)),
                     contentAlignment = Alignment.Center
@@ -127,7 +127,7 @@ fun BuyerMainScreenCard(
                         imageVector = icon,
                         contentDescription = null,
                         tint = Color.White,
-                        modifier = Modifier.size(30.dp)
+                        modifier = Modifier.size(24.dp)
                     )
                 }
                 Text(
@@ -159,9 +159,9 @@ fun BuyerMainScreenCard(
                         imageVictor = Icons.Outlined.Cottage,
                         msg = stringResource(R.string.register_shop),
                         color = Color(0xff12a052),
-                        btnWidth = screenWidth * 0.4,
+                        btnWidth = screenWidth * 0.45,
                         textColor = Color.White,
-                        fontSize = 14.0
+                        fontSize = 12.0
 
                     )
                 }
@@ -183,7 +183,7 @@ fun BuyerMainScreenCard(
                     ),
                     statisticsTextStyle = TextStyle(
                         fontWeight = FontWeight.Normal,
-                        fontSize = 20.sp,
+                        fontSize = 18.sp,
                         color = Color.White.copy(alpha = 0.7f),
                     ),
                 )
@@ -198,7 +198,7 @@ fun BuyerMainScreenCard(
                     ),
                     statisticsTextStyle = TextStyle(
                         fontWeight = FontWeight.Normal,
-                        fontSize = 20.sp,
+                        fontSize = 18.sp,
                         color = Color.White.copy(alpha = 0.7f),
                     ),
                 )

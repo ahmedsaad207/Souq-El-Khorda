@@ -1,8 +1,8 @@
 package com.delighted2wins.souqelkhorda.features.history.di
 
-import com.delighted2wins.souqelkhorda.features.history.data.repository.HistoryRepositoryImpl
 import com.delighted2wins.souqelkhorda.features.history.data.remote.HistoryRemoteDataSource
 import com.delighted2wins.souqelkhorda.features.history.data.remote.HistoryRemoteDataSourceImpl
+import com.delighted2wins.souqelkhorda.features.history.data.repository.HistoryRepositoryImpl
 import com.delighted2wins.souqelkhorda.features.history.domain.repository.HistoryRepository
 import com.delighted2wins.souqelkhorda.features.history.domain.usecase.GetUserOrdersUseCase
 import dagger.Binds

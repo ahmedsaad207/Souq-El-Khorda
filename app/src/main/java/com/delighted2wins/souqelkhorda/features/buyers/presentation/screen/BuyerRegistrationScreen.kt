@@ -38,9 +38,10 @@ import com.delighted2wins.souqelkhorda.features.buyers.presentation.components.R
 fun BuyerRegistrationScreen(
     innerPadding: PaddingValues,
     snackBarHostState: SnackbarHostState,
-    onBackClick: () -> Unit = {}
-) {
+    onBackClick: () -> Unit = {},
+    ) {
     val colors = MaterialTheme.colorScheme
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -201,7 +202,10 @@ fun BuyerRegistrationScreen(
                 )
                 Spacer(Modifier.height(16.dp))
 
-                RegisterBuyerForm()
+                RegisterBuyerForm(
+                    snackBarHostState = snackBarHostState,
+                    onRegisterClick = onBackClick
+                )
                 Spacer(Modifier.height(56.dp))
 
             }
