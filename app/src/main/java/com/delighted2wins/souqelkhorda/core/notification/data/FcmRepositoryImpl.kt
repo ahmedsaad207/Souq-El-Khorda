@@ -14,7 +14,7 @@ class FcmRepositoryImpl @Inject constructor(
     override suspend fun sendNotification(request: NotificationRequestDto): ApiResponseDto<Unit> {
         val userId = authLocalDataSource.getCashedUser().id
         val token = firebaseDb.collection("users").document(userId).get().await()
-            .getString("token")
+            .getString("fcmToken")
 
         return remoteDataSource.sendNotification(request.copy(toToken = token ?: ""))
     }

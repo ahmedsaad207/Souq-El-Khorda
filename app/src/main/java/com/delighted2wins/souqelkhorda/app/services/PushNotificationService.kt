@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Build
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -26,6 +27,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import androidx.core.content.edit
 import com.delighted2wins.souqelkhorda.features.authentication.data.local.IAuthenticationLocalDataSource
+import com.delighted2wins.souqelkhorda.features.authentication.data.remote.IAuthenticationRemoteDataSource
 import com.google.firebase.firestore.SetOptions
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -34,14 +36,15 @@ import javax.inject.Inject
 class PushNotificationService: FirebaseMessagingService() {
     @Inject
     lateinit var localDataSource: IAuthenticationLocalDataSource
+    @Inject
+    lateinit var remoteDataSource: IAuthenticationRemoteDataSource
 
     override fun onNewToken(token: String) {
         val uid = FirebaseAuth.getInstance().currentUser?.uid
-        val prefs = getSharedPreferences("app_prefs", MODE_PRIVATE)
         if (uid == null) {
             localDataSource.saveFcmToken(token)
         } else {
-            saveTokenToFirestore(uid, token)
+            remoteDataSource.updateFcmToken(token)
         }
     }
 

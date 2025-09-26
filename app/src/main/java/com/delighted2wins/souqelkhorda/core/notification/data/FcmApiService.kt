@@ -1,5 +1,6 @@
 package com.delighted2wins.souqelkhorda.core.notification.data
 
+import kotlinx.serialization.Serializable
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -8,6 +9,7 @@ interface FcmApiService {
     suspend fun sendNotification(@Body request: NotificationRequestDto): ApiResponseDto<Unit>
 }
 
+@Serializable
 data class NotificationRequestDto(
     val toToken: String,
     val title: String,
@@ -17,6 +19,7 @@ data class NotificationRequestDto(
     val extraData: Map<String, String>? = null
 )
 
+@Serializable
 data class ApiResponseDto<T>(
     val success: Boolean,
     val message: String,
