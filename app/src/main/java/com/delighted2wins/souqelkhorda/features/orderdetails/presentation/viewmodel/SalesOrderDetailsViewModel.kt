@@ -8,7 +8,6 @@ import com.delighted2wins.souqelkhorda.core.model.Offer
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetUserDataByIdUseCase
 import com.delighted2wins.souqelkhorda.features.offers.domain.usecase.DeleteOfferUseCase
-import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.features.offers.domain.usecase.GetOffersByOrderIdUseCase
 import com.delighted2wins.souqelkhorda.features.offers.domain.usecase.UpdateOfferStatusUseCase
 import com.delighted2wins.souqelkhorda.features.orderdetails.domain.usecase.GetOrderDetailsUseCase
@@ -49,7 +48,12 @@ class SalesOrderDetailsViewModel @Inject constructor(
             is SalesOrderDetailsIntent.RejectOffer -> rejectOffer(intent.offerId)
             is SalesOrderDetailsIntent.CancelOffer -> cancelOffer(intent.offerId)
             is SalesOrderDetailsIntent.CompleteOffer -> completeOffer(intent.offerId)
-            is SalesOrderDetailsIntent.ChatWithBuyer -> openChat(intent.sellerId, intent.buyerId, intent.orderId)
+            is SalesOrderDetailsIntent.ChatWithBuyer -> openChat(
+                intent.orderId,
+                intent.sellerId,
+                intent.buyerId,
+                intent.offerId
+            )
         }
     }
 
@@ -163,14 +167,15 @@ class SalesOrderDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun openChat(sellerId: String, buyerId: String, orderId: String) {
+    private fun openChat( orderId: String, sellerId: String, buyerId: String, offerId: String) {
         viewModelScope.launch {
             try {
                 _effect.emit(
                     SalesOrderDetailsEffect.NavigateToChat(
+                        orderId = orderId,
                         sellerId = sellerId,
                         buyerId = buyerId,
-                        orderId = orderId
+                        offerId = offerId
                     )
                 )
             } catch (e: Exception) {

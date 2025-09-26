@@ -44,7 +44,7 @@ fun SalesOrderDetailsUI(
     snackBarHostState: SnackbarHostState,
     order: Order,
     isRtl: Boolean,
-    onChatClick: (orderId: String, sellerId: String, buyerId: String) -> Unit,
+    onChatClick: (orderId: String, sellerId: String, buyerId: String, offerId: String) -> Unit,
     onBackClick: () -> Unit = {},
     viewModel: SalesOrderDetailsViewModel = hiltViewModel(),
 ) {
@@ -58,7 +58,7 @@ fun SalesOrderDetailsUI(
         viewModel.effect.collect { effect ->
             when (effect) {
                 is SalesOrderDetailsEffect.NavigateToChat -> {
-                    onChatClick(effect.orderId, effect.sellerId, effect.buyerId)
+                    onChatClick(effect.orderId, effect.sellerId, effect.buyerId, effect.offerId)
                 }
                 is SalesOrderDetailsEffect.ShowSuccess -> {
                     snackBarHostState.showSnackbar(effect.message)
@@ -148,7 +148,8 @@ fun SalesOrderDetailsUI(
                                     SalesOrderDetailsIntent.ChatWithBuyer(
                                         order.userId,
                                         offer.buyerId,
-                                        offer.orderId
+                                        offer.orderId,
+                                        offer.offerId
                                     )
                                 )
                             },

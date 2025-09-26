@@ -3,7 +3,6 @@ package com.delighted2wins.souqelkhorda.features.orderdetails.presentation.viewm
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.delighted2wins.souqelkhorda.core.enums.OrderSource
-import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetCurrentUserUseCase
 import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetUserDataByIdUseCase
 import com.delighted2wins.souqelkhorda.features.offers.domain.usecase.DeleteOfferUseCase
@@ -42,7 +41,12 @@ class OffersOrderDetailsViewModel @Inject constructor(
     fun onIntent(intent: OffersOrderDetailsIntent) {
         when (intent) {
             is OffersOrderDetailsIntent.LoadOrderDetails -> loadOrderDetails(intent.orderId)
-            is OffersOrderDetailsIntent.ChatWithSeller -> openChat(intent.orderId, intent.sellerId, intent.buyerId)
+            is OffersOrderDetailsIntent.ChatWithSeller -> openChat(
+                intent.orderId,
+                intent.sellerId,
+                intent.buyerId,
+                intent.offerId
+                )
             is OffersOrderDetailsIntent.UpdateOffer ->  updateOffer(intent.offerId, intent.newPrice)
             is OffersOrderDetailsIntent.CancelOffer -> cancelOffer(intent.offerId)
             is OffersOrderDetailsIntent.MarkAsReceived -> markAsReceived(intent.offerId)
@@ -121,14 +125,15 @@ class OffersOrderDetailsViewModel @Inject constructor(
     }
 
 
-    private fun openChat(orderId: String, sellerId: String, buyerId: String) {
+    private fun openChat(orderId: String, sellerId: String, buyerId: String, offerId: String) {
         viewModelScope.launch {
             try {
                 _effect.emit(
                     OffersOrderDetailsEffect.NavigateToChat(
                         orderId = orderId,
                         sellerId = sellerId,
-                        buyerId = buyerId
+                        buyerId = buyerId,
+                        offerId = offerId
                     )
                 )
             }catch (e : Exception){

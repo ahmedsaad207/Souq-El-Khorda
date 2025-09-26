@@ -16,7 +16,7 @@ import com.delighted2wins.souqelkhorda.features.authentication.presentation.scre
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.screen.SignUpScreen
 import com.delighted2wins.souqelkhorda.features.buyers.presentation.screen.BuyerRegistrationScreen
 import com.delighted2wins.souqelkhorda.features.buyers.presentation.screen.NearestBuyersScreen
-import com.delighted2wins.souqelkhorda.features.chat.ChatScreen
+import com.delighted2wins.souqelkhorda.features.chat.presentation.screen.ChatScreen
 import com.delighted2wins.souqelkhorda.features.history.presentation.screen.HistoryScreen
 import com.delighted2wins.souqelkhorda.features.market.presentation.screen.MarketScreen
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.screen.OrdersScreen
@@ -85,14 +85,15 @@ fun NavigationRoot(
                             snackBarHostState = snackBarState,
                             orderId = key.orderId,
                             orderOwnerId = key.orderOwnerId,
-                            orderBuyerId = key.orderBuyerId,
+                            orderBuyerId = key.orderBuyerId!!,
                             source = key.source,
-                            onChatClick = { sellerId, buyerId, orderId ->
+                            onChatClick = { orderId, sellerId, buyerId, offerId ->
                                 backStack.add(
                                     ChatKey(
-                                        orderId = key.orderId,
-                                        sellerId = key.orderOwnerId,
-                                        buyerId = key.orderBuyerId!!
+                                        orderId = orderId,
+                                        sellerId = sellerId,
+                                        buyerId = buyerId,
+                                        offerId = offerId
                                     )
                                 )
                             },
@@ -105,9 +106,10 @@ fun NavigationRoot(
                     NavEntry(key) {
                         bottomBarState.value = false
                         ChatScreen(
+                            orderId = key.orderId,
                             sellerId = key.sellerId,
                             buyerId = key.buyerId,
-                            orderId = key.orderId,
+                            offerId = key.offerId,
                             onBack = { backStack.remove(key) }
                         )
                     }
