@@ -12,8 +12,5 @@ class OrderDetailsRepositoryImpl @Inject constructor(
     override suspend fun getOrderDetails(orderId: String,source: OrderSource): Order? {
         return remoteDataSource.fetchOrderDetails(orderId, source)
     }
-    override suspend fun getOrderDetails(orderId: String, ownerId: String, buyerId: String?, source: OrderSource): Order? {
-        return remoteDataSource.fetchOrderDetails(orderId, ownerId, buyerId, source)
-    }
 }
 

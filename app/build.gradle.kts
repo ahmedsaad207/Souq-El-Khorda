@@ -107,4 +107,4 @@ dependencies {
     // gson
     implementation("com.google.code.gson:gson:2.13.2")
 
-}
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.34.0")}

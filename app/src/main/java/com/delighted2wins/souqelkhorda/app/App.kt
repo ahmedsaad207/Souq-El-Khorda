@@ -1,7 +1,6 @@
 package com.delighted2wins.souqelkhorda.app
 
 import android.app.Application
-import com.cloudinary.Cloudinary
 import com.cloudinary.android.MediaManager
 import com.google.firebase.FirebaseApp
 import dagger.hilt.android.HiltAndroidApp

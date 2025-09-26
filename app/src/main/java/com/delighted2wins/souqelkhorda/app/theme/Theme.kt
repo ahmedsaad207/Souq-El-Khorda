@@ -39,7 +39,7 @@ val LightColorScheme = lightColorScheme(
 
     inverseSurface = DarkBackground,
     inverseOnSurface = Color.White,
-
+tertiary = LightSubCard,
 )
 
 val DarkColorScheme = darkColorScheme(
@@ -69,7 +69,8 @@ val DarkColorScheme = darkColorScheme(
     outline = DarkBorderUnfocused,
 
     inverseSurface = LightBackground,
-    inverseOnSurface = Color.Black
+    inverseOnSurface = Color.Black,
+    tertiary = DarkSubCard,
 )
 
 @Composable

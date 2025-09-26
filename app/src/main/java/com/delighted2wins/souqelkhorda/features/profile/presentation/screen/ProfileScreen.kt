@@ -2,7 +2,6 @@ package com.delighted2wins.souqelkhorda.features.profile.presentation.screen
 
 import CustomTextFieldWithIcon
 import android.content.Intent
-import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
@@ -33,9 +32,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -57,7 +53,6 @@ import com.delighted2wins.souqelkhorda.features.profile.presentation.component.P
 import com.delighted2wins.souqelkhorda.features.profile.presentation.component.ProfileStats
 import com.delighted2wins.souqelkhorda.features.profile.presentation.contract.ProfileContract
 import com.delighted2wins.souqelkhorda.features.profile.presentation.viewmodel.ProfileViewModel
-import kotlin.collections.plus
 
 @Preview(showBackground = true)
 @Composable

@@ -4,11 +4,11 @@ import android.os.Build
 import android.text.format.DateUtils
 import androidx.annotation.RequiresApi
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Date
+import java.util.Locale
 
 fun Long.toFormattedDate(pattern: String = "MMM dd, yyyy"): String {
     return try {

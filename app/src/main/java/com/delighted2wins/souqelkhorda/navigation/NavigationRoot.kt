@@ -14,7 +14,9 @@ import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
 import com.delighted2wins.souqelkhorda.core.enums.OrderSource
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.screen.LoginScreen
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.screen.SignUpScreen
+import com.delighted2wins.souqelkhorda.features.buyers.presentation.screen.BuyerRegistrationScreen
 import com.delighted2wins.souqelkhorda.features.buyers.presentation.screen.NearestBuyersScreen
+import com.delighted2wins.souqelkhorda.features.chat.presentation.screen.ChatScreen
 import com.delighted2wins.souqelkhorda.features.history.presentation.screen.HistoryScreen
 import com.delighted2wins.souqelkhorda.features.market.presentation.screen.MarketScreen
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.screen.OrdersScreen
@@ -80,11 +82,35 @@ fun NavigationRoot(
                     NavEntry(key) {
                         bottomBarState.value = false
                         OrderDetailsScreen(
+                            snackBarHostState = snackBarState,
                             orderId = key.orderId,
                             orderOwnerId = key.orderOwnerId,
-                            orderBuyerId = key.orderBuyerId,
+                            orderBuyerId = key.orderBuyerId!!,
                             source = key.source,
+                            onChatClick = { orderId, sellerId, buyerId, offerId ->
+                                backStack.add(
+                                    ChatKey(
+                                        orderId = orderId,
+                                        sellerId = sellerId,
+                                        buyerId = buyerId,
+                                        offerId = offerId
+                                    )
+                                )
+                            },
                             onBackClick = { backStack.remove(key) }
+                        )
+                    }
+                }
+
+                is ChatKey -> {
+                    NavEntry(key) {
+                        bottomBarState.value = false
+                        ChatScreen(
+                            orderId = key.orderId,
+                            sellerId = key.sellerId,
+                            buyerId = key.buyerId,
+                            offerId = key.offerId,
+                            onBack = { backStack.remove(key) }
                         )
                     }
                 }
@@ -95,7 +121,10 @@ fun NavigationRoot(
                         screenNameState.value = "Nearest Buyers"
                         NearestBuyersScreen(
                             innerPadding = innerPadding,
-                            )
+                            onBuyerClick = {
+                                backStack.add(element = BuyerRegistration)
+                            }
+                        )
                     }
                 }
 
@@ -204,6 +233,18 @@ fun NavigationRoot(
                     }
                 }
 
+                is BuyerRegistration -> {
+                    NavEntry(key) {
+                        bottomBarState.value = false
+                        BuyerRegistrationScreen(
+                            innerPadding = innerPadding,
+                            snackBarHostState = snackBarState,
+                            onBackClick = {
+                                backStack.remove(key)
+                            }
+                        )
+                    }
+                }
 
                 else -> error("Unknown screen $key")
             }

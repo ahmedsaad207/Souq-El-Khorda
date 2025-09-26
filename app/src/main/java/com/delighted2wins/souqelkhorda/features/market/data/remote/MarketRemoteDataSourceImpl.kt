@@ -32,8 +32,12 @@ class MarketRemoteDataSourceImpl @Inject constructor(
 
                 val scrapsList = (data["scraps"] as? List<Map<String, Any>>)?.map { scrapMap ->
                     Scrap(
+                        id = (scrapMap["id"] as? Long)?.toInt() ?: 0,
+                        category = scrapMap["category"] as? String ?: "",
+                        unit = scrapMap["unit"] as? String ?: "",
                         amount = scrapMap["amount"]?.toString() ?: "",
-                        images = emptyList() // TODO
+                        description = scrapMap["description"] as? String ?: "",
+                        images = (scrapMap["images"] as? List<*>)?.mapNotNull { it?.toString() } ?: emptyList()
                     )
                 } ?: emptyList()
 
