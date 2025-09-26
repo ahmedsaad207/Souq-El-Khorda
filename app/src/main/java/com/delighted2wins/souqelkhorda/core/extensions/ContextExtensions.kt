@@ -27,20 +27,3 @@ fun Context.restartActivity() {
     this.startActivity(intent)
     (this as? Activity)?.finish()
 }
-
-
-fun Context.requestNotificationPermission(activity: Activity, requestCode: Int = 1001) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        if (ContextCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                activity,
-                arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
-                requestCode
-            )
-        }
-    }
-}

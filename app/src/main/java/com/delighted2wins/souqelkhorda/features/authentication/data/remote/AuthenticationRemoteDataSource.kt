@@ -73,13 +73,4 @@ class AuthenticationRemoteDataSourceImp @Inject constructor(
     override fun logout() {
         firebaseAuth.signOut()
     }
-
-    override fun updateFcmToken(token: String) {
-        val data = mapOf("fcmToken" to token)
-        firebaseDb.collection("users").document(firebaseAuth.currentUser?.uid ?: "")
-            .set(data, SetOptions.merge())
-            .addOnCompleteListener {
-
-            }
-    }
 }

@@ -1,15 +1,19 @@
 package com.delighted2wins.souqelkhorda.core.notification.di
 
-import com.delighted2wins.souqelkhorda.core.notification.data.FcmApiService
-import com.delighted2wins.souqelkhorda.core.notification.data.FcmRemoteDataSource
-import com.delighted2wins.souqelkhorda.core.notification.data.FcmRemoteDataSourceImpl
-import com.delighted2wins.souqelkhorda.core.notification.data.FcmRepositoryImpl
-import com.delighted2wins.souqelkhorda.core.notification.domain.FcmRepository
-import com.delighted2wins.souqelkhorda.core.notification.domain.SendNotificationUseCase
+import android.content.Context
+import com.delighted2wins.souqelkhorda.core.AppConstant
+import com.delighted2wins.souqelkhorda.core.notification.data.remote.service.FcmApiService
+import com.delighted2wins.souqelkhorda.core.notification.data.remote.datasource.FcmRemoteDataSource
+import com.delighted2wins.souqelkhorda.core.notification.data.remote.datasource.FcmRemoteDataSourceImpl
+import com.delighted2wins.souqelkhorda.core.notification.data.repository.FcmRepositoryImpl
+import com.delighted2wins.souqelkhorda.core.notification.domain.repository.FcmRepository
+import com.delighted2wins.souqelkhorda.core.notification.domain.usecases.SendNotificationUseCase
+import com.delighted2wins.souqelkhorda.core.notification.utils.FcmTokenManager
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -22,10 +26,16 @@ object RemoteModule {
     @Singleton
     fun provideFcmApiService(): FcmApiService {
         return Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:8080/")
+            .baseUrl(AppConstant.FCM_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(FcmApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFcmTokenManager(@ApplicationContext context: Context): FcmTokenManager {
+        return FcmTokenManager(context)
     }
 }
 

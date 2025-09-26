@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        requestNotificationPermission(this)
+        requestNotificationPermission()
         setContent {
             configureSystemUI(isSystemInDarkTheme())
 

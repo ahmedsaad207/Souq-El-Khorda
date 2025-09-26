@@ -8,8 +8,4 @@ interface IAuthenticationLocalDataSource {
     fun freeUserData()
     fun getCashedUser(): AuthUser
     fun cashUserData( user: AuthUser)
-
-    fun saveFcmToken(token: String)
-    fun getFcmToken(): String?
-    fun clearFcmToken()
 }

@@ -3,10 +3,11 @@ package com.delighted2wins.souqelkhorda.features.sell.presentation.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.delighted2wins.souqelkhorda.core.enums.NotificationMessagesEnum
 import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.core.model.Scrap
-import com.delighted2wins.souqelkhorda.core.notification.data.NotificationRequestDto
-import com.delighted2wins.souqelkhorda.core.notification.domain.SendNotificationUseCase
+import com.delighted2wins.souqelkhorda.core.notification.domain.entity.NotificationRequest
+import com.delighted2wins.souqelkhorda.core.notification.domain.usecases.SendNotificationUseCase
 import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.DeleteAllScrapsUseCase
 import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.DeleteScrapByIdUseCase
 import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.GetScrapesUseCase
@@ -91,12 +92,8 @@ class SellViewModel @Inject constructor(
         try {
             val updatedScraps = uploadScrapImagesUseCase(order.scraps)
             sendNotificationUseCase(
-                NotificationRequestDto(
-                    toToken = "",
-                    title = "Saad ordered",
-                    message = "order delivered from zizo",
-                    action = "",
-                    extraData = emptyMap()
+                NotificationRequest(
+                    message = NotificationMessagesEnum.OFFER_SENT_PENDING.getMessage()
                 )
             )
             val updatedOrder = order.copy(scraps = updatedScraps)

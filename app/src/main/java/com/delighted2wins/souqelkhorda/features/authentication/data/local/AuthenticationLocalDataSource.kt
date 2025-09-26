@@ -49,17 +49,4 @@ class AuthenticationLocalDataSourceImp @Inject constructor(
         saveData("user_image", "")
         saveData("fcm_token", "")
     }
-
-    override fun saveFcmToken(token: String) {
-        saveData("fcm_token", token)
-    }
-
-    override fun getFcmToken(): String? {
-        return fetchData("fcm_token", "")
-            .takeIf { it.isNotEmpty() }
-    }
-
-    override fun clearFcmToken() {
-        saveData("fcm_token", "")
-    }
 }

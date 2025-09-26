@@ -8,6 +8,4 @@ interface IAuthenticationRemoteDataSource {
     suspend fun signUpWithEmail(signUpRequestDto: SignUpRequestDto): Flow<AuthenticationState>
     suspend fun loginWithEmail(email: String, password: String): Flow<AuthenticationState>
     fun logout()
-
-    fun updateFcmToken(token: String)
 }
