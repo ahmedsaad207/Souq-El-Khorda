@@ -1,15 +1,15 @@
-package com.delighted2wins.souqelkhorda.core
+package com.delighted2wins.souqelkhorda.core.notification.data
 
 import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface FcmApiService {
     @POST("fcm/send-notification")
-    suspend fun sendNotification(@Body request: NotificationRequest): ApiResponse<Unit>
+    suspend fun sendNotification(@Body request: NotificationRequestDto): ApiResponseDto<Unit>
 }
 
-data class NotificationRequest(
-    val toUserId: String,
+data class NotificationRequestDto(
+    val toToken: String,
     val title: String,
     val message: String,
     val imageUrl: String? = null,
@@ -17,7 +17,7 @@ data class NotificationRequest(
     val extraData: Map<String, String>? = null
 )
 
-data class ApiResponse<T>(
+data class ApiResponseDto<T>(
     val success: Boolean,
     val message: String,
     val data: T? = null
