@@ -43,10 +43,10 @@ fun OrderDetailsScreen(
     snackBarHostState: SnackbarHostState,
     orderId: String,
     orderOwnerId: String,
-    orderBuyerId: String? = null,
+    orderBuyerId: String?,
     source: OrderSource,
     viewModel: OrderDetailsViewModel = hiltViewModel(),
-    onChatClick: (String, String, String) -> Unit,
+    onChatClick: (String, String, String, String) -> Unit,
     onBackClick: () -> Unit = {},
 ) {
     val layoutDirectionRtl: Boolean = LocalLayoutDirection.current == LayoutDirection.Rtl
@@ -184,7 +184,7 @@ private fun RenderSuccess(
     state: OrderDetailsState.Success,
     orderOwner: MarketUser?,
     isRtl: Boolean,
-    onChatClick: (String, String, String) -> Unit,
+    onChatClick: (String, String, String, String) -> Unit,
     onBackClick: () -> Unit
 ) {
     when (state) {
