@@ -69,7 +69,6 @@ fun OrdersScreen(
     val scope = rememberCoroutineScope()
     val coroutineScope = rememberCoroutineScope()
     val isRtl: Boolean = LocalLayoutDirection.current == LayoutDirection.Rtl
-    var selectedChip by remember { mutableStateOf("Sells") }
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var selectedOrderId by remember { mutableStateOf("")}
@@ -185,7 +184,6 @@ fun OrdersScreen(
                 1 -> MarketOrdersScreen(
                     state = state,
                     onChipSelected = { chip ->
-                        selectedChip = chip
                         when (chip) {
                             "Sells" -> viewModel.onIntent(MyOrdersIntents.LoadSells)
                             "Offers" -> viewModel.onIntent(MyOrdersIntents.LoadOffers)

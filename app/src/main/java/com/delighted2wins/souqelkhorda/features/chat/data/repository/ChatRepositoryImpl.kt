@@ -16,4 +16,7 @@ class ChatRepositoryImpl @Inject constructor(
     override fun getMessages(orderId: String,offerId: String, onMessage: (Message) -> Unit) {
         remoteDataSource.getMessages(orderId,offerId, onMessage)
     }
+    override suspend fun deleteChat(orderId: String, offerId: String): Boolean {
+        return remoteDataSource.deleteChat(orderId, offerId)
+    }
 }
