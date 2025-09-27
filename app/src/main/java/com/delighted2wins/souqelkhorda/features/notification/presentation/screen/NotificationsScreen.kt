@@ -1,101 +1,78 @@
 package com.delighted2wins.souqelkhorda.features.notification.presentation.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.delighted2wins.souqelkhorda.core.components.OneIconCard
+import com.delighted2wins.souqelkhorda.core.extensions.toRelativeTime
 import com.delighted2wins.souqelkhorda.features.notification.presentation.components.NotificationCard
+import com.delighted2wins.souqelkhorda.features.notification.presentation.viewmodel.NotificationsViewModel
 
 
 @Composable
 fun NotificationsScreen(
-    notifications: List<NotificationItem> = emptyList(),
+    viewModel: NotificationsViewModel = hiltViewModel(),
     onBackClick: () -> Unit = {},
-    onItemClick: () -> Unit = {},
+    onItemClick: (String) -> Unit = {},
 ) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
         OneIconCard(
+            modifier = Modifier.padding(vertical = 24.dp),
             onClick = onBackClick,
             headerTxt = "Notifications",
             titleSize = 22
         )
 
-        LazyColumn(
-            modifier = Modifier.fillMaxSize()
+        Box(
+            modifier = Modifier
         ) {
-            items(notifications, key = { it.id }) { item ->
-                NotificationCard(
-                    imageUrl = "",
-                    title = item.title,
-                    description = item.description,
-                    tag = item.tag,
-                    tagColor = when (item.type) {
-                        NotificationType.SELLING -> Color(0xFF00B259)
-                        NotificationType.BUYING -> Color(0xFF2A62FF)
-                    },
-                    time = item.time,
-                    unread = item.unread,
-                    onDismiss = {  },
-                    onItemClick = onItemClick
-                )
+            LazyColumn(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                when {
+                    state.isLoading -> {
+
+                    }
+
+                    state.error != null -> {
+
+                    }
+
+                    else -> {
+                        items(state.notifications, key = { it.id }) { item ->
+                            NotificationCard(
+                                imageUrl = "",
+                                title = item.title,
+                                description = item.message,
+                                time = item.createdAt.toRelativeTime(),
+                                unread = item.read,
+                                onDismiss = { },
+                                onItemClick = { onItemClick(item.id) }
+                            )
+                        }
+                    }
+                }
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun NotificationsScreenPreview() {
-    val dummyNotifications = listOf(
-        NotificationItem(
-            id = 1,
-            title = "New Offer Received",
-            description = "Someone is interested in your old furniture set. Check the offer details and respond.",
-            tag = "SELLING",
-            time = "2 hours ago",
-            type = NotificationType.SELLING,
-            unread = true
-        ),
-        NotificationItem(
-            id = 2,
-            title = "New Offer Received",
-            description = "A bicycle matching your search criteria is now available nearby. Act fast!",
-            tag = "BUYING",
-            time = "5 hours ago",
-            type = NotificationType.BUYING,
-            unread = false
-        )
-    )
-
-    NotificationsScreen(
-        notifications = dummyNotifications,
-        onItemClick = { }
-    )
-}
-
-
-data class NotificationItem(
-    val id: Int,
-    val title: String,
-    val description: String,
-    val tag: String,
-    val time: String,
-    val type: NotificationType,
-    val unread: Boolean = true
-)
-
-enum class NotificationType {
-    SELLING,
-    BUYING
 }
