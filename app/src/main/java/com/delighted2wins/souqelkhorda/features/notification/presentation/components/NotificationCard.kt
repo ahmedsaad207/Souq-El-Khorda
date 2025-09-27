@@ -1,9 +1,7 @@
 package com.delighted2wins.souqelkhorda.features.notification.presentation.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -40,8 +38,6 @@ fun NotificationCard(
     imageUrl: String? = null,
     title: String = "New Offer Received",
     description: String = "Someone is interested in your old furniture set. Check the offer details and respond.",
-    tag: String = "SELLING",
-    tagColor: Color = Color(0xFF00B259) ,
     time: String = "2 hours ago",
     unread: Boolean = true,
     onDismiss: () -> Unit = {},
@@ -128,17 +124,6 @@ fun NotificationCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Box(
-                    modifier = Modifier
-                        .background(tagColor.copy(alpha = 0.15f), RoundedCornerShape(20.dp))
-                        .padding(horizontal = 8.dp, vertical = 2.dp)
-                ) {
-                    Text(
-                        text = tag,
-                        style = AppTypography.bodySmall.copy(color = tagColor, fontWeight = FontWeight.Bold)
-                    )
-                }
-
                 Text(
                     text = time,
                     style = AppTypography.bodySmall.copy(fontWeight = FontWeight.Bold),

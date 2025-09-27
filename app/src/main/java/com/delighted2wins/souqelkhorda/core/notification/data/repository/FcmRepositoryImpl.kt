@@ -23,10 +23,11 @@ class FcmRepositoryImpl @Inject constructor(
             .get()
             .await()
 
+        val userId = docSnapshot.getString("id")
         val token = docSnapshot.getString("fcmToken")
         val name = docSnapshot.getString("name") ?: ""
         val imageUrl = docSnapshot.getString("imageUrl")
 
-        return remoteDataSource.sendNotification(request.copy(title = name, imageUrl = imageUrl, toUserId = token).toDto()).toDomain()
+        return remoteDataSource.sendNotification(request.copy(title = name, imageUrl = imageUrl, toUserId = userId, token = token).toDto()).toDomain()
     }
 }
