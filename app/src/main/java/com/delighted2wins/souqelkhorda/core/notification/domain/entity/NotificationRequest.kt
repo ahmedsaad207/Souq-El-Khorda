@@ -1,6 +1,7 @@
 package com.delighted2wins.souqelkhorda.core.notification.domain.entity
 
 data class NotificationRequest(
+    val token: String? = null,
     val toUserId: String? = null,
     val title: String = "",
     val message: String,

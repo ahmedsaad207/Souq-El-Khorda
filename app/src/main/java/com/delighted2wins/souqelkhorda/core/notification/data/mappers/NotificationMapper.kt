@@ -18,7 +18,8 @@ fun NotificationRequestDto.toDomain() : NotificationRequest {
 
 fun NotificationRequest.toDto() : NotificationRequestDto {
     return NotificationRequestDto(
-        toToken = toUserId ?: "",
+        toToken = token ?: "",
+        toUserId = toUserId ?: "",
         title = title,
         message = message,
         imageUrl = imageUrl,
