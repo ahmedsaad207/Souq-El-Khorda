@@ -158,4 +158,62 @@
     <string name="notifications">الإشعارات</string>
     <string name="read">مقروء</string>
 
+    <string name="just_now">الآن</string>
+
+    <plurals name="minutes_ago">
+        <item quantity="zero">الآن</item>
+        <item quantity="one">قبل دقيقة</item>
+        <item quantity="two">قبل دقيقتين</item>
+        <item quantity="few">قبل %d دقائق</item>
+        <item quantity="many">قبل %d دقيقة</item>
+        <item quantity="other">قبل %d دقيقة</item>
+    </plurals>
+
+    <plurals name="hours_ago">
+        <item quantity="zero">الآن</item>
+        <item quantity="one">قبل ساعة</item>
+        <item quantity="two">قبل ساعتين</item>
+        <item quantity="few">قبل %d ساعات</item>
+        <item quantity="many">قبل %d ساعة</item>
+        <item quantity="other">قبل %d ساعة</item>
+    </plurals>
+
+    <string name="yesterday">أمس</string>
+
+    <plurals name="days_ago">
+        <item quantity="zero">اليوم</item>
+        <item quantity="one">قبل يوم</item>
+        <item quantity="two">قبل يومين</item>
+        <item quantity="few">قبل %d أيام</item>
+        <item quantity="many">قبل %d يوم</item>
+        <item quantity="other">قبل %d يوم</item>
+    </plurals>
+
+    <plurals name="weeks_ago">
+        <item quantity="zero">هذا الأسبوع</item>
+        <item quantity="one">قبل أسبوع</item>
+        <item quantity="two">قبل أسبوعين</item>
+        <item quantity="few">قبل %d أسابيع</item>
+        <item quantity="many">قبل %d أسبوع</item>
+        <item quantity="other">قبل %d أسبوع</item>
+    </plurals>
+
+    <plurals name="months_ago">
+        <item quantity="zero">هذا الشهر</item>
+        <item quantity="one">قبل شهر</item>
+        <item quantity="two">قبل شهرين</item>
+        <item quantity="few">قبل %d أشهر</item>
+        <item quantity="many">قبل %d شهر</item>
+        <item quantity="other">قبل %d شهر</item>
+    </plurals>
+
+    <plurals name="years_ago">
+        <item quantity="zero">هذا العام</item>
+        <item quantity="one">قبل سنة</item>
+        <item quantity="two">قبل سنتين</item>
+        <item quantity="few">قبل %d سنوات</item>
+        <item quantity="many">قبل %d سنة</item>
+        <item quantity="other">قبل %d سنة</item>
+    </plurals>
+
 </resources>

@@ -8,6 +8,6 @@ data class NotificationDto(
     val title: String = "",
     val message: String = "",
     val imageUrl: String? = null,
-    val createdAt: Long = System.currentTimeMillis(),
+    val createdAt: Long = 0L,
     val read: Boolean = false,
 )

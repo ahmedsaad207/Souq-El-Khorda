@@ -12,10 +12,14 @@ import javax.inject.Inject
 class NotificationsRepositoryImpl @Inject constructor(
     private val remoteDataSource: NotificationRemoteDataSource
 ): NotificationsRepository {
-    override suspend fun getUnreadNotifications(): Result<List<Notification>> {
-        return remoteDataSource.getUnreadNotifications().map { notifications ->
+    override suspend fun getNotifications(): Result<List<Notification>> {
+        return remoteDataSource.getNotifications().map { notifications ->
             notifications.map { it.toDomain() }
         }
+    }
+
+    override suspend fun getUnReadNotificationsCount(): Result<Int> {
+        return remoteDataSource.getUnReadNotificationsCount()
     }
 
     override suspend fun markAsRead(notificationId: String): Result<Unit> {
@@ -30,5 +34,9 @@ class NotificationsRepositoryImpl @Inject constructor(
         return remoteDataSource.observeNotifications().map { notifications ->
             notifications.map { it.toDomain() }
         }
+    }
+
+    override suspend fun observeUnReadNotificationsCount(): Flow<Int> {
+        return remoteDataSource.observeUnReadNotificationsCount()
     }
 }

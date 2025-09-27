@@ -162,5 +162,33 @@
     <string name="notifications">Notifications</string>
     <string name="read">Read</string>
 
+    <string name="just_now">Just now</string>
+    <plurals name="minutes_ago">
+        <item quantity="one">%d minute ago</item>
+        <item quantity="other">%d minutes ago</item>
+    </plurals>
+    <plurals name="hours_ago">
+        <item quantity="one">%d hour ago</item>
+        <item quantity="other">%d hours ago</item>
+    </plurals>
+    <string name="yesterday">Yesterday</string>
+    <plurals name="days_ago">
+        <item quantity="one">%d day ago</item>
+        <item quantity="other">%d days ago</item>
+    </plurals>
+    <plurals name="weeks_ago">
+        <item quantity="one">%d week ago</item>
+        <item quantity="other">%d weeks ago</item>
+    </plurals>
+    <plurals name="months_ago">
+        <item quantity="one">%d month ago</item>
+        <item quantity="other">%d months ago</item>
+    </plurals>
+    <plurals name="years_ago">
+        <item quantity="one">%d year ago</item>
+        <item quantity="other">%d years ago</item>
+    </plurals>
+
+
 
 </resources>

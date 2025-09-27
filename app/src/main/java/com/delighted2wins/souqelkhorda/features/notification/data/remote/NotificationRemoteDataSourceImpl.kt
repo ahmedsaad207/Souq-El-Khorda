@@ -15,7 +15,7 @@ class NotificationRemoteDataSourceImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth
 ) : NotificationRemoteDataSource {
 
-    override suspend fun getUnreadNotifications(): Result<List<NotificationDto>> {
+    override suspend fun getNotifications(): Result<List<NotificationDto>> {
         val userId = firebaseAuth.currentUser?.uid
             ?: return Result.success(emptyList())
 
@@ -29,6 +29,22 @@ class NotificationRemoteDataSourceImpl @Inject constructor(
                     doc.toObject(NotificationDto::class.java).copy(id = doc.id)
                 }
             Result.success(list)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun getUnReadNotificationsCount(): Result<Int> {
+        val userId = firebaseAuth.currentUser?.uid ?: return Result.success(0)
+        return try {
+            val count = firestore.collection("notifications")
+                .document(userId)
+                .collection("userNotifications")
+                .whereEqualTo("read", false)
+                .get()
+                .await()
+                .size()
+            Result.success(count)
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -88,7 +104,26 @@ class NotificationRemoteDataSourceImpl @Inject constructor(
                     trySend(notifications)
                 }
             }
+        awaitClose { listener.remove() }
+    }
 
+    override suspend fun observeUnReadNotificationsCount(): Flow<Int> = callbackFlow {
+        val userId = firebaseAuth.currentUser?.uid ?: run {
+            close(IllegalStateException("User not logged in"))
+            return@callbackFlow
+        }
+
+        val listener = firestore.collection("notifications")
+            .document(userId)
+            .collection("userNotifications")
+            .whereEqualTo("read", false)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    close(error)
+                } else {
+                    trySend(snapshot?.size() ?: 0)
+                }
+            }
         awaitClose { listener.remove() }
     }
 }

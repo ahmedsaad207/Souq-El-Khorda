@@ -6,8 +6,10 @@ import com.delighted2wins.souqelkhorda.features.notification.data.repository.Not
 import com.delighted2wins.souqelkhorda.features.notification.domain.repository.NotificationsRepository
 import com.delighted2wins.souqelkhorda.features.notification.domain.usecases.DismissNotificationUseCase
 import com.delighted2wins.souqelkhorda.features.notification.domain.usecases.GetNotificationsUseCase
+import com.delighted2wins.souqelkhorda.features.notification.domain.usecases.GetUnReadNotificationsCountUseCase
 import com.delighted2wins.souqelkhorda.features.notification.domain.usecases.MarkNotificationAsReadUseCase
 import com.delighted2wins.souqelkhorda.features.notification.domain.usecases.ObserveNotificationsUseCase
+import com.delighted2wins.souqelkhorda.features.notification.domain.usecases.ObserveUnReadNotificationsCountUseCase
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -57,4 +59,17 @@ object ProfileUseCaseModule {
     fun provideDismissNotificationUseCase(
         repository: NotificationsRepository
     ): DismissNotificationUseCase = DismissNotificationUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun provideGetUnReadNotificationsCountUseCase(
+        repository: NotificationsRepository
+    ): GetUnReadNotificationsCountUseCase = GetUnReadNotificationsCountUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun provideObserveUnReadNotificationsCountUseCase(
+        repository: NotificationsRepository
+    ): ObserveUnReadNotificationsCountUseCase = ObserveUnReadNotificationsCountUseCase(repository)
+
 }
