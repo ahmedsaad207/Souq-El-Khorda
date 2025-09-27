@@ -39,7 +39,11 @@ val LightColorScheme = lightColorScheme(
 
     inverseSurface = DarkBackground,
     inverseOnSurface = Color.White,
-tertiary = LightSubCard,
+    tertiary = LightSubCard,
+
+    surfaceContainer = LightCardGradientColor1,
+    surfaceContainerLow = LightCardGradientColor2,
+    surfaceTint = LightCardGradientColor3
 )
 
 val DarkColorScheme = darkColorScheme(
@@ -71,6 +75,9 @@ val DarkColorScheme = darkColorScheme(
     inverseSurface = LightBackground,
     inverseOnSurface = Color.Black,
     tertiary = DarkSubCard,
+    surfaceContainer = DarkCardGradientColor1,
+    surfaceContainerLow = DarkCardGradientColor2,
+    surfaceTint = DarkCardGradientColor3
 )
 
 @Composable

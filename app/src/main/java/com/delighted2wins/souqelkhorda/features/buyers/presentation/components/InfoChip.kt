@@ -21,10 +21,10 @@ fun InfoChip(
         modifier = modifier
             .padding(4.dp)
             .clip(RoundedCornerShape(12.dp))
-            .background(colors.outline)
+            .background(colors.surfaceContainerLow.copy(alpha = 0.2f))
             .border(
                 width = 1.dp,
-                color = colors.onSurface,
+                color = colors.primary,
                 shape = RoundedCornerShape(12.dp)
             )
             .padding(horizontal = 12.dp, vertical = 6.dp)
