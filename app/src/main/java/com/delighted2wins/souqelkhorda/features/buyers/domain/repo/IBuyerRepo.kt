@@ -1,0 +1,11 @@
+package com.delighted2wins.souqelkhorda.features.buyers.domain.repo
+
+import com.delighted2wins.souqelkhorda.features.buyers.data.model.BuyerDto
+import com.delighted2wins.souqelkhorda.features.buyers.presentation.state.BuyerState
+import kotlinx.coroutines.flow.Flow
+
+interface IBuyerRepo {
+    suspend fun registerBuyer(buyerModel: BuyerDto): Flow<BuyerState>
+    suspend fun getNearstBuyers(): Flow<BuyerState>
+    suspend fun isBuyer(userID: String): Boolean
+}

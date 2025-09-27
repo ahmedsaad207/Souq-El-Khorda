@@ -48,7 +48,7 @@ class LoginViewModel @Inject constructor(
                         }
 
                         is AuthenticationState.Error -> {
-                            _message.emit(AuthMsgEnum.UNAUTHORIZED.getMsg())
+                            _message.emit(AuthMsgEnum.SIGNUPFAIL.getMsg())
                         }
 
                         else -> Unit

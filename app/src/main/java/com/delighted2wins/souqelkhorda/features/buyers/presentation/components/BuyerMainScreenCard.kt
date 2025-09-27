@@ -7,9 +7,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -18,6 +21,7 @@ import androidx.compose.material.icons.outlined.PeopleOutline
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,6 +43,9 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.delighted2wins.souqelkhorda.R
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material3.placeholder
+import com.google.accompanist.placeholder.material3.shimmer
 
 
 @SuppressLint("ConfigurationScreenWidthHeight")
@@ -56,12 +63,12 @@ fun BuyerMainScreenCard(
     cardSubTitle: String =  stringResource(R.string.nearst_buyer_sub_title),
     firstSpanStyle: SpanStyle = SpanStyle(
         color = Color.White,
-        fontSize = 18.sp,
+        fontSize = 16.sp,
         fontWeight = FontWeight.Bold,
     ),
     secondSpanStyle: SpanStyle = SpanStyle(
         color = Color.White.copy(alpha = 0.8f),
-        fontSize = 16.sp,
+        fontSize = 14.sp,
         fontWeight = FontWeight.Normal
     )
     ) {
@@ -113,12 +120,12 @@ fun BuyerMainScreenCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 16.dp, horizontal = 8.dp),
-                horizontalArrangement = Arrangement.SpaceAround,
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(
                     modifier = Modifier
-                        .size(48.dp)
+                        .size(40.dp)
                         .clip(CircleShape)
                         .background(Color.White.copy(alpha = 0.2f)),
                     contentAlignment = Alignment.Center
@@ -127,7 +134,7 @@ fun BuyerMainScreenCard(
                         imageVector = icon,
                         contentDescription = null,
                         tint = Color.White,
-                        modifier = Modifier.size(30.dp)
+                        modifier = Modifier.size(24.dp)
                     )
                 }
                 Text(
@@ -159,9 +166,9 @@ fun BuyerMainScreenCard(
                         imageVictor = Icons.Outlined.Cottage,
                         msg = stringResource(R.string.register_shop),
                         color = Color(0xff12a052),
-                        btnWidth = screenWidth * 0.4,
+                        btnWidth = screenWidth * 0.45,
                         textColor = Color.White,
-                        fontSize = 14.0
+                        fontSize = 12.0
 
                     )
                 }
@@ -183,7 +190,7 @@ fun BuyerMainScreenCard(
                     ),
                     statisticsTextStyle = TextStyle(
                         fontWeight = FontWeight.Normal,
-                        fontSize = 20.sp,
+                        fontSize = 18.sp,
                         color = Color.White.copy(alpha = 0.7f),
                     ),
                 )
@@ -198,7 +205,7 @@ fun BuyerMainScreenCard(
                     ),
                     statisticsTextStyle = TextStyle(
                         fontWeight = FontWeight.Normal,
-                        fontSize = 20.sp,
+                        fontSize = 18.sp,
                         color = Color.White.copy(alpha = 0.7f),
                     ),
                 )
@@ -207,3 +214,126 @@ fun BuyerMainScreenCard(
         }
     }
 }
+
+
+@Composable
+fun ShimmerBuyerMainScreenCard(
+    modifier: Modifier = Modifier,
+    isFirstScreen: Boolean = true
+) {
+    val colors = MaterialTheme.colorScheme
+
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp)
+            .padding(bottom = 12.dp),
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(4.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = colors.surfaceVariant
+        )
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 16.dp, horizontal = 8.dp)
+        ) {
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .placeholder(
+                            visible = true,
+                            color = colors.surface,
+                            highlight = PlaceholderHighlight.shimmer()
+                        )
+                )
+
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 8.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .height(18.dp)
+                            .fillMaxWidth(0.7f)
+                            .placeholder(
+                                visible = true,
+                                color = colors.surface,
+                                highlight = PlaceholderHighlight.shimmer()
+                            )
+                    )
+                    Spacer(Modifier.height(6.dp))
+                    Box(
+                        modifier = Modifier
+                            .height(14.dp)
+                            .fillMaxWidth(0.5f)
+                            .placeholder(
+                                visible = true,
+                                color = colors.surface,
+                                highlight = PlaceholderHighlight.shimmer()
+                            )
+                    )
+                }
+
+              if (isFirstScreen) {
+                    Box(
+                        modifier = Modifier
+                            .height(36.dp)
+                            .width(120.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .placeholder(
+                                visible = true,
+                                color = colors.surface,
+                                highlight = PlaceholderHighlight.shimmer()
+                            )
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(24.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceAround
+            ) {
+                repeat(2) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .height(24.dp)
+                                .width(40.dp)
+                                .placeholder(
+                                    visible = true,
+                                    color = colors.surface,
+                                    highlight = PlaceholderHighlight.shimmer()
+                                )
+                        )
+                        Spacer(Modifier.height(8.dp))
+                        Box(
+                            modifier = Modifier
+                                .height(16.dp)
+                                .width(80.dp)
+                                .placeholder(
+                                    visible = true,
+                                    color = colors.surface,
+                                    highlight = PlaceholderHighlight.shimmer()
+                                )
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+

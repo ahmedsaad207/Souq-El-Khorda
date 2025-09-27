@@ -25,9 +25,12 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -43,15 +46,48 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.delighted2wins.souqelkhorda.R
+import com.delighted2wins.souqelkhorda.core.enums.ScrapTypeEnum
+import com.delighted2wins.souqelkhorda.features.authentication.presentation.component.DotLoadingIndicator
+import com.delighted2wins.souqelkhorda.features.buyers.presentation.state.BuyerState
+import com.delighted2wins.souqelkhorda.features.buyers.presentation.view_model.BuyerViewModel
 
 
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
-fun RegisterBuyerForm(modifier: Modifier = Modifier) {
+fun RegisterBuyerForm(
+    modifier: Modifier = Modifier,
+    viewModel: BuyerViewModel = hiltViewModel(),
+    snackBarHostState: SnackbarHostState,
+    onRegisterClick: () -> Unit
+    ) {
     var selected by remember { mutableStateOf(listOf<String>()) }
     val screenWidth = LocalConfiguration.current.screenWidthDp
     val colors = MaterialTheme.colorScheme
+    val valuesForApi = selected.map { ScrapTypeEnum.getValue(it) }
+    var latitude by remember { mutableDoubleStateOf(0.0) }
+    var longitude by remember { mutableDoubleStateOf(0.0) }
+
+    val state by viewModel.registerState.collectAsStateWithLifecycle()
+    val isLoading = state is BuyerState.Loading
+
+    LaunchedEffect(Unit) {
+        viewModel.message.collect { message ->
+            snackBarHostState.showSnackbar(message)
+        }
+    }
+    LaunchedEffect(state) {
+        when (state) {
+            is BuyerState.RegisterSuccess -> {
+                onRegisterClick()
+            }
+            is BuyerState.Error -> {
+            }
+            else -> Unit
+        }
+    }
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -83,8 +119,7 @@ fun RegisterBuyerForm(modifier: Modifier = Modifier) {
                 Box(
                     modifier = Modifier
                         .size(48.dp)
-                        .clip(CircleShape)
-                        .background(Color.White.copy(alpha = 0.2f)),
+                        .clip(CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
@@ -164,11 +199,16 @@ fun RegisterBuyerForm(modifier: Modifier = Modifier) {
                         )
                     }
                     Spacer(Modifier.height(16.dp))
-                    LocationComponent()
+                    LocationComponent{lat,lon ->
+                        latitude = lat
+                        longitude = lon
+
+                    }
                     Spacer(Modifier.height(24.dp))
                     Row(
                         modifier = Modifier
-                            .fillMaxWidth().padding(horizontal = 4.dp),
+                            .fillMaxWidth()
+                            .padding(horizontal = 4.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Start
                     ) {
@@ -202,21 +242,22 @@ fun RegisterBuyerForm(modifier: Modifier = Modifier) {
                         )
                     }
                     KordaTypeDrobDownMenu(
-                        options = listOf(
-                            "Option 1",
-                            "Option 2",
-                            "Option 3",
-                            "Option 4",
-                            "Option 5",
-                            "Option 6"
-                        ),
+                        options = ScrapTypeEnum.getAllScrapTypes(),
                         selectedOptions = selected,
-                        onSelectionChange = { selected = it }
-                    )
+                        onSelectionChange = { selectedList ->
+                            selected = selectedList
+                        }
 
+                    )
                     Spacer(Modifier.height(16.dp))
                     Button(
-                        onClick = {},
+                        onClick = {
+                            viewModel.registerBuyer(
+                                latitude,
+                                longitude,
+                                valuesForApi
+                            )
+                        },
                         modifier = Modifier
                             .width((screenWidth * 0.85).dp)
                             .padding(6.dp)
@@ -236,7 +277,11 @@ fun RegisterBuyerForm(modifier: Modifier = Modifier) {
                         ),
                         shape = RoundedCornerShape(12.dp)
                     ) {
-                        Text(stringResource(R.string.register_shop), fontSize = 22.sp, fontWeight = FontWeight.Bold)
+                        if (isLoading) {
+                            DotLoadingIndicator()
+                        } else {
+                            Text(stringResource(R.string.register_shop), fontSize = 22.sp, fontWeight = FontWeight.Bold)
+                        }
                     }
                 }
 

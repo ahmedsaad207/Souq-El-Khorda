@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,11 +15,13 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.rememberNavBackStack
 import com.delighted2wins.souqelkhorda.app.theme.SouqElKhordaTheme
 import com.delighted2wins.souqelkhorda.core.components.AppBottomNavBar
@@ -39,6 +42,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private val mainViewModel: MainViewModel by viewModels()
 
     lateinit var snackBarHostState: SnackbarHostState
     lateinit var bottomBarState: MutableState<Boolean>
@@ -64,6 +69,7 @@ class MainActivity : ComponentActivity() {
             val backStack = rememberNavBackStack(SplashScreen)
             SouqElKhordaTheme(darkTheme = isSystemInDarkTheme(), dynamicColor = false) {
                 val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+                val state by mainViewModel.state.collectAsStateWithLifecycle()
                 Scaffold(
                     modifier = if (navState.value) Modifier else Modifier.nestedScroll(
                         scrollBehavior.nestedScrollConnection
@@ -77,6 +83,9 @@ class MainActivity : ComponentActivity() {
                     topBar = {
                         if (bottomBarState.value) {
                             AppTopAppBar(
+                                userImage = state.userImageUrl,
+                                userName = state.userName,
+                                notificationCount = state.notificationCount,
                                 scrollBehavior = scrollBehavior,
                                 screenName = screenNameState.value,
                                 onProfileClick = { backStack.add(ProfileScreen) },

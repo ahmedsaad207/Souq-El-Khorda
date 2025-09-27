@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class NotificationRequestDto(
     val toToken: String,
+    val toUserId: String,
     val title: String,
     val message: String,
     val imageUrl: String? = null,
