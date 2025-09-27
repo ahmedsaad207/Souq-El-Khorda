@@ -163,6 +163,20 @@
     <string name="read">Read</string>
     <string name="please_check_your_internet_connection">Please Check your Internet Connection</string>
 
+    <string name="retry">Retry</string>
+    <string name="no_market_data">No market data available at the moment</string>
+    <string name="available_offers">Available Offers</string>
+
+    <string name="price_label">Price: %1$d EGP</string>
+    <string name="details_button">Details</string>
+    <string name="make_offer_button">Make Offer</string>
+
+    <string name="unknown_user">Unknown User</string>
+    <string name="unknown_location">Unknown Location</string>
+
+    <string name="search_in_scraps">Search in scraps...</string>
+
+
     <string name="just_now">Just now</string>
     <plurals name="minutes_ago">
         <item quantity="one">%d minute ago</item>
@@ -172,6 +186,7 @@
         <item quantity="one">%d hour ago</item>
         <item quantity="other">%d hours ago</item>
     </plurals>
+    <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
     <plurals name="days_ago">
         <item quantity="one">%d day ago</item>

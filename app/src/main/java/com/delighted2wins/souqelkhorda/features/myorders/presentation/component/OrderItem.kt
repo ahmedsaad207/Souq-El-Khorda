@@ -14,11 +14,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.core.utils.generateUiOrderId
-import com.delighted2wins.souqelkhorda.core.utils.toTimeAgo
+import com.delighted2wins.souqelkhorda.core.utils.getTimeAgoFromMillis
 
 @Composable
 fun OrderItem(
@@ -45,7 +46,10 @@ fun OrderItem(
         ) {
             OrderHeader(
                 orderId = generateUiOrderId(order.orderId, order.date),
-                date = order.date.toTimeAgo(systemIsRtl),
+                date = getTimeAgoFromMillis(
+                    LocalContext.current,
+                    order.date
+                ),
             )
 
             Row(

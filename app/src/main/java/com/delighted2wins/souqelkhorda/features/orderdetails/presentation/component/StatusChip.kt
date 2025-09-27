@@ -52,14 +52,23 @@ fun StatusChip(status: String) {
                 tint = MaterialTheme.colorScheme.onPrimary
             )
             Spacer(modifier = Modifier.width(6.dp))
+
+            val text = when(status){
+                OrderStatus.PENDING.toString(),OfferStatus.PENDING.toString() -> OrderStatus.PENDING.getLocalizedValue()
+                OrderStatus.COMPLETED.toString(),OfferStatus.ACCEPTED.toString() -> OrderStatus.COMPLETED.getLocalizedValue()
+                OrderStatus.CANCELLED.toString(),OfferStatus.REJECTED.toString() -> OrderStatus.CANCELLED.getLocalizedValue()
+                else -> status
+            }
+
             Text(
-                text = status,
+                text = text,
                 style = MaterialTheme.typography.labelSmall.copy(
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 14.sp
                 ),
                 color = MaterialTheme.colorScheme.onPrimary
             )
+
         }
     }
 }
