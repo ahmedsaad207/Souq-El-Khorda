@@ -52,7 +52,10 @@ fun NavigationRoot(
                     screenNameState.value = "Direct Sale"
                     NavEntry(key) {
                         bottomBarState.value = true
-                        SellScreen(innerPadding)
+                        SellScreen(
+                            innerPadding = innerPadding,
+                            snackBarState = snackBarState
+                        )
                     }
                 }
 
@@ -95,7 +98,7 @@ fun NavigationRoot(
                         screenNameState.value = "Nearest Buyers"
                         NearestBuyersScreen(
                             innerPadding = innerPadding,
-                            )
+                        )
                     }
                 }
 

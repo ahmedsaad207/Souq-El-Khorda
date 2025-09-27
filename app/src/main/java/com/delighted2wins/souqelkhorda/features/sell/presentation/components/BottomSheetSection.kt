@@ -203,7 +203,9 @@ fun BottomSheetSection(
                         options = ScrapType.entries.toTypedArray(),
                         selectedOption = selectedScrapType.value,
                         onOptionSelected = { selectedScrapType.value = it },
-                        labelMapper = { it.getLabel(context) }
+                        labelMapper = { it.getLabel(context) },
+                        iconTintMapper = {it.tint},
+                        iconResMapper = { it.iconRes }
                     )
                 }
             }

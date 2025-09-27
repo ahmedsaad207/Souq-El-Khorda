@@ -78,7 +78,7 @@
     <string name="add_to_your_recycling_order">Add to your recycling order</string>
     <string name="close">Close</string>
     <string name="scrap_type">Scrap type</string>
-    <string name="custom_scrap_name">"Custom scrap name "</string>
+    <string name="custom_scrap_name">"scrap name "</string>
     <string name="e_g_copper_wire">e.g., Copper wire</string>
     <string name="quantity_measurement"><![CDATA["Quantity & Measurement "]]></string>
     <string name="measurement_type">Measurement Type</string>
@@ -119,8 +119,9 @@
     <string name="paper">Paper</string>
     <string name="glass">Glass</string>
     <string name="plastic">Plastic</string>
-    <string name="custom_item">Custom Item</string>
+    <string name="custom_item">Other</string>
     <string name="weight_kg">Weight (kg)</string>
     <string name="pieces">Pieces</string>
+    <string name="order_submitted_successfully">Order submitted successfully</string>
 
 </resources>

@@ -1,13 +1,17 @@
 package com.delighted2wins.souqelkhorda.core.components
 
+import android.annotation.SuppressLint
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -29,16 +33,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
+@SuppressLint("SupportAnnotationUsage")
 @Composable
 fun <T : Enum<T>> CustomDropDown(
     modifier: Modifier = Modifier,
     options: Array<T>,
     onOptionSelected: (T) -> Unit,
     labelMapper: (T) -> String,
+    iconTintMapper: (T) -> Color = { Color.Unspecified },
+    @DrawableRes iconResMapper: (T) -> Int = { 0 },
     selectedOption: T
 ) {
+
     var expanded by remember { mutableStateOf(false) }
     var rowWidth by remember { mutableIntStateOf(0) }
 
@@ -61,10 +70,26 @@ fun <T : Enum<T>> CustomDropDown(
                     rowWidth = coordinates.size.width
                 }
         ) {
-            Text(
-                text = labelMapper(selectedOption),
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            Row(
+                modifier = Modifier.weight(1f)
+            ) {
+                if (iconResMapper(selectedOption) != 0) {
+
+                    Icon(
+                        painter = painterResource(iconResMapper(selectedOption)),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(24.dp),
+                        tint = iconTintMapper(selectedOption)
+                    )
+                    Spacer(Modifier.width(12.dp))
+                }
+                Text(
+                    text = labelMapper(selectedOption),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
             Icon(
                 imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                 contentDescription = null,
@@ -85,17 +110,41 @@ fun <T : Enum<T>> CustomDropDown(
                     1.dp,
                     color = MaterialTheme.colorScheme.outline.copy(0.5f),
                     shape = RoundedCornerShape(12.dp)
-                )
-            ,
+                ),
             containerColor = Color.Transparent,
             shadowElevation = 4.dp,
         ) {
             options.forEach { option ->
+                val isSelected = option == selectedOption
                 DropdownMenuItem(text = {
-                    Text(
-                        labelMapper(option),
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                if (isSelected) MaterialTheme.colorScheme.primary.copy(0.1f)
+                                else Color.Transparent,
+                                shape = RoundedCornerShape(8.dp),
+                            )
+                            .padding(4.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+
+                        if (iconResMapper(option) != 0) {
+                            Icon(
+                                painter = painterResource(iconResMapper(option)),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(24.dp),
+                                tint = iconTintMapper(option)
+                            )
+                            Spacer(Modifier.width(12.dp))
+                        }
+                        Text(
+                            labelMapper(option),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
                 }, onClick = {
                     onOptionSelected(option)
                     expanded = false

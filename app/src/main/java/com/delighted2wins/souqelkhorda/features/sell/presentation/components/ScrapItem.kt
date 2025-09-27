@@ -1,5 +1,6 @@
 package com.delighted2wins.souqelkhorda.features.sell.presentation.components
 
+import android.R.attr.category
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -15,7 +16,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Place
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -59,13 +60,13 @@ fun ScrapItem(
         horizontalArrangement = Arrangement.SpaceBetween
 
     ) {
+        val scrapType = ScrapType.entries.find { it.name.equals(scrap.category, ignoreCase = true) }
         Icon(
-            imageVector = Icons.Default.Place,
+            painter = painterResource(scrapType?.iconRes ?: ScrapType.CustomScrap.iconRes),
             contentDescription = scrap.category,
             modifier = Modifier
-                .size(40.dp)
-                .clip(RoundedCornerShape(8.dp)),
-            tint = MaterialTheme.colorScheme.primary
+                .size(36.dp),
+            tint = scrapType?.tint ?: ScrapType.CustomScrap.tint
         )
         Spacer(Modifier.width(12.dp))
         Column(

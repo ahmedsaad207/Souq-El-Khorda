@@ -75,7 +75,7 @@
     <string name="add_to_your_recycling_order">أضف إلى طلب إعادة التدوير</string>
     <string name="close">إغلاق</string>
     <string name="scrap_type">نوع الخردة</string>
-    <string name="custom_scrap_name">"اسم الخردة "</string>
+    <string name="custom_scrap_name">"اسم الخردة"</string>
     <string name="e_g_copper_wire">مثال: سلك نحاس</string>
     <string name="quantity_measurement"><![CDATA["الكمية والقياس "]]></string>
     <string name="measurement_type">نوع القياس</string>
@@ -116,9 +116,8 @@
     <string name="paper">ورق</string>
     <string name="glass">زجاج</string>
     <string name="plastic">بلاستيك</string>
-    <string name="custom_item">خردة اخرى</string>
+    <string name="custom_item">اخرى</string>
     <string name="weight_kg">الوزن (كجم)</string>
     <string name="pieces">قطع(ه)</string>
-
-
+    <string name="order_submitted_successfully">تم إرسال الطلب بنجاح</string>
 </resources>

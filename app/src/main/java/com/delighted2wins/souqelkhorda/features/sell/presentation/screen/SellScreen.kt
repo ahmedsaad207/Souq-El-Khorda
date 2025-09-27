@@ -16,6 +16,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.SheetValue
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -59,6 +61,7 @@ import kotlinx.coroutines.launch
 fun SellScreen(
     innerPadding: PaddingValues = PaddingValues(),
     viewModel: SellViewModel = hiltViewModel(),
+    snackBarState: SnackbarHostState,
 ) {
 
     val uiState by viewModel.state.collectAsStateWithLifecycle()
@@ -83,25 +86,35 @@ fun SellScreen(
     val bottomSheetMode = remember { mutableStateOf(BottomSheetMode.ADD) }
     var currentScrap by remember { mutableStateOf<Scrap?>(null) }
     var scrapToDelete by remember { mutableStateOf<Scrap?>(null) }
-    var orderToSubmit by remember { mutableStateOf<Order?>(null) }
 
     LaunchedEffect(uiState.isScrapSaved) {
         if (uiState.isScrapSaved) {
-            Toast.makeText(context,
-                context.getString(R.string.scrap_added_successfully), Toast.LENGTH_SHORT).show()
+            snackBarState.showSnackbar(
+                message = context.getString(R.string.scrap_added_successfully),
+                duration = SnackbarDuration.Short
+            )
             viewModel.resetScrapSavedFlag()
         }
     }
 
     LaunchedEffect(uiState.isScrapDeleted) {
         if (uiState.isScrapDeleted) {
-            Toast.makeText(context,
-                context.getString(R.string.scrap_deleted_successfully), Toast.LENGTH_SHORT).show()
+
+            snackBarState.currentSnackbarData?.dismiss()
+
+            snackBarState.showSnackbar(
+                message = context.getString(R.string.scrap_deleted_successfully),
+                duration = SnackbarDuration.Short
+            )
             viewModel.resetScrapDeletedFlag()
         }
     }
     LaunchedEffect(uiState.isOrderSubmitted) {
         if (uiState.isOrderSubmitted) {
+            snackBarState.showSnackbar(
+                message = context.getString(R.string.order_submitted_successfully),
+                duration = SnackbarDuration.Short
+            )
             isLoading.value = false
             title.value = ""
             description.value = ""
@@ -120,20 +133,6 @@ fun SellScreen(
                 scrapToDelete = null
             },
             onDismiss = { scrapToDelete = null }
-        )
-    }
-
-    if (orderToSubmit != null) {
-        ConfirmationDialog(
-            title = stringResource(R.string.submit_order),
-            message = stringResource(R.string.are_you_sure_you_want_to_submit_this_order),
-            confirmLabel = stringResource(R.string.submit),
-            onConfirm = {
-                isLoading.value = true
-                viewModel.processIntent(SellIntent.SendOrder(orderToSubmit!!))
-                orderToSubmit = null
-            },
-            onDismiss = { orderToSubmit = null }
         )
     }
 
@@ -211,7 +210,8 @@ fun SellScreen(
                             description = description.value.trim(),
                             price = price.intValue
                         )
-                        orderToSubmit = order
+                        isLoading.value = true
+                        viewModel.processIntent(SellIntent.SendOrder(order))
                     }
 
                     Spacer(Modifier.height(innerPadding.calculateBottomPadding()))
