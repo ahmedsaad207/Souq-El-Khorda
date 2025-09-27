@@ -60,11 +60,13 @@
     <string name="are_you_sure_you_want_to_delete_this_order">Are you sure you want to delete this order?</string>
     <string name="cancel">Cancel</string>
 
+
     <string name="nearest_buyer_title">Nearby Shops\n</string>
     <string name="nearest_buyer_sub_title">Scrap collection points nearby</string>
     <string name="call">call</string>
     <string name="direction">Direction</string>
     <string name="accepted_types">Accepted Types:</string>
+
     <string name="scrap_added_successfully">Scrap added successfully!</string>
     <string name="scrap_deleted_successfully">Scrap deleted successfully!</string>
     <string name="are_you_sure_you_want_to_delete_this_scrap">Are you sure you want to delete this scrap?</string>
@@ -123,5 +125,72 @@
     <string name="weight_kg">Weight (kg)</string>
     <string name="pieces">Pieces</string>
     <string name="order_submitted_successfully">Order submitted successfully</string>
+
+    <string name="the_nearset_buyer">Nearest buyers\n</string>
+    <string name="nearst_buyer_sub_title">Find the best\nbuyers in your area</string>
+    <string name="register_shop">Register shop</string>
+    <string name="all_buyer">Total buyers</string>
+    <string name="online_now">Active now</string>
+    <string name="registerd_buyer">Registered buyer</string>
+    <string name="monthely_deal">Monthly deal</string>
+    <string name="buyer_secoun_screen_sub_title">Register your shop and get the best offers</string>
+    <string name="buyer_secoun_screen_title">Join the scrap traders network\n</string>
+    <string name="register_your_shop">Register your Shop</string>
+    <string name="why_choose_us">Why choose our platform?</string>
+    <string name="best_price">Best prices</string>
+    <string name="first_description">Get the best prices from trusted sellers</string>
+    <string name="secound_description">Connect with buyers in your area</string>
+    <string name="third_description">All transactions are secure and protected</string>
+    <string name="fourth_description">Enter your shop details and available scrap types</string>
+    <string name="fifth_description">We will contact you to verify the data</string>
+    <string name="sixsety_description">Receive offers from buyers instantly</string>
+    <string name="wide_domain">Wide network</string>
+    <string name="good_security">Guaranteed security</string>
+    <string name="steps_ofRegister">Simple registration steps</string>
+    <string name="fill_data">Fill in the data</string>
+    <string name="identity_encurance">Identity verification</string>
+    <string name="start_immediatly">Start selling immediately</string>
+    <string name="enter_your_location">Enter your Location:</string>
+    <string name="location_is">Location is:</string>
+    <string name="pick">Pick</string>
+    <string name="select_items">Select items</string>
+    <string name="register_shop_form">Scrap shop registration</string>
+    <string name="form_sub_title">Join the scrap traders network and get the best offers from buyers</string>
+    <string name="shop_info">Basic information</string>
+    <string name="korda_available_type">Available scrap types</string>
+    <string name="load">load..</string>
+    <string name="u_have_no_buyer">No buyers near you</string>
+    <string name="notifications">Notifications</string>
+    <string name="read">Read</string>
+    <string name="please_check_your_internet_connection">Please Check your Internet Connection</string>
+
+    <string name="just_now">Just now</string>
+    <plurals name="minutes_ago">
+        <item quantity="one">%d minute ago</item>
+        <item quantity="other">%d minutes ago</item>
+    </plurals>
+    <plurals name="hours_ago">
+        <item quantity="one">%d hour ago</item>
+        <item quantity="other">%d hours ago</item>
+    </plurals>
+    <string name="yesterday">Yesterday</string>
+    <plurals name="days_ago">
+        <item quantity="one">%d day ago</item>
+        <item quantity="other">%d days ago</item>
+    </plurals>
+    <plurals name="weeks_ago">
+        <item quantity="one">%d week ago</item>
+        <item quantity="other">%d weeks ago</item>
+    </plurals>
+    <plurals name="months_ago">
+        <item quantity="one">%d month ago</item>
+        <item quantity="other">%d months ago</item>
+    </plurals>
+    <plurals name="years_ago">
+        <item quantity="one">%d year ago</item>
+        <item quantity="other">%d years ago</item>
+    </plurals>
+
+
 
 </resources>

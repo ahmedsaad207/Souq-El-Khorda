@@ -1,7 +1,12 @@
 package com.delighted2wins.souqelkhorda.core.extensions
 
+import android.Manifest
 import android.app.Activity
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.compose.ui.graphics.Color
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -22,4 +27,18 @@ fun Activity.configureSystemUI(darkTheme: Boolean) {
 
     controller.hide(WindowInsetsCompat.Type.navigationBars())
     controller.show(WindowInsetsCompat.Type.statusBars())
+}
+
+fun Activity.requestNotificationPermission(requestCode: Int = 1001) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+        ContextCompat.checkSelfPermission(
+            this, Manifest.permission.POST_NOTIFICATIONS
+        ) != PackageManager.PERMISSION_GRANTED
+    ) {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+            requestCode
+        )
+    }
 }

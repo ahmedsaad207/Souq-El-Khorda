@@ -1,7 +1,6 @@
 package com.delighted2wins.souqelkhorda.navigation
 
 import androidx.navigation3.runtime.NavKey
-import com.delighted2wins.souqelkhorda.core.enums.OrderSource
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -30,12 +29,36 @@ data object ProfileScreen: NavKey
 data object NotificationsScreen: NavKey
 @Serializable
 data object HistoryScreen: NavKey
+
 @Serializable
-data class OrderDetailsKey(
+data class MarketOrderDetailsKey(
     val orderId: String,
-    val orderOwnerId: String,
-    val orderBuyerId: String? = null,
-    val source: OrderSource
+    val orderOwnerId: String
 ) : NavKey
 
+@Serializable
+data class CompanyOrderDetailsKey(
+    val orderId: String,
+    val orderOwnerId: String
+) : NavKey
+
+@Serializable
+data class SalesOrderDetailsKey(
+    val orderId: String,
+) : NavKey
+
+@Serializable
+data class OffersOrderDetailsKey(
+    val orderId: String,
+) : NavKey
+
+@Serializable
+data class ChatKey(
+    val orderId: String,
+    val sellerId: String,
+    val buyerId: String,
+    val offerId: String
+) : NavKey
+
+data object BuyerRegistration: NavKey
 

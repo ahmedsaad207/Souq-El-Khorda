@@ -1,10 +1,13 @@
 package com.delighted2wins.souqelkhorda.features.history.di
 
-import com.delighted2wins.souqelkhorda.features.history.data.HistoryRepositoryImpl
 import com.delighted2wins.souqelkhorda.features.history.data.remote.HistoryRemoteDataSource
 import com.delighted2wins.souqelkhorda.features.history.data.remote.HistoryRemoteDataSourceImpl
+import com.delighted2wins.souqelkhorda.features.history.data.repository.HistoryRepositoryImpl
 import com.delighted2wins.souqelkhorda.features.history.domain.repository.HistoryRepository
+import com.delighted2wins.souqelkhorda.features.history.domain.usecase.AddOrderOfferToHistoryUseCase
+import com.delighted2wins.souqelkhorda.features.history.domain.usecase.AddOrderToHistoryUseCase
 import com.delighted2wins.souqelkhorda.features.history.domain.usecase.GetUserOrdersUseCase
+import com.delighted2wins.souqelkhorda.features.history.domain.usecase.UpdateOrderStatusHistoryUseCase
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -37,5 +40,23 @@ object HistoryUseCaseModule {
     fun provideGetUserOrdersUseCase(
         repository: HistoryRepository
     ): GetUserOrdersUseCase = GetUserOrdersUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun provideAddOrderToHistoryUseCase(
+        repository: HistoryRepository
+    ): AddOrderToHistoryUseCase = AddOrderToHistoryUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun provideAddOrderOfferTOHistoryUseCase(
+        repository: HistoryRepository
+    ): AddOrderOfferToHistoryUseCase = AddOrderOfferToHistoryUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun provideUpdateOrderStatusHistoryUseCase(
+        repository: HistoryRepository
+    ): UpdateOrderStatusHistoryUseCase = UpdateOrderStatusHistoryUseCase(repository)
 
 }

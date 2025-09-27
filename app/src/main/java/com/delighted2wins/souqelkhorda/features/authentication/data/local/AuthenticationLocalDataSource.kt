@@ -46,7 +46,7 @@ class AuthenticationLocalDataSourceImp @Inject constructor(
         saveData("user_governorate", "")
         saveData("user_address", "")
         saveData("user_area","")
-
         saveData("user_image", "")
+        saveData("fcm_token", "")
     }
 }

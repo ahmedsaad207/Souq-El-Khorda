@@ -1,7 +1,10 @@
 package com.delighted2wins.souqelkhorda.features.myorders.presentation.screen
 
 import ShimmerOrderCard
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
@@ -12,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
-import com.delighted2wins.souqelkhorda.core.enums.OrderSource
 import com.delighted2wins.souqelkhorda.core.model.Order
 
 @Composable
@@ -20,7 +22,7 @@ fun CompanyOrdersScreen(
     orders: List<Order>,
     isLoading: Boolean,
     error: String?,
-    onDetailsClick: (String, String) -> Unit,
+    onCompanyDetailsClick: (String, String) -> Unit,
     onDeclineClick: (String) -> Unit,
     systemIsRtl: Boolean
 ) {
@@ -64,7 +66,7 @@ fun CompanyOrdersScreen(
                     items(orders) { order ->
                         CompanyOrderCard(
                             order = order,
-                            onDetailsClick = { orderId, userId, -> onDetailsClick(orderId, userId) },
+                            onDetailsClick = { orderId, userId, -> onCompanyDetailsClick(orderId, userId) },
                             onDeclineClick = { orderId -> onDeclineClick(orderId) },
                             systemIsRtl = systemIsRtl
                         )

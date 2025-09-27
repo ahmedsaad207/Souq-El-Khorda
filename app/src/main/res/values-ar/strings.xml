@@ -21,6 +21,7 @@
 
     <string name="email_signup">البريد الإلكتروني</string>
     <string name="enter_your_email">ادخل بريدك الإلكتروني</string>
+    <string name="please_check_your_internet_connection">"يرجى التحقق من اتصالك بالإنترنت</string>
 
     <string name="phone">رقم الهاتف</string>
     <string name="enter_phone_number">ادخل رقم الهاتف</string>
@@ -62,6 +63,7 @@
     <string name="call">اتصال</string>
     <string name="direction">الاتجاهات</string>
     <string name="accepted_types">الاصناف المقبولة:</string>
+
     <string name="scrap_added_successfully">تمت إضافة الخردة بنجاح!</string>
     <string name="scrap_deleted_successfully">تم حذف الخردة بنجاح!</string>
     <string name="are_you_sure_you_want_to_delete_this_scrap">هل أنت متأكد من حذف هذه الخردة؟</string>
@@ -75,7 +77,7 @@
     <string name="add_to_your_recycling_order">أضف إلى طلب إعادة التدوير</string>
     <string name="close">إغلاق</string>
     <string name="scrap_type">نوع الخردة</string>
-    <string name="custom_scrap_name">"اسم الخردة"</string>
+    <string name="custom_scrap_name">"اسم الخردة "</string>
     <string name="e_g_copper_wire">مثال: سلك نحاس</string>
     <string name="quantity_measurement"><![CDATA["الكمية والقياس "]]></string>
     <string name="measurement_type">نوع القياس</string>
@@ -120,4 +122,100 @@
     <string name="weight_kg">الوزن (كجم)</string>
     <string name="pieces">قطع(ه)</string>
     <string name="order_submitted_successfully">تم إرسال الطلب بنجاح</string>
+
+    <string name="the_nearset_buyer">أقرب المشترين\n</string>
+    <string name="nearst_buyer_sub_title">اعثر على أفضل\nالمشترين في منطقتك</string>
+    <string name="register_shop">سجل محلك</string>
+    <string name="all_buyer">إجمالي المشترين</string>
+    <string name="online_now">نشط الان</string>
+    <string name="registerd_buyer">تاجر مسجل</string>
+    <string name="monthely_deal">صفقة شهرية</string>
+    <string name="buyer_secoun_screen_sub_title">سجل محلك واحصل على أفضل\nالعروض</string>
+    <string name="buyer_secoun_screen_title">انضم إلى شبكة تجار الخردة\n</string>
+    <string name="register_your_shop">سجّل متجرك</string>
+    <string name="why_choose_us">لماذا تختار منصتنا؟</string>
+    <string name="best_price">أسعار أفضل</string>
+    <string name="first_description">احصل على أفض`ل الأسعار من المشنرين المساهمين</string>
+    <string name="secound_description">تواصل مع منات المشترين في منطقتك</string>
+    <string name="third_description">جميع المعاملات محمية ومؤمنة</string>
+    <string name="fourth_description">أدخل معلومات محلك وأنواع الخردة المتاحة</string>
+    <string name="fifth_description">سنتواصل معك لتأكيد البيانات</string>
+    <string name="sixsety_description">ستتلفي عروض من المشترين فورا</string>
+    <string name="wide_domain">شبكة واسعة</string>
+    <string name="good_security">أمان مضمون</string>
+    <string name="steps_ofRegister">خطوات التسجيل البسيطة</string>
+    <string name="fill_data">املا البيانات</string>
+    <string name="identity_encurance">تأكيد الهوية</string>
+    <string name="start_immediatly">إبدأ البيع فورا</string>
+    <string name="enter_your_location">أدخل موقعك:</string>
+    <string name="location_is">الموقع هو:</string>
+    <string name="pick">اختر</string>
+    <string name="select_items">أختر الاصناف</string>
+    <string name="register_shop_form">تسجيل محل خردة</string>
+    <string name="form_sub_title">انضم إلى شبكة تجار الخردة واحصل على أفضل العروض من المشترين</string>
+    <string name="shop_info">المعلومات الاساسية</string>
+    <string name="korda_available_type">أنواع الخردة المتاحة</string>
+    <string name="load">تحم..</string>
+    <string name="u_have_no_buyer">لا يوجد مشترين بالقرب منك</string>
+    <string name="notifications">الإشعارات</string>
+    <string name="read">مقروء</string>
+
+    <string name="just_now">الآن</string>
+
+    <plurals name="minutes_ago">
+        <item quantity="zero">الآن</item>
+        <item quantity="one">قبل دقيقة</item>
+        <item quantity="two">قبل دقيقتين</item>
+        <item quantity="few">قبل %d دقائق</item>
+        <item quantity="many">قبل %d دقيقة</item>
+        <item quantity="other">قبل %d دقيقة</item>
+    </plurals>
+
+    <plurals name="hours_ago">
+        <item quantity="zero">الآن</item>
+        <item quantity="one">قبل ساعة</item>
+        <item quantity="two">قبل ساعتين</item>
+        <item quantity="few">قبل %d ساعات</item>
+        <item quantity="many">قبل %d ساعة</item>
+        <item quantity="other">قبل %d ساعة</item>
+    </plurals>
+
+    <string name="yesterday">أمس</string>
+
+    <plurals name="days_ago">
+        <item quantity="zero">اليوم</item>
+        <item quantity="one">قبل يوم</item>
+        <item quantity="two">قبل يومين</item>
+        <item quantity="few">قبل %d أيام</item>
+        <item quantity="many">قبل %d يوم</item>
+        <item quantity="other">قبل %d يوم</item>
+    </plurals>
+
+    <plurals name="weeks_ago">
+        <item quantity="zero">هذا الأسبوع</item>
+        <item quantity="one">قبل أسبوع</item>
+        <item quantity="two">قبل أسبوعين</item>
+        <item quantity="few">قبل %d أسابيع</item>
+        <item quantity="many">قبل %d أسبوع</item>
+        <item quantity="other">قبل %d أسبوع</item>
+    </plurals>
+
+    <plurals name="months_ago">
+        <item quantity="zero">هذا الشهر</item>
+        <item quantity="one">قبل شهر</item>
+        <item quantity="two">قبل شهرين</item>
+        <item quantity="few">قبل %d أشهر</item>
+        <item quantity="many">قبل %d شهر</item>
+        <item quantity="other">قبل %d شهر</item>
+    </plurals>
+
+    <plurals name="years_ago">
+        <item quantity="zero">هذا العام</item>
+        <item quantity="one">قبل سنة</item>
+        <item quantity="two">قبل سنتين</item>
+        <item quantity="few">قبل %d سنوات</item>
+        <item quantity="many">قبل %d سنة</item>
+        <item quantity="other">قبل %d سنة</item>
+    </plurals>
+
 </resources>

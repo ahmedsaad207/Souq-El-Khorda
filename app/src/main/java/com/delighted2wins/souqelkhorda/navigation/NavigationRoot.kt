@@ -11,15 +11,20 @@ import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
-import com.delighted2wins.souqelkhorda.core.enums.OrderSource
+import com.delighted2wins.souqelkhorda.core.components.NoInternetScreen
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.screen.LoginScreen
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.screen.SignUpScreen
+import com.delighted2wins.souqelkhorda.features.buyers.presentation.screen.BuyerRegistrationScreen
 import com.delighted2wins.souqelkhorda.features.buyers.presentation.screen.NearestBuyersScreen
+import com.delighted2wins.souqelkhorda.features.chat.presentation.screen.ChatScreen
 import com.delighted2wins.souqelkhorda.features.history.presentation.screen.HistoryScreen
 import com.delighted2wins.souqelkhorda.features.market.presentation.screen.MarketScreen
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.screen.OrdersScreen
 import com.delighted2wins.souqelkhorda.features.notification.presentation.screen.NotificationsScreen
-import com.delighted2wins.souqelkhorda.features.orderdetails.OrderDetailsScreen
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.screen.CompanyOrderDetailsScreen
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.screen.MarketOrderDetailsScreen
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.screen.OffersOrderDetailsScreen
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.screen.SalesOrderDetailsScreen
 import com.delighted2wins.souqelkhorda.features.profile.presentation.screen.ProfileScreen
 import com.delighted2wins.souqelkhorda.features.sell.presentation.screen.SellScreen
 import com.delighted2wins.souqelkhorda.features.splash.SplashScreen
@@ -32,7 +37,8 @@ fun NavigationRoot(
     backStack: NavBackStack,
     innerPadding: PaddingValues,
     navState: MutableState<Boolean>,
-    screenNameState: MutableState<String>
+    screenNameState: MutableState<String>,
+    isOnline: Boolean
 ) {
     NavDisplay(
         modifier = modifier, backStack = backStack, entryDecorators = listOf(
@@ -68,10 +74,9 @@ fun NavigationRoot(
                             snackBarHostState = snackBarState,
                             onDetailsClick = { orderId, ownerId ->
                                 backStack.add(
-                                    OrderDetailsKey(
+                                    MarketOrderDetailsKey(
                                         orderId,
                                         ownerId,
-                                        source = OrderSource.MARKET
                                     )
                                 )
                             }
@@ -79,15 +84,65 @@ fun NavigationRoot(
                     }
                 }
 
-                is OrderDetailsKey -> {
+                is MarketOrderDetailsKey -> {
                     NavEntry(key) {
                         bottomBarState.value = false
-                        OrderDetailsScreen(
+                        MarketOrderDetailsScreen(
                             orderId = key.orderId,
                             orderOwnerId = key.orderOwnerId,
-                            orderBuyerId = key.orderBuyerId,
-                            source = key.source,
                             onBackClick = { backStack.remove(key) }
+                        )
+                    }
+                }
+
+                is CompanyOrderDetailsKey -> {
+                    NavEntry(key) {
+                        bottomBarState.value = false
+                        CompanyOrderDetailsScreen(
+                            orderId = key.orderId,
+                            orderOwnerId = key.orderOwnerId,
+                            onBackClick = { backStack.remove(key) }
+                        )
+                    }
+                }
+
+                is SalesOrderDetailsKey -> {
+                    NavEntry(key) {
+                        bottomBarState.value = false
+                        SalesOrderDetailsScreen(
+                            orderId = key.orderId,
+                            snackBarHostState = snackBarState,
+                            onChatClick = { orderId, sellerId, buyerId, offerId ->
+                                backStack.add(ChatKey(orderId, sellerId, buyerId, offerId))
+                            },
+                            onBackClick = { backStack.remove(key) }
+                        )
+                    }
+                }
+
+                is OffersOrderDetailsKey -> {
+                    NavEntry(key) {
+                        bottomBarState.value = false
+                        OffersOrderDetailsScreen(
+                            snackBarHostState = snackBarState,
+                            orderId = key.orderId,
+                            onChatClick = { orderId, sellerId, buyerId, offerId ->
+                                backStack.add(ChatKey(orderId, sellerId, buyerId, offerId))
+                            },
+                            onBackClick = { backStack.remove(key) }
+                        )
+                    }
+                }
+
+                is ChatKey -> {
+                    NavEntry(key) {
+                        bottomBarState.value = false
+                        ChatScreen(
+                            orderId = key.orderId,
+                            sellerId = key.sellerId,
+                            buyerId = key.buyerId,
+                            offerId = key.offerId,
+                            onBack = { backStack.remove(key) }
                         )
                     }
                 }
@@ -99,6 +154,19 @@ fun NavigationRoot(
                         NearestBuyersScreen(
                             innerPadding = innerPadding,
                         )
+
+                        if(isOnline) {
+                            NearestBuyersScreen(
+                                innerPadding = innerPadding,
+                                onBuyerClick = {
+                                    backStack.add(element = BuyerRegistration)
+                                },
+                                snackBarHostState = snackBarState,
+
+                                )
+                        }else{
+                            NoInternetScreen()
+                        }
                     }
                 }
 
@@ -163,6 +231,7 @@ fun NavigationRoot(
                     NavEntry(key) {
                         bottomBarState.value = false
                         ProfileScreen(
+                            snackBarState = snackBarState,
                             onBackClick = { backStack.remove(key) },
                             onHistoryClick = { backStack.add(HistoryScreen) },
                             onLogoutClick = {
@@ -180,9 +249,19 @@ fun NavigationRoot(
                         OrdersScreen(
                             innerPadding = innerPadding,
                             snackBarHostState = snackBarState,
-                            onDetailsClick = { orderId, ownerId, buyerId, source ->
+                            onCompanyDetailsClick = { orderId, ownerId ->
                                 backStack.add(
-                                    OrderDetailsKey(orderId, ownerId, buyerId, source)
+                                    CompanyOrderDetailsKey(orderId, ownerId)
+                                )
+                            },
+                            onSaleDetailsClick = { orderId ->
+                                backStack.add(
+                                    SalesOrderDetailsKey(orderId)
+                                )
+                            },
+                            onOfferDetailsClick = { orderId ->
+                                backStack.add(
+                                    OffersOrderDetailsKey(orderId)
                                 )
                             }
                         )
@@ -207,6 +286,19 @@ fun NavigationRoot(
                     }
                 }
 
+                is BuyerRegistration -> {
+                    NavEntry(key) {
+                        bottomBarState.value = false
+                        BuyerRegistrationScreen(
+                            innerPadding = innerPadding,
+                            snackBarHostState = snackBarState,
+                            onBackClick = {
+                                backStack.remove(key)
+                            },
+                            isOnline = isOnline
+                        )
+                    }
+                }
 
                 else -> error("Unknown screen $key")
             }

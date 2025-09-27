@@ -7,5 +7,5 @@ data class Scrap(
     val unit: String = "",
     val amount: String = "0",
     val description: String = "",
-    val images: List<String>
+    val images: List<String> = emptyList()
 )

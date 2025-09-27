@@ -4,6 +4,8 @@ import java.util.Locale
 
 enum class AuthMsgEnum(val message: String, val arabicMessage: String) {
     UNAUTHORIZED("Unauthorized", "غير مصرح"),
+    LOCATIONEMPTY("pick location, please ","يجب ان تختار الموقع الخاص بك"),
+    SCRAPLISTEMPTY("You should choose some kinds","يجب ان تختار الاصناف التي تقوم بشراءها"),
     USERNAMEVALIDATE("Enter valid name", "أدخل اسمًا صالحًا"),
     EMAILVALIDATE("Enter valid email", "أدخل بريدًا إلكترونيًا صالحًا"),
     PASSWORDVALIDATE(
@@ -17,7 +19,7 @@ enum class AuthMsgEnum(val message: String, val arabicMessage: String) {
         "Enter valid address, must be at least 15 characters",
         "أدخل عنوانًا صالحًا، يجب أن يكون 15 حرفًا على الأقل"
     ),
-    SIGNUPSUCCESS("Registered successfully, welcome ", "تم التسجيل بنجاح، مرحبًا "),
+    SIGNUPSUCCESS("Registered successfully ", "تم التسجيل بنجاح "),
     LOGINSUCCESS("Login successfully, welcome back ", "تسجيل الدخول بنجاح، مرحبًا بعودتك "),
     SIGNUPFAIL("Registration failed", "فشل التسجيل"),
     AREA("Enter valid area ","أدخل عنوان منطقة صحيح"),

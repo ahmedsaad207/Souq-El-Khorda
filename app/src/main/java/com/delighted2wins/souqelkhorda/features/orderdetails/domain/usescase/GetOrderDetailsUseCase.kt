@@ -12,9 +12,6 @@ class GetOrderDetailsUseCase @Inject constructor(
         return repository.getOrderDetails(orderId, source)
     }
 
-    suspend operator fun invoke(orderId: String, ownerId: String, buyerId: String?, source: OrderSource): Order? {
-        return repository.getOrderDetails(orderId, ownerId, buyerId, source)
-    }
 }
 
 

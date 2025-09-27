@@ -70,8 +70,13 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
     implementation(libs.kotlinx.serialization.core)
 
+
+    //lotti
+    implementation("com.airbnb.android:lottie-compose:6.6.3")
+
     //icon
-    implementation ("androidx.compose.material:material-icons-extended")
+    implementation("androidx.compose.material:material-icons-extended")
+    implementation ("androidx.compose.material3:material3:1.1.1")
 
     //scoped api
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose-android:2.8.7")
@@ -86,9 +91,15 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:34.2.0"))
     implementation("com.google.firebase:firebase-firestore:24.10.0")
     implementation("com.google.firebase:firebase-auth:24.0.1")
+    implementation("com.google.firebase:firebase-messaging")
 
-    //extended icons
-    implementation (libs.androidx.compose.material.icons.extended)
+    // retrofit
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    //live data
+    implementation("androidx.compose.runtime:runtime-livedata:1.7.0")
+
 
     // coil
     implementation("io.coil-kt:coil-compose:2.7.0")
@@ -107,4 +118,9 @@ dependencies {
     // gson
     implementation("com.google.code.gson:gson:2.13.2")
 
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.34.0")
+//location services
+    implementation("com.google.android.gms:play-services-location:21.1.0")
+
 }
+

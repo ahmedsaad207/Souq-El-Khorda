@@ -50,4 +50,19 @@ class FirestoreOrderService @Inject constructor(
         }
     }
 
+    suspend fun deleteMarketOrder(orderId: String): Boolean {
+        return try {
+            firestore.collection("orders")
+                .document(OrderType.MARKET.name.lowercase())
+                .collection("items")
+                .document(orderId)
+                .delete()
+                .await()
+            true
+        }catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
 }

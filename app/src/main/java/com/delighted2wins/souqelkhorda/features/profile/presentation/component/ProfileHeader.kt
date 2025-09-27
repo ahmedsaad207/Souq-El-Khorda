@@ -29,13 +29,14 @@ import com.delighted2wins.souqelkhorda.app.theme.AppTypography
 
 @Composable
 fun ProfileHeader(
+    modifier: Modifier,
     email: String = "abdelazizmaher@gmail.com",
     name: String = "Abdelaziz Maher",
     imageUrl: String = "",
     onEditAvatar: () -> Unit = {},
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(320.dp),
         horizontalAlignment = Alignment.CenterHorizontally,

@@ -20,7 +20,7 @@ fun OrdersDisplay(
     orders: List<Order>,
     isLoading: Boolean,
     error: String?,
-    onDetailsClick: (String, String) -> Unit,
+    onDetailsClick: (String) -> Unit,
     systemIsRtl: Boolean = false
 ) {
     when {

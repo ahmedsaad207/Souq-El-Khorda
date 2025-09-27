@@ -72,6 +72,4 @@ class AuthenticationRemoteDataSourceImp @Inject constructor(
     override fun logout() {
         firebaseAuth.signOut()
     }
-
-
 }

@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,11 +15,14 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.rememberNavBackStack
 import com.delighted2wins.souqelkhorda.app.theme.SouqElKhordaTheme
 import com.delighted2wins.souqelkhorda.core.components.AppBottomNavBar
@@ -26,6 +30,7 @@ import com.delighted2wins.souqelkhorda.core.components.AppTopAppBar
 import com.delighted2wins.souqelkhorda.core.enums.LanguageEnum
 import com.delighted2wins.souqelkhorda.core.extensions.applyLanguage
 import com.delighted2wins.souqelkhorda.core.extensions.configureSystemUI
+import com.delighted2wins.souqelkhorda.core.extensions.requestNotificationPermission
 import com.delighted2wins.souqelkhorda.features.profile.di.MainActivityEntryPoint
 import com.delighted2wins.souqelkhorda.features.profile.domain.usecase.GetLanguageUseCase
 import com.delighted2wins.souqelkhorda.navigation.NavigationRoot
@@ -36,8 +41,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
 import javax.inject.Inject
 
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private val mainViewModel: MainViewModel by viewModels()
 
     lateinit var snackBarHostState: SnackbarHostState
     lateinit var bottomBarState: MutableState<Boolean>
@@ -47,11 +55,14 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var getLanguageUseCase: GetLanguageUseCase
 
+
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        requestNotificationPermission()
         setContent {
+            val isOnline by mainViewModel.isOnline.observeAsState(initial = true)
             configureSystemUI(isSystemInDarkTheme())
 
             snackBarHostState = remember { SnackbarHostState() }
@@ -62,6 +73,7 @@ class MainActivity : ComponentActivity() {
             val backStack = rememberNavBackStack(SplashScreen)
             SouqElKhordaTheme(darkTheme = isSystemInDarkTheme(), dynamicColor = false) {
                 val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+                val state by mainViewModel.state.collectAsStateWithLifecycle()
                 Scaffold(
                     modifier = if (navState.value) Modifier else Modifier.nestedScroll(
                         scrollBehavior.nestedScrollConnection
@@ -75,6 +87,9 @@ class MainActivity : ComponentActivity() {
                     topBar = {
                         if (bottomBarState.value) {
                             AppTopAppBar(
+                                userImage = state.userImageUrl,
+                                userName = state.userName,
+                                notificationCount = state.notificationCount,
                                 scrollBehavior = scrollBehavior,
                                 screenName = screenNameState.value,
                                 onProfileClick = { backStack.add(ProfileScreen) },
@@ -96,7 +111,8 @@ class MainActivity : ComponentActivity() {
                         backStack = backStack,
                         innerPadding = innerPadding,
                         navState = navState,
-                        screenNameState = screenNameState
+                        screenNameState = screenNameState,
+                        isOnline = isOnline
                     )
                 }
             }

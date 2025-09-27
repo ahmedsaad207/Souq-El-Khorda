@@ -6,7 +6,6 @@ enum class ProfileMessagesEnum(
     val enMessage: String,
     val arMessage: String
 ) {
-
     NETWORK("Network error", "خطأ في الشبكة"),
     UNAUTHORIZED("Unauthorized action", "غير مصرح"),
     USER_NOT_FOUND("User not found", "المستخدم غير موجود"),
@@ -17,8 +16,14 @@ enum class ProfileMessagesEnum(
     PHONE_INVALID("Enter a valid phone number", "أدخل رقم هاتف صالح"),
     GOVERNORATE_INVALID("Select a valid governorate", "اختر محافظة صالحة"),
     ADDRESS_INVALID("Enter a valid address (at least 15 characters)", "أدخل عنوانًا صالحًا (15 حرفًا على الأقل)"),
-    IMAGE_INVALID("Invalid image selected", "الصورة المحددة غير صالحة");
+    IMAGE_INVALID("Invalid image selected", "الصورة المحددة غير صالحة"),
 
+    NAME_UPDATED("Name updated successfully", "تم تحديث الاسم بنجاح"),
+    EMAIL_UPDATED("Email updated successfully", "تم تحديث البريد الإلكتروني بنجاح"),
+    PHONE_UPDATED("Phone number updated successfully", "تم تحديث رقم الهاتف بنجاح"),
+    GOVERNORATE_UPDATED("Governorate updated successfully", "تم تحديث المحافظة بنجاح"),
+    ADDRESS_UPDATED("Address updated successfully", "تم تحديث العنوان بنجاح"),
+    IMAGE_UPDATED("Image updated successfully", "تم تحديث الصورة بنجاح");
 
     fun getMsg(): String {
         val currentLanguage = Locale.getDefault().language

@@ -3,7 +3,8 @@ package com.delighted2wins.souqelkhorda.features.sell.di
 import com.delighted2wins.souqelkhorda.features.sell.domain.repo.OrderRepository
 import com.delighted2wins.souqelkhorda.features.sell.domain.repo.ScrapRepository
 import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.DeleteAllScrapsUseCase
-import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.DeleteOrderUseCase
+import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.DeleteCompanyOrderUseCase
+import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.DeleteMarketOrderUseCase
 import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.DeleteScrapByIdUseCase
 import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.GetScrapesUseCase
 import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.SaveScrapUseCase
@@ -39,7 +40,11 @@ object ScrapUseCaseModule {
 
     @Provides
     @ViewModelScoped
-    fun provideDeleteOrderUseCase(repo: OrderRepository) = DeleteOrderUseCase(repo)
+    fun provideDeleteCompanyOrderUseCase(repo: OrderRepository) = DeleteCompanyOrderUseCase(repo)
+
+    @Provides
+    @ViewModelScoped
+    fun provideDeleteMarketOrderUseCase(repo: OrderRepository) = DeleteMarketOrderUseCase(repo)
 
     @Provides
     @ViewModelScoped
