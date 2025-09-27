@@ -75,7 +75,8 @@ dependencies {
     implementation("com.airbnb.android:lottie-compose:6.6.3")
 
     //icon
-    implementation ("androidx.compose.material:material-icons-extended")
+    implementation("androidx.compose.material:material-icons-extended")
+    implementation ("androidx.compose.material3:material3:1.1.1")
 
     //scoped api
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose-android:2.8.7")
@@ -96,8 +97,6 @@ dependencies {
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
 
-    //extended icons
-    implementation (libs.androidx.compose.material.icons.extended)
 
     // coil
     implementation("io.coil-kt:coil-compose:2.7.0")

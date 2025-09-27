@@ -6,5 +6,5 @@ import javax.inject.Inject
 class GetNotificationsUseCase @Inject constructor(
    private val notificationsRepository: NotificationsRepository
 ) {
-    suspend operator fun invoke() = notificationsRepository.getUnreadNotifications()
+    suspend operator fun invoke() = notificationsRepository.getNotifications()
 }

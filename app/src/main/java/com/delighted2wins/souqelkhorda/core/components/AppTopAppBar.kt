@@ -3,6 +3,7 @@ package com.delighted2wins.souqelkhorda.core.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.GenericShape
@@ -21,9 +22,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.delighted2wins.souqelkhorda.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,7 +35,7 @@ import com.delighted2wins.souqelkhorda.R
 fun AppTopAppBar(
     userName: String = "Abdelaziz",
     screenName: String = "Home",
-    userImageRes: Int = 0,
+    userImage: String? = null,
     notificationCount: Int = 3,
     scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(),
     onProfileClick: () -> Unit = {},
@@ -57,7 +60,9 @@ fun AppTopAppBar(
 
     TopAppBar(
         title = {
-            Column {
+            Column(
+                modifier = Modifier.padding(start = 4.dp)
+            ) {
                 Text(
                     text = screenName,
                     style = MaterialTheme.typography.titleLarge
@@ -90,9 +95,11 @@ fun AppTopAppBar(
                 }
             }
             IconButton(onClick = onProfileClick) {
-                Image(
-                    painter = painterResource(R.drawable.avatar),
-                    contentDescription = "Profile",
+                AsyncImage(
+                    model = userImage,
+                    contentDescription = "Profile Image",
+                    contentScale = ContentScale.Crop,
+                    placeholder = painterResource(R.drawable.avatar),
                     modifier = Modifier
                         .size(32.dp)
                         .clip(CircleShape)
