@@ -21,6 +21,7 @@
 
     <string name="email_signup">البريد الإلكتروني</string>
     <string name="enter_your_email">ادخل بريدك الإلكتروني</string>
+    <string name="please_check_your_internet_connection">"يرجى التحقق من اتصالك بالإنترنت</string>
 
     <string name="phone">رقم الهاتف</string>
     <string name="enter_phone_number">ادخل رقم الهاتف</string>

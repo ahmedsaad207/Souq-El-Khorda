@@ -1,7 +1,9 @@
 package com.delighted2wins.souqelkhorda.app
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.delighted2wins.souqelkhorda.core.internet.ConnectivityObserver
 import com.delighted2wins.souqelkhorda.features.notification.domain.usecases.GetUnReadNotificationsCountUseCase
 import com.delighted2wins.souqelkhorda.features.notification.domain.usecases.ObserveUnReadNotificationsCountUseCase
 import com.delighted2wins.souqelkhorda.features.profile.domain.usecase.GetUserProfileUseCase
@@ -15,8 +17,11 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val getUserProfileUseCase: GetUserProfileUseCase,
     private val getUnReadNotificationsCountUseCase: GetUnReadNotificationsCountUseCase,
-    private val observeUnReadNotificationsCountUseCase: ObserveUnReadNotificationsCountUseCase
+    private val observeUnReadNotificationsCountUseCase: ObserveUnReadNotificationsCountUseCase,
+    private val connectivityObserver: ConnectivityObserver
+
 ): ViewModel() {
+    val isOnline: LiveData<Boolean> = connectivityObserver.isOnline
 
     private val _state = MutableStateFlow(MainActivityState())
     val state = _state.asStateFlow()
@@ -52,7 +57,10 @@ class MainViewModel @Inject constructor(
             }
         }
     }
-
+    override fun onCleared() {
+        super.onCleared()
+        connectivityObserver.unregister()
+    }
     private fun observeNotificationsCount() {
         viewModelScope.launch {
             observeUnReadNotificationsCountUseCase()

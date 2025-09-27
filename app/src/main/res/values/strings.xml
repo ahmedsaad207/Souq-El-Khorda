@@ -161,6 +161,7 @@
     <string name="u_have_no_buyer">No buyers near you</string>
     <string name="notifications">Notifications</string>
     <string name="read">Read</string>
+    <string name="please_check_your_internet_connection">Please Check your Internet Connection</string>
 
     <string name="just_now">Just now</string>
     <plurals name="minutes_ago">

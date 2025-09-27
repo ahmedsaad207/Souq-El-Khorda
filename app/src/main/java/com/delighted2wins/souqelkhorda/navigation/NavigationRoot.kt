@@ -11,6 +11,7 @@ import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
+import com.delighted2wins.souqelkhorda.core.components.NoInternetScreen
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.screen.LoginScreen
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.screen.SignUpScreen
 import com.delighted2wins.souqelkhorda.features.buyers.presentation.screen.BuyerRegistrationScreen
@@ -36,7 +37,8 @@ fun NavigationRoot(
     backStack: NavBackStack,
     innerPadding: PaddingValues,
     navState: MutableState<Boolean>,
-    screenNameState: MutableState<String>
+    screenNameState: MutableState<String>,
+    isOnline: Boolean
 ) {
     NavDisplay(
         modifier = modifier, backStack = backStack, entryDecorators = listOf(
@@ -146,14 +148,19 @@ fun NavigationRoot(
                     NavEntry(key) {
                         bottomBarState.value = true
                         screenNameState.value = "Nearest Buyers"
-                        NearestBuyersScreen(
-                            innerPadding = innerPadding,
-                            onBuyerClick = {
-                                backStack.add(element = BuyerRegistration)
-                            },
-                            snackBarHostState = snackBarState,
 
-                            )
+                        if(isOnline) {
+                            NearestBuyersScreen(
+                                innerPadding = innerPadding,
+                                onBuyerClick = {
+                                    backStack.add(element = BuyerRegistration)
+                                },
+                                snackBarHostState = snackBarState,
+
+                                )
+                        }else{
+                            NoInternetScreen()
+                        }
                     }
                 }
 
@@ -280,7 +287,8 @@ fun NavigationRoot(
                             snackBarHostState = snackBarState,
                             onBackClick = {
                                 backStack.remove(key)
-                            }
+                            },
+                            isOnline = isOnline
                         )
                     }
                 }

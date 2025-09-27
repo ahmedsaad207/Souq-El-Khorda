@@ -16,6 +16,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -40,6 +41,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
 import javax.inject.Inject
 
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
@@ -53,12 +55,14 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var getLanguageUseCase: GetLanguageUseCase
 
+
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         requestNotificationPermission()
         setContent {
+            val isOnline by mainViewModel.isOnline.observeAsState(initial = true)
             configureSystemUI(isSystemInDarkTheme())
 
             snackBarHostState = remember { SnackbarHostState() }
@@ -107,7 +111,8 @@ class MainActivity : ComponentActivity() {
                         backStack = backStack,
                         innerPadding = innerPadding,
                         navState = navState,
-                        screenNameState = screenNameState
+                        screenNameState = screenNameState,
+                        isOnline = isOnline
                     )
                 }
             }

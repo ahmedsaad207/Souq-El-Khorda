@@ -97,6 +97,9 @@ dependencies {
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
 
+    //live data
+    implementation("androidx.compose.runtime:runtime-livedata:1.7.0")
+
 
     // coil
     implementation("io.coil-kt:coil-compose:2.7.0")

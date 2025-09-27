@@ -2,6 +2,8 @@ package com.delighted2wins.souqelkhorda.core.di
 
 import android.content.Context
 import androidx.room.Room
+import com.delighted2wins.souqelkhorda.core.internet.ConnectivityObserver
+import com.delighted2wins.souqelkhorda.core.internet.ConnectivityObserverImp
 import com.delighted2wins.souqelkhorda.features.sell.data.local.db.ScrapDatabase
 import dagger.Module
 import dagger.Provides
@@ -25,4 +27,17 @@ object DatabaseModule {
 
     @Provides
     fun provideScrapDoa(db: ScrapDatabase) = db.scrapDao()
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+object NetworkModule {
+
+    @Provides
+    @Singleton
+    fun provideConnectivityObserver(
+        @ApplicationContext context: Context
+    ): ConnectivityObserver {
+        return ConnectivityObserverImp(context)
+    }
 }
