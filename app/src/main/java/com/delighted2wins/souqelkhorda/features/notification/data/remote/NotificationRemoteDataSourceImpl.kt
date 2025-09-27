@@ -23,7 +23,6 @@ class NotificationRemoteDataSourceImpl @Inject constructor(
             val list = firestore.collection("notifications")
                 .document(userId)
                 .collection("userNotifications")
-                .whereEqualTo("read", false)
                 .get()
                 .await()
                 .map { doc ->
@@ -45,6 +44,23 @@ class NotificationRemoteDataSourceImpl @Inject constructor(
                 .collection("userNotifications")
                 .document(notificationId)
                 .update("read", true)
+                .await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun deleteNotification(notificationId: String): Result<Unit> {
+        val userId = firebaseAuth.currentUser?.uid
+            ?: return Result.failure(Exception("User not logged in"))
+
+        return try {
+            firestore.collection("notifications")
+                .document(userId)
+                .collection("userNotifications")
+                .document(notificationId)
+                .delete()
                 .await()
             Result.success(Unit)
         } catch (e: Exception) {

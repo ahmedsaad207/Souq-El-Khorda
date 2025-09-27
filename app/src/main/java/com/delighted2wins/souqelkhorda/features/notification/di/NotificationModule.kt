@@ -4,6 +4,7 @@ import com.delighted2wins.souqelkhorda.features.notification.data.remote.Notific
 import com.delighted2wins.souqelkhorda.features.notification.data.remote.NotificationRemoteDataSourceImpl
 import com.delighted2wins.souqelkhorda.features.notification.data.repository.NotificationsRepositoryImpl
 import com.delighted2wins.souqelkhorda.features.notification.domain.repository.NotificationsRepository
+import com.delighted2wins.souqelkhorda.features.notification.domain.usecases.DismissNotificationUseCase
 import com.delighted2wins.souqelkhorda.features.notification.domain.usecases.GetNotificationsUseCase
 import com.delighted2wins.souqelkhorda.features.notification.domain.usecases.MarkNotificationAsReadUseCase
 import com.delighted2wins.souqelkhorda.features.notification.domain.usecases.ObserveNotificationsUseCase
@@ -50,4 +51,10 @@ object ProfileUseCaseModule {
     fun provideObserveNotificationsUseCase(
         repository: NotificationsRepository
     ): ObserveNotificationsUseCase = ObserveNotificationsUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun provideDismissNotificationUseCase(
+        repository: NotificationsRepository
+    ): DismissNotificationUseCase = DismissNotificationUseCase(repository)
 }

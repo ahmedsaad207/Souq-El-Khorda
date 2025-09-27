@@ -22,6 +22,10 @@ class NotificationsRepositoryImpl @Inject constructor(
         return remoteDataSource.markAsRead(notificationId)
     }
 
+    override suspend fun deleteNotification(notificationId: String): Result<Unit> {
+        return remoteDataSource.deleteNotification(notificationId)
+    }
+
     override suspend fun observeNotifications(): Flow<List<Notification>> {
         return remoteDataSource.observeNotifications().map { notifications ->
             notifications.map { it.toDomain() }

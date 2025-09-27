@@ -11,8 +11,9 @@ interface NotificationsContract {
     )
 
     sealed class Intent {
-        data class Load(val userId: String) : Intent()
-        data class MarkAsRead(val userId: String, val notificationId: String) : Intent()
+        data object Load : Intent()
+        data class MarkAsRead(val notificationId: String) : Intent()
+        data class Dismiss(val notificationId: String) : Intent()
         object Refresh : Intent()
     }
 

@@ -155,6 +155,7 @@
     <string name="korda_available_type">أنواع الخردة المتاحة</string>
     <string name="load">تحم..</string>
     <string name="u_have_no_buyer">لا يوجد مشترين بالقرب منك</string>
-
+    <string name="notifications">الإشعارات</string>
+    <string name="read">مقروء</string>
 
 </resources>

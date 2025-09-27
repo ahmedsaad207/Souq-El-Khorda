@@ -2,6 +2,7 @@ package com.delighted2wins.souqelkhorda.features.notification.presentation.viewm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.delighted2wins.souqelkhorda.features.notification.domain.usecases.DismissNotificationUseCase
 import com.delighted2wins.souqelkhorda.features.notification.domain.usecases.GetNotificationsUseCase
 import com.delighted2wins.souqelkhorda.features.notification.domain.usecases.MarkNotificationAsReadUseCase
 import com.delighted2wins.souqelkhorda.features.notification.domain.usecases.ObserveNotificationsUseCase
@@ -20,6 +21,7 @@ import javax.inject.Inject
 class NotificationsViewModel @Inject constructor(
     private val getNotificationsUseCase: GetNotificationsUseCase,
     private val markNotificationAsReadUseCase: MarkNotificationAsReadUseCase,
+    private val dismissNotificationUseCase: DismissNotificationUseCase,
     private val observeNotificationsUseCase: ObserveNotificationsUseCase
 ) : ViewModel() {
 
@@ -38,6 +40,7 @@ class NotificationsViewModel @Inject constructor(
         when (intent) {
             is NotificationsContract.Intent.Load -> loadNotifications()
             is NotificationsContract.Intent.MarkAsRead -> markNotificationAsRead(intent.notificationId)
+            is NotificationsContract.Intent.Dismiss -> dismissNotification(intent.notificationId)
             is NotificationsContract.Intent.Refresh -> refresh()
         }
     }
@@ -70,6 +73,20 @@ class NotificationsViewModel @Inject constructor(
                 }
             }.onFailure {
                 _effect.send(NotificationsContract.Effect.ShowError(it.message ?: "Unknown error"))
+            }
+        }
+    }
+
+    private fun dismissNotification(notificationId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = dismissNotificationUseCase(notificationId)
+            result.onSuccess {
+                _state.update { state ->
+                    val updatedNotifications = state.notifications.filterNot { it.id == notificationId }
+                    state.copy(notifications = updatedNotifications)
+                }
+            }.onFailure {
+                _effect.send(NotificationsContract.Effect.ShowError(it.message ?: "Delete failed"))
             }
         }
     }
