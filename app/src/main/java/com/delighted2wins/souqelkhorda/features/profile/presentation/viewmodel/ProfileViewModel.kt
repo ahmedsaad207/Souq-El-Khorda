@@ -26,7 +26,6 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     private val updateUserProfileUseCase: UpdateUserProfileUseCase,
     private val getUserProfileUseCase: GetUserProfileUseCase,
-    private val updateUserEmailUseCase: UpdateUserEmailUseCase,
     private val logoutUseCase: LogoutUseCase,
     private val freeUserCase: FreeUserCase,
     private val setLanguageUseCase: SetLanguageUseCase,
@@ -50,13 +49,11 @@ class ProfileViewModel @Inject constructor(
             is ProfileContract.Intent.LoadOrders -> loadOrders()
 
             is ProfileContract.Intent.ChangeName -> changeName(intent.name)
-            is ProfileContract.Intent.ChangeEmail -> changeEmail(intent.email)
             is ProfileContract.Intent.ChangePhone -> changePhone(intent.phone)
             is ProfileContract.Intent.ChangeGovernorate -> changeGovernorate(intent.governorate)
             is ProfileContract.Intent.ChangeAddress -> changeAddress(intent.address)
             is ProfileContract.Intent.ChangeImageUrl -> changeImageUrl(intent.imageUrl)
             is ProfileContract.Intent.SaveName -> updateName()
-            is ProfileContract.Intent.SaveEmail -> updateEmail()
             is ProfileContract.Intent.SavePhone -> updatePhone()
             is ProfileContract.Intent.SaveGovernorate -> updateGovernorate()
             is ProfileContract.Intent.SaveAddress -> updateAddress()
@@ -135,10 +132,6 @@ class ProfileViewModel @Inject constructor(
         _state.update { it.copy(name = it.name.copy(value = newName)) }
     }
 
-    private fun changeEmail(newEmail: String) {
-        _state.update { it.copy(email = it.email.copy(value = newEmail)) }
-    }
-
     private fun changePhone(newPhone: String) {
         _state.update { it.copy(phone = it.phone.copy(value = newPhone)) }
     }
@@ -158,7 +151,8 @@ class ProfileViewModel @Inject constructor(
     private fun updateField(
         current: ProfileContract.ProfileFieldState,
         update: suspend () -> Result<Unit>,
-        setFieldValue: (ProfileContract.State, ProfileContract.ProfileFieldState) -> ProfileContract.State
+        setFieldValue: (ProfileContract.State, ProfileContract.ProfileFieldState) -> ProfileContract.State,
+        successMessage: ProfileMessagesEnum
     ) {
         _state.update { setFieldValue(it, current.copy(isLoading = true)) }
         viewModelScope.launch(Dispatchers.IO) {
@@ -170,6 +164,7 @@ class ProfileViewModel @Inject constructor(
                         current.copy(isEditing = false, isLoading = false, success = true)
                     )
                 }
+                sendEffect(ProfileContract.Effect.ShowSnackbar(successMessage.getMsg()))
             }.onFailure { throwable ->
                 _state.update {
                     setFieldValue(
@@ -210,50 +205,53 @@ class ProfileViewModel @Inject constructor(
 
     private fun updateName() {
         val name = _state.value.name
-        updateField(name, { updateUserProfileUseCase.updateName(name.value) }) { state, field ->
-            state.copy(name = field)
-        }
+        updateField(
+            name,
+            { updateUserProfileUseCase.updateName(name.value) },
+            { state, field -> state.copy(name = field) },
+            ProfileMessagesEnum.NAME_UPDATED
+        )
     }
 
-    private fun updateEmail() {
-        val email = _state.value.email
-        updateField(email, { updateUserEmailUseCase(email.value) }) { state, field ->
-            state.copy(email = field)
-        }
-    }
 
     private fun updatePhone() {
         val phone = _state.value.phone
-        updateField(phone, { updateUserProfileUseCase.updatePhone(phone.value) }) { state, field ->
-            state.copy(phone = field)
-        }
+        updateField(
+            phone,
+            { updateUserProfileUseCase.updatePhone(phone.value) },
+            { state, field -> state.copy(phone = field) },
+            ProfileMessagesEnum.PHONE_UPDATED
+        )
     }
 
     private fun updateGovernorate() {
         val governorate = _state.value.governorate
         updateField(
             governorate,
-            { updateUserProfileUseCase.updateGovernorate(governorate.value) }) { state, field ->
-            state.copy(governorate = field)
-        }
+            { updateUserProfileUseCase.updateGovernorate(governorate.value) },
+            { state, field -> state.copy(governorate = field) },
+            ProfileMessagesEnum.GOVERNORATE_UPDATED
+        )
     }
 
     private fun updateAddress() {
         val address = _state.value.address
         updateField(
             address,
-            { updateUserProfileUseCase.updateAddress(address.value) }) { state, field ->
-            state.copy(address = field)
-        }
+            { updateUserProfileUseCase.updateAddress(address.value) },
+            { state, field -> state.copy(address = field) },
+            ProfileMessagesEnum.ADDRESS_UPDATED
+        )
     }
 
     private fun uploadAndUpdateUserImage() {
         val imageUrl = _state.value.imageUrl
         updateField(
             imageUrl,
-            { updateUserProfileUseCase.uploadAndUpdateUserImage(imageUrl.value) }) { state, field ->
-            state.copy(imageUrl = field)
-        }
+            { updateUserProfileUseCase.uploadAndUpdateUserImage(imageUrl.value) },
+            { state, field -> state.copy(imageUrl = field) },
+            ProfileMessagesEnum.IMAGE_UPDATED
+        )
     }
 
     private fun sendEffect(effect: ProfileContract.Effect) {

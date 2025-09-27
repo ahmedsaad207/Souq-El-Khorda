@@ -17,7 +17,7 @@ fun ProfileHeaderBackground() {
     Canvas(
         modifier = Modifier
             .fillMaxWidth()
-            .height(340.dp)
+            .height(380.dp)
     ) {
         val width = size.width
         val height = size.height
