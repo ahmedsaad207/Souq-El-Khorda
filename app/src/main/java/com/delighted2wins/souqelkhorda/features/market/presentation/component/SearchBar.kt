@@ -6,19 +6,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.app.theme.Til
 
 @Composable
@@ -26,55 +24,56 @@ fun SearchBar(
     query: String,
     onQueryChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    isRtl: Boolean
 ) {
     val roundedShape = RoundedCornerShape(20.dp)
+    val layoutDirection = LocalLayoutDirection.current
+    val isRtl = layoutDirection == LayoutDirection.Rtl
+
+    val leadingIcon: @Composable (() -> Unit)? =
+        if (!isRtl) {
+            { Icon(Icons.Default.Search, contentDescription = null, tint = MaterialTheme.colorScheme.secondary) }
+        } else if (query.isNotEmpty()) {
+            {
+                IconButton(onClick = { onQueryChange("") }) {
+                    Icon(Icons.Default.Close, contentDescription = null, tint = MaterialTheme.colorScheme.secondary)
+                }
+            }
+        } else {
+            null
+        }
+
+    val trailingIcon: @Composable (() -> Unit)? =
+        if (isRtl) {
+            if (query.isEmpty()) {
+                { Icon(Icons.Default.Search, contentDescription = null, tint = MaterialTheme.colorScheme.secondary) }
+            } else null
+        } else {
+            if (query.isNotEmpty()) {
+                {
+                    IconButton(onClick = { onQueryChange("") }) {
+                        Icon(Icons.Default.Close, contentDescription = null, tint = MaterialTheme.colorScheme.secondary)
+                    }
+                }
+            } else null
+        }
 
     TextField(
         value = query,
         onValueChange = onQueryChange,
         placeholder = {
             Text(
-                text = if (isRtl) "ابحث في الخردة..." else "Search in scraps...",
+                text = stringResource(id = R.string.search_in_scraps),
                 color = Color.Gray,
-                style = if (isRtl) TextStyle(textAlign = TextAlign.End) else TextStyle(textAlign = TextAlign.Start)
+                style = TextStyle(textAlign = if (isRtl) TextAlign.End else TextAlign.Start)
             )
         },
-        leadingIcon = if (!isRtl) {
-            {
-                Icon(Icons.Default.Search, contentDescription = null, tint = Til)
-            }
-        } else if (query.isNotEmpty()) {
-            {
-                IconButton(onClick = { onQueryChange("") }) {
-                    Icon(Icons.Default.Close, contentDescription = "Clear", tint = Til)
-                }
-            }
-        } else null,
-        trailingIcon = if (isRtl) {
-            if (query.isNotEmpty()) {
-                {
-                    IconButton(onClick = { onQueryChange("") }) {
-                        Icon(Icons.Default.Close, contentDescription = "Clear", tint = Til)
-                    }
-                }
-            } else {
-                {
-                    Icon(Icons.Default.Search, contentDescription = null, tint = Til)
-                }
-            }
-        } else if (query.isNotEmpty()) {
-            {
-                IconButton(onClick = { onQueryChange("") }) {
-                    Icon(Icons.Default.Close, contentDescription = "Clear", tint = Til)
-                }
-            }
-        } else null,
+        leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
         singleLine = true,
         shape = roundedShape,
         modifier = modifier
             .height(56.dp)
-            .border(width = 2.dp, color = Til, shape = roundedShape),
+            .border(width = 2.dp, color = MaterialTheme.colorScheme.secondary, shape = roundedShape),
         colors = TextFieldDefaults.colors(
             focusedContainerColor = Color.Transparent,
             unfocusedContainerColor = Color.Transparent,
@@ -82,23 +81,11 @@ fun SearchBar(
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Transparent,
-            cursorColor = Til,
+            cursorColor = Color.DarkGray,
             focusedTextColor = MaterialTheme.colorScheme.onSurface,
             unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-            focusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant
+            focusedPlaceholderColor = MaterialTheme.colorScheme.onSurface,
+            unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface
         )
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SearchBarPreviewLTR() {
-    SearchBar(query = "", onQueryChange = {}, isRtl = false)
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SearchBarPreviewRTL() {
-    SearchBar(query = "", onQueryChange = {}, isRtl = true)
 }

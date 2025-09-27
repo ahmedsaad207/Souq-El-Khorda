@@ -1,5 +1,6 @@
 package com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,36 +20,42 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.components.CachedUserImage
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 
 @Composable
-fun UserSection(
-    marketUserData: MarketUser,
-    date: String,
-    systemIsRtl: Boolean = false
-) {
+fun UserSection(marketUserData: MarketUser, date: String) {
+    val context = LocalContext.current
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 6.dp),
+            .background(color = Color.Transparent)
+            .padding(bottom = 12.dp),
         shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(4.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)
+        colors = CardDefaults.cardColors(
+            containerColor = Color.Transparent
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 0.dp
+        )
     ) {
         Row(
             verticalAlignment = Alignment.Top,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp)
+                .padding(4.dp)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp)
             ) {
                 CachedUserImage(
                     imageUrl = marketUserData.imageUrl,
@@ -59,33 +66,35 @@ fun UserSection(
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                Column(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
+                Column(modifier = Modifier.fillMaxWidth()) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
-                            text = marketUserData.name,
+                            text = marketUserData.name.ifBlank {
+                                context.getString(R.string.unknown_user)
+                            },
                             style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.onSurface,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
                         Text(
                             text = date,
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.75f),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             maxLines = 1,
                         )
                     }
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = marketUserData.location,
+                        text = marketUserData.location.ifBlank {
+                            context.getString(R.string.unknown_location)
+                        },
                         style = MaterialTheme.typography.titleSmall,
-                        color = Color.LightGray,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -93,16 +102,4 @@ fun UserSection(
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ScrapUserSectionPreview() {
-    val marketUser = MarketUser(
-        id = "",
-        name = "فاطمة أحمد",
-        location = "الجيزة - الدقي",
-        imageUrl = "https://avatar.iran.liara.run/public/boy?username=Scott"
-    )
-    UserSection(marketUser, "9/9/2009", systemIsRtl = false)
 }

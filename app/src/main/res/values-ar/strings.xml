@@ -159,6 +159,19 @@
     <string name="notifications">الإشعارات</string>
     <string name="read">مقروء</string>
 
+    <string name="retry">إعادة المحاولة</string>
+    <string name="no_market_data">لا توجد بيانات متاحة حالياً في السوق</string>
+    <string name="available_offers">العروض المتاحة</string>
+
+    <string name="price_label">السعر: %1$d ج.م</string>
+    <string name="details_button">تفاصيل</string>
+    <string name="make_offer_button">قدم عرضك</string>
+
+    <string name="unknown_user">مستخدم مجهول</string>
+    <string name="unknown_location">منطقة غير معروف</string>
+
+    <string name="search_in_scraps">ابحث في الخردة...</string>
+
     <string name="just_now">الآن</string>
 
     <plurals name="minutes_ago">
@@ -179,6 +192,7 @@
         <item quantity="other">قبل %d ساعة</item>
     </plurals>
 
+    <string name="today">اليوم</string>
     <string name="yesterday">أمس</string>
 
     <plurals name="days_ago">
