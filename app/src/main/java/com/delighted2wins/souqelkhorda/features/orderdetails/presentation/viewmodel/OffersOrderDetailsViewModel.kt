@@ -1,12 +1,15 @@
 package com.delighted2wins.souqelkhorda.features.orderdetails.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.delighted2wins.souqelkhorda.core.enums.NotificationMessagesEnum
 import com.delighted2wins.souqelkhorda.core.enums.OrderSource
+import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
 import com.delighted2wins.souqelkhorda.core.notification.domain.entity.NotificationRequest
 import com.delighted2wins.souqelkhorda.core.notification.domain.usecases.SendNotificationUseCase
 import com.delighted2wins.souqelkhorda.features.chat.domain.usecase.DeleteOfferChatUseCase
+import com.delighted2wins.souqelkhorda.features.history.domain.usecase.UpdateOrderStatusHistoryUseCase
 import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetCurrentUserUseCase
 import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetUserDataByIdUseCase
 import com.delighted2wins.souqelkhorda.features.offers.domain.usecase.DeleteOfferUseCase
@@ -16,6 +19,7 @@ import com.delighted2wins.souqelkhorda.features.orderdetails.domain.usecase.GetO
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.OffersOrderDetailsIntent
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.OffersOrderDetailsState
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.OffersOrderDetailsEffect
+import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.DeleteMarketOrderUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,6 +30,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OffersOrderDetailsViewModel @Inject constructor(
+    private val updateOrderStatusHistoryUseCase: UpdateOrderStatusHistoryUseCase,
     private val getOrderDetails: GetOrderDetailsUseCase,
     private val getOffersByOrderIdUseCase: GetOffersByOrderIdUseCase,
     private val makeOfferUseCase: MakeOfferUseCase,
@@ -33,7 +38,8 @@ class OffersOrderDetailsViewModel @Inject constructor(
     private val getUserByIdUseCase: GetUserDataByIdUseCase,
     private val getCurrentUserUseCase: GetCurrentUserUseCase,
     private val sendNotificationUseCase: SendNotificationUseCase,
-    private val deleteOfferChatUseCase: DeleteOfferChatUseCase
+    private val deleteMarketOrderUseCase: DeleteMarketOrderUseCase,
+    private val deleteOfferChatUseCase: DeleteOfferChatUseCase,
     ) : ViewModel() {
 
     private val _state = MutableStateFlow(OffersOrderDetailsState())
@@ -80,72 +86,120 @@ class OffersOrderDetailsViewModel @Inject constructor(
 
     private fun updateOffer(offerId: String, price: String, sellerId: String) {
         viewModelScope.launch {
+            _state.value = _state.value.copy(isSubmitting = true)
             try {
                 val currentOffer = _state.value.buyerOffer?.first ?: return@launch
                 val result = makeOfferUseCase(offer = currentOffer.copy(offerId = offerId, offerPrice = price.toInt()))
                 if (result.isNotEmpty()) {
-                    sendNotificationUseCase(
-                        request = NotificationRequest(
-                            toUserId = sellerId,
-                            message = NotificationMessagesEnum.BUYER_UPDATED_OFFER.getMessage(),
-                        )
-                    )
+                    launch {
+                        try {
+                            sendNotificationUseCase(
+                                request = NotificationRequest(
+                                    toUserId = sellerId,
+                                    message = NotificationMessagesEnum.BUYER_UPDATED_OFFER.getMessage(),
+                                )
+                            )
+                        }catch (e : Exception){
+                            Log.e("OffersViewModel", "Notification failed: ${e.message}")
+                        }
+                    }
                     _effect.emit(OffersOrderDetailsEffect.ShowSuccess("Offer updated successfully"))
-                    reloadOffer(offerId)
+                    _state.value.order?.orderId?.let { reloadOffer(it) }
                 }else{
                     _effect.emit(OffersOrderDetailsEffect.ShowError("Failed to update offer"))
                 }
             }catch (e : Exception){
                 _effect.emit(OffersOrderDetailsEffect.ShowError(e.message ?: "Failed to update offer"))
             }
+            finally {
+                _state.value = _state.value.copy(isSubmitting = false)
+            }
         }
     }
     private fun cancelOffer(orderId: String, offerId: String, sellerId: String) {
         viewModelScope.launch {
+            _state.value = _state.value.copy(isSubmitting = true)
             try {
-                // update order in history/ buyer status (cancel)
+                val resultUpdatedHistoryBuyer = updateOrderStatusHistoryUseCase(
+                    orderId,
+                    getCurrentUserUseCase().id,
+                    "offers",
+                    OrderStatus.CANCELLED
+                )
                 val resultDeleteOrder = deleteOfferChatUseCase(orderId, offerId)
                 val resultDeleteOffer = deleteOfferUseCase(offerId)
-                if (resultDeleteOffer || resultDeleteOrder) {
-                    sendNotificationUseCase(
-                        request = NotificationRequest(
-                            toUserId = sellerId,
-                            message = NotificationMessagesEnum.BUYER_CANCELED_OFFER.getMessage(),
-                        )
-                    )
+                Log.e("OffersViewModel", "resultDeleteOffer: $resultDeleteOffer")
+                Log.e("OffersViewModel", "resultDeleteOrder: $resultDeleteOrder")
+                Log.e("OffersViewModel", "resultUpdatedHistoryBuyer: $resultUpdatedHistoryBuyer")
+                if (resultDeleteOffer && resultDeleteOrder && resultUpdatedHistoryBuyer) {
+                    launch {
+                        try {
+                            sendNotificationUseCase(
+                                request = NotificationRequest(
+                                    toUserId = sellerId,
+                                    message = NotificationMessagesEnum.BUYER_CANCELED_OFFER.getMessage(),
+                                )
+                            )
+                        }catch (e : Exception){
+                            Log.e("OffersViewModel", "Notification failed: ${e.message}")
+                        }
+                    }
                     _effect.emit(OffersOrderDetailsEffect.ShowSuccess("Offer canceled successfully"))
-                    reloadOffer(offerId)
+                    _state.value = _state.value.copy(buyerOffer = null)
+                    reloadOffer(orderId)
                 } else {
                     _effect.emit(OffersOrderDetailsEffect.ShowError("Failed to cancel offer"))
                 }
             } catch (e: Exception) {
                 _effect.emit(OffersOrderDetailsEffect.ShowError(e.message ?: "Failed to cancel offer"))
+            }finally {
+                _state.value = _state.value.copy(isSubmitting = false)
             }
         }
     }
 
     private fun markAsReceived(orderId: String,offerId: String, sellerId: String) {
         viewModelScope.launch {
+            _state.value = _state.value.copy(isSubmitting = true)
             try {
-                // delete order from orders/market collection
-                // update order in history/ seller status (complete)
-                // update order in history/ buyer status (complete)
-                val resultDeleteChat = deleteOfferUseCase(offerId)
-                val resultDeleteOrder = deleteOfferChatUseCase(orderId, offerId)
-                if (resultDeleteChat || resultDeleteOrder) {
-                    sendNotificationUseCase(
-                        request = NotificationRequest(
-                            toUserId = sellerId,
-                            message = NotificationMessagesEnum.BUYER_MARKED_RECEIVED.getMessage(),
-                        )
-                    )
+                val resultUpdatedHistoryBuyer = updateOrderStatusHistoryUseCase(
+                    orderId,
+                    getCurrentUserUseCase().id,
+                    "offers",
+                    OrderStatus.COMPLETED
+                )
+                val resultUpdatedHistorySeller = updateOrderStatusHistoryUseCase(
+                    orderId,
+                    sellerId,
+                    "orders",
+                    OrderStatus.COMPLETED
+                )
+                val resultDeleteOrder = deleteMarketOrderUseCase(orderId)
+                val resultDeleteOffer = deleteOfferUseCase(offerId)
+                val resultDeleteOfferChat = deleteOfferChatUseCase(orderId, offerId)
+                if (resultDeleteOffer && resultDeleteOfferChat && resultDeleteOrder && resultUpdatedHistorySeller && resultUpdatedHistoryBuyer) {
+                    launch {
+                        try {
+                            sendNotificationUseCase(
+                                request = NotificationRequest(
+                                    toUserId = sellerId,
+                                    message = NotificationMessagesEnum.BUYER_MARKED_RECEIVED.getMessage(),
+                                )
+                            )
+                        }catch (e : Exception){
+                            Log.e("OffersViewModel", "Notification failed: ${e.message}")
+                        }
+                    }
                     _effect.emit(OffersOrderDetailsEffect.ShowSuccess("Order marked as received"))
-                    reloadOffer(offerId)
+                    _state.value = _state.value.copy(buyerOffer = null)
+                    reloadOffer(orderId)
                 } else {
                     _effect.emit(OffersOrderDetailsEffect.ShowError("Failed to mark as received"))
                }
             } catch (e: Exception) {
                 _effect.emit(OffersOrderDetailsEffect.ShowError(e.message ?: "Failed to mark as received"))
+            } finally {
+                _state.value = _state.value.copy(isSubmitting = false)
             }
         }
     }
@@ -168,21 +222,25 @@ class OffersOrderDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun reloadOffer(offerId: String) {
+    private fun reloadOffer(orderId: String) {
         viewModelScope.launch {
+            _state.value = _state.value.copy(isLoading = true)
             try {
-                val order = _state.value.order ?: return@launch
-                val offers = getOffersByOrderIdUseCase(order.orderId)
-                val refreshed = offers.find { it.offerId == offerId }
-
-                val sellerUser = order.userId?.let { getUserByIdUseCase(it) } ?: return@launch
+                val refreshedOrder = getOrderDetails(orderId, OrderSource.MARKET)
+                val offers = getOffersByOrderIdUseCase(orderId)
+                val myOffer = offers.find { it.buyerId == getCurrentUserUseCase().id }
+                val sellerUser = refreshedOrder?.userId?.let { getUserByIdUseCase(it) } ?: return@launch
 
                 _state.value = _state.value.copy(
-                    buyerOffer = refreshed?.let { it to sellerUser }
+                    isLoading = false,
+                    order = refreshedOrder,
+                    buyerOffer = myOffer?.let { it to sellerUser }
                 )
             } catch (e: Exception) {
+                _state.value = _state.value.copy(isLoading = false)
                 _effect.emit(OffersOrderDetailsEffect.ShowError(e.message ?: "Failed to refresh offer"))
             }
         }
     }
+
 }

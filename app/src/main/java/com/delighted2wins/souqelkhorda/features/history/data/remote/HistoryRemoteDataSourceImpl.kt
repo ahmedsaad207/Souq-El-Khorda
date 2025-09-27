@@ -43,12 +43,33 @@ class HistoryRemoteDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateOrderStatus(orderId: String, userId: String, status: OrderStatus): Boolean {
+    override suspend fun addOrderOffer(order: Order, buyerId: String): Boolean {
+        return try {
+            firebaseFirestore
+                .collection("history")
+                .document(buyerId)
+                .collection("offers")
+                .document(order.orderId)
+                .set(order)
+                .await()
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+    override suspend fun updateOrderStatus(
+        orderId: String,
+        userId: String,
+        orderType: String,
+        status: OrderStatus
+    ): Boolean {
         return try {
             val orderRef = firebaseFirestore
                 .collection("history")
                 .document(userId)
-                .collection("orders")
+                .collection(orderType)
                 .document(orderId)
 
             val snapshot = orderRef.get().await()

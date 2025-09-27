@@ -9,8 +9,10 @@ import androidx.lifecycle.viewModelScope
 import com.delighted2wins.souqelkhorda.core.enums.NotificationMessagesEnum
 import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
 import com.delighted2wins.souqelkhorda.core.model.Offer
+import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.core.notification.domain.entity.NotificationRequest
 import com.delighted2wins.souqelkhorda.core.notification.domain.usecases.SendNotificationUseCase
+import com.delighted2wins.souqelkhorda.features.history.domain.usecase.AddOrderOfferToHistoryUseCase
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetCurrentUserUseCase
 import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetMarketOrdersUseCase
@@ -31,6 +33,7 @@ class MarketViewModel @Inject constructor(
     private val getUserByIdUseCase: GetUserDataByIdUseCase,
     private val getCurrentUserUseCase: GetCurrentUserUseCase,
     private val makeOfferUseCase: MakeOfferUseCase,
+    private val addOrderOfferToHistoryUseCase: AddOrderOfferToHistoryUseCase,
     private val sendNotificationUseCase: SendNotificationUseCase
 ) : ViewModel() {
 
@@ -67,7 +70,7 @@ class MarketViewModel @Inject constructor(
             )
 
             is MarketIntent.MakeOffer -> {
-                makeOffer(intent.offer, intent.sellerId)
+                makeOffer(intent.order,intent.offer, intent.sellerId)
             }
 
         }
@@ -133,18 +136,25 @@ class MarketViewModel @Inject constructor(
         viewModelScope.launch { _effect.emit(effect) }
     }
 
-    private fun makeOffer(offer: Offer, sellerId : String) {
+    private fun makeOffer(order: Order, offer: Offer, sellerId : String) {
         viewModelScope.launch {
             state = state.copy(isSubmitting = true)
             try {
                 val offerId = makeOfferUseCase(offer)
-                if (offerId.isNotEmpty()) {
-                    sendNotificationUseCase(
-                        request = NotificationRequest(
-                            toUserId = sellerId,
-                            message = NotificationMessagesEnum.OFFER_SENT_PENDING.getMessage(),
-                        )
-                    )
+                val resultAddOrderToHistory = addOrderOfferToHistoryUseCase(order, _currentUser!!.id)
+                if (offerId.isNotEmpty() && resultAddOrderToHistory) {
+                    launch {
+                        try {
+                            sendNotificationUseCase(
+                                request = NotificationRequest(
+                                    toUserId = sellerId,
+                                    message = NotificationMessagesEnum.OFFER_SENT_PENDING.getMessage()
+                                )
+                            )
+                        } catch (e: Exception) {
+                            Log.e("OffersViewModel", "Notification failed: ${e.message}")
+                        }
+                    }
                     emitEffect(MarketEffect.ShowSuccess("Offer made successfully"))
                 }
             } catch (e: Exception) {
@@ -155,6 +165,4 @@ class MarketViewModel @Inject constructor(
             }
         }
     }
-
-
 }

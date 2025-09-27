@@ -4,6 +4,7 @@ import com.delighted2wins.souqelkhorda.features.history.data.repository.HistoryR
 import com.delighted2wins.souqelkhorda.features.history.data.remote.HistoryRemoteDataSource
 import com.delighted2wins.souqelkhorda.features.history.data.remote.HistoryRemoteDataSourceImpl
 import com.delighted2wins.souqelkhorda.features.history.domain.repository.HistoryRepository
+import com.delighted2wins.souqelkhorda.features.history.domain.usecase.AddOrderOfferToHistoryUseCase
 import com.delighted2wins.souqelkhorda.features.history.domain.usecase.AddOrderToHistoryUseCase
 import com.delighted2wins.souqelkhorda.features.history.domain.usecase.GetUserOrdersUseCase
 import com.delighted2wins.souqelkhorda.features.history.domain.usecase.UpdateOrderStatusHistoryUseCase
@@ -45,6 +46,12 @@ object HistoryUseCaseModule {
     fun provideAddOrderToHistoryUseCase(
         repository: HistoryRepository
     ): AddOrderToHistoryUseCase = AddOrderToHistoryUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun provideAddOrderOfferTOHistoryUseCase(
+        repository: HistoryRepository
+    ): AddOrderOfferToHistoryUseCase = AddOrderOfferToHistoryUseCase(repository)
 
     @Provides
     @Singleton

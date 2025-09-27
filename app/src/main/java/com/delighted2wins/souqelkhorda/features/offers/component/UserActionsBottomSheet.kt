@@ -127,13 +127,32 @@ fun UserActionsBottomSheet(
                                 }
                             }
                         }
-
+                        BottomSheetActionType.ACCEPT_OFFER -> {
+                            coroutineScope.launch {
+                                onConfirmAction(Unit)
+                            }
+                        }
+                        BottomSheetActionType.REJECT_OFFER -> {
+                            coroutineScope.launch {
+                                onConfirmAction(Unit)
+                            }
+                        }
                         BottomSheetActionType.DELETE_OFFER -> {
                             coroutineScope.launch {
                                 onConfirmAction(Unit)
                             }
                         }
+                        BottomSheetActionType.COMPLETE_ORDER -> {
+                            coroutineScope.launch {
+                                onConfirmAction(Unit)
+                            }
+                        }
                         BottomSheetActionType.CANCEL_COMPANY_ORDER -> {
+                            coroutineScope.launch {
+                                onConfirmAction(Unit)
+                            }
+                        }
+                        BottomSheetActionType.MARK_RECEIVED -> {
                             coroutineScope.launch {
                                 onConfirmAction(Unit)
                             }

@@ -9,5 +9,6 @@ data class OffersOrderDetailsState(
     val order: Order? = null,
     val buyerOffer: Pair<Offer, MarketUser>? = null,
     val isRefreshing: Boolean = false,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+    val isSubmitting: Boolean = false
 )

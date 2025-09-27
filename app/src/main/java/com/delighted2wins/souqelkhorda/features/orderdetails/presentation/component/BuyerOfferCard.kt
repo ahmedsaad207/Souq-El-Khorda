@@ -33,6 +33,7 @@ import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUse
 fun BuyerOfferCard(
     offer: Offer,
     seller: MarketUser,
+    onUpdate: () -> Unit,
     onChat: () -> Unit,
     onMarkReceived: () -> Unit,
     onCancel: () -> Unit,
@@ -82,13 +83,13 @@ fun BuyerOfferCard(
                 when (offer.status) {
                     OfferStatus.PENDING -> {
                         OutlinedButton(
-                            onClick = {},
+                            onClick = onCancel,
                             modifier = Modifier.weight(1f)
                         ) {
                             Text("Cancel")
                         }
                         Button(
-                            onClick = onChat,
+                            onClick = onUpdate,
                             modifier = Modifier.weight(1f)
                         ) {
                             Text("Update Offer")
@@ -96,6 +97,12 @@ fun BuyerOfferCard(
                     }
 
                     OfferStatus.ACCEPTED -> {
+                        Button(
+                            onClick = onChat,
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text("Chat")
+                        }
                         Button(
                             onClick = onMarkReceived,
                             modifier = Modifier.weight(1f)

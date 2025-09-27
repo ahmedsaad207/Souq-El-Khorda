@@ -22,8 +22,12 @@ class HistoryRepositoryImpl @Inject constructor(
         return historyRemoteDataSource.addOrder(order)
     }
 
-    override suspend fun updateOrderStatus(orderId: String, userId: String, status: OrderStatus): Boolean {
-        return historyRemoteDataSource.updateOrderStatus(orderId, userId, status)
+    override suspend fun addOrderOffer(order: Order, buyerId: String): Boolean {
+        return historyRemoteDataSource.addOrderOffer(order, buyerId)
+    }
+
+    override suspend fun updateOrderStatus(orderId: String, userId: String,orderType: String, status: OrderStatus): Boolean {
+        return historyRemoteDataSource.updateOrderStatus(orderId, userId, orderType,status)
     }
 
 }

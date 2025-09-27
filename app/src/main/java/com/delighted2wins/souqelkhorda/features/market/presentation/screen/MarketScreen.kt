@@ -251,7 +251,7 @@ fun MarketScreen(
                 sheetState = sheetState,
                 coroutineScope = coroutineScope,
                 onConfirmAction = {
-                    viewModel.onIntent(MarketIntent.MakeOffer(it as Offer, selectedOrder!!.userId))
+                    viewModel.onIntent(MarketIntent.MakeOffer(selectedOrder!!, it as Offer, selectedOrder!!.userId))
                 },
                 isSubmitting = viewModel.state.isSubmitting,
                 isRtl = isRtl,

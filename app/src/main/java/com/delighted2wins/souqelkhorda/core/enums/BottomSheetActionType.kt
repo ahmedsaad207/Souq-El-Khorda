@@ -27,6 +27,7 @@ enum class BottomSheetActionType(
                     "بمجرد الإرسال، لا يمكن تعديل العرض إلا إذا سمح البائع بذلك."
         )
     ),
+
     UPDATE_STATUS_OFFER(
         code = 1,
         enValue = "Update Status",
@@ -40,6 +41,7 @@ enum class BottomSheetActionType(
                     "تأكد من اختيار الحالة الصحيحة لتجنب الالتباس."
         )
     ),
+
     DELETE_OFFER(
         code = 2,
         enValue = "Confirm Delete",
@@ -53,10 +55,11 @@ enum class BottomSheetActionType(
                     "لا يمكن التراجع عن هذا الإجراء، يرجى التأكد قبل المتابعة."
         )
     ),
+
     CANCEL_COMPANY_ORDER(
         code = 3,
-        enValue = "Confirm",
-        arValue = "تأكيد الالغاء",
+        enValue = "Cancel Order",
+        arValue = "إلغاء الطلب",
         color = Color(0xFFF44336),
         warningColor = Color(0xFFFFCDD2),
         warnings = listOf(
@@ -66,4 +69,60 @@ enum class BottomSheetActionType(
                     "لن تتمكن من إعادة تنشيط هذا الطلب بعد الإلغاء."
         )
     ),
+
+    ACCEPT_OFFER(
+        code = 4,
+        enValue = "Accept Offer",
+        arValue = "قبول العرض",
+        color = Color(0xFF4CAF50),
+        warningColor = Color(0xFFB8EFBA),
+        warnings = listOf(
+            "Accepting this offer will notify the buyer immediately." to
+                    "قبول هذا العرض سيخطر المشتري على الفور.",
+            "You cannot undo this action once accepted." to
+                    "لا يمكنك التراجع عن هذا الإجراء بعد القبول."
+        )
+    ),
+
+    REJECT_OFFER(
+        code = 5,
+        enValue = "Reject Offer",
+        arValue = "رفض العرض",
+        color = Color(0xFFF44336),
+        warningColor = Color(0xFFFFCDD2),
+        warnings = listOf(
+            "Rejecting this offer will notify the buyer immediately." to
+                    "رفض هذا العرض سيخطر المشتري على الفور.",
+            "You cannot undo this action once rejected." to
+                    "لا يمكنك التراجع عن هذا الإجراء بعد الرفض."
+        )
+    ),
+
+    COMPLETE_ORDER(
+        code = 6,
+        enValue = "Complete Order",
+        arValue = "إكمال الطلب",
+        color = Color(0xFF4CAF50),
+        warningColor = Color(0xFFB8EFBA),
+        warnings = listOf(
+            "Completing this order will mark it as finished and notify all parties." to
+                    "إكمال هذا الطلب سيؤدي إلى وضع علامة عليه كمكتمل وإخطار جميع الأطراف.",
+            "You cannot undo this action once completed." to
+                    "لا يمكنك التراجع عن هذا الإجراء بعد الإكمال."
+        )
+    ),
+
+    MARK_RECEIVED(
+    code = 7,
+    enValue = "Mark as Received",
+    arValue = "تأكيد الاستلام",
+    color = Color(0xFF4CAF50),
+    warningColor = Color(0xFFB8EFBA),
+    warnings = listOf(
+            "Marking as received will notify the seller that you have received the order." to
+                    "تأكيد الاستلام سيخطر البائع أنك استلمت الطلب.",
+            "You cannot undo this action once confirmed." to
+                    "لا يمكنك التراجع عن هذا الإجراء بعد التأكيد."
+         )
+    );
 }
