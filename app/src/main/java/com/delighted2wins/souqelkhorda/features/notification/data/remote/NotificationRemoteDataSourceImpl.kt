@@ -23,6 +23,7 @@ class NotificationRemoteDataSourceImpl @Inject constructor(
             val list = firestore.collection("notifications")
                 .document(userId)
                 .collection("userNotifications")
+                .orderBy("createdAt", Query.Direction.DESCENDING)
                 .get()
                 .await()
                 .map { doc ->
@@ -93,7 +94,6 @@ class NotificationRemoteDataSourceImpl @Inject constructor(
         val listener = firestore.collection("notifications")
             .document(userId)
             .collection("userNotifications")
-            .orderBy("timestamp", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
                     close(error)
