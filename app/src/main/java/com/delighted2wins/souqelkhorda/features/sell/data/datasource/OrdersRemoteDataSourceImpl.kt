@@ -15,8 +15,12 @@ class OrdersRemoteDataSourceImpl @Inject constructor(
         firestoreService.sendOrder(order)
     }
 
-    override suspend fun deleteOrder(orderId: String): Boolean {
+    override suspend fun deleteCompanyOrder(orderId: String): Boolean {
         return firestoreService.deleteCompanyOrder(orderId)
+    }
+
+    override suspend fun deleteMarketOrder(orderId: String): Boolean {
+        return firestoreService.deleteMarketOrder(orderId)
     }
 
     override suspend fun uploadScrapImages(scraps: List<Scrap>): List<Scrap> {

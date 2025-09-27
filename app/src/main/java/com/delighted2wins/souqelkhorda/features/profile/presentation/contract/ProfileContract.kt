@@ -33,14 +33,12 @@ interface ProfileContract {
         object LoadOrders : Intent()
 
         data class ChangeName(val name: String) : Intent()
-        data class ChangeEmail(val email: String) : Intent()
         data class ChangePhone(val phone: String) : Intent()
         data class ChangeGovernorate(val governorate: String) : Intent()
         data class ChangeAddress(val address: String) : Intent()
         data class ChangeImageUrl(val imageUrl: String) : Intent()
 
         data object SaveName : Intent()
-        data object SaveEmail : Intent()
         data object SavePhone : Intent()
         data object SaveGovernorate : Intent()
         data object SaveAddress : Intent()
@@ -63,6 +61,7 @@ interface ProfileContract {
     }
 
     sealed class Effect {
+        data class ShowSnackbar(val message: String) : Effect()
         object NavigateToHistory : Effect()
         object Logout : Effect()
     }

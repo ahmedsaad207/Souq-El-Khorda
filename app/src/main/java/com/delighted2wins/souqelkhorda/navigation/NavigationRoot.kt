@@ -225,6 +225,7 @@ fun NavigationRoot(
                     NavEntry(key) {
                         bottomBarState.value = false
                         ProfileScreen(
+                            snackBarState = snackBarState,
                             onBackClick = { backStack.remove(key) },
                             onHistoryClick = { backStack.add(HistoryScreen) },
                             onLogoutClick = {
