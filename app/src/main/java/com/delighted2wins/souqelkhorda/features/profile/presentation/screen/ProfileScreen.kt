@@ -38,6 +38,7 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetValue
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -72,10 +73,10 @@ import com.delighted2wins.souqelkhorda.features.profile.presentation.contract.Pr
 import com.delighted2wins.souqelkhorda.features.profile.presentation.viewmodel.ProfileViewModel
 import kotlinx.coroutines.launch
 
-@Preview(showBackground = true)
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
+    snackBarState: SnackbarHostState,
     onBackClick: () -> Unit = {},
     onLogoutClick: () -> Unit = {},
     onHistoryClick: () -> Unit = {}
@@ -88,6 +89,7 @@ fun ProfileScreen(
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
+                is ProfileContract.Effect.ShowSnackbar -> snackBarState.showSnackbar(effect.message)
                 ProfileContract.Effect.Logout -> onLogoutClick()
                 ProfileContract.Effect.NavigateToHistory -> onHistoryClick()
             }
@@ -187,29 +189,6 @@ fun ProfileScreen(
                         })
                     },
                     onSave = { viewModel.handleIntent(ProfileContract.Intent.SaveName) }
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                EditableField(
-                    label = stringResource(R.string.profile_email),
-                    state = state.email,
-                    onValueChange = { viewModel.handleIntent(ProfileContract.Intent.ChangeEmail(it)) },
-                    onStartEdit = {
-                        viewModel.handleIntent(ProfileContract.Intent.StartEditing({ it.email }) { st, f ->
-                            st.copy(
-                                email = f
-                            )
-                        })
-                    },
-                    onCancel = {
-                        viewModel.handleIntent(ProfileContract.Intent.CancelEditing({ it.email }) { st, f ->
-                            st.copy(
-                                email = f
-                            )
-                        })
-                    },
-                    onSave = { viewModel.handleIntent(ProfileContract.Intent.SaveEmail) }
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
