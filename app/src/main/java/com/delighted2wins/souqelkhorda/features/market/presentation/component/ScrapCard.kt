@@ -60,15 +60,13 @@ fun ScrapCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .border(shape = cornerRadius, width = 1.dp, color = MaterialTheme.colorScheme.secondary)
             .clip(cornerRadius),
         shape = cornerRadius,
+        border = CardDefaults.outlinedCardBorder().copy(brush = gradientBrush),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
     ) {
         Column(
-            modifier = Modifier
-                .background(brush = gradientBrush)
-                .padding(12.dp)
+            modifier = Modifier.padding(12.dp)
         ) {
             marketUser?.let {
                 UserSection(

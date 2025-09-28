@@ -1,6 +1,7 @@
 package com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -47,11 +48,10 @@ fun SellerInfoSection(
             .padding(horizontal = 4.dp, vertical = 12.dp)
             .clip(cornerRadius),
         shape = cornerRadius,
+        border = CardDefaults.outlinedCardBorder().copy(brush = gradientBrush),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
     ) {
-        Column(
-            modifier = Modifier.background(brush = gradientBrush)
-        ) {
+        Column {
             Row(
                 modifier = Modifier.padding(4.dp),
                 verticalAlignment = Alignment.CenterVertically

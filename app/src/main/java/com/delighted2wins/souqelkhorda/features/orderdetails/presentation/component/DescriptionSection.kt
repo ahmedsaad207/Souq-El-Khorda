@@ -39,13 +39,12 @@ fun DescriptionSection(
     Card(
         modifier = Modifier.padding(horizontal = 4.dp, vertical = 4.dp),
         shape = RoundedCornerShape(16.dp),
+        border = CardDefaults.outlinedCardBorder().copy(brush = gradientBrush),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0f))
 
     ) {
         Column(
-            modifier = Modifier
-                .background(gradientBrush, shape = RoundedCornerShape(16.dp))
-                .padding(16.dp)
+            modifier = Modifier.padding(16.dp)
         ) {
             DirectionalText(
                 text = stringResource(R.string.description),

@@ -16,6 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
+import com.delighted2wins.souqelkhorda.core.enums.ScrapType
 import com.delighted2wins.souqelkhorda.core.model.Scrap
 
 @Composable
@@ -25,6 +26,8 @@ fun OrderItemCard(
 ) {
     val contentIsRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
+    val scrapType = ScrapType.fromCategory(item.category)
+
     val cardGradient = Brush.horizontalGradient(
         listOf(
             MaterialTheme.colorScheme.secondary.copy(alpha = 0.4f),
@@ -33,23 +36,16 @@ fun OrderItemCard(
         )
     )
 
-    val chipGradient = Brush.horizontalGradient(
-        listOf(
-            MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
-            MaterialTheme.colorScheme.secondary.copy(alpha = 0.4f),
-        )
-    )
-
     Card(
         shape = RoundedCornerShape(16.dp),
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 4.dp, vertical = 8.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent)
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+        border = CardDefaults.outlinedCardBorder().copy(brush = cardGradient)
     ) {
         Column(
             modifier = Modifier
-                .background(cardGradient)
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
@@ -63,7 +59,7 @@ fun OrderItemCard(
                     color = Color.White,
                     modifier = Modifier
                         .background(
-                            brush = chipGradient,
+                            brush = scrapType.gradientBrush(),
                             shape = RoundedCornerShape(24.dp)
                         )
                         .padding(horizontal = 12.dp, vertical = 6.dp),
@@ -76,7 +72,7 @@ fun OrderItemCard(
                     color = Color.White,
                     modifier = Modifier
                         .background(
-                            brush = chipGradient,
+                            color = Color.Blue.copy(alpha = 0.8f),
                             shape = RoundedCornerShape(24.dp)
                         )
                         .padding(horizontal = 12.dp, vertical = 6.dp),

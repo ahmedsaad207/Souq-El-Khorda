@@ -40,11 +40,11 @@ fun OrderSummaryCard(order: Order) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 4.dp, vertical = 8.dp),
+        border = CardDefaults.outlinedCardBorder().copy(brush = cardGradient),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0f))
     ) {
         Row(
             modifier = Modifier
-                .background(brush = cardGradient)
                 .padding(horizontal = 2.dp, vertical = 8.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
