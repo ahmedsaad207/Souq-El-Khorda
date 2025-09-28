@@ -62,8 +62,9 @@ fun ScrapCard(
             .fillMaxWidth()
             .clip(cornerRadius),
         shape = cornerRadius,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         border = CardDefaults.outlinedCardBorder().copy(brush = gradientBrush),
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
     ) {
         Column(
             modifier = Modifier.padding(12.dp)

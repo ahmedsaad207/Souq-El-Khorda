@@ -182,7 +182,6 @@
     <string name="search_in_scraps">Search in scraps...</string>
     <string name="read_less">Read Less</string>
     <string name="read_more">Read More</string>
-    <string name="order_items">Order Items</string>
     <string name="no_images_available">No images available</string>
     <string name="details">Details</string>
     <string name="no_order_details_found">No order details found</string>
@@ -191,6 +190,17 @@
     <string name="total_weight">Total weight</string>
     <string name="total_items">Total items</string>
     <string name="view_profile">View Profile</string>
+    <string name="no_sells_available">No sells available</string>
+    <string name="no_offers_available">No offers available</string>
+    <string name="no_orders_available">No orders available</string>
+    <string name="offers_label">Offers</string>
+    <string name="sales_label">Sales</string>
+    <string name="order_items_label">Order Items</string>
+    <string name="order_id">ID #%1$s</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="no_orders_found">No orders found</string>
+    <string name="order_source_market">Market</string>
+    <string name="order_source_company">Company</string>
 
 
 

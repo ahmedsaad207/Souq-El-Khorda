@@ -84,7 +84,7 @@ fun UserSection(marketUserData: MarketUser, date: String) {
                         Text(
                             text = date,
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            color = MaterialTheme.colorScheme.primary,
                             maxLines = 1,
                         )
                     }

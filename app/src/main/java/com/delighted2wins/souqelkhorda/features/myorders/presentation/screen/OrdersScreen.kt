@@ -34,12 +34,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.enums.BottomSheetActionType
 import com.delighted2wins.souqelkhorda.core.enums.OrderSource
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.contract.MyOrdersEffect
@@ -69,6 +71,7 @@ fun OrdersScreen(
     val scope = rememberCoroutineScope()
     val coroutineScope = rememberCoroutineScope()
     val isRtl: Boolean = LocalLayoutDirection.current == LayoutDirection.Rtl
+    val retry = stringResource(R.string.retry)
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var selectedOrderId by remember { mutableStateOf("")}
@@ -90,7 +93,7 @@ fun OrdersScreen(
                     coroutineScope.launch {
                         snackBarHostState.showSnackbar(
                             message = effect.message,
-                            actionLabel = if (isRtl) "إعادة المحاولة" else "Retry"
+                            actionLabel = retry
                         ).let { result ->
                             if (result == SnackbarResult.ActionPerformed) {
                                 viewModel.onIntent(MyOrdersIntents.LoadSaleOrders)
@@ -132,14 +135,14 @@ fun OrdersScreen(
                             horizontalArrangement = Arrangement.spacedBy(6.dp),
                             modifier = Modifier
                                 .background(
-                                    if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                                    if (isSelected) MaterialTheme.colorScheme.secondary.copy(alpha = 0.1f)
                                     else Color.Transparent,
                                     shape = MaterialTheme.shapes.medium
                                 )
                                 .padding(horizontal = 12.dp, vertical = 6.dp)
                         ) {
                             Text(
-                                text = title.name,
+                                text = stringResource(id = title.labelRes),
                                 fontSize = 20.sp,
                                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                                 color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Gray
@@ -164,7 +167,9 @@ fun OrdersScreen(
 
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize().background(
+                if (isRtl) MaterialTheme.colorScheme.background else Color.Transparent
+            )
         ) { page ->
             when (page) {
                 0 -> CompanyOrdersScreen(

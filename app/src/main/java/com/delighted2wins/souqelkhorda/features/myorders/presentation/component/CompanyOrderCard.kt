@@ -16,6 +16,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -23,10 +24,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.app.theme.AppTypography
 import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
 import com.delighted2wins.souqelkhorda.core.model.Order
@@ -58,7 +61,10 @@ fun CompanyOrderCard(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = "ID #${generateUiOrderId(order.orderId, order.date)}",
+                    text = stringResource(
+                        R.string.order_id,
+                        generateUiOrderId(order.orderId, order.date)
+                    ),
                     style = AppTypography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -99,9 +105,9 @@ fun CompanyOrderCard(
             ) {
 
                 Text(
-                    text = "Price: ${order.price} EGP",
+                    text = stringResource(R.string.price_label, order.price),
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.primary
+                    color = MaterialTheme.colorScheme.secondary
                 )
 
                 Text(
@@ -132,18 +138,17 @@ fun CompanyOrderCard(
                         .fillMaxWidth()
                         .padding(top = 4.dp)
                 ) {
-                    Button(
+                    OutlinedButton(
                         onClick = { onDeclineClick(order.orderId) },
                         shape = RoundedCornerShape(8.dp),
                         modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.error,
-                            contentColor = MaterialTheme.colorScheme.onPrimary
-                        )
                     ) {
                         Text(
-                            text = if (systemIsRtl) "الغاء الطلب" else "Cancel",
-                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                            text = stringResource(R.string.cancel_button),
+                            style = MaterialTheme.typography.titleMedium.copy(
+                                color = MaterialTheme.colorScheme.error,
+                                fontWeight = FontWeight.Bold
+                            )
                         )
                     }
 
@@ -152,12 +157,12 @@ fun CompanyOrderCard(
                         shape = RoundedCornerShape(8.dp),
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            containerColor = MaterialTheme.colorScheme.secondary,
                             contentColor = MaterialTheme.colorScheme.onPrimary
                         )
                     ) {
                         Text(
-                            if (systemIsRtl) "تفاصيل" else "Details",
+                            text = stringResource(R.string.details_button),
                             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
                         )
                     }
