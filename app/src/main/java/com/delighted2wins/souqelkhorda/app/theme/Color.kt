@@ -31,6 +31,14 @@ val DarkFirstBottomNavColor = Color(0xFF1B8A59)
 val DarkSecondBottomNavColor = Color(0xFF12824D)
 val DarkError = Color(0xFFB71C1C)
 
-val LightSubCard = Color(0xFFF0F0F0) // رمادي فاتح
+val LightSubCard = Color(0xFFF0F0F0)
 
-val DarkSubCard = Color(0xFF2A2A2A) //
+val DarkSubCard = Color(0xFF2A2A2A)
+
+val LightCardGradientColor1 = Color(0xFFB2DFDB)
+val LightCardGradientColor2 = Color(0xFF80DEEA)
+val LightCardGradientColor3 =  Color(0xFF64B5F6)
+
+val DarkCardGradientColor1 = Color(0xFF00695C)
+val DarkCardGradientColor2 =Color(0xFF00838F)
+val DarkCardGradientColor3 =Color(0xFF1565C0)

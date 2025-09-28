@@ -1,6 +1,7 @@
 package com.delighted2wins.souqelkhorda.features.buyers.presentation.components
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -40,6 +41,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -61,8 +63,10 @@ fun RegisterBuyerForm(
     modifier: Modifier = Modifier,
     viewModel: BuyerViewModel = hiltViewModel(),
     snackBarHostState: SnackbarHostState,
-    onRegisterClick: () -> Unit
-    ) {
+    onRegisterClick: () -> Unit,
+    isOnline: Boolean
+) {
+    val ctx = LocalContext.current
     var selected by remember { mutableStateOf(listOf<String>()) }
     val screenWidth = LocalConfiguration.current.screenWidthDp
     val colors = MaterialTheme.colorScheme
@@ -83,8 +87,10 @@ fun RegisterBuyerForm(
             is BuyerState.RegisterSuccess -> {
                 onRegisterClick()
             }
+
             is BuyerState.Error -> {
             }
+
             else -> Unit
         }
     }
@@ -199,7 +205,7 @@ fun RegisterBuyerForm(
                         )
                     }
                     Spacer(Modifier.height(16.dp))
-                    LocationComponent{lat,lon ->
+                    LocationComponent { lat, lon ->
                         latitude = lat
                         longitude = lon
 
@@ -252,11 +258,15 @@ fun RegisterBuyerForm(
                     Spacer(Modifier.height(16.dp))
                     Button(
                         onClick = {
-                            viewModel.registerBuyer(
-                                latitude,
-                                longitude,
-                                valuesForApi
-                            )
+                            if (isOnline) {
+                                viewModel.registerBuyer(
+                                    latitude,
+                                    longitude,
+                                    valuesForApi
+                                )
+                            } else {
+                                Toast.makeText(ctx, "no internet", Toast.LENGTH_SHORT).show()
+                            }
                         },
                         modifier = Modifier
                             .width((screenWidth * 0.85).dp)
@@ -280,7 +290,11 @@ fun RegisterBuyerForm(
                         if (isLoading) {
                             DotLoadingIndicator()
                         } else {
-                            Text(stringResource(R.string.register_shop), fontSize = 22.sp, fontWeight = FontWeight.Bold)
+                            Text(
+                                stringResource(R.string.register_shop),
+                                fontSize = 22.sp,
+                                fontWeight = FontWeight.Bold
+                            )
                         }
                     }
                 }

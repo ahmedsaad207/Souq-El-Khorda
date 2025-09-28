@@ -32,13 +32,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.app.theme.Til
-import com.delighted2wins.souqelkhorda.core.components.DirectionalText
 import com.delighted2wins.souqelkhorda.core.enums.BottomSheetActionType
 import com.delighted2wins.souqelkhorda.core.model.Offer
+import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.ScrapCard
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.SearchBar
@@ -62,8 +64,12 @@ fun MarketScreen(
     val coroutineScope = rememberCoroutineScope()
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    var selectedOrderId by remember { mutableStateOf("")}
+    var selectedOrder by remember { mutableStateOf<Order?>(null)}
     var isBottomSheetVisible by remember { mutableStateOf(false) }
+
+    val retryLabel = stringResource(R.string.retry)
+    val noMarketData = stringResource(R.string.no_market_data)
+    val availableOffers = stringResource(R.string.available_offers)
 
     LaunchedEffect(Unit) {
         viewModel.loadCurrentUser()
@@ -77,7 +83,7 @@ fun MarketScreen(
                     if (isBottomSheetVisible) {
                         sheetState.hide()
                         isBottomSheetVisible = false
-                        selectedOrderId = ""
+                        selectedOrder = null
                     }
                     coroutineScope.launch { snackBarHostState.showSnackbar(effect.message) }
                 }
@@ -85,7 +91,7 @@ fun MarketScreen(
                     coroutineScope.launch {
                         snackBarHostState.showSnackbar(
                             message = effect.message,
-                            actionLabel = if (isRtl) "إعادة المحاولة" else "Retry"
+                            actionLabel = retryLabel
                         ).let { result ->
                             if (result == SnackbarResult.ActionPerformed) {
                                 viewModel.onIntent(MarketIntent.Refresh)
@@ -151,7 +157,7 @@ fun MarketScreen(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = if (isRtl) "لا توجد بيانات متاحة حالياً في السوق" else "No market data available at the moment",
+                                text = noMarketData,
                                 style = MaterialTheme.typography.titleLarge,
                                 color = Color.LightGray
                             )
@@ -173,27 +179,26 @@ fun MarketScreen(
                                 viewModel.onIntent(MarketIntent.SearchQueryChanged(it))
                             },
                             modifier = Modifier.fillMaxWidth(),
-                            isRtl = isRtl
                         )
                     }
 
                     item {
-                        CompositionLocalProvider(
-                            LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                DirectionalText(
-                                    text = if (isRtl) "العروض المتاحة" else "Available Offers",
-                                    contentIsRtl = isRtl,
-                                    style = MaterialTheme.typography.titleLarge,
-                                    color = Til,
-                                    modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
-                                )
-                            }
+                            Text(
+                                text = availableOffers,
+                                style = MaterialTheme.typography.headlineLarge.copy(
+                                    fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
+                                    fontWeight = MaterialTheme.typography.titleLarge.fontWeight
+                                ),
+                                color = MaterialTheme.colorScheme.secondary.copy(
+                                    alpha = 4f
+                                ),
+                                modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
+                            )
                         }
                     }
 
@@ -217,12 +222,11 @@ fun MarketScreen(
                                 marketUser = loadedUser,
                                 order = scrapData,
                                 onMakeOfferClick = {
-                                    selectedOrderId = scrapData.orderId
+                                    selectedOrder = scrapData
                                     isBottomSheetVisible = true
                                     coroutineScope.launch { sheetState.show() }
                                 },
                                 onDetailsClick = { orderId, ownerId -> onDetailsClick(orderId, ownerId)},
-                                systemIsRtl = isRtl
                             )
                         } ?: ShimmerScrapCard(systemIsRtl = isRtl)
                     }
@@ -233,24 +237,24 @@ fun MarketScreen(
         }
     }
 
-    if (isBottomSheetVisible && selectedOrderId.isNotEmpty() && viewModel.currentUser != null) {
+    if (isBottomSheetVisible && viewModel.currentUser != null) {
         ModalBottomSheet(
             onDismissRequest = {
                 coroutineScope.launch {
                     sheetState.hide()
                     isBottomSheetVisible = false
-                    selectedOrderId = ""
+                    selectedOrder = null
                 }
             },
             sheetState = sheetState
         ) {
             UserActionsBottomSheet(
-                orderId = selectedOrderId,
+                orderId = selectedOrder!!.orderId,
                 offerMaker = viewModel.currentUser,
                 sheetState = sheetState,
                 coroutineScope = coroutineScope,
                 onConfirmAction = {
-                    viewModel.onIntent(MarketIntent.MakeOffer(it as Offer))
+                    viewModel.onIntent(MarketIntent.MakeOffer(selectedOrder!!, it as Offer, selectedOrder!!.userId))
                 },
                 isSubmitting = viewModel.state.isSubmitting,
                 isRtl = isRtl,

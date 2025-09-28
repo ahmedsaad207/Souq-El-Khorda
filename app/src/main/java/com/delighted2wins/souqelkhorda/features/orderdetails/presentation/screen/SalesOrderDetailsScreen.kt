@@ -1,42 +1,56 @@
 package com.delighted2wins.souqelkhorda.features.orderdetails.presentation.screen
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.outlined.Inventory2
-import androidx.compose.material3.*
-import androidx.compose.ui.Alignment
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.delighted2wins.souqelkhorda.core.enums.BottomSheetActionType
 import com.delighted2wins.souqelkhorda.core.model.Offer
 import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.ShimmerScrapCard
+import com.delighted2wins.souqelkhorda.features.offers.UserActionsBottomSheet
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.AcceptedOfferItemCard
-import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.OrderInformationCard
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.OfferItemCard
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.OrderDetailsTopBar
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.OrderInformationCard
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.ScrapItemCard
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.SectionTitle
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.SalesOrderDetailsEffect
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.SalesOrderDetailsIntent
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.viewmodel.SalesOrderDetailsViewModel
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SalesOrderDetailsScreen(
     orderId: String,
@@ -47,6 +61,14 @@ fun SalesOrderDetailsScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val isRtl = LocalLayoutDirection.current == androidx.compose.ui.unit.LayoutDirection.Rtl
+    val coroutineScope = rememberCoroutineScope()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    var selectedOfferId by remember { mutableStateOf("") }
+    var selectedOrderId by remember { mutableStateOf("") }
+    var selectedBuyerId by remember { mutableStateOf("") }
+    var actionType by remember { mutableStateOf<BottomSheetActionType?>(null) }
+    var isBottomSheetVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(orderId) {
         viewModel.onIntent(SalesOrderDetailsIntent.LoadOrderDetails(orderId))
@@ -58,13 +80,94 @@ fun SalesOrderDetailsScreen(
                 is SalesOrderDetailsEffect.NavigateToChat -> {
                     onChatClick(effect.orderId, effect.sellerId, effect.buyerId, effect.offerId)
                 }
+
                 is SalesOrderDetailsEffect.ShowSuccess -> {
-                    snackBarHostState.showSnackbar(effect.message)
+                    val lastAction = actionType
+                    if (isBottomSheetVisible) {
+                        sheetState.hide()
+                        isBottomSheetVisible = false
+                        selectedOfferId = ""
+                        selectedOrderId = ""
+                        selectedBuyerId = ""
+                        actionType = null
+                    }
+                    coroutineScope.launch {
+                        if (lastAction != BottomSheetActionType.COMPLETE_ORDER) {
+                            snackBarHostState.showSnackbar(message = effect.message)
+                        }
+                    }
+
+                    if (lastAction == BottomSheetActionType.COMPLETE_ORDER) {
+                        onBackClick()
+                    }
                 }
+
                 is SalesOrderDetailsEffect.ShowError -> {
                     snackBarHostState.showSnackbar(effect.message)
                 }
             }
+        }
+    }
+
+    if (isBottomSheetVisible && actionType != null) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                coroutineScope.launch { sheetState.hide() }
+                isBottomSheetVisible = false
+                selectedOfferId = ""
+                selectedOrderId = ""
+                selectedBuyerId = ""
+                actionType = null
+            },
+            sheetState = sheetState
+        ) {
+            UserActionsBottomSheet(
+                orderId = selectedOrderId,
+                offerMaker = null,
+                sheetState = sheetState,
+                coroutineScope = coroutineScope,
+                actionType = actionType!!,
+                isSubmitting = state.isSubmitting,
+                isRtl = isRtl,
+                onConfirmAction = {
+                    when (actionType) {
+                        BottomSheetActionType.ACCEPT_OFFER -> {
+                            viewModel.onIntent(
+                                SalesOrderDetailsIntent.AcceptOffer(
+                                    selectedOfferId,
+                                    selectedBuyerId
+                                )
+                            )
+                        }
+
+                        BottomSheetActionType.REJECT_OFFER -> {
+                            viewModel.onIntent(
+                                SalesOrderDetailsIntent.RejectOffer(
+                                    selectedOrderId, selectedOfferId, selectedBuyerId
+                                )
+                            )
+                        }
+
+                        BottomSheetActionType.DELETE_OFFER -> {
+                            viewModel.onIntent(
+                                SalesOrderDetailsIntent.CancelOffer(
+                                    selectedOrderId, selectedOfferId, selectedBuyerId
+                                )
+                            )
+                        }
+
+                        BottomSheetActionType.COMPLETE_ORDER -> {
+                            viewModel.onIntent(
+                                SalesOrderDetailsIntent.CompleteOffer(
+                                    selectedOrderId, selectedOfferId, selectedBuyerId
+                                )
+                            )
+                        }
+
+                        else -> {}
+                    }
+                }
+            )
         }
     }
 
@@ -96,11 +199,37 @@ fun SalesOrderDetailsScreen(
                         )
                     )
                 },
-                onCompleted = { offerId ->
-                    viewModel.onIntent(SalesOrderDetailsIntent.CompleteOffer(offerId))
+                onAccept = { offerId, buyerId ->
+                    selectedOfferId = offerId
+                    selectedBuyerId = buyerId
+                    selectedOrderId = state.order!!.orderId
+                    actionType = BottomSheetActionType.ACCEPT_OFFER
+                    isBottomSheetVisible = true
+                    coroutineScope.launch { sheetState.show() }
                 },
-                onCancel = { offerId ->
-                    viewModel.onIntent(SalesOrderDetailsIntent.CancelOffer(offerId))
+                onReject = { orderId, offerId, buyerId ->
+                    selectedOfferId = offerId
+                    selectedBuyerId = buyerId
+                    selectedOrderId = orderId
+                    actionType = BottomSheetActionType.REJECT_OFFER
+                    isBottomSheetVisible = true
+                    coroutineScope.launch { sheetState.show() }
+                },
+                onCancel = { orderId, offerId, buyerId ->
+                    selectedOfferId = offerId
+                    selectedBuyerId = buyerId
+                    selectedOrderId = orderId
+                    actionType = BottomSheetActionType.DELETE_OFFER
+                    isBottomSheetVisible = true
+                    coroutineScope.launch { sheetState.show() }
+                },
+                onCompleted = { orderId, offerId, buyerId ->
+                    selectedOfferId = offerId
+                    selectedBuyerId = buyerId
+                    selectedOrderId = orderId
+                    actionType = BottomSheetActionType.COMPLETE_ORDER
+                    isBottomSheetVisible = true
+                    coroutineScope.launch { sheetState.show() }
                 }
             )
         }
@@ -128,8 +257,10 @@ private fun SalesOrderDetailsUI(
     pendingOffers: List<Pair<Offer, MarketUser>>,
     onBackClick: () -> Unit = {},
     onChatClick: (sellerId: String, buyerId: String, orderId: String, offerId: String) -> Unit,
-    onCompleted: (offerId: String) -> Unit,
-    onCancel: (offerId: String) -> Unit
+    onAccept: (offerId: String, buyerId: String) -> Unit,
+    onReject: (orderId: String, offerId: String, buyerId: String) -> Unit,
+    onCompleted: (orderId: String, offerId: String, buyerId: String) -> Unit,
+    onCancel: (orderId: String, offerId: String, buyerId: String) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -192,9 +323,16 @@ private fun SalesOrderDetailsUI(
                 AcceptedOfferItemCard(
                     buyer = user,
                     offer = offer,
-                    onChat = { onChatClick(order.userId, offer.buyerId, offer.orderId, offer.offerId) },
-                    onCompleted = { onCompleted(offer.offerId) },
-                    onCancel = { onCancel(offer.offerId) }
+                    onChat = {
+                        onChatClick(
+                            order.userId,
+                            offer.buyerId,
+                            offer.orderId,
+                            offer.offerId
+                        )
+                    },
+                    onCompleted = { onCompleted(offer.orderId, offer.offerId, offer.buyerId) },
+                    onCancel = { onCancel(offer.orderId, offer.offerId, offer.buyerId) }
                 )
             }
         }
@@ -213,8 +351,8 @@ private fun SalesOrderDetailsUI(
                 OfferItemCard(
                     buyer = user,
                     offer = offer,
-                    onAccept = { onCompleted(offer.offerId) },
-                    onReject = { onCancel(offer.offerId) }
+                    onAccept = { onAccept(offer.offerId, offer.buyerId) },
+                    onReject = { onReject(offer.orderId, offer.offerId, offer.buyerId) }
                 )
             }
         }

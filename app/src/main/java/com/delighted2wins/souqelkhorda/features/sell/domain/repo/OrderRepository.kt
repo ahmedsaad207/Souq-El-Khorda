@@ -5,6 +5,7 @@ import com.delighted2wins.souqelkhorda.core.model.Scrap
 
 interface OrderRepository {
     suspend fun sendOrder(order: Order)
-    suspend fun deleteOrder(orderId: String): Boolean
+    suspend fun deleteCompanyOrder(orderId: String): Boolean
+    suspend fun deleteMarketOrder(orderId: String): Boolean
     suspend fun uploadScrapImages(scraps: List<Scrap>): List<Scrap>
 }

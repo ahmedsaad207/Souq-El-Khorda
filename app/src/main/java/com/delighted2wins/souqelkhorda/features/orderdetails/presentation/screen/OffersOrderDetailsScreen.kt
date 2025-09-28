@@ -2,7 +2,16 @@ package com.delighted2wins.souqelkhorda.features.orderdetails.presentation.scree
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,6 +21,11 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -25,15 +39,24 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.delighted2wins.souqelkhorda.core.enums.BottomSheetActionType
 import com.delighted2wins.souqelkhorda.core.model.Offer
 import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.ShimmerScrapCard
+import com.delighted2wins.souqelkhorda.features.offers.UserActionsBottomSheet
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.*
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.BuyerOfferCard
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.OrderDetailsTopBar
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.OrderInformationCard
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.ScrapItemCard
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.SectionTitle
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.OffersOrderDetailsEffect
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.OffersOrderDetailsIntent
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.viewmodel.OffersOrderDetailsViewModel
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OffersOrderDetailsScreen(
     snackBarHostState: SnackbarHostState,
@@ -46,6 +69,13 @@ fun OffersOrderDetailsScreen(
     val isRtl = LocalLayoutDirection.current == androidx.compose.ui.unit.LayoutDirection.Rtl
     var scrapsExpanded by remember { mutableStateOf(false) }
 
+    val coroutineScope = rememberCoroutineScope()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var isBottomSheetVisible by remember { mutableStateOf(false) }
+    var actionType by remember { mutableStateOf<BottomSheetActionType?>(null) }
+    var selectedOfferId by remember { mutableStateOf("") }
+    var selectedOrderId by remember { mutableStateOf("") }
+
     LaunchedEffect(orderId) {
         viewModel.onIntent(OffersOrderDetailsIntent.LoadOrderDetails(orderId))
     }
@@ -57,8 +87,28 @@ fun OffersOrderDetailsScreen(
                     onChatClick(effect.orderId, effect.sellerId, effect.buyerId, effect.offerId)
                 }
                 is OffersOrderDetailsEffect.ShowSuccess -> {
-                    snackBarHostState.showSnackbar(effect.message)
+                    val lastAction = actionType
+
+                    if (isBottomSheetVisible) {
+                        sheetState.hide()
+                        isBottomSheetVisible = false
+                        selectedOfferId = ""
+                        selectedOrderId = ""
+                        actionType = null
+                    }
+
+                    coroutineScope.launch {
+                        if (lastAction != BottomSheetActionType.DELETE_OFFER) {
+                            snackBarHostState.showSnackbar(message = effect.message)
+                        }
+                    }
+
+                    if (lastAction == BottomSheetActionType.DELETE_OFFER) {
+                        onBackClick()
+                    }
+
                 }
+
                 is OffersOrderDetailsEffect.ShowError -> {
                     snackBarHostState.showSnackbar(effect.message)
                 }
@@ -84,10 +134,29 @@ fun OffersOrderDetailsScreen(
                 onScrapsToggle = { scrapsExpanded = !scrapsExpanded },
                 buyerOffer = state.buyerOffer,
                 isRtl = isRtl,
+                onUpdateOfferClick = {
+                    selectedOfferId = state.buyerOffer!!.first.offerId
+                    selectedOrderId = state.order!!.orderId
+                    actionType = BottomSheetActionType.UPDATE_STATUS_OFFER
+                    isBottomSheetVisible = true
+                    coroutineScope.launch { sheetState.show() }
+                },
                 onBackClick = onBackClick,
                 onChatClick = onChatClick,
-                onMarkReceived = { offerId -> viewModel.onIntent(OffersOrderDetailsIntent.MarkAsReceived(offerId)) },
-                onCancel = { offerId -> viewModel.onIntent(OffersOrderDetailsIntent.CancelOffer(offerId)) }
+                onMarkReceived = { offerId ->
+                    selectedOfferId = offerId
+                    selectedOrderId = state.order!!.orderId
+                    actionType = BottomSheetActionType.MARK_RECEIVED
+                    isBottomSheetVisible = true
+                    coroutineScope.launch { sheetState.show() }
+                },
+                onCancel = { offerId ->
+                    selectedOfferId = offerId
+                    selectedOrderId = state.order!!.orderId
+                    actionType = BottomSheetActionType.DELETE_OFFER
+                    isBottomSheetVisible = true
+                    coroutineScope.launch { sheetState.show() }
+                }
             )
         }
 
@@ -104,6 +173,65 @@ fun OffersOrderDetailsScreen(
             }
         }
     }
+
+    if (isBottomSheetVisible && actionType != null) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                coroutineScope.launch { sheetState.hide() }
+                isBottomSheetVisible = false
+                selectedOfferId = ""
+                selectedOrderId = ""
+                actionType = null
+            },
+            sheetState = sheetState
+        ) {
+            UserActionsBottomSheet(
+                orderId = selectedOrderId,
+                offerMaker = state.buyerOffer?.second,
+                sheetState = sheetState,
+                coroutineScope = coroutineScope,
+                actionType = actionType!!,
+                isSubmitting = state.isSubmitting,
+                isRtl = isRtl,
+                onConfirmAction = { data ->
+                    when (actionType) {
+                        BottomSheetActionType.UPDATE_STATUS_OFFER -> {
+                            if (data is Offer) {
+                                viewModel.onIntent(
+                                    OffersOrderDetailsIntent.UpdateOffer(
+                                        offerId = selectedOfferId,
+                                        newPrice = data.offerPrice.toString(),
+                                        sellerId = state.order!!.userId
+                                    )
+                                )
+                            }
+                        }
+
+                        BottomSheetActionType.MARK_RECEIVED -> {
+                            viewModel.onIntent(
+                                OffersOrderDetailsIntent.MarkAsReceived(
+                                    orderId = selectedOrderId,
+                                    offerId = selectedOfferId,
+                                    sellerId = state.order!!.userId
+                                )
+                            )
+                        }
+
+                        BottomSheetActionType.DELETE_OFFER -> {
+                            viewModel.onIntent(
+                                OffersOrderDetailsIntent.CancelOffer(
+                                    orderId = selectedOrderId,
+                                    offerId = selectedOfferId,
+                                    sellerId = state.order!!.userId
+                                )
+                            )
+                        }
+                        else -> {}
+                    }
+                }
+            )
+        }
+    }
 }
 
 @Composable
@@ -113,6 +241,7 @@ private fun OffersOrderDetailsUI(
     onScrapsToggle: () -> Unit,
     buyerOffer: Pair<Offer, MarketUser>?,
     isRtl: Boolean,
+    onUpdateOfferClick: () -> Unit = {},
     onBackClick: () -> Unit = {},
     onChatClick: (orderId: String, sellerId: String, buyerId: String, offerId: String) -> Unit,
     onMarkReceived: (offerId: String) -> Unit,
@@ -144,6 +273,7 @@ private fun OffersOrderDetailsUI(
                 BuyerOfferCard(
                     seller = seller,
                     offer = offer,
+                    onUpdate = { onUpdateOfferClick() },
                     onChat = { onChatClick(order.orderId, seller.id, offer.buyerId, offer.offerId) },
                     onMarkReceived = { onMarkReceived(offer.offerId) },
                     onCancel = { onCancel(offer.offerId) }

@@ -1,7 +1,6 @@
 package com.delighted2wins.souqelkhorda.features.sell.presentation.screen
 
 import android.annotation.SuppressLint
-import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -12,10 +11,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Sync
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.SheetValue
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -59,6 +64,8 @@ import kotlinx.coroutines.launch
 fun SellScreen(
     innerPadding: PaddingValues = PaddingValues(),
     viewModel: SellViewModel = hiltViewModel(),
+    snackBarState: SnackbarHostState,
+    isOnline: Boolean,
 ) {
 
     val uiState by viewModel.state.collectAsStateWithLifecycle()
@@ -78,30 +85,42 @@ fun SellScreen(
     val title = remember { mutableStateOf("") }
     val description = remember { mutableStateOf("") }
     val price = remember { mutableIntStateOf(0) }
-    val showError = remember { mutableStateOf(false) }
+    val showTitleError = remember { mutableStateOf(false) }
+    val showPriceError = remember { mutableStateOf(false) }
     val isLoading = remember { mutableStateOf(false) }
     val bottomSheetMode = remember { mutableStateOf(BottomSheetMode.ADD) }
     var currentScrap by remember { mutableStateOf<Scrap?>(null) }
     var scrapToDelete by remember { mutableStateOf<Scrap?>(null) }
-    var orderToSubmit by remember { mutableStateOf<Order?>(null) }
+    val showNoInternetDialog = remember { mutableStateOf(false) }
 
     LaunchedEffect(uiState.isScrapSaved) {
         if (uiState.isScrapSaved) {
-            Toast.makeText(context,
-                context.getString(R.string.scrap_added_successfully), Toast.LENGTH_SHORT).show()
+            snackBarState.showSnackbar(
+                message = context.getString(R.string.scrap_added_successfully),
+                duration = SnackbarDuration.Short
+            )
             viewModel.resetScrapSavedFlag()
         }
     }
 
     LaunchedEffect(uiState.isScrapDeleted) {
         if (uiState.isScrapDeleted) {
-            Toast.makeText(context,
-                context.getString(R.string.scrap_deleted_successfully), Toast.LENGTH_SHORT).show()
+
+            snackBarState.currentSnackbarData?.dismiss()
+
+            snackBarState.showSnackbar(
+                message = context.getString(R.string.scrap_deleted_successfully),
+                duration = SnackbarDuration.Short
+            )
             viewModel.resetScrapDeletedFlag()
         }
     }
     LaunchedEffect(uiState.isOrderSubmitted) {
         if (uiState.isOrderSubmitted) {
+            snackBarState.showSnackbar(
+                message = context.getString(R.string.order_submitted_successfully),
+                duration = SnackbarDuration.Short
+            )
             isLoading.value = false
             title.value = ""
             description.value = ""
@@ -112,7 +131,7 @@ fun SellScreen(
 
     if (scrapToDelete != null) {
         ConfirmationDialog(
-            title =stringResource(R.string.confirm_delete),
+            title = stringResource(R.string.confirm_delete),
             message = stringResource(R.string.are_you_sure_you_want_to_delete_this_scrap),
             confirmLabel = stringResource(R.string.delete),
             onConfirm = {
@@ -123,19 +142,45 @@ fun SellScreen(
         )
     }
 
-    if (orderToSubmit != null) {
-        ConfirmationDialog(
-            title = stringResource(R.string.submit_order),
-            message = stringResource(R.string.are_you_sure_you_want_to_submit_this_order),
-            confirmLabel = stringResource(R.string.submit),
-            onConfirm = {
-                isLoading.value = true
-                viewModel.processIntent(SellIntent.SendOrder(orderToSubmit!!))
-                orderToSubmit = null
-            },
-            onDismiss = { orderToSubmit = null }
+    if (showNoInternetDialog.value) {
+        isLoading.value = false
+        AlertDialog(
+            onDismissRequest = { showNoInternetDialog.value = false },
+            title = { Text(stringResource(R.string.no_internet)) },
+            text = { Text(stringResource(R.string.please_check_connection)) },
+            confirmButton = {
+                TextButton(onClick = { showNoInternetDialog.value = false }) {
+                    Text(stringResource(R.string.ok))
+                }
+            }
         )
     }
+
+    if (uiState.err != null) {
+        isLoading.value = false
+        AlertDialog(
+            onDismissRequest = {
+                viewModel.resetErrorFlag()
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.resetErrorFlag()
+                    }
+                ) {
+                    Text(stringResource(R.string.ok))
+                }
+            },
+            title = {
+                Text(text = stringResource(R.string.error))
+            },
+            text = {
+                Text(text = uiState.err!!)
+            }
+        )
+    }
+
+
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -159,6 +204,7 @@ fun SellScreen(
             item {
                 ItemsSection(
                     uiState.data,
+                    isLoading = isLoading,
                     onEdit = { scrap ->
                         currentScrap = scrap
                         bottomSheetMode.value = BottomSheetMode.EDIT
@@ -184,8 +230,10 @@ fun SellScreen(
                             title = title,
                             description = description,
                             price = price,
-                            showError = showError,
-                            selectedDestination = selectedDestination
+                            showTitleError = showTitleError,
+                            selectedDestination = selectedDestination,
+                            isLoading = isLoading,
+                            showPriceError = showPriceError
                         )
                     }
 
@@ -199,7 +247,17 @@ fun SellScreen(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         if (title.value.isBlank()) {
-                            showError.value = true
+                            showTitleError.value = true
+                            return@CustomButton
+                        }
+
+                        if (selectedDestination.value == Destination.Market && price.intValue == 0) {
+                            showPriceError.value = true
+                            return@CustomButton
+                        }
+
+                        if (!isOnline) {
+                            showNoInternetDialog.value = true
                             return@CustomButton
                         }
 
@@ -211,7 +269,8 @@ fun SellScreen(
                             description = description.value.trim(),
                             price = price.intValue
                         )
-                        orderToSubmit = order
+                        isLoading.value = true
+                        viewModel.processIntent(SellIntent.SendOrder(order))
                     }
 
                     Spacer(Modifier.height(innerPadding.calculateBottomPadding()))
@@ -228,7 +287,9 @@ fun SellScreen(
                         bottomSheetState,
                         isBottomSheetVisible
                     )
-                }
+                },
+                containerColor = MaterialTheme.colorScheme.background,
+                contentColor = MaterialTheme.colorScheme.onBackground
             ) {
                 Box(
                     modifier = Modifier
@@ -238,7 +299,7 @@ fun SellScreen(
                     BottomSheetSection(
                         mode = bottomSheetMode.value,
                         scrap = currentScrap,
-                        onCancelClick = {
+                        onCancel = {
                             hideBottomSheet(scope, bottomSheetState, isBottomSheetVisible)
                         },
                         onAddScrapClick = { scrap ->
@@ -251,7 +312,6 @@ fun SellScreen(
                         }
                     )
                 }
-
             }
         }
     }

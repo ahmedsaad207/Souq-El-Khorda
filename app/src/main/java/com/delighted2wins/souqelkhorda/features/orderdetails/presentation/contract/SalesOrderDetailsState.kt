@@ -9,5 +9,6 @@ data class SalesOrderDetailsState(
     val acceptedOffers: List<Pair<Offer, MarketUser>> = emptyList(),
     val pendingOffers: List<Pair<Offer, MarketUser>> = emptyList(),
     val isLoading: Boolean = false,
-    val error: String? = null
+    val error: String? = null,
+    val isSubmitting: Boolean = false
 )

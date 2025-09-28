@@ -39,6 +39,7 @@ fun BuyerRegistrationScreen(
     innerPadding: PaddingValues,
     snackBarHostState: SnackbarHostState,
     onBackClick: () -> Unit = {},
+    isOnline: Boolean,
     ) {
     val colors = MaterialTheme.colorScheme
 
@@ -204,7 +205,8 @@ fun BuyerRegistrationScreen(
 
                 RegisterBuyerForm(
                     snackBarHostState = snackBarHostState,
-                    onRegisterClick = onBackClick
+                    onRegisterClick = onBackClick,
+                    isOnline = isOnline
                 )
                 Spacer(Modifier.height(56.dp))
 

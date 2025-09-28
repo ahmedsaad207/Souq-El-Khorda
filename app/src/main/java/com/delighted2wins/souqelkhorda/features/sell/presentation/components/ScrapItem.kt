@@ -15,16 +15,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Place
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -37,8 +37,10 @@ import com.delighted2wins.souqelkhorda.core.model.Scrap
 fun ScrapItem(
     scrap: Scrap,
     onEdit: () -> Unit,
-    onDelete: () -> Unit
-) {
+    onDelete: () -> Unit,
+    isLoading: MutableState<Boolean>,
+
+    ) {
 
     Row(
         modifier = Modifier
@@ -58,13 +60,13 @@ fun ScrapItem(
         horizontalArrangement = Arrangement.SpaceBetween
 
     ) {
+        val scrapType = ScrapType.entries.find { it.name.equals(scrap.category, ignoreCase = true) }
         Icon(
-            imageVector = Icons.Default.Place,
+            painter = painterResource(scrapType?.iconRes ?: ScrapType.CustomScrap.iconRes),
             contentDescription = scrap.category,
             modifier = Modifier
-                .size(40.dp)
-                .clip(RoundedCornerShape(8.dp)),
-            tint = MaterialTheme.colorScheme.primary
+                .size(36.dp),
+            tint = scrapType?.tint ?: ScrapType.CustomScrap.tint
         )
         Spacer(Modifier.width(12.dp))
         Column(
@@ -97,16 +99,18 @@ fun ScrapItem(
         }
         Row {
             IconButton(
-                onClick = onEdit
+                onClick = onEdit,
+                enabled = !isLoading.value
             ) {
                 Icon(
                     imageVector = Icons.Default.Edit,
                     contentDescription = stringResource(R.string.edit),
-                    tint = MaterialTheme.colorScheme.tertiary
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
             IconButton(
-                onClick = onDelete
+                onClick = onDelete,
+                enabled = !isLoading.value
             ) {
                 Icon(
                     imageVector = Icons.Default.Delete,

@@ -22,7 +22,9 @@ fun CustomTextField(
     onValueChange: (String) -> Unit,
     label: String = "",
     placeholder: String = "",
-    keyboardOptions:KeyboardOptions = KeyboardOptions.Default
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    enabled: Boolean = true,
+    isError: Boolean = false
 ) {
     Column(
         modifier = modifier
@@ -40,6 +42,7 @@ fun CustomTextField(
                     shape = RoundedCornerShape(12.dp)
                 ),
             shape = RoundedCornerShape(12.dp),
+            enabled = enabled,
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = MaterialTheme.colorScheme.surface,
                 unfocusedContainerColor = MaterialTheme.colorScheme.surface,
@@ -49,7 +52,8 @@ fun CustomTextField(
                 disabledIndicatorColor = Color.Transparent
             ),
             keyboardOptions = keyboardOptions,
-            placeholder = { Text(placeholder, color = MaterialTheme.colorScheme.onSurfaceVariant) }
+            placeholder = { Text(placeholder, color = MaterialTheme.colorScheme.onSurfaceVariant) },
+            isError = isError
         )
     }
 }
