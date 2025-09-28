@@ -164,6 +164,7 @@
     <string name="available_offers">العروض المتاحة</string>
 
     <string name="price_label">السعر: %1$d ج.م</string>
+    <string name="weight_label">%1$s كجم</string>
     <string name="details_button">تفاصيل</string>
     <string name="make_offer_button">قدم عرضك</string>
 
@@ -171,6 +172,18 @@
     <string name="unknown_location">منطقة غير معروف</string>
 
     <string name="search_in_scraps">ابحث في الخردة...</string>
+    <string name="read_less">عرض أقل</string>
+    <string name="read_more">المزيد</string>
+    <string name="order_items">تفاصيل الأصناف</string>
+    <string name="no_images_available">لا توجد صور</string>
+    <string name="details">التفاصيل</string>
+    <string name="no_order_details_found">لا يوجد تفاصيل لهذا العرض</string>
+    <string name="price">%1$d ج.م</string>
+    <string name="total_price">إجمالي السعر</string>
+    <string name="total_weight">إجمالي الوزن</string>
+    <string name="total_items">إجمالي العناصر</string>
+    <string name="view_profile">عرض الملف الشخصي</string>
+
 
     <string name="just_now">الآن</string>
 

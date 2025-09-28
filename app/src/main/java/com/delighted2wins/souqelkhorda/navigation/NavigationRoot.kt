@@ -85,9 +85,13 @@ fun NavigationRoot(
                     NavEntry(key) {
                         bottomBarState.value = false
                         MarketOrderDetailsScreen(
+                            snackBarHostState = snackBarState,
                             orderId = key.orderId,
                             orderOwnerId = key.orderOwnerId,
-                            onBackClick = { backStack.remove(key) }
+                            onBackClick = { backStack.remove(key) },
+                            navToSellerProfile = {
+                                backStack.add(ProfileScreen)
+                            }
                         )
                     }
                 }

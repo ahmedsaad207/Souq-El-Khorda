@@ -168,6 +168,7 @@
     <string name="available_offers">Available Offers</string>
 
     <string name="price_label">Price: %1$d EGP</string>
+    <string name="weight_label">%1$s Kg</string>
     <string name="details_button">Details</string>
     <string name="make_offer_button">Make Offer</string>
 
@@ -175,6 +176,18 @@
     <string name="unknown_location">Unknown Location</string>
 
     <string name="search_in_scraps">Search in scraps...</string>
+    <string name="read_less">Read Less</string>
+    <string name="read_more">Read More</string>
+    <string name="order_items">Order Items</string>
+    <string name="no_images_available">No images available</string>
+    <string name="details">Details</string>
+    <string name="no_order_details_found">No order details found</string>
+    <string name="price">%1$d EGP</string>
+    <string name="total_price">Total price</string>
+    <string name="total_weight">Total weight</string>
+    <string name="total_items">Total items</string>
+    <string name="view_profile">View Profile</string>
+
 
 
     <string name="just_now">Just now</string>

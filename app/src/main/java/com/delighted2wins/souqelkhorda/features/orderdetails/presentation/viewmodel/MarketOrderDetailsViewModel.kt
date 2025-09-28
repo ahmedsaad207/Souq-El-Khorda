@@ -1,26 +1,48 @@
 package com.delighted2wins.souqelkhorda.features.orderdetails.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.delighted2wins.souqelkhorda.core.enums.NotificationMessagesEnum
 import com.delighted2wins.souqelkhorda.core.enums.OrderSource
+import com.delighted2wins.souqelkhorda.core.model.Offer
+import com.delighted2wins.souqelkhorda.core.model.Order
+import com.delighted2wins.souqelkhorda.core.notification.domain.entity.NotificationRequest
+import com.delighted2wins.souqelkhorda.core.notification.domain.usecases.SendNotificationUseCase
+import com.delighted2wins.souqelkhorda.features.history.domain.usecase.AddOrderOfferToHistoryUseCase
+import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
+import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetCurrentUserUseCase
 import com.delighted2wins.souqelkhorda.features.market.domain.usecase.GetUserDataByIdUseCase
+import com.delighted2wins.souqelkhorda.features.offers.domain.usecase.MakeOfferUseCase
 import com.delighted2wins.souqelkhorda.features.orderdetails.domain.usecase.GetOrderDetailsUseCase
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.MarketOrderDetailsEffect
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.MarketOrderDetailsIntent
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.MarketOrderDetailsState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MarketOrderDetailsViewModel @Inject constructor(
     private val getOrderDetails: GetOrderDetailsUseCase,
-    private val getUserDataById: GetUserDataByIdUseCase
+    private val getUserDataById: GetUserDataByIdUseCase,
+    private val getCurrentUserUseCase: GetCurrentUserUseCase,
+    private val makeOfferUseCase: MakeOfferUseCase,
+    private val addOrderOfferToHistoryUseCase: AddOrderOfferToHistoryUseCase,
+    private val sendNotificationUseCase: SendNotificationUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<MarketOrderDetailsState>(MarketOrderDetailsState.Empty)
     val state: StateFlow<MarketOrderDetailsState> = _state
+    private val _effect = MutableSharedFlow<MarketOrderDetailsEffect>()
+    val effect = _effect.asSharedFlow()
+
+    val _currentUser = MutableStateFlow<MarketUser?>(null)
+    val currentUser: StateFlow<MarketUser?> = _currentUser
 
     private var lastOrderId: String? = null
     private var lastOwnerId: String? = null
@@ -39,6 +61,9 @@ class MarketOrderDetailsViewModel @Inject constructor(
                     loadOrder(orderId, ownerId)
                 }
             }
+            is MarketOrderDetailsIntent.MakeOffer -> {
+                makeOffer(intent.order,intent.offer, intent.sellerId)
+            }
         }
     }
 
@@ -48,6 +73,7 @@ class MarketOrderDetailsViewModel @Inject constructor(
             try {
                 val order = getOrderDetails(orderId, OrderSource.MARKET)
                 val owner = getUserDataById(order?.userId ?: orderOwnerId)
+                _currentUser.value = getCurrentUserUseCase()
                 if (order != null) {
                     _state.value = MarketOrderDetailsState.Success(order, owner)
                 } else {
@@ -56,6 +82,51 @@ class MarketOrderDetailsViewModel @Inject constructor(
             } catch (e: Exception) {
                 _state.value = MarketOrderDetailsState.Error(e.message ?: "Unknown error")
             }
+        }
+    }
+
+    private fun makeOffer(order: Order, offer: Offer, sellerId: String) {
+        viewModelScope.launch {
+            _state.value = when (val current = _state.value) {
+                is MarketOrderDetailsState.Success ->
+                    current.copy(isSubmitting = true)
+                else -> current
+            }
+
+            try {
+                val offerId = makeOfferUseCase(offer)
+                val resultAddOrderToHistory =
+                    addOrderOfferToHistoryUseCase(order, getCurrentUserUseCase().id)
+                if (offerId.isNotEmpty() && resultAddOrderToHistory) {
+                    launch {
+                        try {
+                            sendNotificationUseCase(
+                                request = NotificationRequest(
+                                    toUserId = sellerId,
+                                    message = NotificationMessagesEnum.OFFER_SENT_PENDING.getMessage()
+                                )
+                            )
+                        } catch (e: Exception) {
+                            Log.e("OffersViewModel", "Notification failed: ${e.message}")
+                        }
+                    }
+                    emitEffect(MarketOrderDetailsEffect.ShowSuccess("Offer made successfully"))                }
+            } catch (e: Exception) {
+                val errorMsg = e.message ?: "Network error"
+                emitEffect(MarketOrderDetailsEffect.ShowError(errorMsg))
+            } finally {
+                _state.value = when (val current = _state.value) {
+                    is MarketOrderDetailsState.Success ->
+                        current.copy(isSubmitting = false)
+                    else -> current
+                }
+            }
+        }
+    }
+
+    private fun emitEffect(effect: MarketOrderDetailsEffect) {
+        viewModelScope.launch {
+            _effect.emit(effect)
         }
     }
 }

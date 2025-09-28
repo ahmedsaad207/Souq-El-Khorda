@@ -1,83 +1,109 @@
 package com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component
 
-import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection
+import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
 import com.delighted2wins.souqelkhorda.core.model.Scrap
 
 @Composable
 fun OrderItemCard(
     item: Scrap,
-    contentIsRtl: Boolean = false,
-    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier
+    modifier: Modifier = Modifier
 ) {
+    val contentIsRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+
+    val cardGradient = Brush.horizontalGradient(
+        listOf(
+            MaterialTheme.colorScheme.secondary.copy(alpha = 0.4f),
+            MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
+            MaterialTheme.colorScheme.secondary.copy(alpha = 0.4f)
+        )
+    )
+
+    val chipGradient = Brush.horizontalGradient(
+        listOf(
+            MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
+            MaterialTheme.colorScheme.secondary.copy(alpha = 0.4f),
+        )
+    )
+
     Card(
-        shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        modifier = modifier.fillMaxWidth().padding(top = 8.dp)
+        shape = RoundedCornerShape(16.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 4.dp, vertical = 8.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent)
     ) {
         Column(
-            modifier = Modifier.padding(12.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            modifier = Modifier
+                .background(cardGradient)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-//            DirectionalText(
-//                text = item.name,
-//                contentIsRtl = contentIsRtl,
-//                color = MaterialTheme.colorScheme.onSurface,
-//                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
-//                maxLines = 1,
-//            )
-
             Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxWidth()
             ) {
-                DirectionalText(
-                    text = if (contentIsRtl) "الوزن: ${item.amount} كجم" else "Weight: ${item.amount} Kg",
-                    contentIsRtl = contentIsRtl,
-                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-                    color = MaterialTheme.colorScheme.primary,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier.weight(1f)
+                Text(
+                    text = item.category ?: "Unknown",
+                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
+                    color = Color.White,
+                    modifier = Modifier
+                        .background(
+                            brush = chipGradient,
+                            shape = RoundedCornerShape(24.dp)
+                        )
+                        .padding(horizontal = 12.dp, vertical = 6.dp),
+                    textAlign = TextAlign.Center
                 )
 
-//                item.quantity.let {
-//                    DirectionalText(
-//                        text = if (contentIsRtl) "العدد: $it" else "Quantity: $it",
-//                        contentIsRtl = contentIsRtl,
-//                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-//                        color = MaterialTheme.colorScheme.primary,
-//                        textAlign = TextAlign.Start,
-//                        modifier = Modifier.weight(2f)
-//                    )
-//                }
+                Text(
+                    text = "${item.amount} ${item.unit ?: ""}",
+                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
+                    color = Color.White,
+                    modifier = Modifier
+                        .background(
+                            brush = chipGradient,
+                            shape = RoundedCornerShape(24.dp)
+                        )
+                        .padding(horizontal = 12.dp, vertical = 6.dp),
+                    textAlign = TextAlign.Center
+                )
             }
-            Spacer(modifier = Modifier.height(8.dp))
 
+            item.description?.let {
+                DirectionalText(
+                    text = it,
+                    contentIsRtl = contentIsRtl,
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
 
             if (item.images.isEmpty()) {
-                Text(
-                    text = if (contentIsRtl) "لا توجد صور" else "No images available",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
+                DirectionalText(
+                    text = stringResource(R.string.no_images_available),
+                    contentIsRtl = contentIsRtl,
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    ),
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = if (contentIsRtl) TextAlign.End else TextAlign.Start
                 )
             } else {
                 ZoomableImageList(urls = item.images)

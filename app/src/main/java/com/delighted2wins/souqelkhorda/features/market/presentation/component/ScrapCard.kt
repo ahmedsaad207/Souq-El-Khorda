@@ -1,6 +1,7 @@
 package com.delighted2wins.souqelkhorda.features.market.presentation.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,7 +18,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
@@ -51,13 +51,17 @@ fun ScrapCard(
 
     val gradientBrush = Brush.horizontalGradient(
         colors = listOf(
-            MaterialTheme.colorScheme.secondary.copy(alpha = 0.20f),
-            MaterialTheme.colorScheme.primary.copy(alpha = 0.08f),
+            MaterialTheme.colorScheme.secondary.copy(alpha = 0.4f),
+            MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
+            MaterialTheme.colorScheme.secondary.copy(alpha = 0.4f),
         )
     )
 
     Card(
-        modifier = Modifier.fillMaxWidth().clip(cornerRadius),
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(shape = cornerRadius, width = 1.dp, color = MaterialTheme.colorScheme.secondary)
+            .clip(cornerRadius),
         shape = cornerRadius,
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
     ) {

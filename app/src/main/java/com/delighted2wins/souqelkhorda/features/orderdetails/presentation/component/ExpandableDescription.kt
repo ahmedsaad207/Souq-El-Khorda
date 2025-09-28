@@ -11,9 +11,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
 
 @Composable
@@ -38,13 +40,13 @@ fun ExpandableDescription(
 
         DirectionalText(
             text = if (expanded) {
-                if (contentIsRtl) "عرض أقل" else "Read Less"
+                stringResource(R.string.read_less)
             } else {
-                if (contentIsRtl) "المزيد" else "Read More"
+                stringResource(R.string.read_more)
             },
             contentIsRtl = contentIsRtl,
-            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-            color = MaterialTheme.colorScheme.primary,
+            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+            color = MaterialTheme.colorScheme.secondary,
             modifier = Modifier.clickable { expanded = !expanded }
         )
 

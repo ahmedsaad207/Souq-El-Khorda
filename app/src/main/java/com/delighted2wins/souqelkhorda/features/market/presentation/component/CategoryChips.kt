@@ -38,14 +38,14 @@ fun CategoryChips(scraps: List<Scrap>) {
             Card(
                 shape = RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.1f)
+                    containerColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f)
                 ),
                 modifier = Modifier.padding(end = 8.dp)
             ) {
                 Text(
                     text =  scrapType.getLabel(context) ,
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-                    color = MaterialTheme.colorScheme.secondary,
+                    color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                 )
             }
