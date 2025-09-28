@@ -74,13 +74,13 @@ class MarketRemoteDataSourceImpl @Inject constructor(
         val id = snapshot.getString("id") ?: ""
         val name = snapshot.getString("name") ?: ""
         val governorate = snapshot.getString("governorate") ?: ""
-        val address = snapshot.getString("address") ?: ""
+        val area = snapshot.getString("area") ?: ""
         val userImage = snapshot.getString("userImage")
 
         return MarketUser(
             id = id,
             name = name,
-            location = "$governorate, $address",
+            location = "$governorate, $area",
             imageUrl = userImage
         )
     }

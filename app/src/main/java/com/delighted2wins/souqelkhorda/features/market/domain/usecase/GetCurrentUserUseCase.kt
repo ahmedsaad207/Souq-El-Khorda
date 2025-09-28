@@ -11,7 +11,6 @@ class GetCurrentUserUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(): MarketUser {
         val userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
-        Log.d("GetCurrentUserUseCase", "User ID: $userId")
         return repository.fetchUserForMarket(userId)
     }
 }
