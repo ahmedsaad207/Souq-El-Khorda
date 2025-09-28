@@ -116,39 +116,39 @@ fun <T : Enum<T>> CustomDropDown(
         ) {
             options.forEach { option ->
                 val isSelected = option == selectedOption
-                DropdownMenuItem(text = {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(
-                                if (isSelected) MaterialTheme.colorScheme.primary.copy(0.1f)
-                                else Color.Transparent,
-                                shape = RoundedCornerShape(8.dp),
+                DropdownMenuItem(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            if (isSelected) MaterialTheme.colorScheme.primary.copy(0.1f)
+                            else Color.Transparent,
+                            shape = RoundedCornerShape(8.dp),
+                        ),
+                    text = {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            if (iconResMapper(option) != 0) {
+                                Icon(
+                                    painter = painterResource(iconResMapper(option)),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .size(24.dp),
+                                    tint = iconTintMapper(option)
+                                )
+                                Spacer(Modifier.width(12.dp))
+                            }
+                            Text(
+                                labelMapper(option),
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onSurface
                             )
-                            .padding(4.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-
-                        if (iconResMapper(option) != 0) {
-                            Icon(
-                                painter = painterResource(iconResMapper(option)),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(24.dp),
-                                tint = iconTintMapper(option)
-                            )
-                            Spacer(Modifier.width(12.dp))
                         }
-                        Text(
-                            labelMapper(option),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                    }
-                }, onClick = {
-                    onOptionSelected(option)
-                    expanded = false
-                })
+                    }, onClick = {
+                        onOptionSelected(option)
+                        expanded = false
+                    })
             }
         }
     }

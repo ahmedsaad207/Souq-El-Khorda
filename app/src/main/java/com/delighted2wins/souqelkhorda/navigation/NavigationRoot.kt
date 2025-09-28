@@ -55,12 +55,13 @@ fun NavigationRoot(
             when (key) {
                 is DirectSaleScreen -> {
                     navState.value = false
-                    screenNameState.value = "Direct Sale"
+                    screenNameState.value = "Sell"
                     NavEntry(key) {
                         bottomBarState.value = true
                         SellScreen(
                             innerPadding = innerPadding,
-                            snackBarState = snackBarState
+                            snackBarState = snackBarState,
+                            isOnline = isOnline
                         )
                     }
                 }
@@ -151,9 +152,6 @@ fun NavigationRoot(
                     NavEntry(key) {
                         bottomBarState.value = true
                         screenNameState.value = "Nearest Buyers"
-                        NearestBuyersScreen(
-                            innerPadding = innerPadding,
-                        )
 
                         if(isOnline) {
                             NearestBuyersScreen(

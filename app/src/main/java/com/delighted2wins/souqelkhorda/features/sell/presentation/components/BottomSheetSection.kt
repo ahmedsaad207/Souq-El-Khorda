@@ -48,9 +48,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import coil.compose.AsyncImage
@@ -69,7 +71,7 @@ import com.delighted2wins.souqelkhorda.core.model.Scrap
 fun BottomSheetSection(
     mode: BottomSheetMode,
     scrap: Scrap? = null,
-    onCancelClick: () -> Unit,
+    onCancel: () -> Unit,
     onAddScrapClick: (Scrap) -> Unit,
     onUpdateScrapClick: (Scrap) -> Unit,
 ) {
@@ -79,6 +81,10 @@ fun BottomSheetSection(
     val description = remember { mutableStateOf("") }
     val selectedScrapType = remember { mutableStateOf(ScrapType.Aluminum) }
     val selectedMeasurementType = remember { mutableStateOf(MeasurementType.Weight) }
+    val layoutDirection = LocalLayoutDirection.current
+
+    var showAmountError by remember { mutableStateOf(false) }
+    var showCategoryError by remember { mutableStateOf(false) }
 
     var selectedImages by remember {
         mutableStateOf<List<Uri>>(emptyList())
@@ -173,19 +179,16 @@ fun BottomSheetSection(
                 )
             }
             IconButton(
-                onClick = onCancelClick,
+                onClick = onCancel,
                 modifier = Modifier
                     .size(36.dp)
-                    .clip(CircleShape)
-                    .background(color = MaterialTheme.colorScheme.surfaceVariant)
             ) {
                 Icon(
                     imageVector = Icons.Default.Close,
                     contentDescription = stringResource(R.string.close),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.size(20.dp)
+                    modifier = Modifier.size(24.dp)
                 )
-
             }
         }
 
@@ -204,7 +207,7 @@ fun BottomSheetSection(
                         selectedOption = selectedScrapType.value,
                         onOptionSelected = { selectedScrapType.value = it },
                         labelMapper = { it.getLabel(context) },
-                        iconTintMapper = {it.tint},
+                        iconTintMapper = { it.tint },
                         iconResMapper = { it.iconRes }
                     )
                 }
@@ -220,9 +223,21 @@ fun BottomSheetSection(
                             textFieldModifier = Modifier
                                 .fillMaxWidth(),
                             state = category,
-                            onValueChange = { category.value = it },
-                            placeholder = stringResource(R.string.e_g_copper_wire)
+                            onValueChange = {
+                                category.value = it
+                                showCategoryError = false
+                            },
+                            placeholder = stringResource(R.string.e_g_copper_wire),
+                            isError = showCategoryError
                         )
+                        if (showCategoryError) {
+                            Spacer(Modifier.height(4.dp))
+                            Text(
+                                text = stringResource(R.string.required_field),
+                                color = MaterialTheme.colorScheme.error,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
                     }
                 }
             }
@@ -230,7 +245,7 @@ fun BottomSheetSection(
             item {
                 CustomCard(
                     title = stringResource(R.string.quantity_measurement),
-                    color = Color.Magenta
+                    color = Color.Red
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -248,30 +263,45 @@ fun BottomSheetSection(
                             )
                         }
 
-                        CustomTextField(
+                        Column(
                             modifier = Modifier.weight(1f),
-                            state = amount,
-                            label = stringResource(R.string.quantity),
-                            onValueChange = { newValue ->
-                                when (selectedMeasurementType.value) {
-                                    MeasurementType.Weight -> {
-                                        // allow only decimals
-                                        if (newValue.isEmpty() || newValue.matches(Regex("^\\d*\\.?\\d*$"))) {
-                                            amount.value = newValue
-                                        }
-                                    }
 
-                                    MeasurementType.Pieces -> {
-                                        // allow only integers
-                                        if (newValue.isEmpty() || newValue.matches(Regex("^\\d*$"))) {
-                                            amount.value = newValue
+                            ) {
+                            CustomTextField(
+                                state = amount,
+                                onValueChange = { newValue ->
+                                    showAmountError = false
+                                    when (selectedMeasurementType.value) {
+                                        MeasurementType.Weight -> {
+                                            // allow only decimals
+                                            if (newValue.isEmpty() || newValue.matches(Regex("^\\d*\\.?\\d*$"))) {
+                                                amount.value = newValue
+                                            }
+                                        }
+
+                                        MeasurementType.Pieces -> {
+                                            // allow only integers
+                                            if (newValue.isEmpty() || newValue.matches(Regex("^\\d*$"))) {
+                                                amount.value = newValue
+                                            }
                                         }
                                     }
-                                }
-                            },
-                            keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-                            placeholder = stringResource(R.string.eg_10)
-                        )
+                                },
+                                label = stringResource(R.string.quantity),
+                                placeholder = stringResource(R.string.eg_10),
+                                keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+                                isError = showAmountError
+                            )
+
+                            if (showAmountError) {
+                                Spacer(Modifier.height(4.dp))
+                                Text(
+                                    text = stringResource(R.string.required_field),
+                                    color = MaterialTheme.colorScheme.error,
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -279,7 +309,7 @@ fun BottomSheetSection(
             item {
                 CustomCard(
                     title = stringResource(R.string.description),
-                    color = Color.Blue,
+                    color = Color.DarkGray,
                     subTitle = stringResource(R.string.optional)
                 ) {
                     CustomTextField(
@@ -323,7 +353,8 @@ fun BottomSheetSection(
                         LazyRow(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        ) {
+                        )
+                        {
                             items(
                                 items = selectedImages,
                                 key = { it }
@@ -332,7 +363,12 @@ fun BottomSheetSection(
                                     modifier = Modifier
                                         .size(itemSize)
                                         .clip(RoundedCornerShape(8.dp))
-                                        .animateItem()
+                                        .let {
+                                            if (layoutDirection == LayoutDirection.Ltr) {
+                                                it.animateItem()
+                                            } else it
+
+                                        }
                                 ) {
                                     AsyncImage(
                                         model = uri,
@@ -348,7 +384,9 @@ fun BottomSheetSection(
                                         modifier = Modifier
                                             .align(Alignment.TopEnd)
                                             .background(
-                                                color = MaterialTheme.colorScheme.surfaceVariant.copy(0.7f),
+                                                color = MaterialTheme.colorScheme.onSurface.copy(
+                                                    0.5f
+                                                ),
                                                 shape = CircleShape
                                             )
                                             .size(24.dp)
@@ -427,7 +465,7 @@ fun BottomSheetSection(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
-                            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                            color = MaterialTheme.colorScheme.background,
                             shape = RoundedCornerShape(12.dp)
                         )
                 ) {
@@ -473,7 +511,7 @@ fun BottomSheetSection(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             CustomButton(
-                onClick = onCancelClick,
+                onClick = onCancel,
                 modifier = Modifier.weight(1f),
                 text = stringResource(R.string.cancel),
                 textColor = Color.Black,
@@ -482,6 +520,17 @@ fun BottomSheetSection(
 
             CustomButton(
                 onClick = {
+                    if (selectedScrapType.value == ScrapType.CustomScrap && category.value.isBlank()) {
+                        showCategoryError = true
+                        return@CustomButton
+                    }
+
+                    if (amount.value.isBlank()) {
+                        showAmountError = true
+                        return@CustomButton
+                    }
+
+
                     val newScrap = Scrap(
                         category = if (selectedScrapType.value == ScrapType.CustomScrap) category.value else selectedScrapType.value.name,
                         unit = selectedMeasurementType.value.name,
@@ -489,7 +538,6 @@ fun BottomSheetSection(
                         description = description.value,
                         images = selectedImages.map { it.toString() }
                     )
-
 
                     if (mode == BottomSheetMode.ADD) {
                         onAddScrapClick(newScrap)

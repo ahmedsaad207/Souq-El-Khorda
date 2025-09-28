@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -25,9 +24,11 @@ import com.delighted2wins.souqelkhorda.core.enums.Destination
 fun OrderDetailsSection(
     title: MutableState<String>,
     description: MutableState<String>,
-    showError: MutableState<Boolean>,
+    showTitleError: MutableState<Boolean>,
+    showPriceError: MutableState<Boolean>,
     selectedDestination: MutableState<Destination>,
-    price: MutableState<Int>
+    price: MutableState<Int>,
+    isLoading: MutableState<Boolean>
 ) {
     Column(
         modifier = Modifier
@@ -45,16 +46,14 @@ fun OrderDetailsSection(
             value = title.value,
             onValueChange = {
                 title.value = it
-                if (it.isNotBlank()) showError.value = false
+                showTitleError.value = false
             },
+            enabled = !isLoading.value,
             modifier = Modifier
                 .fillMaxWidth()
                 .border(
                     width = 1.dp,
-                    color = if (showError.value && title.value.isBlank()) MaterialTheme.colorScheme.error
-                    else MaterialTheme.colorScheme.onSurfaceVariant.copy(
-                        alpha = 0.5f
-                    ),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
                     shape = RoundedCornerShape(12.dp)
                 ),
             shape = RoundedCornerShape(12.dp),
@@ -67,16 +66,21 @@ fun OrderDetailsSection(
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent
             ),
-            placeholder = { Text(stringResource(R.string.short_title_for_your_order),
-                color = MaterialTheme.colorScheme.onSurfaceVariant) }
+            placeholder = {
+                Text(
+                    stringResource(R.string.short_title_for_your_order),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            },
+            isError = showTitleError.value
         )
 
-        if (showError.value && title.value.isBlank()) {
+        if (showTitleError.value) {
+            Spacer(Modifier.height(4.dp))
             Text(
-                text = stringResource(R.string.title_is_required),
-                color = Color.Red,
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+                text = stringResource(R.string.required_field),
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodyMedium
             )
         }
 
@@ -87,9 +91,12 @@ fun OrderDetailsSection(
                 .fillMaxWidth()
                 .heightIn(min = 100.dp),
             state = description,
+            onValueChange = {
+                description.value = it
+            },
             label = stringResource(R.string.description_optional),
-            onValueChange = { description.value = it },
-            placeholder = stringResource(R.string.describe_the_order_in_detail)
+            placeholder = stringResource(R.string.describe_the_order_in_detail),
+            enabled = !isLoading.value
         )
 
         if (selectedDestination.value == Destination.Market) {
@@ -105,19 +112,14 @@ fun OrderDetailsSection(
             TextField(
                 value = if (price.value == 0) "" else price.value.toString(),
                 onValueChange = { newValue ->
+                    showPriceError.value = false
                     if (newValue.all { it.isDigit() }) {
                         price.value = newValue.toIntOrNull() ?: 0
                     }
                 },
+                enabled = !isLoading.value,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .border(
-                        width = 1.dp,
-                        color = if (showError.value && title.value.isBlank()) Color.Red else Color.Gray.copy(
-                            alpha = 0.5f
-                        ),
-                        shape = RoundedCornerShape(12.dp)
-                    ),
+                    .fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 singleLine = true,
                 colors = TextFieldDefaults.colors(
@@ -128,7 +130,8 @@ fun OrderDetailsSection(
                     unfocusedIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent
                 ),
-                placeholder = { Text(stringResource(R.string.e_g_300)) }
+                placeholder = { Text(stringResource(R.string.e_g_300)) },
+                isError = showPriceError.value
             )
         }
     }

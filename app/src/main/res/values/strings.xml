@@ -84,7 +84,7 @@
     <string name="e_g_copper_wire">e.g., Copper wire</string>
     <string name="quantity_measurement"><![CDATA["Quantity & Measurement "]]></string>
     <string name="measurement_type">Measurement Type</string>
-    <string name="quantity">Quantity</string>
+    <string name="quantity">Quantity*</string>
     <string name="eg_10">eg, 10</string>
     <string name="description">Description</string>
     <string name="optional">(Optional)</string>
@@ -163,6 +163,9 @@
     <string name="notifications">Notifications</string>
     <string name="read">Read</string>
     <string name="please_check_your_internet_connection">Please Check your Internet Connection</string>
+    <string name="no_internet">No Internet</string>
+    <string name="please_check_connection">Please check your connection</string>
+    <string name="ok">OK</string>
 
     <string name="just_now">Just now</string>
     <plurals name="minutes_ago">
@@ -174,6 +177,8 @@
         <item quantity="other">%d hours ago</item>
     </plurals>
     <string name="yesterday">Yesterday</string>
+    <string name="error">Error</string>
+    <string name="required_field">required field</string>
     <plurals name="days_ago">
         <item quantity="one">%d day ago</item>
         <item quantity="other">%d days ago</item>
