@@ -211,7 +211,7 @@ private fun MarketOrderDetailsUI(
         ) {
             item {
                 OrderDetailsTopBar(
-                    title = stringResource(R.string.order_details),
+                    title = stringResource(R.string.details),
                     onBackClick = onBackClick
                 )
             }
@@ -247,7 +247,7 @@ private fun MarketOrderDetailsUI(
 
             item {
                 Text(
-                    text = stringResource(R.string.order_items),
+                    text = stringResource(R.string.order_items_label),
                     style = MaterialTheme.typography.headlineSmall.copy(
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.9f)

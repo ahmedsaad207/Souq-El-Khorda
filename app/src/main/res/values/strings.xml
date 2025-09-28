@@ -201,6 +201,8 @@
     <string name="no_orders_found">No orders found</string>
     <string name="order_source_market">Market</string>
     <string name="order_source_company">Company</string>
+    <string name="no_description_available">No description available</string>
+
 
 
 

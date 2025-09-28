@@ -197,6 +197,8 @@
     <string name="no_orders_found">لا توجد طلبات</string>
     <string name="order_source_market">السوق</string>
     <string name="order_source_company">الشركة</string>
+    <string name="no_description_available">لا يوجد وصف متاح</string>
+
 
 
     <string name="just_now">الآن</string>

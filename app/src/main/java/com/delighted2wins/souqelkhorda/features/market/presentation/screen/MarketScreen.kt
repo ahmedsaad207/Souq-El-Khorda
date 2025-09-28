@@ -182,9 +182,7 @@ fun MarketScreen(
                                     fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
                                     fontWeight = MaterialTheme.typography.titleLarge.fontWeight
                                 ),
-                                color = MaterialTheme.colorScheme.secondary.copy(
-                                    alpha = 4f
-                                ),
+                                color = MaterialTheme.colorScheme.secondary.copy(alpha = 4f),
                                 modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
                             )
                         }
