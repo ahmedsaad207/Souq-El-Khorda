@@ -80,11 +80,11 @@
     <string name="add_to_your_recycling_order">Add to your recycling order</string>
     <string name="close">Close</string>
     <string name="scrap_type">Scrap type</string>
-    <string name="custom_scrap_name">"Custom scrap name "</string>
+    <string name="custom_scrap_name">"scrap name "</string>
     <string name="e_g_copper_wire">e.g., Copper wire</string>
     <string name="quantity_measurement"><![CDATA["Quantity & Measurement "]]></string>
     <string name="measurement_type">Measurement Type</string>
-    <string name="quantity">Quantity</string>
+    <string name="quantity">Quantity*</string>
     <string name="eg_10">eg, 10</string>
     <string name="description">Description</string>
     <string name="optional">(Optional)</string>
@@ -121,9 +121,10 @@
     <string name="paper">Paper</string>
     <string name="glass">Glass</string>
     <string name="plastic">Plastic</string>
-    <string name="custom_item">Custom Item</string>
+    <string name="custom_item">Other</string>
     <string name="weight_kg">Weight (kg)</string>
     <string name="pieces">Pieces</string>
+    <string name="order_submitted_successfully">Order submitted successfully</string>
 
     <string name="the_nearset_buyer">Nearest buyers\n</string>
     <string name="nearst_buyer_sub_title">Find the best\nbuyers in your area</string>
@@ -162,6 +163,9 @@
     <string name="notifications">Notifications</string>
     <string name="read">Read</string>
     <string name="please_check_your_internet_connection">Please Check your Internet Connection</string>
+    <string name="no_internet">No Internet</string>
+    <string name="please_check_connection">Please check your connection</string>
+    <string name="ok">OK</string>
 
     <string name="retry">Retry</string>
     <string name="no_market_data">No market data available at the moment</string>
@@ -188,6 +192,8 @@
     </plurals>
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
+    <string name="error">Error</string>
+    <string name="required_field">required field</string>
     <plurals name="days_ago">
         <item quantity="one">%d day ago</item>
         <item quantity="other">%d days ago</item>

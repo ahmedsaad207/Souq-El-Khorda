@@ -1,6 +1,5 @@
 package com.delighted2wins.souqelkhorda.features.sell.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.delighted2wins.souqelkhorda.core.enums.NotificationMessagesEnum
@@ -46,13 +45,10 @@ class SellViewModel @Inject constructor(
     }
 
     private fun loadScraps() = viewModelScope.launch(Dispatchers.IO) {
-        Log.d("SellViewModel", "loadScraps: called")
         _state.value = _state.value.copy(isLoading = true)
         getScrapsUseCase().catch {
-            Log.e("SellViewModel", "loadScraps: ${it.message}")
             _state.value = _state.value.copy(isLoading = false, err = it.message)
         }.collect {
-            Log.d("SellViewModel", "loadScraps: ${it.size}")
             _state.value = _state.value.copy(isLoading = false, data = it)
         }
     }
@@ -90,32 +86,36 @@ class SellViewModel @Inject constructor(
         }
     }
 
-    private fun submitOrder(order: Order) = viewModelScope.launch {
-        _state.value = _state.value.copy(isOrderSubmitted = false)
+    private fun submitOrder(order: Order) = viewModelScope.launch(Dispatchers.IO) {
+//        _state.value = _state.value.copy(isOrderSubmitted = false)
         try {
             val updatedScraps = uploadScrapImagesUseCase(order.scraps)
-            sendNotificationUseCase(
-                NotificationRequest(
-                    message = NotificationMessagesEnum.OFFER_SENT_PENDING.getMessage()
-                )
-            )
+
+            launch {
+                try {
+                    sendNotificationUseCase(
+                        NotificationRequest(
+                            message = NotificationMessagesEnum.OFFER_SENT_PENDING.getMessage()
+                        )
+                    )
+                } catch (e: Exception) {
+                }
+            }
+
             val updatedOrder = order.copy(scraps = updatedScraps)
             sendOrderUseCase(updatedOrder)
             delay(500)
             clearOrder()
         } catch (e: Exception) {
             _state.value =
-                _state.value.copy(isLoading = false, err = e.message, isOrderSubmitted = false)
+                _state.value.copy( err = e.message)
         }
     }
 
     private fun updateScrap(scrap: Scrap) = viewModelScope.launch(Dispatchers.IO) {
-        updateScrapUseCase(scrap)
-            .catch { }
-            .collect {
-                Log.i("TAG", "updateScrap: updated rows: $it")
-                loadScraps()
-            }
+        updateScrapUseCase(scrap).catch { }.collect {
+            loadScraps()
+        }
     }
 
     private fun clearOrder() = viewModelScope.launch {
@@ -133,5 +133,9 @@ class SellViewModel @Inject constructor(
 
     fun resetOrderSubmittedFlag() {
         _state.value = _state.value.copy(isOrderSubmitted = false)
+    }
+
+    fun resetErrorFlag() {
+        _state.value = _state.value.copy(err = null)
     }
 }

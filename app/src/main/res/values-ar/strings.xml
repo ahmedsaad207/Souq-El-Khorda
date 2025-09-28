@@ -81,7 +81,7 @@
     <string name="e_g_copper_wire">مثال: سلك نحاس</string>
     <string name="quantity_measurement"><![CDATA["الكمية والقياس "]]></string>
     <string name="measurement_type">نوع القياس</string>
-    <string name="quantity">الكمية</string>
+    <string name="quantity">الكمية*</string>
     <string name="eg_10">مثال: ١٠</string>
     <string name="description">الوصف</string>
     <string name="optional">(اختياري)</string>
@@ -118,9 +118,10 @@
     <string name="paper">ورق</string>
     <string name="glass">زجاج</string>
     <string name="plastic">بلاستيك</string>
-    <string name="custom_item">خردة اخرى</string>
+    <string name="custom_item">اخرى</string>
     <string name="weight_kg">الوزن (كجم)</string>
     <string name="pieces">قطع(ه)</string>
+    <string name="order_submitted_successfully">تم إرسال الطلب بنجاح</string>
 
     <string name="the_nearset_buyer">أقرب المشترين\n</string>
     <string name="nearst_buyer_sub_title">اعثر على أفضل\nالمشترين في منطقتك</string>
@@ -158,6 +159,9 @@
     <string name="u_have_no_buyer">لا يوجد مشترين بالقرب منك</string>
     <string name="notifications">الإشعارات</string>
     <string name="read">مقروء</string>
+    <string name="no_internet">لا يوجد اتصال بالإنترنت</string>
+    <string name="please_check_connection">يرجى التحقق من الاتصال</string>
+    <string name="ok">حسناً</string>
 
     <string name="retry">إعادة المحاولة</string>
     <string name="no_market_data">لا توجد بيانات متاحة حالياً في السوق</string>
@@ -194,6 +198,8 @@
 
     <string name="today">اليوم</string>
     <string name="yesterday">أمس</string>
+    <string name="error">خطأ</string>
+    <string name="required_field">هذا الحقل مطلوب</string>
 
     <plurals name="days_ago">
         <item quantity="zero">اليوم</item>

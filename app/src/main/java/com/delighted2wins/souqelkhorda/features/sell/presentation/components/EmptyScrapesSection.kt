@@ -34,11 +34,11 @@ fun EmptyScrapesSection() {
         shape = RoundedCornerShape(12.dp),
         border = BorderStroke(
             width = 1.dp,
-            color = Color.LightGray.copy(0.5f)
+            color = MaterialTheme.colorScheme.outline.copy(0.5f)
         ),
         elevation = CardDefaults.cardElevation(4.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFF9FAFB)
+            containerColor = MaterialTheme.colorScheme.surface
         )
     ) {
         Column(
@@ -50,7 +50,7 @@ fun EmptyScrapesSection() {
                 imageVector = Icons.Default.Inventory2,
                 contentDescription = stringResource(R.string.box),
                 modifier = Modifier.size(48.dp),
-                tint = Color.Gray
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Spacer(modifier = Modifier.height(12.dp))
             Text(
@@ -62,7 +62,7 @@ fun EmptyScrapesSection() {
             Text(
                 text = stringResource(R.string.add_your_first_item_and_join_thousands_making_a_positive_environmental_impact),
                 style = MaterialTheme.typography.bodySmall,
-                color = Color.Gray,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
             )
         }
