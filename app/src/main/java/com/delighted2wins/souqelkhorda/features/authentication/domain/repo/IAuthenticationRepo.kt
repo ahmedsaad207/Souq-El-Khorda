@@ -4,10 +4,11 @@ import com.delighted2wins.souqelkhorda.features.authentication.data.model.AuthUs
 import com.delighted2wins.souqelkhorda.features.authentication.data.model.SignUpRequestDto
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.state.AuthenticationState
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
 interface IAuthenticationRepo {
+    val userFlow: StateFlow<AuthUser?>
     suspend fun login(email: String, password: String) :Flow<AuthenticationState>
-
     suspend fun signUp(
         signUpRequestDto: SignUpRequestDto
     ):Flow<AuthenticationState>

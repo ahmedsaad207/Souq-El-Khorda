@@ -216,4 +216,6 @@
         <item quantity="other">قبل %d سنة</item>
     </plurals>
 
+    <string name="nothing_to_see_here_yet">لا يوجد شيء هنا… حتى الآن!</string>
+
 </resources>

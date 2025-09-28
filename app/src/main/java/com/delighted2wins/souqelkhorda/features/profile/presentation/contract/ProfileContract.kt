@@ -5,6 +5,7 @@ interface ProfileContract {
 
     data class ProfileFieldState(
         val value: String = "",
+        val originalValue: String = "",
         val isEditing: Boolean = false,
         val isLoading: Boolean = false,
         val error: String? = null,
@@ -16,6 +17,7 @@ interface ProfileContract {
         val email: ProfileFieldState = ProfileFieldState(),
         val phone: ProfileFieldState = ProfileFieldState(),
         val governorate: ProfileFieldState = ProfileFieldState(),
+        val area: ProfileFieldState = ProfileFieldState(),
         val address: ProfileFieldState = ProfileFieldState(),
         val imageUrl: ProfileFieldState = ProfileFieldState(),
         val isLoadingProfile: Boolean = false,
@@ -35,12 +37,14 @@ interface ProfileContract {
         data class ChangeName(val name: String) : Intent()
         data class ChangePhone(val phone: String) : Intent()
         data class ChangeGovernorate(val governorate: String) : Intent()
+        data class ChangeArea(val area: String) : Intent()
         data class ChangeAddress(val address: String) : Intent()
         data class ChangeImageUrl(val imageUrl: String) : Intent()
 
         data object SaveName : Intent()
         data object SavePhone : Intent()
         data object SaveGovernorate : Intent()
+        data object SaveArea : Intent()
         data object SaveAddress : Intent()
         data object SaveImageUrl : Intent()
 

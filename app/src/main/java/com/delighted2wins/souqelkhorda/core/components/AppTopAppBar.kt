@@ -100,6 +100,7 @@ fun AppTopAppBar(
                     contentDescription = "Profile Image",
                     contentScale = ContentScale.Crop,
                     placeholder = painterResource(R.drawable.avatar),
+                    error = painterResource(R.drawable.avatar),
                     modifier = Modifier
                         .size(32.dp)
                         .clip(CircleShape)

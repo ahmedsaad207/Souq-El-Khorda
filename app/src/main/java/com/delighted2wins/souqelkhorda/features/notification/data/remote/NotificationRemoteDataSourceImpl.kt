@@ -2,11 +2,14 @@ package com.delighted2wins.souqelkhorda.features.notification.data.remote
 
 import com.delighted2wins.souqelkhorda.features.notification.data.model.NotificationDto
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -85,45 +88,60 @@ class NotificationRemoteDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun observeNotifications(): Flow<List<NotificationDto>> = callbackFlow {
-        val userId = firebaseAuth.currentUser?.uid ?: run {
-            close(IllegalStateException("User not logged in"))
-            return@callbackFlow
-        }
-
-        val listener = firestore.collection("notifications")
-            .document(userId)
-            .collection("userNotifications")
-            .addSnapshotListener { snapshot, error ->
-                if (error != null) {
-                    close(error)
-                } else {
-                    val notifications = snapshot?.documents?.mapNotNull { doc ->
-                        doc.toObject(NotificationDto::class.java)?.copy(id = doc.id)
-                    }.orEmpty()
-                    trySend(notifications)
+    override suspend fun observeNotifications(): Flow<List<NotificationDto>> =
+        firebaseAuth.authStateFlow().flatMapLatest { user ->
+            if (user == null) {
+                flowOf(emptyList())
+            } else {
+                callbackFlow {
+                    val listener = firestore.collection("notifications")
+                        .document(user.uid)
+                        .collection("userNotifications")
+                        .orderBy("createdAt", Query.Direction.DESCENDING)
+                        .addSnapshotListener { snapshot, error ->
+                            if (error != null) {
+                                close(error)
+                            } else {
+                                val notifications = snapshot?.documents?.mapNotNull { doc ->
+                                    doc.toObject(NotificationDto::class.java)?.copy(id = doc.id)
+                                }.orEmpty()
+                                trySend(notifications)
+                            }
+                        }
+                    awaitClose { listener.remove() }
                 }
             }
-        awaitClose { listener.remove() }
-    }
-
-    override suspend fun observeUnReadNotificationsCount(): Flow<Int> = callbackFlow {
-        val userId = firebaseAuth.currentUser?.uid ?: run {
-            close(IllegalStateException("User not logged in"))
-            return@callbackFlow
         }
 
-        val listener = firestore.collection("notifications")
-            .document(userId)
-            .collection("userNotifications")
-            .whereEqualTo("read", false)
-            .addSnapshotListener { snapshot, error ->
-                if (error != null) {
-                    close(error)
-                } else {
-                    trySend(snapshot?.size() ?: 0)
+
+    override suspend fun observeUnReadNotificationsCount(): Flow<Int> =
+        firebaseAuth.authStateFlow().flatMapLatest { user ->
+            if (user == null) {
+                flowOf(0)
+            } else {
+                callbackFlow {
+                    val listener = firestore.collection("notifications")
+                        .document(user.uid)
+                        .collection("userNotifications")
+                        .whereEqualTo("read", false)
+                        .addSnapshotListener { snapshot, error ->
+                            if (error != null) {
+                                close(error)
+                            } else {
+                                trySend(snapshot?.size() ?: 0)
+                            }
+                        }
+                    awaitClose { listener.remove() }
                 }
             }
-        awaitClose { listener.remove() }
+        }
+
+
+    private fun FirebaseAuth.authStateFlow(): Flow<FirebaseUser?> = callbackFlow {
+        val listener = FirebaseAuth.AuthStateListener { auth ->
+            trySend(auth.currentUser)
+        }
+        addAuthStateListener(listener)
+        awaitClose { removeAuthStateListener(listener) }
     }
 }

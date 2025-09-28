@@ -189,6 +189,7 @@
         <item quantity="other">%d years ago</item>
     </plurals>
 
+    <string name="nothing_to_see_here_yet">Nothing to see here… yet!</string>
 
 
 </resources>
