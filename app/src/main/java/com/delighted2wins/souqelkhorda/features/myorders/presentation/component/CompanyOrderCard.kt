@@ -1,8 +1,6 @@
 package com.delighted2wins.souqelkhorda.features.myorders.presentation.screen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -31,10 +29,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.app.theme.AppTypography
-import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
 import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.core.utils.generateUiOrderId
 import com.delighted2wins.souqelkhorda.core.utils.getTimeAgoFromMillis
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.StatusChip
 
 @Composable
 fun CompanyOrderCard(
@@ -68,24 +66,7 @@ fun CompanyOrderCard(
                     style = AppTypography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
-                Box(
-                    modifier = Modifier
-                        .background(
-                            color = when (order.status) {
-                                OrderStatus.PENDING -> OrderStatus.PENDING.color
-                                OrderStatus.COMPLETED -> OrderStatus.COMPLETED.color
-                                OrderStatus.CANCELLED -> OrderStatus.CANCELLED.color
-                            },
-                            shape = RoundedCornerShape(8.dp)
-                        )
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
-                ) {
-                    Text(
-                        text = order.status.name,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        style = AppTypography.titleSmall
-                    )
-                }
+                StatusChip(status = order.status.toString())
             }
 
             Spacer(modifier = Modifier.height(8.dp))
