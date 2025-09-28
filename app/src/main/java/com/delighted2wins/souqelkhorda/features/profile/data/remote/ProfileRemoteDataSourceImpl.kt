@@ -50,6 +50,13 @@ class ProfileRemoteDataSourceImpl @Inject constructor(
         return updateUserField(userId, "governorate", governorate)
     }
 
+    override suspend fun updateArea(
+        userId: String,
+        area: String
+    ): Result<Unit> {
+        return updateUserField(userId, "area", area)
+    }
+
     override suspend fun updateAddress(
         userId: String,
         address: String

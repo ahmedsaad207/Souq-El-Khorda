@@ -57,7 +57,6 @@ fun UserActionsBottomSheet(
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-
         Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
             horizontalArrangement = Arrangement.Center,

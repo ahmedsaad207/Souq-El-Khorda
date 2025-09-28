@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import com.delighted2wins.souqelkhorda.R
 
@@ -21,4 +22,20 @@ enum class ScrapType(
     fun getLabel(context: Context): String {
         return context.getString(labelRes)
     }
+
+    fun gradientBrush(): Brush = Brush.horizontalGradient(
+        listOf(
+            tint.copy(alpha = 0.9f),
+            tint.copy(alpha = 0.6f)
+        )
+    )
+
+    companion object {
+        fun fromCategory(category: String?): ScrapType {
+            return values().firstOrNull {
+                it.name.equals(category, ignoreCase = true)
+            } ?: CustomScrap
+        }
+    }
+
 }

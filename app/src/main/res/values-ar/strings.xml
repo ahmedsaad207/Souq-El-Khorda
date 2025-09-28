@@ -163,6 +163,32 @@
     <string name="please_check_connection">يرجى التحقق من الاتصال</string>
     <string name="ok">حسناً</string>
 
+    <string name="retry">إعادة المحاولة</string>
+    <string name="no_market_data">لا توجد بيانات متاحة حالياً في السوق</string>
+    <string name="available_offers">العروض المتاحة</string>
+
+    <string name="price_label">السعر: %1$d ج.م</string>
+    <string name="weight_label">%1$s كجم</string>
+    <string name="details_button">تفاصيل</string>
+    <string name="make_offer_button">قدم عرضك</string>
+
+    <string name="unknown_user">مستخدم مجهول</string>
+    <string name="unknown_location">منطقة غير معروف</string>
+
+    <string name="search_in_scraps">ابحث في الخردة...</string>
+    <string name="read_less">عرض أقل</string>
+    <string name="read_more">المزيد</string>
+    <string name="order_items">تفاصيل الأصناف</string>
+    <string name="no_images_available">لا توجد صور</string>
+    <string name="details">التفاصيل</string>
+    <string name="no_order_details_found">لا يوجد تفاصيل لهذا العرض</string>
+    <string name="price">%1$d ج.م</string>
+    <string name="total_price">إجمالي السعر</string>
+    <string name="total_weight">إجمالي الوزن</string>
+    <string name="total_items">إجمالي العناصر</string>
+    <string name="view_profile">عرض الملف الشخصي</string>
+
+
     <string name="just_now">الآن</string>
 
     <plurals name="minutes_ago">
@@ -183,6 +209,7 @@
         <item quantity="other">قبل %d ساعة</item>
     </plurals>
 
+    <string name="today">اليوم</string>
     <string name="yesterday">أمس</string>
     <string name="error">خطأ</string>
     <string name="required_field">هذا الحقل مطلوب</string>
@@ -222,5 +249,9 @@
         <item quantity="many">قبل %d سنة</item>
         <item quantity="other">قبل %d سنة</item>
     </plurals>
+
+    <string name="nothing_to_see_here_yet">لا يوجد شيء هنا… حتى الآن!</string>
+    <string name="you_don_t_have_any_transactions_yet">ا توجد معاملات حتى الآن</string>
+    <string name="order_items">عناصر الطلب (%1$d)</string>
 
 </resources>

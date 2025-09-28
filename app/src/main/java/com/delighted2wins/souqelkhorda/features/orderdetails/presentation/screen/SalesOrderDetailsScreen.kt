@@ -268,8 +268,7 @@ private fun SalesOrderDetailsUI(
     ) {
         item {
             OrderDetailsTopBar(
-                title = if (isRtl) "التفاصيل" else "Details",
-                isRtl = isRtl,
+                title = order.title,
                 onBackClick = onBackClick
             )
         }

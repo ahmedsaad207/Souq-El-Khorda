@@ -51,11 +51,13 @@ class ProfileViewModel @Inject constructor(
             is ProfileContract.Intent.ChangeName -> changeName(intent.name)
             is ProfileContract.Intent.ChangePhone -> changePhone(intent.phone)
             is ProfileContract.Intent.ChangeGovernorate -> changeGovernorate(intent.governorate)
+            is ProfileContract.Intent.ChangeArea -> changeArea(intent.area)
             is ProfileContract.Intent.ChangeAddress -> changeAddress(intent.address)
             is ProfileContract.Intent.ChangeImageUrl -> changeImageUrl(intent.imageUrl)
             is ProfileContract.Intent.SaveName -> updateName()
             is ProfileContract.Intent.SavePhone -> updatePhone()
             is ProfileContract.Intent.SaveGovernorate -> updateGovernorate()
+            is ProfileContract.Intent.SaveArea -> updateArea()
             is ProfileContract.Intent.SaveAddress -> updateAddress()
             is ProfileContract.Intent.SaveImageUrl -> uploadAndUpdateUserImage()
             is ProfileContract.Intent.StartEditing -> startEditing(
@@ -92,6 +94,7 @@ class ProfileViewModel @Inject constructor(
                         email = ProfileContract.ProfileFieldState(value = user.email),
                         phone = ProfileContract.ProfileFieldState(value = user.phone),
                         governorate = ProfileContract.ProfileFieldState(value = user.governorate),
+                        area = ProfileContract.ProfileFieldState(value = user.area),
                         address = ProfileContract.ProfileFieldState(value = user.address),
                         imageUrl = ProfileContract.ProfileFieldState(value = user.imageUrl ?: "")
                     )
@@ -140,6 +143,10 @@ class ProfileViewModel @Inject constructor(
         _state.update { it.copy(governorate = it.governorate.copy(value = newGovernorate)) }
     }
 
+    private fun changeArea(newArea: String) {
+        _state.update { it.copy(area = it.area.copy(value = newArea)) }
+    }
+
     private fun changeAddress(newAddress: String) {
         _state.update { it.copy(address = it.address.copy(value = newAddress)) }
     }
@@ -184,9 +191,10 @@ class ProfileViewModel @Inject constructor(
         setFieldValue: (ProfileContract.State, ProfileContract.ProfileFieldState) -> ProfileContract.State
     ) {
         _state.update {
+            val current = field(it)
             setFieldValue(
                 it,
-                field(it).copy(isEditing = true, success = false, error = null)
+                current.copy(isEditing = true, success = false, error = null, originalValue = current.value)
             )
         }
     }
@@ -196,9 +204,10 @@ class ProfileViewModel @Inject constructor(
         setFieldValue: (ProfileContract.State, ProfileContract.ProfileFieldState) -> ProfileContract.State
     ) {
         _state.update {
+            val current = field(it)
             setFieldValue(
                 it,
-                field(it).copy(isEditing = false, success = false, error = null)
+                current.copy(isEditing = false, success = false, error = null, value = current.originalValue)
             )
         }
     }
@@ -231,6 +240,16 @@ class ProfileViewModel @Inject constructor(
             { updateUserProfileUseCase.updateGovernorate(governorate.value) },
             { state, field -> state.copy(governorate = field) },
             ProfileMessagesEnum.GOVERNORATE_UPDATED
+        )
+    }
+
+    private fun updateArea() {
+        val area = _state.value.area
+        updateField(
+            area,
+            { updateUserProfileUseCase.updateArea(area.value) },
+            { state, field -> state.copy(area = field) },
+            ProfileMessagesEnum.AREA_UPDATED
         )
     }
 

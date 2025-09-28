@@ -8,7 +8,8 @@ sealed class MarketOrderDetailsState {
     data class Error(val message: String) : MarketOrderDetailsState()
     data class Success(
         val order: Order,
-        val owner: MarketUser?
+        val owner: MarketUser?,
+        val isSubmitting: Boolean = false,
     ) : MarketOrderDetailsState()
     object Empty : MarketOrderDetailsState()
 }

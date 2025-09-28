@@ -45,6 +45,14 @@ class ProfileRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun updateArea(area: String): Result<Unit> {
+        val userId = authLocalDataSource.getCashedUser().id
+        return profileRemoteDataSource.updateArea(userId, area).onSuccess {
+            val cachedUser = authLocalDataSource.getCashedUser()
+            authLocalDataSource.cashUserData(cachedUser.copy(area = area))
+        }
+    }
+
     override suspend fun updateAddress(address: String): Result<Unit> {
         val userId = authLocalDataSource.getCashedUser().id
         return profileRemoteDataSource.updateAddress(userId, address).onSuccess {

@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.delighted2wins.souqelkhorda.R
+import com.delighted2wins.souqelkhorda.core.components.EmptyCart
 import com.delighted2wins.souqelkhorda.core.components.OneIconCard
 import com.delighted2wins.souqelkhorda.core.extensions.toRelativeTime
 import com.delighted2wins.souqelkhorda.features.notification.presentation.components.NotificationCard
@@ -77,7 +78,7 @@ fun NotificationsScreen(
             ) {
                 when {
                     state.isLoading -> {
-                        items(3) {
+                        items(6) {
                             Column {
                                 NotificationCardShimmer()
                                 Divider(
@@ -96,34 +97,43 @@ fun NotificationsScreen(
 
                     else -> {
                         items(state.notifications, key = { it.id }) { item ->
-                            Column {
-                                NotificationCard(
-                                    imageUrl = item.imageUrl,
-                                    title = item.title,
-                                    description = item.message,
-                                    time = item.createdAt.toRelativeTime(context),
-                                    unread = item.read.not(),
-                                    onDismiss = {
-                                        viewModel.handleIntent(
-                                            NotificationsContract.Intent.Dismiss(
-                                                item.id
-                                            )
+                            when (state.notifications.isEmpty()) {
+                                true -> {
+                                    EmptyCart(R.raw.no_data,
+                                        context.getString(R.string.nothing_to_see_here_yet))
+                                }
+                                false -> {
+                                    Column {
+                                        NotificationCard(
+                                            imageUrl = item.imageUrl,
+                                            title = item.title,
+                                            description = item.message,
+                                            time = item.createdAt.toRelativeTime(context),
+                                            unread = item.read.not(),
+                                            onDismiss = {
+                                                viewModel.handleIntent(
+                                                    NotificationsContract.Intent.Dismiss(
+                                                        item.id
+                                                    )
+                                                )
+                                            },
+                                            onItemClick = {
+                                                viewModel.handleIntent(
+                                                    NotificationsContract.Intent.MarkAsRead(
+                                                        item.id
+                                                    )
+                                                )
+                                                onItemClick(item.id)
+                                            }
                                         )
-                                    },
-                                    onItemClick = {
-                                        viewModel.handleIntent(
-                                            NotificationsContract.Intent.MarkAsRead(
-                                                item.id
-                                            )
-                                        )
-                                        onItemClick(item.id)
                                     }
-                                )
+                                    Divider(
+                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
+                                        thickness = 1.dp
+                                    )
+                                }
                             }
-                            Divider(
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
-                                thickness = 1.dp
-                            )
+
                         }
                     }
                 }
