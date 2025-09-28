@@ -146,7 +146,7 @@ fun SignUpScreen(
             CustomDropdownMenu(
                 value = governorate,
                 onValueChange = {
-                    governorate = GovernorateEnum.getValue(it)
+                    governorate =  it
                 },
                 label = stringResource(R.string.governorate),
                 options = governorates,
@@ -184,7 +184,7 @@ fun SignUpScreen(
                             phone = phone,
                             password = password,
                             passwordConfirmation = confirmPassword,
-                            governorate = governorate,
+                            governorate = GovernorateEnum.getValue(governorate),
                             address = addressDetails,
                             area = area
                         )
