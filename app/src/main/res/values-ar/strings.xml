@@ -250,4 +250,8 @@
         <item quantity="other">قبل %d سنة</item>
     </plurals>
 
+    <string name="nothing_to_see_here_yet">لا يوجد شيء هنا… حتى الآن!</string>
+    <string name="you_don_t_have_any_transactions_yet">ا توجد معاملات حتى الآن</string>
+    <string name="order_items">عناصر الطلب (%1$d)</string>
+
 </resources>

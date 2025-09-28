@@ -2,6 +2,7 @@ package com.delighted2wins.souqelkhorda.app
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -14,6 +15,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -59,6 +61,7 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("MainActivity", "MainActivity created, VM instance = $mainViewModel")
         enableEdgeToEdge()
         requestNotificationPermission()
         setContent {
@@ -74,6 +77,8 @@ class MainActivity : ComponentActivity() {
             SouqElKhordaTheme(darkTheme = isSystemInDarkTheme(), dynamicColor = false) {
                 val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
                 val state by mainViewModel.state.collectAsStateWithLifecycle()
+                val user by mainViewModel.user.collectAsStateWithLifecycle()
+
                 Scaffold(
                     modifier = if (navState.value) Modifier else Modifier.nestedScroll(
                         scrollBehavior.nestedScrollConnection
@@ -87,8 +92,8 @@ class MainActivity : ComponentActivity() {
                     topBar = {
                         if (bottomBarState.value) {
                             AppTopAppBar(
-                                userImage = state.userImageUrl,
-                                userName = state.userName,
+                                userImage = user?.imageUrl,
+                                userName = user?.name ?: "Hello User",
                                 notificationCount = state.notificationCount,
                                 scrollBehavior = scrollBehavior,
                                 screenName = screenNameState.value,

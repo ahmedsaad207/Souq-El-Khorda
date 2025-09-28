@@ -11,6 +11,7 @@ import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.Fr
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.GetCashUserCase
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.LoginUseCase
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.LogoutUseCase
+import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.ObserveUserUseCase
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.SignUpUseCase
 import dagger.Binds
 import dagger.Module
@@ -87,4 +88,7 @@ object UseCasesModule{
         repo
     )
 
+    @Provides
+    @ViewModelScoped
+    fun provideObserveUserUseCase(repo: IAuthenticationRepo): ObserveUserUseCase = ObserveUserUseCase(repo)
 }

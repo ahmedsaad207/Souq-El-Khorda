@@ -7,6 +7,7 @@ interface ProfileRepository {
     suspend fun updateEmail(email: String): Result<Unit>
     suspend fun updatePhone(phone: String): Result<Unit>
     suspend fun updateGovernorate(governorate: String): Result<Unit>
+    suspend fun updateArea(area: String): Result<Unit>
     suspend fun updateAddress(address: String): Result<Unit>
     suspend fun uploadAndUpdateUserImage(imageUrl: String): Result<Unit>
     suspend fun getUserProfile(): Result<AuthUser>

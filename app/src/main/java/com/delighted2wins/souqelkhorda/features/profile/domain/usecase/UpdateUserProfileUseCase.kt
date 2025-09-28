@@ -34,6 +34,13 @@ class UpdateUserProfileUseCase @Inject constructor(
         return repository.updateGovernorate(governorate)
     }
 
+    suspend fun updateArea(area: String): Result<Unit> {
+        if (area.isBlank()) {
+            return Result.failure(IllegalArgumentException(ProfileMessagesEnum.AREA_INVALID.getMsg()))
+        }
+        return repository.updateArea(area)
+    }
+
     suspend fun updateAddress(address: String): Result<Unit> {
         if (address.isBlank() || address.length < 15) {
             return Result.failure(IllegalArgumentException(ProfileMessagesEnum.ADDRESS_INVALID.getMsg()))

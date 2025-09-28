@@ -244,6 +244,28 @@ fun ProfileScreen(
                     }
                 )
 
+                Spacer(modifier = Modifier.height(12.dp))
+
+                EditableField(
+                    label = stringResource(R.string.area),
+                    state = state.area,
+                    onValueChange = { viewModel.handleIntent(ProfileContract.Intent.ChangeArea(it)) },
+                    onStartEdit = {
+                        viewModel.handleIntent(ProfileContract.Intent.StartEditing({ it.area }) { st, f ->
+                            st.copy(
+                                area = f
+                            )
+                        })
+                    },
+                    onCancel = {
+                        viewModel.handleIntent(ProfileContract.Intent.CancelEditing({ it.area }) { st, f ->
+                            st.copy(
+                                area = f
+                            )
+                        })
+                    },
+                    onSave = { viewModel.handleIntent(ProfileContract.Intent.SaveArea) }
+                )
 
                 Spacer(modifier = Modifier.height(12.dp))
 
@@ -467,7 +489,7 @@ fun EditableDropdownField(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(imageVector = Icons.Default.Error, contentDescription = null, tint = colors.error, modifier = Modifier.size(16.dp))
                 Spacer(modifier = Modifier.width(6.dp))
-                Text(text = state.error ?: "", color = colors.error, style = MaterialTheme.typography.bodySmall)
+                Text(text = state.error, color = colors.error, style = MaterialTheme.typography.bodySmall)
             }
         }
     }

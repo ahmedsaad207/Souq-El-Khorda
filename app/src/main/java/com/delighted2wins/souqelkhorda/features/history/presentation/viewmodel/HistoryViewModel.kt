@@ -57,6 +57,7 @@ class HistoryViewModel @Inject constructor(
     }
 
     private fun filterOrders(tab: Int) {
+        loadOrders()
         _state.update { it.copy(selectedTabIndex = tab) }
     }
 }
