@@ -44,6 +44,7 @@ android {
     buildFeatures {
         compose = true
     }
+    ndkVersion = "29.0.14033849 rc4"
 }
 
 dependencies {
@@ -72,14 +73,14 @@ dependencies {
 
 
     //lotti
-    implementation("com.airbnb.android:lottie-compose:6.6.3")
+    implementation("com.airbnb.android:lottie-compose:6.6.9")
 
     //icon
     implementation("androidx.compose.material:material-icons-extended")
-    implementation ("androidx.compose.material3:material3:1.1.1")
+    implementation ("androidx.compose.material3:material3:1.4.0")
 
     //scoped api
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose-android:2.8.7")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose-android:2.9.4")
 
 
     // hilt
@@ -88,17 +89,17 @@ dependencies {
     ksp("com.google.dagger:hilt-android-compiler:2.56.2")
 
     // firebase
-    implementation(platform("com.google.firebase:firebase-bom:34.2.0"))
-    implementation("com.google.firebase:firebase-firestore:24.10.0")
+    implementation(platform("com.google.firebase:firebase-bom:34.3.0"))
+    implementation("com.google.firebase:firebase-firestore:26.0.1")
     implementation("com.google.firebase:firebase-auth:24.0.1")
     implementation("com.google.firebase:firebase-messaging")
 
     // retrofit
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("com.squareup.retrofit2:retrofit:3.0.0")
+    implementation ("com.squareup.retrofit2:converter-gson:3.0.0")
 
     //live data
-    implementation("androidx.compose.runtime:runtime-livedata:1.7.0")
+    implementation("androidx.compose.runtime:runtime-livedata:1.9.2")
 
 
     // coil
@@ -110,17 +111,17 @@ dependencies {
     implementation(libs.androidx.room.ktx)
 
     // accompanist placeholder (shimmer)
-    implementation("com.google.accompanist:accompanist-placeholder-material3:0.32.0")
+    implementation("com.google.accompanist:accompanist-placeholder-material3:0.36.0")
 
     // cloudinary
-    implementation("com.cloudinary:cloudinary-android:3.0.2")
+    implementation("com.cloudinary:cloudinary-android:3.1.2")
 
     // gson
     implementation("com.google.code.gson:gson:2.13.2")
 
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.34.0")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.36.0")
 //location services
-    implementation("com.google.android.gms:play-services-location:21.1.0")
+    implementation("com.google.android.gms:play-services-location:21.3.0")
 
 }
 
