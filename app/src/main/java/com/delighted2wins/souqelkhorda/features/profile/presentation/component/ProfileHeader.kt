@@ -10,18 +10,23 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.delighted2wins.souqelkhorda.R
@@ -33,7 +38,9 @@ fun ProfileHeader(
     email: String = "abdelazizmaher@gmail.com",
     name: String = "Abdelaziz Maher",
     imageUrl: String = "",
+    isBuyer: Boolean = true,
     onEditAvatar: () -> Unit = {},
+    onBuyerClick: () -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -43,8 +50,8 @@ fun ProfileHeader(
         verticalArrangement = Arrangement.Center
     ) {
         Box(
-            modifier = Modifier.size(130.dp),
-            contentAlignment = Alignment.BottomEnd
+            modifier = Modifier.size(120.dp),
+            contentAlignment = Alignment.Center
         ) {
             AsyncImage(
                 model = imageUrl.ifEmpty { R.drawable.avatar },
@@ -56,10 +63,30 @@ fun ProfileHeader(
                     .border(width = 4.dp, color = Color.White, shape = CircleShape)
             )
 
+            if (isBuyer) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .clip(RoundedCornerShape(bottomEnd = 8.dp))
+                        .background(MaterialTheme.colorScheme.secondaryContainer)
+                        .clickable { onBuyerClick() }
+                        .padding(horizontal = 10.dp, vertical = 2.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Buyer",
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                        style = AppTypography.labelSmall.copy(
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
+                }
+            }
+
             Box(
                 modifier = Modifier
-                    .offset(x = 4.dp, y = 4.dp)
-                    .size(36.dp)
+                    .align(Alignment.BottomEnd)
+                    .size(32.dp)
                     .clip(CircleShape)
                     .background(Color.White)
                     .clickable { onEditAvatar() },
@@ -69,7 +96,7 @@ fun ProfileHeader(
                     imageVector = Icons.Default.Edit,
                     contentDescription = "Edit avatar",
                     tint = Color(0xFF00A86B),
-                    modifier = Modifier.size(20.dp)
+                    modifier = Modifier.size(18.dp)
                 )
             }
         }
@@ -86,3 +113,5 @@ fun ProfileHeader(
         )
     }
 }
+
+

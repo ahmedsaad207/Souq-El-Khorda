@@ -36,7 +36,6 @@ import com.delighted2wins.souqelkhorda.features.history.presentation.components.
 import com.delighted2wins.souqelkhorda.features.history.presentation.components.HistoryTabs
 import com.delighted2wins.souqelkhorda.features.history.presentation.contract.HistoryContract
 import com.delighted2wins.souqelkhorda.features.history.presentation.viewmodel.HistoryViewModel
-import com.delighted2wins.souqelkhorda.features.notification.presentation.contract.NotificationsContract
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -122,42 +121,42 @@ fun HistoryScreen(
                 )
             }
         ) {
-            LazyColumn (
+            LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(top = 4.dp)
-                ) {
-            when (state.isLoading) {
-                true -> items(5) {
-                    HistoryCardShimmer()
-                }
+            ) {
+                when (state.isLoading) {
+                    true -> items(5) {
+                        HistoryCardShimmer()
+                    }
 
-                false -> {
-                    if (filteredOrders.isEmpty()) {
-                        item {
-                            EmptyCart(
-                                R.raw.no_data,
-                                stringResource(R.string.you_don_t_have_any_transactions_yet)
-                            )
-                        }
-                    } else {
-                        items(filteredOrders) { order ->
-                            HistoryCard(
-                                title = order.title,
-                                subtitle = order.type.getLocalizedValue(),
-                                status = order.status,
-                                date = order.date.toRelativeTime(context),
-                                items = order.scraps,
-                                expanded = false,
-                                onViewDetails = { }
-                            )
+                    false -> {
+                        if (filteredOrders.isEmpty()) {
+                            item {
+                                EmptyCart(
+                                    R.raw.no_data,
+                                    stringResource(R.string.you_don_t_have_any_transactions_yet)
+                                )
+                            }
+                        } else {
+                            items(filteredOrders) { order ->
+                                HistoryCard(
+                                    title = order.title,
+                                    subtitle = order.type.getLocalizedValue(),
+                                    status = order.status,
+                                    date = order.date.toRelativeTime(context),
+                                    items = order.scraps,
+                                    expanded = false,
+                                    onViewDetails = { }
+                                )
+                            }
                         }
                     }
                 }
-            }
 
+            }
         }
-    }
 
     }
 }
