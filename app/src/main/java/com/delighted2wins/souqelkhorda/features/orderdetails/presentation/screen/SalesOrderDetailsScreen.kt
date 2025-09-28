@@ -80,8 +80,9 @@ fun SalesOrderDetailsScreen(
                 is SalesOrderDetailsEffect.NavigateToChat -> {
                     onChatClick(effect.orderId, effect.sellerId, effect.buyerId, effect.offerId)
                 }
+
                 is SalesOrderDetailsEffect.ShowSuccess -> {
-                    val lastAction =  actionType
+                    val lastAction = actionType
                     if (isBottomSheetVisible) {
                         sheetState.hide()
                         isBottomSheetVisible = false
@@ -100,6 +101,7 @@ fun SalesOrderDetailsScreen(
                         onBackClick()
                     }
                 }
+
                 is SalesOrderDetailsEffect.ShowError -> {
                     snackBarHostState.showSnackbar(effect.message)
                 }
@@ -131,9 +133,13 @@ fun SalesOrderDetailsScreen(
                     when (actionType) {
                         BottomSheetActionType.ACCEPT_OFFER -> {
                             viewModel.onIntent(
-                                SalesOrderDetailsIntent.AcceptOffer(selectedOfferId, selectedBuyerId)
+                                SalesOrderDetailsIntent.AcceptOffer(
+                                    selectedOfferId,
+                                    selectedBuyerId
+                                )
                             )
                         }
+
                         BottomSheetActionType.REJECT_OFFER -> {
                             viewModel.onIntent(
                                 SalesOrderDetailsIntent.RejectOffer(
@@ -141,6 +147,7 @@ fun SalesOrderDetailsScreen(
                                 )
                             )
                         }
+
                         BottomSheetActionType.DELETE_OFFER -> {
                             viewModel.onIntent(
                                 SalesOrderDetailsIntent.CancelOffer(
@@ -148,6 +155,7 @@ fun SalesOrderDetailsScreen(
                                 )
                             )
                         }
+
                         BottomSheetActionType.COMPLETE_ORDER -> {
                             viewModel.onIntent(
                                 SalesOrderDetailsIntent.CompleteOffer(
@@ -155,6 +163,7 @@ fun SalesOrderDetailsScreen(
                                 )
                             )
                         }
+
                         else -> {}
                     }
                 }
@@ -313,8 +322,15 @@ private fun SalesOrderDetailsUI(
                 AcceptedOfferItemCard(
                     buyer = user,
                     offer = offer,
-                    onChat = { onChatClick(order.userId, offer.buyerId, offer.orderId, offer.offerId) },
-                    onCompleted = { onCompleted(offer.orderId,offer.offerId, offer.buyerId) },
+                    onChat = {
+                        onChatClick(
+                            order.userId,
+                            offer.buyerId,
+                            offer.orderId,
+                            offer.offerId
+                        )
+                    },
+                    onCompleted = { onCompleted(offer.orderId, offer.offerId, offer.buyerId) },
                     onCancel = { onCancel(offer.orderId, offer.offerId, offer.buyerId) }
                 )
             }
