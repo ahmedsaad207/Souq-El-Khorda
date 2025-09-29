@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.app.theme.AppTypography
+import com.delighted2wins.souqelkhorda.core.components.DirectionalText
 import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.core.utils.generateUiOrderId
 import com.delighted2wins.souqelkhorda.core.utils.getTimeAgoFromMillis
@@ -71,10 +72,11 @@ fun CompanyOrderCard(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Text(
+            DirectionalText(
                 text = order.title,
                 style = AppTypography.titleLarge,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
+                contentIsRtl = false
             )
 
             Spacer(modifier = Modifier.height(16.dp))
