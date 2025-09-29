@@ -31,7 +31,6 @@ import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.app.theme.AppTypography
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
 import com.delighted2wins.souqelkhorda.core.model.Order
-import com.delighted2wins.souqelkhorda.core.utils.generateUiOrderId
 import com.delighted2wins.souqelkhorda.core.utils.getTimeAgoFromMillis
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.StatusChip
 
@@ -62,7 +61,7 @@ fun CompanyOrderCard(
                 Text(
                     text = stringResource(
                         R.string.order_id,
-                        generateUiOrderId(order.orderId, order.date)
+                        order.orderId
                     ),
                     style = AppTypography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface

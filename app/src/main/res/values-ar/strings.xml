@@ -13,7 +13,7 @@
     <string name="register_new_account">تسجيل حساب جديد</string>
 
     <string name="sell_screen_title">بيع</string>
-    <string name="shop_screen_title">تسوق</string>
+    <string name="shop_screen_title">السوق</string>
     <string name="orders_screen_title">طلباتي</string>
     <string name="nearest_screen_title">الأقرب</string>
     <string name="username">اسم المستخدم</string>
@@ -172,7 +172,7 @@
 
     <string name="retry">إعادة المحاولة</string>
     <string name="no_market_data">لا توجد بيانات متاحة حالياً في السوق</string>
-    <string name="available_offers">العروض المتاحة</string>
+    <string name="available_offers">الطلبات المتاحة</string>
 
     <string name="price_label">السعر: %1$d ج.م</string>
     <string name="weight_label">%1$s كجم</string>

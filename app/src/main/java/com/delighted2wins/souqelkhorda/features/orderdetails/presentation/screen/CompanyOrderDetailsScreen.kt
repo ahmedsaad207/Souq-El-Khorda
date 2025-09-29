@@ -39,7 +39,6 @@ import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
 import com.delighted2wins.souqelkhorda.core.components.EmptyCart
 import com.delighted2wins.souqelkhorda.core.model.Order
-import com.delighted2wins.souqelkhorda.core.utils.generateUiOrderId
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.ShimmerScrapCard
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.OrderDetailsTopBar
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.ScrapItemCard
@@ -184,7 +183,7 @@ private fun CompanyOrderDetailsUI(
                             )
                         },
                         label = stringResource(R.string.order_id_label),
-                        value = generateUiOrderId(order.orderId, order.date),
+                        value = order.orderId,
                         isRtl = isRtl
                     )
                     Spacer(modifier = Modifier.height(8.dp))

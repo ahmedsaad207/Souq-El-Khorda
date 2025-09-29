@@ -2,7 +2,7 @@
     <string name="app_name">Souq El Khorda</string>
 
     <string name="sell_screen_title">Sell</string>
-    <string name="shop_screen_title">Shop</string>
+    <string name="shop_screen_title">Market</string>
     <string name="orders_screen_title">Orders</string>
     <string name="nearest_screen_title">Nearest</string>
 
@@ -173,7 +173,7 @@
 
     <string name="retry">Retry</string>
     <string name="no_market_data">No market data available at the moment</string>
-    <string name="available_offers">Available Offers</string>
+    <string name="available_offers">Available Orders</string>
 
     <string name="price_label">Price: %1$d EGP</string>
     <string name="weight_label">%1$s Kg</string>
