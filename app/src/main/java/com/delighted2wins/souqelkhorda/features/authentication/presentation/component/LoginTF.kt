@@ -79,6 +79,8 @@ fun LoginPasswordTF(
                 text = it
                 onValueChange(it.text)
             },
+            singleLine = true,
+            maxLines = 1,
             shape = RoundedCornerShape(8.dp),
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedBorderColor = Color.Transparent,
@@ -148,6 +150,8 @@ fun LoginTF(
                 )
 
             },
+            singleLine = true,
+            maxLines = 1,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email
             ),

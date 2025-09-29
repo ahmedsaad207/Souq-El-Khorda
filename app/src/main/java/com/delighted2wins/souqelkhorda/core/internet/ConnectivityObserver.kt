@@ -31,7 +31,11 @@ class ConnectivityObserverImp(private val context: Context) : ConnectivityObserv
     }
 
     override fun unregister() {
-        context.unregisterReceiver(connectivityReceiver)
+        try {
+            context.unregisterReceiver(connectivityReceiver)
+        } catch (e: IllegalArgumentException) {
+            e.printStackTrace()
+        }
     }
 
     private fun isInternetAvailable(context: Context?): Boolean {

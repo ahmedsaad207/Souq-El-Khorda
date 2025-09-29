@@ -16,8 +16,10 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -29,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.delighted2wins.souqelkhorda.app.theme.Til
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,7 +43,6 @@ fun CustomDropdownMenu(
     expanded: Boolean,
     onExpandedChange: (Boolean) -> Unit
 ) {
-
     val colors = MaterialTheme.colorScheme
 
     val interactionSource = remember { MutableInteractionSource() }
@@ -51,7 +53,7 @@ fun CustomDropdownMenu(
         animationSpec = tween(durationMillis = 300)
     )
     val borderColor by animateColorAsState(
-        targetValue = if (isFocused) colors.primary else colors.onSurfaceVariant,
+        targetValue = if (isFocused) Til else colors.onSurfaceVariant,
         animationSpec = tween(durationMillis = 300)
     )
 
@@ -59,6 +61,7 @@ fun CustomDropdownMenu(
         Text(
             text = label,
             fontSize = 14.sp,
+            color = colors.onBackground
         )
         Spacer(modifier = Modifier.height(8.dp))
         ExposedDropdownMenuBox(
@@ -90,10 +93,8 @@ fun CustomDropdownMenu(
                     focusedTextColor = colors.onBackground,
                     unfocusedTextColor = colors.onBackground
                 ),
-                textStyle = TextStyle(
-                    fontSize = 14.sp,
-                    color = colors.surface
-
+                textStyle = LocalTextStyle.current.copy(
+                    fontSize = 14.sp
                 ),
                 interactionSource = interactionSource
             )
@@ -102,7 +103,7 @@ fun CustomDropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { onExpandedChange(false) },
                 modifier = Modifier
-                    .background(colors.surfaceVariant)
+                    .background(colors.onTertiary)
                     .border(
                         width = 1.dp,
                         color = colors.onSurfaceVariant,
@@ -115,6 +116,7 @@ fun CustomDropdownMenu(
                             Text(
                                 text = option,
                                 fontSize = 14.sp,
+                                color = colors.onBackground
                             )
                         },
                         onClick = {
