@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">سوق الخردة</string>
 
     <string name="forgot_password">هل نسيت كلمة المرور؟</string>
@@ -300,5 +300,7 @@
     <string name="nothing_to_see_here_yet">لا يوجد شيء هنا… حتى الآن!</string>
     <string name="you_don_t_have_any_transactions_yet">ا توجد معاملات حتى الآن</string>
     <string name="order_items">عناصر الطلب (%1$d)</string>
+    <string name="no_internet_message">لا يوجد إتصال بالانترنت</string>
+    <string name="nearest_buyers">التجار القريبين</string>
 
 </resources>

@@ -85,7 +85,7 @@ fun NavigationRoot(
                                     )
                                 },
                             )
-                        }else{
+                        } else {
                             NoInternetScreen()
                         }
                     }
@@ -104,7 +104,7 @@ fun NavigationRoot(
                                     backStack.add(ProfileScreen)
                                 }
                             )
-                        }else{
+                        } else {
                             NoInternetScreen()
                         }
                     }
@@ -119,7 +119,7 @@ fun NavigationRoot(
                                 orderOwnerId = key.orderOwnerId,
                                 onBackClick = { backStack.remove(key) }
                             )
-                        }else{
+                        } else {
                             NoInternetScreen()
                         }
                     }
@@ -137,7 +137,7 @@ fun NavigationRoot(
                                 },
                                 onBackClick = { backStack.remove(key) }
                             )
-                        }else{
+                        } else {
                             NoInternetScreen()
                         }
                     }
@@ -155,7 +155,7 @@ fun NavigationRoot(
                                 },
                                 onBackClick = { backStack.remove(key) }
                             )
-                        }else{
+                        } else {
                             NoInternetScreen()
                         }
                     }
@@ -172,7 +172,7 @@ fun NavigationRoot(
                                 offerId = key.offerId,
                                 onBack = { backStack.remove(key) }
                             )
-                        }else{
+                        } else {
                             NoInternetScreen()
                         }
                     }
@@ -181,18 +181,17 @@ fun NavigationRoot(
                 is NearestBuyersScreen -> {
                     NavEntry(key) {
                         bottomBarState.value = true
-                        screenNameState.value = "Nearest Buyers"
+                        screenNameState.value = stringResource(R.string.nearest_buyers)
 
-                        if(isOnline) {
+                        if (isOnline) {
                             NearestBuyersScreen(
                                 innerPadding = innerPadding,
                                 onBuyerClick = {
                                     backStack.add(element = BuyerRegistration)
                                 },
                                 snackBarHostState = snackBarState,
-
-                                )
-                        }else{
+                            )
+                        } else {
                             NoInternetScreen()
                         }
                     }
@@ -261,11 +260,12 @@ fun NavigationRoot(
                         ProfileScreen(
                             snackBarState = snackBarState,
                             onBackClick = { backStack.remove(key) },
-                            onHistoryClick = { backStack.add(HistoryScreen) },
                             onLogoutClick = {
                                 backStack.clear()
                                 backStack.add(LoginScreen)
-                            }
+                            },
+                            onHistoryClick = { backStack.add(HistoryScreen) },
+                            isOnline = isOnline
                         )
                     }
                 }
@@ -294,7 +294,7 @@ fun NavigationRoot(
                                     )
                                 }
                             )
-                        }else{
+                        } else {
                             NoInternetScreen()
                         }
                     }
@@ -303,27 +303,36 @@ fun NavigationRoot(
                 is NotificationsScreen -> {
                     NavEntry(key) {
                         bottomBarState.value = false
-                        NotificationsScreen(
-                            onBackClick = { backStack.remove(key) },
-                        )
+                        if (isOnline) {
+                            NotificationsScreen(
+                                onBackClick = { backStack.remove(key) },
+                            )
+                        } else {
+                            NoInternetScreen()
+                        }
                     }
                 }
 
                 is HistoryScreen -> {
                     NavEntry(key) {
                         bottomBarState.value = false
-                        HistoryScreen(
-                            onViewDetailsClick = { orderId, orderOwnerId, typeFlag ->
-                                backStack.add(
-                                    when (typeFlag) {
-                                        "SALE" -> CompanyOrderDetailsKey(orderId, orderOwnerId)
-                                        "MY_ORDER" -> SalesOrderDetailsKey(orderId)
-                                        else -> OffersOrderDetailsKey(orderId)
-                                    }
-                                )
-                            },
-                            onBackClick = { backStack.remove(key) }
-                        )
+                        if (isOnline) {
+
+                            HistoryScreen(
+                                onViewDetailsClick = { orderId, orderOwnerId, typeFlag ->
+                                    backStack.add(
+                                        when (typeFlag) {
+                                            "SALE" -> CompanyOrderDetailsKey(orderId, orderOwnerId)
+                                            "MY_ORDER" -> SalesOrderDetailsKey(orderId)
+                                            else -> OffersOrderDetailsKey(orderId)
+                                        }
+                                    )
+                                },
+                                onBackClick = { backStack.remove(key) }
+                            )
+                        } else {
+                            NoInternetScreen()
+                        }
                     }
                 }
 

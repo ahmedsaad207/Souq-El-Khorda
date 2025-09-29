@@ -109,7 +109,7 @@ fun HistoryScreen(
         PullToRefreshBox(
             state = pullToRefreshState,
             isRefreshing = state.isLoading,
-            onRefresh = { viewModel.handleIntent(HistoryContract.Intent.FilterOrders(state.selectedTabIndex)) },
+            onRefresh = { viewModel.handleIntent(HistoryContract.Intent.LoadOrders) },
             modifier = Modifier.fillMaxSize(),
             indicator = {
                 PullToRefreshDefaults.Indicator(

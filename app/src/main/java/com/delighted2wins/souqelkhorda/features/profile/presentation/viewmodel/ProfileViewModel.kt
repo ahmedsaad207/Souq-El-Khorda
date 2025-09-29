@@ -10,7 +10,6 @@ import com.delighted2wins.souqelkhorda.features.history.domain.usecase.GetUserOr
 import com.delighted2wins.souqelkhorda.features.profile.domain.entity.ProfileMessagesEnum
 import com.delighted2wins.souqelkhorda.features.profile.domain.usecase.GetUserProfileUseCase
 import com.delighted2wins.souqelkhorda.features.profile.domain.usecase.SetLanguageUseCase
-import com.delighted2wins.souqelkhorda.features.profile.domain.usecase.UpdateUserEmailUseCase
 import com.delighted2wins.souqelkhorda.features.profile.domain.usecase.UpdateUserProfileUseCase
 import com.delighted2wins.souqelkhorda.features.profile.presentation.contract.ProfileContract
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -182,7 +181,7 @@ class ProfileViewModel @Inject constructor(
                 _state.update {
                     setFieldValue(
                         it,
-                        current.copy(isEditing = false, isLoading = false, success = true)
+                        current.copy(isEditing = false, isLoading = false, success = true, error = null)
                     )
                 }
                 sendEffect(ProfileContract.Effect.ShowSnackbar(successMessage.getMsg()))

@@ -30,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.enums.OfferStatus
 import com.delighted2wins.souqelkhorda.core.model.Offer
-import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 
 @Composable
 fun BuyerOfferCard(
