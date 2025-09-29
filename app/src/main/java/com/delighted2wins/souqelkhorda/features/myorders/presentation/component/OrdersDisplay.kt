@@ -10,9 +10,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.delighted2wins.souqelkhorda.R
+import com.delighted2wins.souqelkhorda.core.components.EmptyCart
 import com.delighted2wins.souqelkhorda.core.model.Order
 
 @Composable
@@ -21,7 +24,6 @@ fun OrdersDisplay(
     isLoading: Boolean,
     error: String?,
     onDetailsClick: (String) -> Unit,
-    systemIsRtl: Boolean = false
 ) {
     when {
         isLoading -> {
@@ -40,12 +42,7 @@ fun OrdersDisplay(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = error,
-                    fontSize = 16.sp,
-                    color = Color.Red,
-                    fontWeight = FontWeight.Bold
-                )
+                EmptyCart(messageInfo = error)
             }
         }
 
@@ -54,11 +51,7 @@ fun OrdersDisplay(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = "No orders available",
-                    fontSize = 16.sp,
-                    color = Color.Gray
-                )
+               EmptyCart(messageInfo = stringResource(R.string.no_orders_available))
             }
         }
 
@@ -71,7 +64,6 @@ fun OrdersDisplay(
                     OrderItem(
                         order = order,
                         onDetailsClick = onDetailsClick,
-                        systemIsRtl = systemIsRtl
                     )
                 }
             }

@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Sell
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -23,7 +24,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.enums.OfferStatus
 import com.delighted2wins.souqelkhorda.core.model.Offer
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
@@ -31,13 +35,13 @@ import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUse
 @Composable
 fun BuyerOfferCard(
     offer: Offer,
-    seller: MarketUser,
     onUpdate: () -> Unit,
     onChat: () -> Unit,
     onMarkReceived: () -> Unit,
     onCancel: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -52,6 +56,8 @@ fun BuyerOfferCard(
                 .background(MaterialTheme.colorScheme.surface)
                 .padding(16.dp)
         ) {
+            StatusChip(status = offer.status.name)
+            Spacer(Modifier.height(12.dp))
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
@@ -59,18 +65,16 @@ fun BuyerOfferCard(
                 Icon(
                     imageVector = Icons.Filled.Sell,
                     contentDescription = "Offer Price",
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = MaterialTheme.colorScheme.secondary
                 )
                 Spacer(Modifier.width(8.dp))
                 Text(
-                    text = "${offer.offerPrice} EGP",
+                    text = context.getString(R.string.price_label, offer.offerPrice),
                     style = MaterialTheme.typography.headlineLarge.copy(
-                        color = MaterialTheme.colorScheme.primary,
+                        color = MaterialTheme.colorScheme.secondary,
                         fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
                     ),
                 )
-                Spacer(Modifier.weight(1f))
-                StatusChip(status = offer.status.name)
             }
 
             Spacer(Modifier.height(12.dp))
@@ -85,13 +89,17 @@ fun BuyerOfferCard(
                             onClick = onCancel,
                             modifier = Modifier.weight(1f)
                         ) {
-                            Text("Cancel")
+                            Text(stringResource(R.string.cancel))
                         }
                         Button(
                             onClick = onUpdate,
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(1f),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.secondary,
+                                contentColor = MaterialTheme.colorScheme.onSecondary
+                            )
                         ) {
-                            Text("Update Offer")
+                            Text(stringResource(R.string.update_offer))
                         }
                     }
 
@@ -100,25 +108,25 @@ fun BuyerOfferCard(
                             onClick = onChat,
                             modifier = Modifier.weight(1f)
                         ) {
-                            Text("Chat")
+                            Text(stringResource(R.string.chat))
                         }
                         Button(
                             onClick = onMarkReceived,
                             modifier = Modifier.weight(1f)
                         ) {
-                            Text("Received")
+                            Text(stringResource(R.string.mark_received))
                         }
                         OutlinedButton(
                             onClick = onCancel,
                             modifier = Modifier.weight(1f)
                         ) {
-                            Text("Cancel")
+                            Text(stringResource(R.string.cancel))
                         }
                     }
 
                     else -> {
                         Text(
-                            text = "No actions available",
+                            text = stringResource(R.string.no_actions_available),
                             style = MaterialTheme.typography.bodySmall,
                             color = Color.Gray
                         )

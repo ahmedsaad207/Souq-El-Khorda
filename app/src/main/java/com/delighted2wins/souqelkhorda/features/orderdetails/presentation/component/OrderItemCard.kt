@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -16,6 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
+import com.delighted2wins.souqelkhorda.core.enums.MeasurementType
 import com.delighted2wins.souqelkhorda.core.enums.ScrapType
 import com.delighted2wins.souqelkhorda.core.model.Scrap
 
@@ -27,6 +29,9 @@ fun OrderItemCard(
     val contentIsRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
     val scrapType = ScrapType.fromCategory(item.category)
+    val categoryLabel = scrapType.getLabel(context = LocalContext.current)
+    val measurementEnum = MeasurementType.entries.firstOrNull { it.name.equals(item.unit, true) }
+    val measurementLabel = measurementEnum?.getLabel(LocalContext.current) ?: ""
 
     val cardGradient = Brush.horizontalGradient(
         listOf(
@@ -54,7 +59,7 @@ fun OrderItemCard(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = item.category ?: "Unknown",
+                    text = categoryLabel,
                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
                     color = Color.White,
                     modifier = Modifier
@@ -67,7 +72,7 @@ fun OrderItemCard(
                 )
 
                 Text(
-                    text = "${item.amount} ${item.unit ?: ""}",
+                    text = "${item.amount} $measurementLabel",
                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
                     color = Color.White,
                     modifier = Modifier
@@ -80,26 +85,33 @@ fun OrderItemCard(
                 )
             }
 
-            item.description?.let {
+             if (item.description.isNotEmpty()) {
                 DirectionalText(
-                    text = it,
+                    text = item.description,
                     contentIsRtl = contentIsRtl,
                     style = MaterialTheme.typography.bodyMedium.copy(
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                     ),
                     modifier = Modifier.fillMaxWidth()
                 )
-            }
-
-            if (item.images.isEmpty()) {
-                DirectionalText(
-                    text = stringResource(R.string.no_images_available),
-                    contentIsRtl = contentIsRtl,
+            }else{
+                Text(
+                    text = stringResource(R.string.no_description_available),
                     style = MaterialTheme.typography.bodySmall.copy(
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                     ),
                     modifier = Modifier.fillMaxWidth(),
-                    textAlign = if (contentIsRtl) TextAlign.End else TextAlign.Start
+                )
+            }
+
+            if (item.images.isEmpty()) {
+                Text(
+                    text = stringResource(R.string.no_images_available),
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    ),
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Start
                 )
             } else {
                 ZoomableImageList(urls = item.images)

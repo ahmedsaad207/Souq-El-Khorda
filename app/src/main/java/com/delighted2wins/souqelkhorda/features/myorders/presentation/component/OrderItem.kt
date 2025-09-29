@@ -15,8 +15,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.delighted2wins.souqelkhorda.R
+import com.delighted2wins.souqelkhorda.core.components.DirectionalText
 import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.core.utils.generateUiOrderId
 import com.delighted2wins.souqelkhorda.core.utils.getTimeAgoFromMillis
@@ -25,7 +28,6 @@ import com.delighted2wins.souqelkhorda.core.utils.getTimeAgoFromMillis
 fun OrderItem(
     order: Order,
     onDetailsClick: (String) -> Unit,
-    systemIsRtl: Boolean = false
 ) {
     Card(
         modifier = Modifier
@@ -52,29 +54,24 @@ fun OrderItem(
                 ),
             )
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
+                DirectionalText(
                     text = order.title,
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface
                     ),
-                    modifier = Modifier.weight(1f)
+                    contentIsRtl = false
                 )
 
                 Text(
-                    text = "${order.price} EGP",
+                    text = stringResource(R.string.price_label, order.price),
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary
+                        color = MaterialTheme.colorScheme.secondary
                     )
                 )
             }
-        }
+
     }
 }
 
@@ -93,7 +90,7 @@ private fun OrderHeader(
             horizontalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             Text(
-                text = "ID #$orderId",
+                text = stringResource(R.string.order_id, orderId),
                 style = MaterialTheme.typography.labelSmall.copy(
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                 )

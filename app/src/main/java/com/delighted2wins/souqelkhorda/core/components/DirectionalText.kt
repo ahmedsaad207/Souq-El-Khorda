@@ -13,6 +13,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.LayoutDirection
+import com.delighted2wins.souqelkhorda.core.utils.isArabic
 
 
 @Composable
@@ -27,8 +28,9 @@ fun DirectionalText(
     softWrap: Boolean = true,
     style: TextStyle = MaterialTheme.typography.bodyMedium
 ) {
+    val isArabic = isArabic(text)
     CompositionLocalProvider(
-        LocalLayoutDirection provides if (contentIsRtl) LayoutDirection.Rtl else LayoutDirection.Ltr
+        LocalLayoutDirection provides if (isArabic) LayoutDirection.Rtl else LayoutDirection.Ltr
     ) {
         Box(modifier = modifier.fillMaxWidth())
         {

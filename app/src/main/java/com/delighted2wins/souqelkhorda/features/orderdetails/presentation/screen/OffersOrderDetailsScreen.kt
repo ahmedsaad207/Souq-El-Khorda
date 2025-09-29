@@ -41,13 +41,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.delighted2wins.souqelkhorda.R
+import com.delighted2wins.souqelkhorda.core.components.EmptyCart
 import com.delighted2wins.souqelkhorda.core.enums.BottomSheetActionType
 import com.delighted2wins.souqelkhorda.core.model.Offer
 import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.ShimmerScrapCard
 import com.delighted2wins.souqelkhorda.features.offers.UserActionsBottomSheet
-import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.*
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.BuyerOfferCard
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.OrderDetailsTopBar
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.OrderInformationCard
@@ -135,11 +135,10 @@ fun OffersOrderDetailsScreen(
                 scrapsExpanded = scrapsExpanded,
                 onScrapsToggle = { scrapsExpanded = !scrapsExpanded },
                 buyerOffer = state.buyerOffer,
-                isRtl = isRtl,
                 onUpdateOfferClick = {
                     selectedOfferId = state.buyerOffer!!.first.offerId
                     selectedOrderId = state.order!!.orderId
-                    actionType = BottomSheetActionType.UPDATE_STATUS_OFFER
+                    actionType = BottomSheetActionType.UPDATE_OFFER
                     isBottomSheetVisible = true
                     coroutineScope.launch { sheetState.show() }
                 },
@@ -163,16 +162,7 @@ fun OffersOrderDetailsScreen(
         }
 
         else -> {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = if (isRtl) "لا توجد بيانات" else "No data available",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.error
-                )
-            }
+           EmptyCart(messageInfo = stringResource(R.string.no_orders_found))
         }
     }
 
@@ -185,7 +175,8 @@ fun OffersOrderDetailsScreen(
                 selectedOrderId = ""
                 actionType = null
             },
-            sheetState = sheetState
+            sheetState = sheetState,
+            containerColor = MaterialTheme.colorScheme.surface
         ) {
             UserActionsBottomSheet(
                 orderId = selectedOrderId,
@@ -197,7 +188,7 @@ fun OffersOrderDetailsScreen(
                 isRtl = isRtl,
                 onConfirmAction = { data ->
                     when (actionType) {
-                        BottomSheetActionType.UPDATE_STATUS_OFFER -> {
+                        BottomSheetActionType.UPDATE_OFFER -> {
                             if (data is Offer) {
                                 viewModel.onIntent(
                                     OffersOrderDetailsIntent.UpdateOffer(
@@ -242,7 +233,6 @@ private fun OffersOrderDetailsUI(
     scrapsExpanded: Boolean,
     onScrapsToggle: () -> Unit,
     buyerOffer: Pair<Offer, MarketUser>?,
-    isRtl: Boolean,
     onUpdateOfferClick: () -> Unit = {},
     onBackClick: () -> Unit = {},
     onChatClick: (orderId: String, sellerId: String, buyerId: String, offerId: String) -> Unit,
@@ -255,7 +245,7 @@ private fun OffersOrderDetailsUI(
     ) {
         item {
             OrderDetailsTopBar(
-                title = order.title,
+                title = stringResource(R.string.details),
                 onBackClick = onBackClick
             )
         }
@@ -264,7 +254,7 @@ private fun OffersOrderDetailsUI(
             item {
                 SectionTitle(
                     icon = Icons.Filled.AttachMoney,
-                    title = if (isRtl) "عرضي" else "My Offer",
+                    title = stringResource(R.string.my_offer),
                     count = 0,
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )
@@ -272,7 +262,6 @@ private fun OffersOrderDetailsUI(
 
             item {
                 BuyerOfferCard(
-                    seller = seller,
                     offer = offer,
                     onUpdate = { onUpdateOfferClick() },
                     onChat = { onChatClick(order.orderId, seller.id, offer.buyerId, offer.offerId) },
@@ -283,12 +272,13 @@ private fun OffersOrderDetailsUI(
         }
 
         item {
+
             OrderInformationCard(
                 title = order.title,
                 description = order.description,
                 price = order.price.toString(),
                 scraps = order.scraps,
-                status = order.status,
+                status = if (buyerOffer!!.first.buyerId != order.userId) null else order.status.name,
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
         }
@@ -310,13 +300,13 @@ private fun OffersOrderDetailsUI(
             ) {
                 SectionTitle(
                     icon = Icons.Outlined.Inventory2,
-                    title = "Scraps",
+                    title = stringResource(R.string.scraps),
                     count = order.scraps.size
                 )
                 Icon(
                     imageVector = if (scrapsExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                     contentDescription = if (scrapsExpanded) "Collapse" else "Expand",
-                    tint = MaterialTheme.colorScheme.primary,
+                    tint = MaterialTheme.colorScheme.secondary,
                     modifier = Modifier.size(36.dp)
                 )
             }
@@ -330,10 +320,14 @@ private fun OffersOrderDetailsUI(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 16.dp),
+                            .padding(16.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("No Scraps Item Found", color = Color.Gray)
+                        Text(
+                            stringResource(R.string.no_scraps_available),
+                            style = MaterialTheme.typography.titleLarge,
+                            color = Color.Gray
+                        )
                     }
                 }
             }

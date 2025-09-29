@@ -26,9 +26,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.enums.BottomSheetActionType
 import com.delighted2wins.souqelkhorda.core.enums.OfferStatus
 import com.delighted2wins.souqelkhorda.core.model.Offer
@@ -51,6 +54,7 @@ fun UserActionsBottomSheet(
 ) {
     var offerAmount by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -89,14 +93,14 @@ fun UserActionsBottomSheet(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        if ((actionType == BottomSheetActionType.MAKE_OFFER || actionType == BottomSheetActionType.UPDATE_STATUS_OFFER) && offerMaker != null) {
+        if ((actionType == BottomSheetActionType.MAKE_OFFER || actionType == BottomSheetActionType.UPDATE_OFFER) && offerMaker != null) {
             OutlinedTextField(
                 value = offerAmount,
                 onValueChange = { input ->
                     offerAmount = input.filter { it.isDigit() }
                     errorMessage = ""
                 },
-                label = { Text(if (isRtl) "المبلغ" else "Amount") },
+                label = { Text(stringResource(R.string.label_amount)) },
                 isError = errorMessage.isNotEmpty(),
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions.Default.copy(
@@ -120,15 +124,12 @@ fun UserActionsBottomSheet(
             onClick = {
                 coroutineScope.launch {
                     when (actionType) {
-                        BottomSheetActionType.MAKE_OFFER, BottomSheetActionType.UPDATE_STATUS_OFFER -> {
+                        BottomSheetActionType.MAKE_OFFER, BottomSheetActionType.UPDATE_OFFER -> {
                             val amount = offerAmount.toIntOrNull()
                             when {
-                                offerAmount.isBlank() -> errorMessage =
-                                    if (isRtl) "الرجاء إدخال المبلغ" else "Please enter an amount"
-                                amount == null -> errorMessage =
-                                    if (isRtl) "المبلغ غير صالح" else "Invalid amount"
-                                amount <= 0 -> errorMessage =
-                                    if (isRtl) "المبلغ يجب أن يكون أكبر من صفر" else "Amount must be greater than zero"
+                                offerAmount.isBlank() -> errorMessage = context.getString(R.string.enter_amount)
+                                amount == null -> errorMessage = context.getString(R.string.invalid_amount)
+                                amount <= 0 -> errorMessage = context.getString(R.string.amount_greater_than_zero)
                                 else -> offerMaker?.let { user ->
                                     onConfirmAction(
                                         Offer(
@@ -178,7 +179,9 @@ fun UserActionsBottomSheet(
             },
             modifier = Modifier.fillMaxWidth(),
             enabled = !isSubmitting,
-            colors = ButtonDefaults.buttonColors(containerColor = actionType.color)
+            colors = ButtonDefaults.buttonColors(
+                containerColor = actionType.color
+            )
         ) {
             if (isSubmitting) {
                 DotLoadingIndicator()

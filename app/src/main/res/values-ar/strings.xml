@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">سوق الخردة</string>
 
     <string name="forgot_password">هل نسيت كلمة المرور؟</string>
@@ -178,7 +178,6 @@
     <string name="search_in_scraps">ابحث في الخردة...</string>
     <string name="read_less">عرض أقل</string>
     <string name="read_more">المزيد</string>
-    <string name="order_items">تفاصيل الأصناف</string>
     <string name="no_images_available">لا توجد صور</string>
     <string name="details">التفاصيل</string>
     <string name="no_order_details_found">لا يوجد تفاصيل لهذا العرض</string>
@@ -187,7 +186,48 @@
     <string name="total_weight">إجمالي الوزن</string>
     <string name="total_items">إجمالي العناصر</string>
     <string name="view_profile">عرض الملف الشخصي</string>
-
+    <string name="no_sells_available">لا يوجد معروضات متاحة</string>
+    <string name="no_offers_available">لا يوجد عروض متاحة</string>
+    <string name="no_orders_available">لا توجد طلبات متاحة</string>
+    <string name="offers_label">عروضي</string>
+    <string name="sales_label">معروضاتي</string>
+    <string name="order_items_label">تفاصيل الأصناف</string>
+    <string name="order_id">رقم الطلب #%1$s</string>
+    <string name="cancel_button">الغاء الطلب</string>
+    <string name="no_orders_found">لا توجد طلبات</string>
+    <string name="order_source_market">السوق</string>
+    <string name="order_source_company">الشركة</string>
+    <string name="no_description_available">لا يوجد وصف متاح</string>
+    <string name="my_orders">طلباتي</string>
+    <string name="my_offer">عرضي</string>
+    <string name="no_scraps_available">لا توجد خردة متاحة</string>
+    <string name="scraps">الخردة</string>
+    <string name="no_data_available">لا توجد بيانات</string>
+    <string name="discussion_offers">مناقشة العروض</string>
+    <string name="pending_offers">العروض المعلقة</string>
+    <string name="no_offers_found">لا توجد عروض</string>
+    <string name="company_name">شركة سوق الخردة</string>
+    <string name="company_address">العنوان: الإسكندرية، مصر</string>
+    <string name="company_email">البريد: info@souqelkhorda.com</string>
+    <string name="seller_information">معلومات البائع</string>
+    <string name="status">الحالة</string>
+    <string name="no_scraps_found">لا توجد خردة</string>
+    <string name="amount_label">الكمية</string>
+    <string name="description_label">الوصف</string>
+    <string name="date_label">التاريخ</string>
+    <string name="images_label">الصور</string>
+    <string name="order_id_label">رقم الطلب</string>
+    <string name="company_review_order">ستقوم الشركة بمراجعة طلبك وسيتواصلون معك قريبًا</string>
+    <string name="chat">محادثة</string>
+    <string name="completed">مكتمل</string>
+    <string name="update_offer">تحديث العرض</string>
+    <string name="offer_price">السعر: %1$s</string>
+    <string name="mark_received">تم الاستلام</string>
+    <string name="no_actions_available">لا توجد إجراءات متاحة</string>
+    <string name="label_amount">المبلغ</string>
+    <string name="enter_amount">الرجاء إدخال المبلغ</string>
+    <string name="invalid_amount">المبلغ غير صالح</string>
+    <string name="amount_greater_than_zero">المبلغ يجب أن يكون أكبر من صفر</string>
 
     <string name="just_now">الآن</string>
 

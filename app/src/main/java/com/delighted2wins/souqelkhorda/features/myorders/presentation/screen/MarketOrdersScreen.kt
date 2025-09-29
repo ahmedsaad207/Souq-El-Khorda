@@ -21,9 +21,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.delighted2wins.souqelkhorda.R
+import com.delighted2wins.souqelkhorda.core.components.EmptyCart
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.component.FilterWithBadge
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.component.OrdersDisplay
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.contract.MyOrdersState
@@ -42,83 +45,71 @@ fun MarketOrdersScreen(
         onChipSelected(selectedFilter)
     }
 
-    CompositionLocalProvider(
-        LocalLayoutDirection provides if (systemIsRtl) LayoutDirection.Rtl else LayoutDirection.Ltr
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                FilterWithBadge(
-                    label = if (systemIsRtl) "معروضاتي" else "Sells",
-                    count = state.sellsCount,
-                    selected = selectedFilter == "Sells",
-                    onClick = { selectedFilter = "Sells" }
-                )
+            FilterWithBadge(
+                label = stringResource(R.string.sales_label),
+                count = state.sellsCount,
+                selected = selectedFilter == "Sells",
+                onClick = { selectedFilter = "Sells" }
+            )
 
-                FilterWithBadge(
-                    label = if (systemIsRtl) "عروضي" else "Offers",
-                    count = state.offersCount,
-                    selected = selectedFilter == "Offers",
-                    onClick = { selectedFilter = "Offers" }
-                )
-            }
+            FilterWithBadge(
+                label = stringResource(R.string.offers_label),
+                count = state.offersCount,
+                selected = selectedFilter == "Offers",
+                onClick = { selectedFilter = "Offers" }
+            )
+        }
 
-            Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                when (selectedFilter) {
-                    "Sells" -> {
-                        if (state.sells.isEmpty() && !state.isLoading) {
-                            Box (Modifier.fillMaxSize(), contentAlignment = Alignment.Center)
-                            {
-                                Text(
-                                    if (systemIsRtl) "لا يوجد معروضات متاحة" else "No sells available",
-                                    fontSize = 24.sp,
-                                    color = Color.Gray
-                                )
-                            }
-                        } else {
-                            OrdersDisplay(
-                                orders = state.sells,
-                                isLoading = state.isLoading,
-                                error = state.error,
-                                onDetailsClick = onSaleDetailsClick,
-                                systemIsRtl = systemIsRtl
-                            )
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            when (selectedFilter) {
+                "Sells" -> {
+                    if (state.sells.isEmpty() && !state.isLoading) {
+                        Box (Modifier.fillMaxSize(), contentAlignment = Alignment.Center)
+                        {
+                            EmptyCart(messageInfo = stringResource(R.string.no_sells_available))
                         }
+                    } else {
+                        OrdersDisplay(
+                            orders = state.sells,
+                            isLoading = state.isLoading,
+                            error = state.error,
+                            onDetailsClick = onSaleDetailsClick,
+                        )
                     }
+                }
 
-                    "Offers" -> {
-                        if (state.offers.isEmpty() && !state.isLoading) {
-                            Box (Modifier.fillMaxSize(), contentAlignment = Alignment.Center)
-                            {
-                                Text(
-                                    if (systemIsRtl) "لا يوجد عروض متاحة" else "No offers available",
-                                    fontSize = 24.sp,
-                                    color = Color.Gray
-                                )
-                            }
-                        } else {
-                            OrdersDisplay(
-                                orders = state.offers,
-                                isLoading = state.isLoading,
-                                error = state.error,
-                                onDetailsClick = onOfferDetailsClick,
-                                systemIsRtl = systemIsRtl
-                            )
+                "Offers" -> {
+                    if (state.offers.isEmpty() && !state.isLoading) {
+                        Box (Modifier.fillMaxSize(), contentAlignment = Alignment.Center)
+                        {
+                           EmptyCart(messageInfo = stringResource(R.string.no_offers_available))
                         }
+                    } else {
+                        OrdersDisplay(
+                            orders = state.offers,
+                            isLoading = state.isLoading,
+                            error = state.error,
+                            onDetailsClick = onOfferDetailsClick,
+                        )
                     }
                 }
             }
         }
+
     }
 }
