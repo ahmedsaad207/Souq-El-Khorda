@@ -28,10 +28,10 @@ enum class BottomSheetActionType(
         )
     ),
 
-    UPDATE_STATUS_OFFER(
+    UPDATE_OFFER(
         code = 1,
-        enValue = "Update Status",
-        arValue = "تحديث الحالة",
+        enValue = "Update Offer",
+        arValue = "تحديث العرض",
         color = Color(0xFF4CAF50),
         warningColor = Color(0xFFB8EFBA),
         warnings = listOf(

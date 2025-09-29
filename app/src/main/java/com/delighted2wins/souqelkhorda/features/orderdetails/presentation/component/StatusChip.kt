@@ -24,7 +24,10 @@ import com.delighted2wins.souqelkhorda.core.enums.OfferStatus
 import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
 
 @Composable
-fun StatusChip(status: String) {
+fun StatusChip(status: String?) {
+
+    if (status.isNullOrBlank()) return
+
     Surface(
         shape = RoundedCornerShape(50),
         tonalElevation = 2.dp,

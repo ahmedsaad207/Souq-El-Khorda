@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.delighted2wins.souqelkhorda.R
+import com.delighted2wins.souqelkhorda.core.components.EmptyCart
 import com.delighted2wins.souqelkhorda.core.enums.BottomSheetActionType
 import com.delighted2wins.souqelkhorda.core.model.Offer
 import com.delighted2wins.souqelkhorda.core.model.Order
@@ -66,8 +67,6 @@ fun MarketScreen(
     var isBottomSheetVisible by remember { mutableStateOf(false) }
 
     val retryLabel = stringResource(R.string.retry)
-    val noMarketData = stringResource(R.string.no_market_data)
-    val availableOffers = stringResource(R.string.available_offers)
 
     LaunchedEffect(Unit) {
         viewModel.loadCurrentUser()
@@ -148,18 +147,9 @@ fun MarketScreen(
                     contentPadding = PaddingValues(16.dp)
                 ) {
                     item {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(400.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = noMarketData,
-                                style = MaterialTheme.typography.titleLarge,
-                                color = Color.LightGray
-                            )
-                        }
+                        EmptyCart(
+                            messageInfo = stringResource(R.string.no_market_data)
+                        )
                     }
                 }
             }
@@ -187,14 +177,12 @@ fun MarketScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = availableOffers,
+                                text = stringResource(R.string.available_offers),
                                 style = MaterialTheme.typography.headlineLarge.copy(
                                     fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
                                     fontWeight = MaterialTheme.typography.titleLarge.fontWeight
                                 ),
-                                color = MaterialTheme.colorScheme.secondary.copy(
-                                    alpha = 4f
-                                ),
+                                color = MaterialTheme.colorScheme.secondary.copy(alpha = 4f),
                                 modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
                             )
                         }
@@ -244,7 +232,8 @@ fun MarketScreen(
                     selectedOrder = null
                 }
             },
-            sheetState = sheetState
+            sheetState = sheetState,
+            containerColor = MaterialTheme.colorScheme.surface,
         ) {
             UserActionsBottomSheet(
                 orderId = selectedOrder!!.orderId,

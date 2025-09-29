@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.AttachMoney
+import androidx.compose.material.icons.filled.Inventory2
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Scale
 import androidx.compose.material3.Card
@@ -66,7 +67,7 @@ fun OrderSummaryCard(order: Order) {
             SummaryItem(
                 label = stringResource(R.string.total_items),
                 value = order.scraps.size.toString(),
-                icon = Icons.Default.List
+                icon = Icons.Default.Inventory2
             )
         }
     }

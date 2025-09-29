@@ -5,12 +5,14 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
+import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.components.NoInternetScreen
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.screen.LoginScreen
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.screen.SignUpScreen
@@ -69,86 +71,110 @@ fun NavigationRoot(
                 is MarketScreen -> {
                     NavEntry(key) {
                         bottomBarState.value = true
-                        screenNameState.value = "Market"
-                        MarketScreen(
-                            innerPadding,
-                            snackBarHostState = snackBarState,
-                            onDetailsClick = { orderId, ownerId ->
-                                backStack.add(
-                                    MarketOrderDetailsKey(
-                                        orderId,
-                                        ownerId,
+                        screenNameState.value = stringResource(R.string.market)
+                        if (isOnline) {
+                            MarketScreen(
+                                innerPadding,
+                                snackBarHostState = snackBarState,
+                                onDetailsClick = { orderId, ownerId ->
+                                    backStack.add(
+                                        MarketOrderDetailsKey(
+                                            orderId,
+                                            ownerId,
+                                        )
                                     )
-                                )
-                            }
-                        )
+                                },
+                            )
+                        }else{
+                            NoInternetScreen()
+                        }
                     }
                 }
 
                 is MarketOrderDetailsKey -> {
                     NavEntry(key) {
                         bottomBarState.value = false
-                        MarketOrderDetailsScreen(
-                            snackBarHostState = snackBarState,
-                            orderId = key.orderId,
-                            orderOwnerId = key.orderOwnerId,
-                            onBackClick = { backStack.remove(key) },
-                            navToSellerProfile = {
-                                backStack.add(ProfileScreen)
-                            }
-                        )
+                        if (isOnline) {
+                            MarketOrderDetailsScreen(
+                                snackBarHostState = snackBarState,
+                                orderId = key.orderId,
+                                orderOwnerId = key.orderOwnerId,
+                                onBackClick = { backStack.remove(key) },
+                                navToSellerProfile = {
+                                    backStack.add(ProfileScreen)
+                                }
+                            )
+                        }else{
+                            NoInternetScreen()
+                        }
                     }
                 }
 
                 is CompanyOrderDetailsKey -> {
                     NavEntry(key) {
                         bottomBarState.value = false
-                        CompanyOrderDetailsScreen(
-                            orderId = key.orderId,
-                            orderOwnerId = key.orderOwnerId,
-                            onBackClick = { backStack.remove(key) }
-                        )
+                        if (isOnline) {
+                            CompanyOrderDetailsScreen(
+                                orderId = key.orderId,
+                                orderOwnerId = key.orderOwnerId,
+                                onBackClick = { backStack.remove(key) }
+                            )
+                        }else{
+                            NoInternetScreen()
+                        }
                     }
                 }
 
                 is SalesOrderDetailsKey -> {
                     NavEntry(key) {
                         bottomBarState.value = false
-                        SalesOrderDetailsScreen(
-                            orderId = key.orderId,
-                            snackBarHostState = snackBarState,
-                            onChatClick = { orderId, sellerId, buyerId, offerId ->
-                                backStack.add(ChatKey(orderId, sellerId, buyerId, offerId))
-                            },
-                            onBackClick = { backStack.remove(key) }
-                        )
+                        if (isOnline) {
+                            SalesOrderDetailsScreen(
+                                orderId = key.orderId,
+                                snackBarHostState = snackBarState,
+                                onChatClick = { orderId, sellerId, buyerId, offerId ->
+                                    backStack.add(ChatKey(orderId, sellerId, buyerId, offerId))
+                                },
+                                onBackClick = { backStack.remove(key) }
+                            )
+                        }else{
+                            NoInternetScreen()
+                        }
                     }
                 }
 
                 is OffersOrderDetailsKey -> {
                     NavEntry(key) {
                         bottomBarState.value = false
-                        OffersOrderDetailsScreen(
-                            snackBarHostState = snackBarState,
-                            orderId = key.orderId,
-                            onChatClick = { orderId, sellerId, buyerId, offerId ->
-                                backStack.add(ChatKey(orderId, sellerId, buyerId, offerId))
-                            },
-                            onBackClick = { backStack.remove(key) }
-                        )
+                        if (isOnline) {
+                            OffersOrderDetailsScreen(
+                                snackBarHostState = snackBarState,
+                                orderId = key.orderId,
+                                onChatClick = { orderId, sellerId, buyerId, offerId ->
+                                    backStack.add(ChatKey(orderId, sellerId, buyerId, offerId))
+                                },
+                                onBackClick = { backStack.remove(key) }
+                            )
+                        }else{
+                            NoInternetScreen()
+                        }
                     }
                 }
 
                 is ChatKey -> {
                     NavEntry(key) {
                         bottomBarState.value = false
-                        ChatScreen(
-                            orderId = key.orderId,
-                            sellerId = key.sellerId,
-                            buyerId = key.buyerId,
-                            offerId = key.offerId,
-                            onBack = { backStack.remove(key) }
-                        )
+                        if (isOnline) {
+                            ChatScreen(
+                                orderId = key.orderId,
+                                sellerId = key.sellerId,
+                                buyerId = key.buyerId,
+                                offerId = key.offerId,
+                                onBack = { backStack.remove(key) }
+                            )
+                        }else{
+                            NoInternetScreen()
+                        }
                     }
                 }
 
@@ -247,26 +273,30 @@ fun NavigationRoot(
                 is OrdersScreen -> {
                     NavEntry(key) {
                         bottomBarState.value = true
-                        screenNameState.value = "Orders"
-                        OrdersScreen(
-                            innerPadding = innerPadding,
-                            snackBarHostState = snackBarState,
-                            onCompanyDetailsClick = { orderId, ownerId ->
-                                backStack.add(
-                                    CompanyOrderDetailsKey(orderId, ownerId)
-                                )
-                            },
-                            onSaleDetailsClick = { orderId ->
-                                backStack.add(
-                                    SalesOrderDetailsKey(orderId)
-                                )
-                            },
-                            onOfferDetailsClick = { orderId ->
-                                backStack.add(
-                                    OffersOrderDetailsKey(orderId)
-                                )
-                            }
-                        )
+                        screenNameState.value = stringResource(R.string.my_orders)
+                        if (isOnline) {
+                            OrdersScreen(
+                                innerPadding = innerPadding,
+                                snackBarHostState = snackBarState,
+                                onCompanyDetailsClick = { orderId, ownerId ->
+                                    backStack.add(
+                                        CompanyOrderDetailsKey(orderId, ownerId)
+                                    )
+                                },
+                                onSaleDetailsClick = { orderId ->
+                                    backStack.add(
+                                        SalesOrderDetailsKey(orderId)
+                                    )
+                                },
+                                onOfferDetailsClick = { orderId ->
+                                    backStack.add(
+                                        OffersOrderDetailsKey(orderId)
+                                    )
+                                }
+                            )
+                        }else{
+                            NoInternetScreen()
+                        }
                     }
                 }
 
@@ -283,6 +313,15 @@ fun NavigationRoot(
                     NavEntry(key) {
                         bottomBarState.value = false
                         HistoryScreen(
+                            onViewDetailsClick = { orderId, orderOwnerId, typeFlag ->
+                                backStack.add(
+                                    when (typeFlag) {
+                                        "SALE" -> CompanyOrderDetailsKey(orderId, orderOwnerId)
+                                        "MY_ORDER" -> SalesOrderDetailsKey(orderId)
+                                        else -> OffersOrderDetailsKey(orderId)
+                                    }
+                                )
+                            },
                             onBackClick = { backStack.remove(key) }
                         )
                     }

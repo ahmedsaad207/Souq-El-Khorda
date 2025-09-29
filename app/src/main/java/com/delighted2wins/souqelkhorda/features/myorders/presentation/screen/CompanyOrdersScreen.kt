@@ -12,9 +12,12 @@ import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
+import com.delighted2wins.souqelkhorda.core.components.EmptyCart
 import com.delighted2wins.souqelkhorda.core.model.Order
 
 @Composable
@@ -38,26 +41,19 @@ fun CompanyOrdersScreen(
                     }
                 }
             }
+
             error != null -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    DirectionalText(
-                        text = error,
-                        contentIsRtl = systemIsRtl,
-                        style = typography.titleLarge.copy(
-                            color = MaterialTheme.colorScheme.error,
-                            fontWeight = FontWeight.Bold
-                        ),
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .padding(16.dp)
-                    )
-                }
+                EmptyCart(
+                    messageInfo = error,
+                )
             }
+
+            orders.isEmpty() -> {
+                EmptyCart(
+                    messageInfo = stringResource(R.string.no_orders_found),
+                )
+            }
+
             else -> {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),

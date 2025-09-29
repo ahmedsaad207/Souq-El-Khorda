@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Badge
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,6 +24,14 @@ fun FilterWithBadge(
     FilterChip(
         selected = selected,
         onClick = onClick,
+        colors = FilterChipDefaults.filterChipColors(
+            containerColor = if (selected)
+                MaterialTheme.colorScheme.secondary
+            else
+                MaterialTheme.colorScheme.surfaceVariant,
+            labelColor = MaterialTheme.colorScheme.secondary,
+            selectedContainerColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.75f),
+        ),
         label = {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(

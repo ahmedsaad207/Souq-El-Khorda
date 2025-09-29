@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
 import com.delighted2wins.souqelkhorda.features.history.domain.usecase.GetUserOrdersUseCase
 import com.delighted2wins.souqelkhorda.features.history.presentation.contract.HistoryContract
+import com.delighted2wins.souqelkhorda.features.profile.domain.usecase.GetUserProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,13 +16,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
-    private val getUserOrdersUseCase: GetUserOrdersUseCase
+    private val getUserOrdersUseCase: GetUserOrdersUseCase,
+    private val getUserProfileUseCase: GetUserProfileUseCase
 ): ViewModel() {
     private val _state = MutableStateFlow(HistoryContract.State())
     val state = _state.asStateFlow()
 
     init {
         loadOrders()
+        loadUserId()
     }
 
     fun handleIntent(intent: HistoryContract.Intent) {
@@ -53,6 +56,17 @@ class HistoryViewModel @Inject constructor(
                 _state.update { it.copy(isLoading = false,error = it.error) }
             }
 
+        }
+    }
+
+    private fun loadUserId() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = getUserProfileUseCase()
+            result.onSuccess { user ->
+                _state.update { it.copy(userId = user.id) }
+            }.onFailure {
+
+            }
         }
     }
 

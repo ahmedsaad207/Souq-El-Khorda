@@ -18,9 +18,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -38,9 +40,15 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.app.theme.Til
 import com.delighted2wins.souqelkhorda.core.components.CachedUserImage
 import com.delighted2wins.souqelkhorda.features.chat.presentation.component.ShimmerMessagePlaceholder
@@ -62,6 +70,7 @@ fun ChatScreen(
     val listState = rememberLazyListState()
     val systemUiController = rememberSystemUiController()
     val useDarkIcons: Boolean = !isSystemInDarkTheme()
+    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
     LaunchedEffect(orderId, buyerId, sellerId, offerId) {
         viewModel.init(
@@ -115,7 +124,10 @@ fun ChatScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(
+                            if (isRtl) Icons.Default.ArrowForward else Icons.Default.ArrowBack,
+                            contentDescription = "Back"
+                        )
                     }
                 }
             )
@@ -144,7 +156,7 @@ fun ChatScreen(
                             contentAlignment = if (isMe) Alignment.CenterEnd else Alignment.CenterStart
                         ) {
                             Surface(
-                                color = if (isMe) MaterialTheme.colorScheme.primary else Color.LightGray,
+                                color = if (isMe) MaterialTheme.colorScheme.secondary else Color.LightGray,
                                 shape = RoundedCornerShape(12.dp),
                                 tonalElevation = 2.dp,
                                 modifier = Modifier.padding(4.dp)
@@ -185,8 +197,8 @@ fun ChatScreen(
                         cursorColor = Til,
                         focusedTextColor = MaterialTheme.colorScheme.onSurface,
                         unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-                        focusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant
+                        focusedPlaceholderColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface
                     )
                 )
                 IconButton(
@@ -196,11 +208,28 @@ fun ChatScreen(
                         }
                     }
                 ) {
-                    Icon(
-                        Icons.Default.Send,
-                        contentDescription = "Send",
-                        tint = if (state.messageText.isNotBlank()) Til else Color.Gray
-                    )
+                    Box(
+                        modifier = Modifier
+                            .size(62.dp)
+                            .clip(CircleShape)
+                            .background(
+                                if (state.messageText.isNotBlank())
+                                    MaterialTheme.colorScheme.secondary
+                                else
+                                    Color.LightGray
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector =  Icons.Default.Send,
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier
+                                .graphicsLayer {
+                                    scaleX = if (isRtl) -1f else 1f
+                                }
+                        )
+                    }
                 }
             }
         }

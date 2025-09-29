@@ -7,7 +7,7 @@ fun MainUserDto.toMarketUser(): MarketUser {
     return MarketUser(
         id = id,
         name = name,
-        location = "$governorate, $address",
+        location = "$governorate, $area",
         imageUrl = userImage
     )
 }
