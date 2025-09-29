@@ -13,6 +13,7 @@ interface ProfileContract {
     )
 
     data class State(
+        val userId: String = "",
         val name: ProfileFieldState = ProfileFieldState(),
         val email: ProfileFieldState = ProfileFieldState(),
         val phone: ProfileFieldState = ProfileFieldState(),
@@ -26,6 +27,8 @@ interface ProfileContract {
         val completedCount: Int = 0,
         val pendingCount: Int = 0,
         val cancelledCount: Int = 0,
+
+        val isBuyer: Boolean = false,
 
         val generalError: String? = null
     )
@@ -59,6 +62,8 @@ interface ProfileContract {
         ) : Intent()
 
         data class ChangeLanguage(val lang: String) : Intent()
+
+        data object LoadBuyerState : Intent()
 
         data object Logout : Intent()
         data object NavigateToHistory : Intent()

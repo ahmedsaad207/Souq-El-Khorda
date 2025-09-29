@@ -3,6 +3,7 @@ package com.delighted2wins.souqelkhorda.features.profile.presentation.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -68,7 +69,7 @@ fun ProfileHeader(
                     modifier = Modifier
                         .align(Alignment.TopStart)
                         .clip(RoundedCornerShape(bottomEnd = 8.dp))
-                        .background(MaterialTheme.colorScheme.secondaryContainer)
+                        .background(if (isSystemInDarkTheme()) Color(0xFFFFD54F) else Color(0xFFFFF176))
                         .clickable { onBuyerClick() }
                         .padding(horizontal = 10.dp, vertical = 2.dp),
                     contentAlignment = Alignment.Center
