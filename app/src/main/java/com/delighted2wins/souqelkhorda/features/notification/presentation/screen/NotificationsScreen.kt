@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
@@ -81,9 +82,9 @@ fun NotificationsScreen(
                         items(6) {
                             Column {
                                 NotificationCardShimmer()
-                                Divider(
-                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
-                                    thickness = 1.dp
+                                HorizontalDivider(
+                                    thickness = 1.dp,
+                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
                                 )
                             }
                         }
@@ -127,9 +128,9 @@ fun NotificationsScreen(
                                             }
                                         )
                                     }
-                                    Divider(
-                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
-                                        thickness = 1.dp
+                                    HorizontalDivider(
+                                        thickness = 1.dp,
+                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
                                     )
                                 }
                             }
