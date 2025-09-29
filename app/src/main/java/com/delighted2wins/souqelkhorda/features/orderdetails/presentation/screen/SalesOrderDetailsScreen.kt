@@ -30,9 +30,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.delighted2wins.souqelkhorda.R
+import com.delighted2wins.souqelkhorda.core.components.EmptyCart
 import com.delighted2wins.souqelkhorda.core.enums.BottomSheetActionType
 import com.delighted2wins.souqelkhorda.core.model.Offer
 import com.delighted2wins.souqelkhorda.core.model.Order
@@ -119,7 +122,8 @@ fun SalesOrderDetailsScreen(
                 selectedBuyerId = ""
                 actionType = null
             },
-            sheetState = sheetState
+            sheetState = sheetState,
+            containerColor = MaterialTheme.colorScheme.surface
         ) {
             UserActionsBottomSheet(
                 orderId = selectedOrderId,
@@ -187,7 +191,6 @@ fun SalesOrderDetailsScreen(
                 order = state.order!!,
                 acceptedOffers = state.acceptedOffers,
                 pendingOffers = state.pendingOffers,
-                isRtl = isRtl,
                 onBackClick = onBackClick,
                 onChatClick = { sellerId, buyerId, orderId, offerId ->
                     viewModel.onIntent(
@@ -235,16 +238,7 @@ fun SalesOrderDetailsScreen(
         }
 
         else -> {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = if (isRtl) "لا توجد بيانات" else "No data available",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.error
-                )
-            }
+            EmptyCart(messageInfo = stringResource(R.string.no_orders_found))
         }
     }
 }
@@ -252,7 +246,6 @@ fun SalesOrderDetailsScreen(
 @Composable
 private fun SalesOrderDetailsUI(
     order: Order,
-    isRtl: Boolean,
     acceptedOffers: List<Pair<Offer, MarketUser>>,
     pendingOffers: List<Pair<Offer, MarketUser>>,
     onBackClick: () -> Unit = {},
@@ -268,7 +261,7 @@ private fun SalesOrderDetailsUI(
     ) {
         item {
             OrderDetailsTopBar(
-                title = order.title,
+                title = stringResource(R.string.details),
                 onBackClick = onBackClick
             )
         }
@@ -279,7 +272,7 @@ private fun SalesOrderDetailsUI(
                 description = order.description,
                 price = order.price.toString(),
                 scraps = order.scraps,
-                status = order.status,
+                status = order.status.name,
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
         }
@@ -287,7 +280,7 @@ private fun SalesOrderDetailsUI(
         item {
             SectionTitle(
                 icon = Icons.Outlined.Inventory2,
-                title = "Scraps",
+                title = stringResource(R.string.scraps),
                 count = order.scraps.size,
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
@@ -297,14 +290,7 @@ private fun SalesOrderDetailsUI(
             items(order.scraps) { scrap -> ScrapItemCard(scrap = scrap) }
         } else {
             item {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 16.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("No Scraps Item Found", color = Color.Gray)
-                }
+                EmptyCart(messageInfo = stringResource(R.string.no_scraps_available))
             }
         }
 
@@ -312,7 +298,7 @@ private fun SalesOrderDetailsUI(
             item {
                 SectionTitle(
                     icon = Icons.Filled.AttachMoney,
-                    title = if (isRtl) "مناقشة العروض" else "Discussion Offers",
+                    title = stringResource(R.string.discussion_offers),
                     count = acceptedOffers.size,
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )
@@ -340,7 +326,7 @@ private fun SalesOrderDetailsUI(
             item {
                 SectionTitle(
                     icon = Icons.Filled.AttachMoney,
-                    title = if (isRtl) "العروض" else "Offers",
+                    title = stringResource(R.string.pending_offers),
                     count = pendingOffers.size,
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )
@@ -353,6 +339,23 @@ private fun SalesOrderDetailsUI(
                     onAccept = { onAccept(offer.offerId, offer.buyerId) },
                     onReject = { onReject(offer.orderId, offer.offerId, offer.buyerId) }
                 )
+            }
+        }
+
+        if (pendingOffers.isEmpty() && acceptedOffers.isEmpty()) {
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        stringResource(R.string.no_offers_found),
+                        style = MaterialTheme.typography.titleLarge,
+                        color = Color.Gray
+                    )
+                }
             }
         }
 

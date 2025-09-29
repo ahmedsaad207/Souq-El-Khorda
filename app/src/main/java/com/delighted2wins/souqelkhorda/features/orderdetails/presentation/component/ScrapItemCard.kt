@@ -4,8 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,10 +24,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.delighted2wins.souqelkhorda.R
+import com.delighted2wins.souqelkhorda.core.components.DirectionalText
+import com.delighted2wins.souqelkhorda.core.enums.MeasurementType
+import com.delighted2wins.souqelkhorda.core.enums.ScrapType
 import com.delighted2wins.souqelkhorda.core.model.Scrap
 
 @Composable
@@ -33,6 +42,11 @@ fun ScrapItemCard(
     scrap: Scrap,
     modifier: Modifier = Modifier
 ) {
+    val scrapType = ScrapType.fromCategory(scrap.category)
+    val categoryLabel = scrapType.getLabel(context = LocalContext.current)
+    val measurementEnum = MeasurementType.entries.firstOrNull { it.name.equals(scrap.unit, true) }
+    val measurementLabel = measurementEnum?.getLabel(LocalContext.current) ?: ""
+
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -59,52 +73,57 @@ fun ScrapItemCard(
                 contentScale = ContentScale.Crop
             )
 
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    AssistChip(
-                        onClick = {},
-                        label = { Text(scrap.category) },
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Default.Category,
-                                contentDescription = null
-                            )
-                        },
-                        enabled = false
-                    )
-                    AssistChip(
-                        onClick = {},
-                        label = { Text(scrap.amount) },
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Default.Scale,
-                                contentDescription = null
-                            )
-                        },
-                        enabled = false
-                    )
-                }
+            Column(modifier = Modifier.fillMaxWidth()) {
+                AssistChip(
+                    onClick = {},
+                    label = { Text(categoryLabel) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Category,
+                            contentDescription = null,
+                            tint = scrapType.tint
+                        )
+                    },
+                    enabled = false
+                )
+                AssistChip(
+                    onClick = {},
+                    label = { Text("${scrap.amount} $measurementLabel") },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Scale,
+                            contentDescription = null,
+                            tint = Color.Blue.copy(alpha = 0.8f),
+                        )
+                    },
+                    enabled = false
+                )
+            }
+        }
 
-                if (scrap.description.isNotEmpty()) {
-                    Text(
-                        text = scrap.description,
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.Normal,
-                        maxLines = 3
-                    )
-                }else {
-                    Text(
-                        text = "No Description",
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.Normal,
-                        maxLines = 3
-                    )
-                }
+        Column(
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(12.dp)
+                .fillMaxWidth(),
+        ) {
+            if (scrap.description.isNotEmpty()) {
+                DirectionalText(
+                    text = scrap.description,
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.Normal
+                    ),
+                    maxLines = 3,
+                    contentIsRtl = false
+                )
+            } else {
+                Text(
+                    text = stringResource(R.string.no_description_available),
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Normal,
+                    maxLines = 3
+                )
             }
         }
     }

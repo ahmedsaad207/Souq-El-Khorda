@@ -203,8 +203,35 @@
     <string name="order_source_company">Company</string>
     <string name="no_description_available">No description available</string>
     <string name="my_orders">My Orders</string>
-
-
+    <string name="my_offer">My Offer</string>
+    <string name="no_scraps_available">No Scraps Available</string>
+    <string name="scraps">Scraps</string>
+    <string name="no_data_available">No data available</string>
+    <string name="discussion_offers">Discussion Offers</string>
+    <string name="pending_offers">Pending Offers</string>
+    <string name="no_offers_found">No offers found</string>
+    <string name="company_name">Souq El Khorda Company</string>
+    <string name="company_address">Address: Alexandria, Egypt</string>
+    <string name="company_email">Email: info@souqelkhorda.com</string>
+    <string name="seller_information">Seller Information</string>
+    <string name="status">Status</string>
+    <string name="no_scraps_found">No scraps item found</string>
+    <string name="amount_label">Amount</string>
+    <string name="description_label">Description</string>
+    <string name="images_label">Images</string>
+    <string name="date_label">Date</string>
+    <string name="order_id_label">Order ID</string>
+    <string name="company_review_order">The company will review your order and will contact you soon</string>
+    <string name="chat">Chat</string>
+    <string name="completed">Completed</string>
+    <string name="update_offer">Update Offer</string>
+    <string name="offer_price">Price: %1$s</string>
+    <string name="mark_received">I\'m Received</string>
+    <string name="no_actions_available">No actions available</string>
+    <string name="label_amount">Amount</string>
+    <string name="enter_amount">Please enter an amount</string>
+    <string name="invalid_amount">Invalid amount</string>
+    <string name="amount_greater_than_zero">Amount must be greater than zero</string>
 
 
 

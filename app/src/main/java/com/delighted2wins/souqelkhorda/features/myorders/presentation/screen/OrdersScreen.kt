@@ -207,7 +207,8 @@ fun OrdersScreen(
                     selectedOrderId = ""
                     isBottomSheetVisible = false
                 },
-                sheetState = sheetState
+                sheetState = sheetState,
+                containerColor = MaterialTheme.colorScheme.surface
             ) {
                 UserActionsBottomSheet(
                     orderId = selectedOrderId,
