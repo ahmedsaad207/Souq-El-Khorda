@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.FreeUserCase
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.LogoutUseCase
+import com.delighted2wins.souqelkhorda.features.buyers.domain.use_case.IsBuyersCase
 import com.delighted2wins.souqelkhorda.features.history.domain.usecase.GetUserOrdersUseCase
 import com.delighted2wins.souqelkhorda.features.profile.domain.entity.ProfileMessagesEnum
 import com.delighted2wins.souqelkhorda.features.profile.domain.usecase.GetUserProfileUseCase
@@ -30,6 +31,7 @@ class ProfileViewModel @Inject constructor(
     private val freeUserCase: FreeUserCase,
     private val setLanguageUseCase: SetLanguageUseCase,
     private val getUserOrdersUseCase: GetUserOrdersUseCase,
+    private val isBuyersCase: IsBuyersCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ProfileContract.State())
@@ -41,12 +43,14 @@ class ProfileViewModel @Inject constructor(
     init {
         loadProfile()
         loadOrders()
+        loadBuyerState()
     }
 
     fun handleIntent(intent: ProfileContract.Intent) {
         when (intent) {
             is ProfileContract.Intent.LoadProfile -> loadProfile()
             is ProfileContract.Intent.LoadOrders -> loadOrders()
+            is ProfileContract.Intent.LoadBuyerState -> loadBuyerState()
 
             is ProfileContract.Intent.ChangeName -> changeName(intent.name)
             is ProfileContract.Intent.ChangePhone -> changePhone(intent.phone)
@@ -90,6 +94,7 @@ class ProfileViewModel @Inject constructor(
                 _state.update {
                     it.copy(
                         isLoadingProfile = false,
+                        userId = user.id,
                         name = ProfileContract.ProfileFieldState(value = user.name),
                         email = ProfileContract.ProfileFieldState(value = user.email),
                         phone = ProfileContract.ProfileFieldState(value = user.phone),
@@ -106,6 +111,15 @@ class ProfileViewModel @Inject constructor(
                         generalError = it.generalError
                     )
                 }
+            }
+        }
+    }
+
+    private fun loadBuyerState() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = isBuyersCase(_state.value.userId)
+            if (result) {
+                _state.update { it.copy(isBuyer = true) }
             }
         }
     }

@@ -313,6 +313,15 @@ fun NavigationRoot(
                     NavEntry(key) {
                         bottomBarState.value = false
                         HistoryScreen(
+                            onViewDetailsClick = { orderId, orderOwnerId, typeFlag ->
+                                backStack.add(
+                                    when (typeFlag) {
+                                        "SALE" -> CompanyOrderDetailsKey(orderId, orderOwnerId)
+                                        "MY_ORDER" -> SalesOrderDetailsKey(orderId)
+                                        else -> OffersOrderDetailsKey(orderId)
+                                    }
+                                )
+                            },
                             onBackClick = { backStack.remove(key) }
                         )
                     }

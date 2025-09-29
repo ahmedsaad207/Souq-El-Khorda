@@ -42,7 +42,7 @@ import com.delighted2wins.souqelkhorda.features.history.presentation.viewmodel.H
 @Composable
 fun HistoryScreen(
     viewModel: HistoryViewModel = hiltViewModel(),
-    onViewDetailsClick: () -> Unit = {},
+    onViewDetailsClick: (orderId: String, orderOwnerId: String, typeFlag: String) -> Unit = { _, _, _ -> },
     onBackClick: () -> Unit = {},
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -148,7 +148,14 @@ fun HistoryScreen(
                                     date = order.date.toRelativeTime(context),
                                     items = order.scraps,
                                     expanded = false,
-                                    onViewDetails = { }
+                                    onViewDetails = {
+                                        val typeFlag = when {
+                                            order.type == OrderType.SALE -> "SALE"
+                                            order.userId == state.userId -> "MY_ORDER"
+                                            else -> "OFFER"
+                                        }
+                                        onViewDetailsClick(order.orderId, order.userId, typeFlag)
+                                    }
                                 )
                             }
                         }
