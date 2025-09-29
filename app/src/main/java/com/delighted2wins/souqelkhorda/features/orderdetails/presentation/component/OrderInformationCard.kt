@@ -18,10 +18,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.delighted2wins.souqelkhorda.R
+import com.delighted2wins.souqelkhorda.core.components.DirectionalText
 import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
 import com.delighted2wins.souqelkhorda.core.model.Scrap
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.CategoryChips
@@ -33,9 +37,10 @@ fun OrderInformationCard(
     description: String,
     scraps: List<Scrap>,
     price: String,
-    status: OrderStatus = OrderStatus.PENDING,
+    status: String?,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     Card(
         modifier = modifier
             .fillMaxWidth(),
@@ -56,22 +61,24 @@ fun OrderInformationCard(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(
+                    DirectionalText(
                         text = title,
                         style = MaterialTheme.typography.titleLarge.copy(
                             fontWeight = FontWeight.Bold,
                             fontSize = 20.sp
-                        )
+                        ),
+                        contentIsRtl = false
                     )
                 }
 
                 Spacer(modifier = Modifier.height(6.dp))
 
-                Text(
+                DirectionalText(
                     text = description,
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 3
+                    maxLines = 3,
+                    contentIsRtl = false
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -87,30 +94,21 @@ fun OrderInformationCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "EGP $price",
+                        text = context.getString(R.string.price_label, price.toInt()),
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.Bold,
                             fontSize = 24.sp
                         ),
-                        color = MaterialTheme.colorScheme.primary
+                        color = MaterialTheme.colorScheme.secondary
                     )
                     Spacer(modifier = Modifier.width(12.dp))
-                    StatusChip(status = status.name)
+
+                    status?.takeIf { it.isNotBlank() }?.let {
+                        StatusChip(status = it)
+                    }
                 }
             }
         }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun OrderInformationCardPreview() {
-    OrderInformationCard(
-        title = "Mixed Metal Scrap Collection",
-        description = "We collect mixed metal scrap from households and small businesses. Pickup available within 20 km.",
-        price = "3,500",
-        status = OrderStatus.COMPLETED,
-        scraps = emptyList(),
-        modifier = Modifier.padding(16.dp)
-    )
-}

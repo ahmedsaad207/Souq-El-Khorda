@@ -32,7 +32,7 @@ fun SectionTitle(
         Icon(
             imageVector = icon,
             contentDescription = "$title Icon",
-            tint = MaterialTheme.colorScheme.primary,
+            tint = MaterialTheme.colorScheme.secondary,
             modifier = Modifier.size(20.dp)
         )
         Spacer(modifier = Modifier.width(10.dp))
@@ -47,7 +47,7 @@ fun SectionTitle(
             Surface(
                 color = MaterialTheme.colorScheme.surface,
                 shape = MaterialTheme.shapes.small,
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
                 tonalElevation = 4.dp,
                 shadowElevation = 4.dp
             ) {
@@ -59,7 +59,7 @@ fun SectionTitle(
                         text = count.toString(),
                         style = MaterialTheme.typography.labelMedium.copy(
                             fontWeight = FontWeight.ExtraBold,
-                            color = MaterialTheme.colorScheme.primary
+                            color = MaterialTheme.colorScheme.secondary
                         )
                     )
                 }

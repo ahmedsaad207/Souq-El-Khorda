@@ -199,6 +199,31 @@
     <string name="order_source_company">الشركة</string>
     <string name="no_description_available">لا يوجد وصف متاح</string>
     <string name="my_orders">طلباتي</string>
+    <string name="my_offer">عرضي</string>
+    <string name="no_scraps_available">لا توجد خردة متاحة</string>
+    <string name="scraps">الخردة</string>
+    <string name="no_data_available">لا توجد بيانات</string>
+    <string name="discussion_offers">مناقشة العروض</string>
+    <string name="pending_offers">العروض المعلقة</string>
+    <string name="no_offers_found">لا توجد عروض</string>
+    <string name="company_name">شركة سوق الخردة</string>
+    <string name="company_address">العنوان: الإسكندرية، مصر</string>
+    <string name="company_email">البريد: info@souqelkhorda.com</string>
+    <string name="seller_information">معلومات البائع</string>
+    <string name="status">الحالة</string>
+    <string name="no_scraps_found">لا توجد خردة</string>
+    <string name="amount_label">الكمية</string>
+    <string name="description_label">الوصف</string>
+    <string name="date_label">التاريخ</string>
+    <string name="images_label">الصور</string>
+    <string name="order_id_label">رقم الطلب</string>
+    <string name="company_review_order">ستقوم الشركة بمراجعة طلبك وسيتواصلون معك قريبًا</string>
+    <string name="chat">محادثة</string>
+    <string name="completed">مكتمل</string>
+    <string name="update_offer">تحديث العرض</string>
+    <string name="offer_price">السعر: %1$s</string>
+    <string name="mark_received">تم الاستلام</string>
+    <string name="no_actions_available">لا توجد إجراءات متاحة</string>
 
 
 
