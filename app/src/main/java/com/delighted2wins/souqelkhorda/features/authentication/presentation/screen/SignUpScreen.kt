@@ -146,7 +146,7 @@ fun SignUpScreen(
             CustomDropdownMenu(
                 value = governorate,
                 onValueChange = {
-                    governorate =  it
+                    governorate = it
                 },
                 label = stringResource(R.string.governorate),
                 options = governorates,
