@@ -5,6 +5,7 @@ import com.delighted2wins.souqelkhorda.features.history.domain.entity.HistoryOrd
 interface HistoryContract {
 
     data class State(
+        val userId: String = "",
         val isLoading: Boolean = false,
         val orders: List<HistoryOrder> = emptyList(),
         val completedCount: Int = 0,

@@ -76,7 +76,7 @@ fun ProfileHeader(
                 ) {
                     Text(
                         text = "Buyer",
-                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                        color = Color.Black,
                         style = AppTypography.labelSmall.copy(
                             fontWeight = FontWeight.Bold
                         )
