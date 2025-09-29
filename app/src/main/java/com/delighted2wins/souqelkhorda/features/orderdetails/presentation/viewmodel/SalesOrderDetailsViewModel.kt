@@ -23,7 +23,6 @@ import com.delighted2wins.souqelkhorda.features.orderdetails.domain.usecase.GetO
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.SalesOrderDetailsEffect
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.SalesOrderDetailsIntent
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.SalesOrderDetailsState
-import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.DeleteCompanyOrderUseCase
 import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.DeleteMarketOrderUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async

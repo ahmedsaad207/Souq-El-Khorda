@@ -24,25 +24,18 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Language
-import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.SheetValue
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -59,12 +52,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.components.TowIconAppBar
+import com.delighted2wins.souqelkhorda.core.enums.AuthMsgEnum
 import com.delighted2wins.souqelkhorda.core.enums.GovernorateEnum
 import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
 import com.delighted2wins.souqelkhorda.core.extensions.convertNumbersToArabic
@@ -84,10 +77,11 @@ fun ProfileScreen(
     snackBarState: SnackbarHostState,
     onBackClick: () -> Unit = {},
     onLogoutClick: () -> Unit = {},
-    onHistoryClick: () -> Unit = {}
+    onHistoryClick: () -> Unit = {},
+    isOnline: Boolean
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-
+    val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val colors = MaterialTheme.colorScheme
 
@@ -128,7 +122,13 @@ fun ProfileScreen(
                     imageUrl = state.imageUrl.value,
                     isBuyer = state.isBuyer,
                     onEditAvatar = {
-                        launcher.launch(arrayOf("image/*"))
+                        if (isOnline) {
+                            launcher.launch(arrayOf("image/*"))
+                        } else {
+                            scope.launch {
+                                snackBarState.showSnackbar(AuthMsgEnum.NOINTRENET.getMsg())
+                            }
+                        }
                     }
                 )
                 TowIconAppBar(
@@ -162,9 +162,12 @@ fun ProfileScreen(
                 } else {
                     ProfileStats(
                         stats = listOf(
-                            state.cancelledCount.toString().convertNumbersToArabic() to OrderStatus.CANCELLED.getLocalizedValue(),
-                            state.pendingCount.toString().convertNumbersToArabic() to OrderStatus.PENDING.getLocalizedValue(),
-                            state.completedCount.toString().convertNumbersToArabic() to OrderStatus.COMPLETED.getLocalizedValue()
+                            state.cancelledCount.toString()
+                                .convertNumbersToArabic() to OrderStatus.CANCELLED.getLocalizedValue(),
+                            state.pendingCount.toString()
+                                .convertNumbersToArabic() to OrderStatus.PENDING.getLocalizedValue(),
+                            state.completedCount.toString()
+                                .convertNumbersToArabic() to OrderStatus.COMPLETED.getLocalizedValue()
                         )
                     )
                 }
@@ -181,11 +184,17 @@ fun ProfileScreen(
                     state = state.name,
                     onValueChange = { viewModel.handleIntent(ProfileContract.Intent.ChangeName(it)) },
                     onStartEdit = {
-                        viewModel.handleIntent(ProfileContract.Intent.StartEditing({ it.name }) { st, f ->
-                            st.copy(
-                                name = f
-                            )
-                        })
+                        if (isOnline) {
+                            viewModel.handleIntent(ProfileContract.Intent.StartEditing({ it.name }) { st, f ->
+                                st.copy(
+                                    name = f
+                                )
+                            })
+                        } else {
+                            scope.launch {
+                                snackBarState.showSnackbar(AuthMsgEnum.NOINTRENET.getMsg())
+                            }
+                        }
                     },
                     onCancel = {
                         viewModel.handleIntent(ProfileContract.Intent.CancelEditing({ it.name }) { st, f ->
@@ -204,11 +213,17 @@ fun ProfileScreen(
                     state = state.phone,
                     onValueChange = { viewModel.handleIntent(ProfileContract.Intent.ChangePhone(it)) },
                     onStartEdit = {
-                        viewModel.handleIntent(ProfileContract.Intent.StartEditing({ it.phone }) { st, f ->
-                            st.copy(
-                                phone = f
-                            )
-                        })
+                        if (isOnline) {
+                            viewModel.handleIntent(ProfileContract.Intent.StartEditing({ it.phone }) { st, f ->
+                                st.copy(
+                                    phone = f
+                                )
+                            })
+                        } else {
+                            scope.launch {
+                                snackBarState.showSnackbar(AuthMsgEnum.NOINTRENET.getMsg())
+                            }
+                        }
                     },
                     onCancel = {
                         viewModel.handleIntent(ProfileContract.Intent.CancelEditing({ it.phone }) { st, f ->
@@ -227,16 +242,28 @@ fun ProfileScreen(
                     state = state.governorate,
                     options = GovernorateEnum.getAllGovernorate(),
                     onValueChange = {
-                        viewModel.handleIntent(
-                            ProfileContract.Intent.ChangeGovernorate(it)
-                        )
+                        if (isOnline) {
+                            viewModel.handleIntent(
+                                ProfileContract.Intent.ChangeGovernorate(it)
+                            )
+                        } else {
+                            scope.launch {
+                                snackBarState.showSnackbar(AuthMsgEnum.NOINTRENET.getMsg())
+                            }
+                        }
                     },
                     onStartEdit = {
-                        viewModel.handleIntent(
-                            ProfileContract.Intent.StartEditing({ it.governorate }) { st, f ->
-                                st.copy(governorate = f)
+                        if (isOnline) {
+                            viewModel.handleIntent(
+                                ProfileContract.Intent.StartEditing({ it.governorate }) { st, f ->
+                                    st.copy(governorate = f)
+                                }
+                            )
+                        } else {
+                            scope.launch {
+                                snackBarState.showSnackbar(AuthMsgEnum.NOINTRENET.getMsg())
                             }
-                        )
+                        }
                     },
                     onCancel = {
                         viewModel.handleIntent(
@@ -257,11 +284,17 @@ fun ProfileScreen(
                     state = state.area,
                     onValueChange = { viewModel.handleIntent(ProfileContract.Intent.ChangeArea(it)) },
                     onStartEdit = {
-                        viewModel.handleIntent(ProfileContract.Intent.StartEditing({ it.area }) { st, f ->
-                            st.copy(
-                                area = f
-                            )
-                        })
+                        if (isOnline) {
+                            viewModel.handleIntent(ProfileContract.Intent.StartEditing({ it.area }) { st, f ->
+                                st.copy(
+                                    area = f
+                                )
+                            })
+                        } else {
+                            scope.launch {
+                                snackBarState.showSnackbar(AuthMsgEnum.NOINTRENET.getMsg())
+                            }
+                        }
                     },
                     onCancel = {
                         viewModel.handleIntent(ProfileContract.Intent.CancelEditing({ it.area }) { st, f ->
@@ -280,11 +313,17 @@ fun ProfileScreen(
                     state = state.address,
                     onValueChange = { viewModel.handleIntent(ProfileContract.Intent.ChangeAddress(it)) },
                     onStartEdit = {
-                        viewModel.handleIntent(ProfileContract.Intent.StartEditing({ it.address }) { st, f ->
-                            st.copy(
-                                address = f
-                            )
-                        })
+                        if (isOnline) {
+                            viewModel.handleIntent(ProfileContract.Intent.StartEditing({ it.address }) { st, f ->
+                                st.copy(
+                                    address = f
+                                )
+                            })
+                        } else {
+                            scope.launch {
+                                snackBarState.showSnackbar(AuthMsgEnum.NOINTRENET.getMsg())
+                            }
+                        }
                     },
                     onCancel = {
                         viewModel.handleIntent(ProfileContract.Intent.CancelEditing({ it.address }) { st, f ->
@@ -304,9 +343,25 @@ fun ProfileScreen(
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
-                HistoryButton(onClick = { viewModel.handleIntent(ProfileContract.Intent.NavigateToHistory) })
+                HistoryButton(onClick = {
+                    if (isOnline) {
+                        viewModel.handleIntent(ProfileContract.Intent.NavigateToHistory)
+                    } else {
+                        scope.launch {
+                            snackBarState.showSnackbar(AuthMsgEnum.NOINTRENET.getMsg())
+                        }
+                    }
+                })
                 Spacer(modifier = Modifier.height(16.dp))
-                LogoutButton(onLogout = { viewModel.handleIntent(ProfileContract.Intent.Logout) })
+                LogoutButton(onLogout = {
+                    if (isOnline) {
+                        viewModel.handleIntent(ProfileContract.Intent.Logout)
+                    } else {
+                        scope.launch {
+                            snackBarState.showSnackbar(AuthMsgEnum.NOINTRENET.getMsg())
+                        }
+                    }
+                })
             }
         }
     }
@@ -428,13 +483,24 @@ fun EditableDropdownField(
                 {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         if (state.isLoading) {
-                            CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(20.dp),
+                                strokeWidth = 2.dp
+                            )
                         } else {
                             IconButton(onClick = onSave) {
-                                Icon(imageVector = Icons.Default.Check, contentDescription = "Save", tint = colors.primary)
+                                Icon(
+                                    imageVector = Icons.Default.Check,
+                                    contentDescription = "Save",
+                                    tint = colors.primary
+                                )
                             }
                             IconButton(onClick = onCancel) {
-                                Icon(imageVector = Icons.Default.Close, contentDescription = "Cancel", tint = colors.error)
+                                Icon(
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = "Cancel",
+                                    tint = colors.error
+                                )
                             }
                         }
                     }
@@ -449,7 +515,11 @@ fun EditableDropdownField(
                 shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
                 containerColor = MaterialTheme.colorScheme.surface
             ) {
-                Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ) {
                     Text(text = label, style = MaterialTheme.typography.titleMedium)
                 }
                 Divider()
@@ -477,7 +547,11 @@ fun EditableDropdownField(
                             )
                             if (isSelected) {
                                 Spacer(modifier = Modifier.weight(1f))
-                                Icon(imageVector = Icons.Default.Check, contentDescription = null, tint = colors.primary)
+                                Icon(
+                                    imageVector = Icons.Default.Check,
+                                    contentDescription = null,
+                                    tint = colors.primary
+                                )
                             }
                         }
                     }
@@ -493,9 +567,18 @@ fun EditableDropdownField(
         if (state.error != null) {
             Spacer(modifier = Modifier.height(6.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(imageVector = Icons.Default.Error, contentDescription = null, tint = colors.error, modifier = Modifier.size(16.dp))
+                Icon(
+                    imageVector = Icons.Default.Error,
+                    contentDescription = null,
+                    tint = colors.error,
+                    modifier = Modifier.size(16.dp)
+                )
                 Spacer(modifier = Modifier.width(6.dp))
-                Text(text = state.error, color = colors.error, style = MaterialTheme.typography.bodySmall)
+                Text(
+                    text = state.error,
+                    color = colors.error,
+                    style = MaterialTheme.typography.bodySmall
+                )
             }
         }
     }

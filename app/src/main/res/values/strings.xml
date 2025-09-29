@@ -268,6 +268,8 @@
     <string name="nothing_to_see_here_yet">Nothing to see here… yet!</string>
     <string name="you_don_t_have_any_transactions_yet">You don’t have any transactions yet</string>
     <string name="order_items">Order Items (%1$d)</string>
+    <string name="no_internet_message">no internet</string>
+    <string name="nearest_buyers">Nearest Buyers</string>
 
 
 </resources>

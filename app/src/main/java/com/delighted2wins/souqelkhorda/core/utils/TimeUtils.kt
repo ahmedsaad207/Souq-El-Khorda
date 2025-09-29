@@ -3,7 +3,8 @@ package com.delighted2wins.souqelkhorda.core.utils
 import android.content.Context
 import com.delighted2wins.souqelkhorda.R
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 fun Long.toFormattedDate(): String {
     val date = Date(this)

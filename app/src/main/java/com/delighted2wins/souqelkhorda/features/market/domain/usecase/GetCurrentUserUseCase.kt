@@ -1,6 +1,5 @@
 package com.delighted2wins.souqelkhorda.features.market.domain.usecase
 
-import android.util.Log
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.delighted2wins.souqelkhorda.features.market.domain.repository.MarketRepository
 import com.google.firebase.auth.FirebaseAuth

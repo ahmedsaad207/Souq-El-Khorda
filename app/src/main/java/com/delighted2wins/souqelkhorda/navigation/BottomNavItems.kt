@@ -2,7 +2,6 @@ package com.delighted2wins.souqelkhorda.navigation
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Sell
 import androidx.compose.material.icons.filled.ShoppingBag

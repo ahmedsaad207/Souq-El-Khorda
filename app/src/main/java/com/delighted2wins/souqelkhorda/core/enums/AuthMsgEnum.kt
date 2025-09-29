@@ -4,6 +4,8 @@ import java.util.Locale
 
 enum class AuthMsgEnum(val message: String, val arabicMessage: String) {
     UNAUTHORIZED("Unauthorized", "غير مصرح"),
+    NOINTRENET("no internet connection", "لا يوجد اتصال بالنترنت"),
+
     LOCATIONEMPTY("pick location, please ","يجب ان تختار الموقع الخاص بك"),
     SCRAPLISTEMPTY("You should choose some kinds","يجب ان تختار الاصناف التي تقوم بشراءها"),
     USERNAMEVALIDATE("Enter valid name", "أدخل اسمًا صالحًا"),

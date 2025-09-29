@@ -1,16 +1,13 @@
 package com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.Inventory2
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Scale
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults

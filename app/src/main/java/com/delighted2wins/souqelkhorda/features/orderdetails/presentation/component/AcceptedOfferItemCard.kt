@@ -31,11 +31,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.components.CachedUserImage
-import com.delighted2wins.souqelkhorda.core.enums.OfferStatus
 import com.delighted2wins.souqelkhorda.core.model.Offer
 import com.delighted2wins.souqelkhorda.core.utils.toFormattedDate
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser

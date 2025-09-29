@@ -1,7 +1,6 @@
 package com.delighted2wins.souqelkhorda.features.buyers.presentation.components
 
 import android.annotation.SuppressLint
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -34,6 +33,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,10 +51,12 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.delighted2wins.souqelkhorda.R
+import com.delighted2wins.souqelkhorda.core.enums.AuthMsgEnum
 import com.delighted2wins.souqelkhorda.core.enums.ScrapTypeEnum
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.component.DotLoadingIndicator
 import com.delighted2wins.souqelkhorda.features.buyers.presentation.state.BuyerState
 import com.delighted2wins.souqelkhorda.features.buyers.presentation.view_model.BuyerViewModel
+import kotlinx.coroutines.launch
 
 
 @SuppressLint("ConfigurationScreenWidthHeight")
@@ -73,6 +75,7 @@ fun RegisterBuyerForm(
     val valuesForApi = selected.map { ScrapTypeEnum.getValue(it) }
     var latitude by remember { mutableDoubleStateOf(0.0) }
     var longitude by remember { mutableDoubleStateOf(0.0) }
+    val scope = rememberCoroutineScope ()
 
     val state by viewModel.registerState.collectAsStateWithLifecycle()
     val isLoading = state is BuyerState.Loading
@@ -265,7 +268,9 @@ fun RegisterBuyerForm(
                                     valuesForApi
                                 )
                             } else {
-                                Toast.makeText(ctx, "no internet", Toast.LENGTH_SHORT).show()
+                                scope.launch {
+                                    snackBarHostState.showSnackbar(AuthMsgEnum.NOINTRENET.getMsg())
+                                }
                             }
                         },
                         modifier = Modifier
