@@ -181,7 +181,7 @@ class ProfileViewModel @Inject constructor(
                 _state.update {
                     setFieldValue(
                         it,
-                        current.copy(isEditing = false, isLoading = false, success = true)
+                        current.copy(isEditing = false, isLoading = false, success = true, error = null)
                     )
                 }
                 sendEffect(ProfileContract.Effect.ShowSnackbar(successMessage.getMsg()))

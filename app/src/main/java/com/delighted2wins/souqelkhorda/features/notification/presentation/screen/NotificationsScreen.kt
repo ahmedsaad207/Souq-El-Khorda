@@ -1,6 +1,5 @@
 package com.delighted2wins.souqelkhorda.features.notification.presentation.screen
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -79,7 +78,6 @@ fun NotificationsScreen(
             ) {
                 when {
                     state.isLoading -> {
-                        Log.d("asd", "loading")
                         items(6) {
                             Column {
                                 NotificationCardShimmer()
@@ -92,14 +90,12 @@ fun NotificationsScreen(
                     }
 
                     state.error != null -> {
-
                         item {
 
                         }
                     }
 
                     else -> {
-
                         items(state.notifications, key = { it.id }) { item ->
                             when (state.notifications.isEmpty()) {
                                 true -> {
