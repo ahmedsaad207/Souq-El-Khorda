@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.Badge
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -63,8 +62,8 @@ fun OrdersScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val systemIsRtl = LocalConfiguration.current.layoutDirection == LayoutDirection.Rtl.ordinal
     val tabs = listOf(
-        OrderSource.COMPANY to state.saleCount,
-        OrderSource.MARKET to (state.offersCount + state.sellsCount)
+        OrderSource.COMPANY to 0,
+        OrderSource.MARKET to 0
     )
 
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { tabs.size })
@@ -74,7 +73,7 @@ fun OrdersScreen(
     val retry = stringResource(R.string.retry)
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    var selectedOrderId by remember { mutableStateOf("")}
+    var selectedOrderId by remember { mutableStateOf("") }
     var isBottomSheetVisible by remember { mutableStateOf(false) }
 
 
@@ -87,8 +86,9 @@ fun OrdersScreen(
                         isBottomSheetVisible = false
                         selectedOrderId = ""
                     }
-                    coroutineScope.launch { snackBarHostState.showSnackbar(message = effect.message,) }
+                    coroutineScope.launch { snackBarHostState.showSnackbar(message = effect.message) }
                 }
+
                 is MyOrdersEffect.ShowError -> {
                     coroutineScope.launch {
                         snackBarHostState.showSnackbar(
@@ -148,15 +148,15 @@ fun OrdersScreen(
                                 color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Gray
                             )
 
-                            Badge(
-                                containerColor = Color.Red,
-                                contentColor = Color.White
-                            ) {
-                                Text(
-                                    text = count.toString(),
-                                    fontSize = 16.sp
-                                )
-                            }
+//                            Badge(
+//                                containerColor = Color.Red,
+//                                contentColor = Color.White
+//                            ) {
+//                                Text(
+//                                    text = count.toString(),
+//                                    fontSize = 16.sp
+//                                )
+//                            }
                         }
                     }
                 )
@@ -167,9 +167,11 @@ fun OrdersScreen(
 
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier.fillMaxSize().background(
-                if (isRtl) MaterialTheme.colorScheme.background else Color.Transparent
-            )
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    if (isRtl) MaterialTheme.colorScheme.background else Color.Transparent
+                )
         ) { page ->
             when (page) {
                 0 -> CompanyOrdersScreen(
@@ -186,6 +188,7 @@ fun OrdersScreen(
                     },
                     systemIsRtl
                 )
+
                 1 -> MarketOrdersScreen(
                     state = state,
                     onChipSelected = { chip ->

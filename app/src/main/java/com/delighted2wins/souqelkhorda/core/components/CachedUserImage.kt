@@ -24,8 +24,8 @@ fun CachedUserImage(imageUrl: String?, modifier: Modifier = Modifier) {
                 .size(Size.ORIGINAL)
                 .build()
         } else null,
-        placeholder = painterResource(R.drawable.outline_person_24),
-        error = painterResource(R.drawable.outline_person_24),
+        placeholder = painterResource(R.drawable.user_default),
+        error = painterResource(R.drawable.user_default),
         contentDescription = "User profile image",
         modifier = modifier
     )

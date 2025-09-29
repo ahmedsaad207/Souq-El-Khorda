@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
 import com.delighted2wins.souqelkhorda.core.model.Order
-import com.delighted2wins.souqelkhorda.core.utils.generateUiOrderId
 import com.delighted2wins.souqelkhorda.core.utils.getTimeAgoFromMillis
 
 @Composable
@@ -33,7 +32,7 @@ fun OrderItem(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 6.dp, horizontal = 8.dp)
-            .clickable { onDetailsClick(order.orderId)  },
+            .clickable { onDetailsClick(order.orderId) },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
@@ -47,30 +46,30 @@ fun OrderItem(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             OrderHeader(
-                orderId = generateUiOrderId(order.orderId, order.date),
+                orderId = order.orderId,
                 date = getTimeAgoFromMillis(
                     LocalContext.current,
                     order.date
                 ),
             )
 
-                DirectionalText(
-                    text = order.title,
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface
-                    ),
-                    contentIsRtl = false
-                )
+            DirectionalText(
+                text = order.title,
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface
+                ),
+                contentIsRtl = false
+            )
 
-                Text(
-                    text = stringResource(R.string.price_label, order.price),
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.secondary
-                    )
+            Text(
+                text = stringResource(R.string.price_label, order.price),
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.secondary
                 )
-            }
+            )
+        }
 
     }
 }

@@ -29,6 +29,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.R
@@ -81,7 +82,11 @@ fun ItemsSection(
                         color = Color(0xFF3b71dd)
                     )
                     Text(
-                        text = stringResource(R.string.item_s, data.size,),
+                        text = pluralStringResource(
+                            id = R.plurals.items_count,
+                            count = data.size,
+                            data.size
+                        ),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurface
                     )

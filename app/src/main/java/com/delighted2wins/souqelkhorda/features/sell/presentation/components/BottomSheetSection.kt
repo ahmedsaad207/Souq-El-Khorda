@@ -22,6 +22,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -41,10 +44,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -65,6 +72,7 @@ import com.delighted2wins.souqelkhorda.core.enums.MeasurementType
 import com.delighted2wins.souqelkhorda.core.enums.ScrapType
 import com.delighted2wins.souqelkhorda.core.extensions.dashedBorder
 import com.delighted2wins.souqelkhorda.core.model.Scrap
+import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
@@ -89,6 +97,9 @@ fun BottomSheetSection(
     var selectedImages by remember {
         mutableStateOf<List<Uri>>(emptyList())
     }
+
+    val scope = rememberCoroutineScope()
+    val listState = rememberLazyListState()
 
     LaunchedEffect(mode, scrap) {
         if (mode == BottomSheetMode.EDIT && scrap != null) {
@@ -193,7 +204,8 @@ fun BottomSheetSection(
         }
 
         LazyColumn(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
+            state = listState
         ) {
 
             item {
@@ -522,11 +534,17 @@ fun BottomSheetSection(
                 onClick = {
                     if (selectedScrapType.value == ScrapType.CustomScrap && category.value.isBlank()) {
                         showCategoryError = true
+                        scope.launch {
+                            listState.animateScrollToItem(index = 1)
+                        }
                         return@CustomButton
                     }
 
                     if (amount.value.isBlank()) {
                         showAmountError = true
+                        scope.launch {
+                            listState.animateScrollToItem(index = 2)
+                        }
                         return@CustomButton
                     }
 

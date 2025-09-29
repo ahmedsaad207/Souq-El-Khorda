@@ -2,7 +2,7 @@
     <string name="app_name">Souq El Khorda</string>
 
     <string name="sell_screen_title">Sell</string>
-    <string name="shop_screen_title">Shop</string>
+    <string name="shop_screen_title">Market</string>
     <string name="orders_screen_title">Orders</string>
     <string name="nearest_screen_title">Nearest</string>
 
@@ -102,7 +102,11 @@
     <string name="box">Box</string>
     <string name="ready_to_start_recycling">Ready to start recycling?</string>
     <string name="add_your_first_item_and_join_thousands_making_a_positive_environmental_impact">Add your first item and join thousands making a positive environmental impact</string>
-    <string name="item_s">%1$d items</string>
+    <plurals name="items_count">
+        <item quantity="zero">No items</item>
+        <item quantity="one">%d item</item>
+        <item quantity="other">%d items</item>
+    </plurals>
     <string name="add_item">add item</string>
     <string name="order_destination">Order Destination</string>
     <string name="to_market">To Market</string>
@@ -169,7 +173,7 @@
 
     <string name="retry">Retry</string>
     <string name="no_market_data">No market data available at the moment</string>
-    <string name="available_offers">Available Offers</string>
+    <string name="available_offers">Available Orders</string>
 
     <string name="price_label">Price: %1$d EGP</string>
     <string name="weight_label">%1$s Kg</string>

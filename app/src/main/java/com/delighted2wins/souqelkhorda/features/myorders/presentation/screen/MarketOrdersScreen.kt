@@ -51,14 +51,14 @@ fun MarketOrdersScreen(
         ) {
             FilterWithBadge(
                 label = stringResource(R.string.sales_label),
-                count = state.sellsCount,
+                count = 0,
                 selected = selectedFilter == "Sells",
                 onClick = { selectedFilter = "Sells" }
             )
 
             FilterWithBadge(
                 label = stringResource(R.string.offers_label),
-                count = state.offersCount,
+                count = 0,
                 selected = selectedFilter == "Offers",
                 onClick = { selectedFilter = "Offers" }
             )

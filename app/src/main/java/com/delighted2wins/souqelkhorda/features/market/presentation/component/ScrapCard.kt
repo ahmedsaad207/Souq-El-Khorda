@@ -139,7 +139,7 @@ private fun ScrapMetaInfo(status: String, price: Int) {
             textAlign = TextAlign.Start,
             modifier = Modifier.weight(1f)
         )
-        StatusChip(status = status)
+//        StatusChip(status = status)
     }
 }
 
