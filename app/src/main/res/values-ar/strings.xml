@@ -99,8 +99,15 @@
     <string name="box">صندوق</string>
     <string name="ready_to_start_recycling">هل أنت مستعد لكسب المال؟</string>
     <string name="add_your_first_item_and_join_thousands_making_a_positive_environmental_impact">أضف أول خرده لك وانضم إلى آلاف الأشخاص الذين يساهمون في أثر بيئي إيجابي</string>
-    <string name="item_s">%1$d خردوات</string>
     <string name="add_item">اضف خرده</string>
+    <plurals name="items_count">
+        <item quantity="zero">لا توجد عناصر</item>
+        <item quantity="one">عنصر واحد</item>
+        <item quantity="two">عنصران</item>
+        <item quantity="few">%d عناصر</item>
+        <item quantity="many">%d عنصراً</item>
+        <item quantity="other">%d عنصر</item>
+    </plurals>
     <string name="order_destination">وجهة الطلب</string>
     <string name="to_market">إلى السوق</string>
     <string name="direct_to_company">مباشرة إلى الشركة</string>
@@ -178,7 +185,7 @@
     <string name="search_in_scraps">ابحث في الخردة...</string>
     <string name="read_less">عرض أقل</string>
     <string name="read_more">المزيد</string>
-    <string name="order_items">تفاصيل الأصناف</string>
+<!--    <string name="order_items">تفاصيل الأصناف</string>-->
     <string name="no_images_available">لا توجد صور</string>
     <string name="details">التفاصيل</string>
     <string name="no_order_details_found">لا يوجد تفاصيل لهذا العرض</string>

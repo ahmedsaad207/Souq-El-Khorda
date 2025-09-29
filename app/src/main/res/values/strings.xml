@@ -102,7 +102,11 @@
     <string name="box">Box</string>
     <string name="ready_to_start_recycling">Ready to start recycling?</string>
     <string name="add_your_first_item_and_join_thousands_making_a_positive_environmental_impact">Add your first item and join thousands making a positive environmental impact</string>
-    <string name="item_s">%1$d items</string>
+    <plurals name="items_count">
+        <item quantity="zero">No items</item>
+        <item quantity="one">%d item</item>
+        <item quantity="other">%d items</item>
+    </plurals>
     <string name="add_item">add item</string>
     <string name="order_destination">Order Destination</string>
     <string name="to_market">To Market</string>
@@ -182,7 +186,7 @@
     <string name="search_in_scraps">Search in scraps...</string>
     <string name="read_less">Read Less</string>
     <string name="read_more">Read More</string>
-    <string name="order_items">Order Items</string>
+<!--    <string name="order_items">Order Items</string>-->
     <string name="no_images_available">No images available</string>
     <string name="details">Details</string>
     <string name="no_order_details_found">No order details found</string>
