@@ -230,12 +230,14 @@
     <string name="completed">Completed</string>
     <string name="update_offer">Update Offer</string>
     <string name="offer_price">Price: %1$s</string>
-    <string name="mark_received">I\'m Received</string>
+    <string name="mark_received">Received</string>
     <string name="no_actions_available">No actions available</string>
     <string name="label_amount">Amount</string>
     <string name="enter_amount">Please enter an amount</string>
     <string name="invalid_amount">Invalid amount</string>
     <string name="amount_greater_than_zero">Amount must be greater than zero</string>
+    <string name="reject">Reject</string>
+    <string name="accept">Accept</string>
 
 
 

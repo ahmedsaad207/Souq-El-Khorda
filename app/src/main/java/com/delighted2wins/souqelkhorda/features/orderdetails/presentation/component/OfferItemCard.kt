@@ -27,8 +27,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.components.CachedUserImage
 import com.delighted2wins.souqelkhorda.core.model.Offer
 import com.delighted2wins.souqelkhorda.core.utils.toFormattedDate
@@ -62,7 +64,7 @@ fun OfferItemCard(
                 CachedUserImage(
                     imageUrl = buyer.imageUrl,
                     modifier = Modifier
-                        .size(40.dp)
+                        .size(48.dp)
                         .clip(CircleShape)
                 )
 
@@ -72,12 +74,12 @@ fun OfferItemCard(
                     ) {
                         Text(
                             text = buyer.name,
-                            style = MaterialTheme.typography.bodyLarge,
+                            style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold,
                             maxLines = 1,
                             modifier = Modifier.weight(1f)
                         )
-                        StatusChip(status = offer.status.name)
+                       // StatusChip(status = offer.status.name)
                     }
                     OfferPriceTag(offer.offerPrice)
                 }
@@ -85,22 +87,22 @@ fun OfferItemCard(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Spacer(modifier = Modifier.width(4.dp))
-                Icon(
-                    imageVector = Icons.Default.ChatBubbleOutline,
-                    contentDescription = null,
-                    tint = Color.Gray,
-                    modifier = Modifier.size(18.dp)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = "",
-                    color = Color.Gray,
-                    style = MaterialTheme.typography.bodyMedium,
-                    maxLines = 3
-                )
-            }
+//            Row(verticalAlignment = Alignment.CenterVertically) {
+//                Spacer(modifier = Modifier.width(4.dp))
+//                Icon(
+//                    imageVector = Icons.Default.ChatBubbleOutline,
+//                    contentDescription = null,
+//                    tint = Color.Gray,
+//                    modifier = Modifier.size(18.dp)
+//                )
+//                Spacer(modifier = Modifier.width(4.dp))
+//                Text(
+//                    text = "",
+//                    color = Color.Gray,
+//                    style = MaterialTheme.typography.bodyMedium,
+//                    maxLines = 3
+//                )
+//            }
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -109,20 +111,20 @@ fun OfferItemCard(
             ) {
                 Text(
                     text = offer.date.toFormattedDate(),
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodyMedium,
                     color = Color.Gray
                 )
 
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    OutlinedButton(
+                    Button(
                         onClick = onReject,
                         colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = MaterialTheme.colorScheme.surface,
-                            contentColor = Color.Red
+                            containerColor = MaterialTheme.colorScheme.error,
+                            contentColor = Color.White
                         )
                     ) {
                         Text(
-                            "Reject",
+                            text = stringResource(R.string.reject),
                             style = MaterialTheme.typography.bodyMedium.copy(
                                 fontWeight = FontWeight.Bold
                             )
@@ -132,12 +134,12 @@ fun OfferItemCard(
                     Button(
                         onClick = onAccept,
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.primary,
+                            containerColor = MaterialTheme.colorScheme.secondary,
                             contentColor = Color.White
                         )
                     ) {
                         Text(
-                            "Accept",
+                            stringResource(R.string.accept),
                             style = MaterialTheme.typography.bodyMedium.copy(
                                 fontWeight = FontWeight.Bold
                             )

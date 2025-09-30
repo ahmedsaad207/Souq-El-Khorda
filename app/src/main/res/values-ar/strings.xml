@@ -235,6 +235,8 @@
     <string name="enter_amount">الرجاء إدخال المبلغ</string>
     <string name="invalid_amount">المبلغ غير صالح</string>
     <string name="amount_greater_than_zero">المبلغ يجب أن يكون أكبر من صفر</string>
+    <string name="reject">رفض</string>
+    <string name="accept">قبول</string>
 
     <string name="just_now">الآن</string>
 

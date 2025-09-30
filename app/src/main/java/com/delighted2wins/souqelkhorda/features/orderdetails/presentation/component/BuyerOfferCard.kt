@@ -3,14 +3,19 @@ package com.delighted2wins.souqelkhorda.features.orderdetails.presentation.compo
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Message
+import androidx.compose.material.icons.filled.ChatBubbleOutline
+import androidx.compose.material.icons.filled.Message
 import androidx.compose.material.icons.filled.Sell
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -55,7 +60,7 @@ fun BuyerOfferCard(
                 .background(MaterialTheme.colorScheme.surface)
                 .padding(16.dp)
         ) {
-            StatusChip(status = offer.status.name)
+           // StatusChip(status = offer.status.name)
             Spacer(Modifier.height(12.dp))
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -103,21 +108,41 @@ fun BuyerOfferCard(
                     }
 
                     OfferStatus.ACCEPTED -> {
-                        Button(
+                        OutlinedButton(
                             onClick = onChat,
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier
+                                .defaultMinSize(minWidth = 0.dp)
+                                .height(42.dp),
+                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
                         ) {
+                            Icon(
+                                imageVector = Icons.Filled.ChatBubbleOutline,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.secondary
+                            )
+                            Spacer(Modifier.width(2.dp))
                             Text(stringResource(R.string.chat))
                         }
                         Button(
                             onClick = onMarkReceived,
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier
+                                .weight(1f)
+                                .defaultMinSize(minWidth = 0.dp)
+                                .height(42.dp),
+                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.secondary,
+                                contentColor = MaterialTheme.colorScheme.onSecondary
+                            )
                         ) {
                             Text(stringResource(R.string.mark_received))
                         }
                         OutlinedButton(
                             onClick = onCancel,
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier
+                                .defaultMinSize(minWidth = 0.dp)
+                                .height(42.dp),
+                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
                         ) {
                             Text(stringResource(R.string.cancel))
                         }
