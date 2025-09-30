@@ -1,6 +1,7 @@
 package com.delighted2wins.souqelkhorda.features.myorders.presentation.screen
 
 
+import android.R.attr.order
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -81,7 +82,9 @@ fun MarketOrdersScreen(
                             orders = state.sells,
                             isLoading = state.isLoading,
                             error = state.error,
-                            onDetailsClick = onSaleDetailsClick,
+                            onDetailsClick = { order, _ ->
+                                onSaleDetailsClick(order)
+                            },
                         )
                     }
                 }
@@ -97,7 +100,9 @@ fun MarketOrdersScreen(
                             orders = state.offers,
                             isLoading = state.isLoading,
                             error = state.error,
-                            onDetailsClick = onOfferDetailsClick,
+                            onDetailsClick = { order, _ ->
+                                onOfferDetailsClick(order)
+                            },
                         )
                     }
                 }

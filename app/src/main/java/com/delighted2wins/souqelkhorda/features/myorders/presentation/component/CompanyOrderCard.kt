@@ -1,6 +1,5 @@
 package com.delighted2wins.souqelkhorda.features.myorders.presentation.screen
 
-import android.graphics.drawable.Icon
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,7 +16,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -33,9 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.delighted2wins.souqelkhorda.R
-import com.delighted2wins.souqelkhorda.app.theme.AppTypography
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
 import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.core.utils.getTimeAgoFromMillis
@@ -76,21 +72,20 @@ fun CompanyOrderCard(
                 }
                 Text(
                     modifier = Modifier.weight(1f),
-                    text = "Order #12345",/*stringResource(
-                        ,
+                    text = stringResource(
                         R.string.order_id,
                         shortId
-                    ),*/
+                    ),
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurface.copy(0.5f)
                 )
-              //  StatusChip(status = order.status.toString())
+                StatusChip(status = order.status.toString())
             }
 
             Spacer(modifier = Modifier.height(4.dp))
 
             DirectionalText(
-                text = "Wireless Bluetooth Headphones Headphones"/*order.title*/,
+                text = order.title,
                 style = MaterialTheme.typography.titleLarge.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
@@ -116,10 +111,10 @@ fun CompanyOrderCard(
                 )
 
                 Text(
-                    text = "2 hours ago"/*getTimeAgoFromMillis(
+                    text = getTimeAgoFromMillis(
                         LocalContext.current,
                         order.date
-                    )*/,
+                    ),
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.Bold
                     ),

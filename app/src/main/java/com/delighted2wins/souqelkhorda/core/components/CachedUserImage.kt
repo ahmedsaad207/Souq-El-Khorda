@@ -5,6 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import coil.compose.AsyncImage
@@ -49,6 +51,8 @@ fun CachedUserImage(imageUrl: String?, modifier: Modifier = Modifier) {
                 visible = loadingState.value,
                 shape = CircleShape,
                 highlight = PlaceholderHighlight.shimmer()
-            )
+            ),
+        contentScale = ContentScale.FillBounds
+
     )
 }

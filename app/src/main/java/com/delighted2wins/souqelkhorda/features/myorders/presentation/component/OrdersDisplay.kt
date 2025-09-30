@@ -22,7 +22,7 @@ fun OrdersDisplay(
     orders: List<Order>,
     isLoading: Boolean,
     error: String?,
-    onDetailsClick: (String) -> Unit,
+    onDetailsClick: (String, String) -> Unit,
 ) {
     val systemIsRtl = LocalConfiguration.current.layoutDirection == LayoutDirection.Rtl.ordinal
     when {
@@ -67,9 +67,7 @@ fun OrdersDisplay(
 //                    )
                     CompanyOrderCard(
                         order = order,
-                        onDetailsClick = { _, _ ->
-                            // TODO Fayad
-                        },
+                        onDetailsClick = onDetailsClick,
                         onCancelClick = {
                             // TODO Fayad
                         },
