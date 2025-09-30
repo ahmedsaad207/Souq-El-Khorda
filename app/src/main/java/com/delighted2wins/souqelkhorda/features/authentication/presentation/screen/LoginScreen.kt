@@ -34,6 +34,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -65,6 +67,8 @@ fun LoginScreen(
     val colors = MaterialTheme.colorScheme
     val loginState by viewModel.loginState.collectAsStateWithLifecycle()
     val isLoading = loginState is AuthenticationState.Loading
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
 
 
     LaunchedEffect(Unit) {
@@ -133,6 +137,8 @@ fun LoginScreen(
         Button(
             shape = RoundedCornerShape(8.dp),
             onClick = {
+                focusManager.clearFocus(force = true)
+                keyboardController?.hide()
                 viewModel.login(email, password)
             },
             modifier = Modifier
@@ -167,7 +173,11 @@ fun LoginScreen(
                 fontSize = 12.sp,
             )
             TextButton(
-                onClick = { onRegisterClick() }
+                onClick = {
+                    focusManager.clearFocus(force = true)
+                    keyboardController?.hide()
+                    onRegisterClick()
+                }
             ) {
                 Text(
                     text = stringResource(R.string.register_here),

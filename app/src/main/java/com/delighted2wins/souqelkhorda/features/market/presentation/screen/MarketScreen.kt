@@ -192,6 +192,13 @@ fun MarketScreen(
                             it.title.contains(state.query, ignoreCase = true) || state.query.isBlank()
                         }
                     ) { scrapData ->
+                        if(state.successfulOrders.isEmpty()){
+                            Box{
+                                EmptyCart(
+                                    messageInfo = stringResource(R.string.u_have_no_buyer)
+                                )
+                            }
+                        }
 
                         var user by remember { mutableStateOf<MarketUser?>(null) }
 

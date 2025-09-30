@@ -1,10 +1,8 @@
 package com.delighted2wins.souqelkhorda.features.authentication.presentation.screen
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -25,9 +23,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -69,6 +67,8 @@ fun SignUpScreen(
     var area by remember { mutableStateOf("") }
 
     var governorateExpanded by remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
+
 
     LaunchedEffect(Unit) {
         viewModel.message.collect { message ->
@@ -177,6 +177,7 @@ fun SignUpScreen(
 
             Button(
                 onClick = {
+                    focusManager.clearFocus()
                     viewModel.signUp(
                         SignUpRequestDto(
                             name = username,
@@ -216,26 +217,10 @@ fun SignUpScreen(
         }
 
         when (registerState) {
-            is AuthenticationState.Error -> {
-            }
-            is AuthenticationState.Loading -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(
-                        color = primaryColor
-
-                    )
-
-                }
-            }
-            is AuthenticationState.Idle -> {
-            }
             is AuthenticationState.Success -> {
                 onRegisterClick()
             }
+            else ->{}
         }
 
 }
