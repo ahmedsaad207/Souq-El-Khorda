@@ -203,7 +203,7 @@ fun MarketScreen(
                             }
                             Spacer(Modifier.height(8.dp))
                             Text(
-                                text = "Browse and purchase scrap materials from sellers",
+                                text = stringResource(R.string.browse_and_purchase_scrap_materials_from_sellers),
                                 textAlign = TextAlign.Start,
                                 style = MaterialTheme.typography.bodyLarge.copy(
                                     color = MaterialTheme.colorScheme.onSurface
