@@ -61,7 +61,7 @@ fun WarningCard(
 
             Text(
                 text = message,
-                color = warningColor,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontSize = 15.sp,
                 style = MaterialTheme.typography.bodyMedium
             )

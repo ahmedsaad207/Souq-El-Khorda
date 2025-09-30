@@ -1,5 +1,7 @@
 package com.delighted2wins.souqelkhorda.features.market.presentation.component
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,12 +14,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -53,27 +55,59 @@ fun ScrapCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(cornerRadius),
-        shape = cornerRadius,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        border = CardDefaults.outlinedCardBorder().copy(brush = gradientBrush),
-        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
+            .padding(bottom = 12.dp),
+        shape = RoundedCornerShape(12.dp),
+        border = BorderStroke(
+            width = 1.dp,
+            color = MaterialTheme.colorScheme.outline.copy(0.5f)
+        ),
+        elevation = CardDefaults.cardElevation(2.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
     ) {
         Column(
-            modifier = Modifier.padding(12.dp)
+            modifier = Modifier.padding(16.dp)
         ) {
             marketUser?.let {
                 UserSection(
                     marketUserData = it,
                     date = order.date.toSinceString(LocalContext.current),
                 )
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp),
+                    color = MaterialTheme.colorScheme.primary.copy(0.3f))
+                Spacer(Modifier.height(12.dp))
             }
 
-            ScrapTitle(order.title)
+//            ScrapTitle(order.title)
+            DirectionalText(
+                text = order.title,
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
+                color = MaterialTheme.colorScheme.onSurface,
+                contentIsRtl = false,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+            )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            if (order.description.trim().isNotBlank()) {
+                Spacer(modifier = Modifier.height(8.dp))
+                DirectionalText(
+                    text = order.description,
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                    color = MaterialTheme.colorScheme.onSurface.copy(0.5f),
+                    contentIsRtl = false,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
 
-            ScrapDescription(order.description)
+//            Spacer(modifier = Modifier.height(8.dp))
+//
+//            ScrapDescription(order.description)
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -129,7 +163,9 @@ private fun ScrapMetaInfo(status: String, price: Int) {
     val context = LocalContext.current
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp)
     ) {
         Text(
             text = context.getString(R.string.price_label, price),
@@ -165,9 +201,9 @@ private fun ScrapActions(
             Text(
                 context.getString(R.string.details_button),
                 style = MaterialTheme.typography.titleMedium.copy(
-                    color = MaterialTheme.colorScheme.secondary,
                     fontWeight = FontWeight.Bold
-                )
+                ),
+                color = MaterialTheme.colorScheme.primary
             )
         }
 
@@ -177,14 +213,15 @@ private fun ScrapActions(
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier.weight(1f),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.secondary
+                    containerColor = MaterialTheme.colorScheme.primary
                 )
             ) {
                 Text(
                     context.getString(R.string.make_offer_button),
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.Bold
-                    )
+                    ),
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             }
         }

@@ -2,6 +2,7 @@ package com.delighted2wins.souqelkhorda.features.market.presentation.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,9 +34,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import coil.compose.AsyncImage
 import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.components.EmptyCart
 import com.delighted2wins.souqelkhorda.core.enums.BottomSheetActionType
@@ -62,7 +68,7 @@ fun MarketScreen(
     val coroutineScope = rememberCoroutineScope()
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    var selectedOrder by remember { mutableStateOf<Order?>(null)}
+    var selectedOrder by remember { mutableStateOf<Order?>(null) }
     var isBottomSheetVisible by remember { mutableStateOf(false) }
 
     val retryLabel = stringResource(R.string.retry)
@@ -74,7 +80,11 @@ fun MarketScreen(
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                is MarketEffect.NavigateToOrderDetails -> onDetailsClick(effect.orderId, effect.ownerId)
+                is MarketEffect.NavigateToOrderDetails -> onDetailsClick(
+                    effect.orderId,
+                    effect.ownerId
+                )
+
                 is MarketEffect.ShowSuccess -> {
                     if (isBottomSheetVisible) {
                         sheetState.hide()
@@ -83,6 +93,7 @@ fun MarketScreen(
                     }
                     coroutineScope.launch { snackBarHostState.showSnackbar(effect.message) }
                 }
+
                 is MarketEffect.ShowError -> {
                     coroutineScope.launch {
                         snackBarHostState.showSnackbar(
@@ -170,30 +181,48 @@ fun MarketScreen(
                     }
 
                     item {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
+                        Column {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+//                                AsyncImage(
+//                                    model = R.drawable.recycle,
+//                                    contentDescription = null,
+//                                    modifier = Modifier.size(48.dp),
+//                                )
+                                Text(
+                                    text = stringResource(R.string.available_offers),
+                                    style = MaterialTheme.typography.headlineLarge.copy(
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = MaterialTheme.colorScheme.primary,
+                                    ),
+                                    modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
+                                )
+                            }
+                            Spacer(Modifier.height(8.dp))
                             Text(
-                                text = stringResource(R.string.available_offers),
-                                style = MaterialTheme.typography.headlineLarge.copy(
-                                    fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
-                                    fontWeight = MaterialTheme.typography.titleLarge.fontWeight
-                                ),
-                                color = MaterialTheme.colorScheme.secondary.copy(alpha = 4f),
-                                modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
+                                text = "Browse and purchase scrap materials from sellers",
+                                textAlign = TextAlign.Start,
+                                style = MaterialTheme.typography.bodyLarge.copy(
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
                             )
+                            Spacer(Modifier.height(8.dp))
                         }
                     }
 
                     items(
                         state.successfulOrders.filter {
-                            it.title.contains(state.query, ignoreCase = true) || state.query.isBlank()
+                            it.title.contains(
+                                state.query,
+                                ignoreCase = true
+                            ) || state.query.isBlank()
                         }
                     ) { scrapData ->
-                        if(state.successfulOrders.isEmpty()){
-                            Box{
+                        if (state.successfulOrders.isEmpty()) {
+                            Box {
                                 EmptyCart(
                                     messageInfo = stringResource(R.string.u_have_no_buyer)
                                 )
@@ -218,7 +247,12 @@ fun MarketScreen(
                                     isBottomSheetVisible = true
                                     coroutineScope.launch { sheetState.show() }
                                 },
-                                onDetailsClick = { orderId, ownerId -> onDetailsClick(orderId, ownerId)},
+                                onDetailsClick = { orderId, ownerId ->
+                                    onDetailsClick(
+                                        orderId,
+                                        ownerId
+                                    )
+                                },
                             )
                         } ?: ShimmerScrapCard(systemIsRtl = isRtl)
                     }
@@ -247,7 +281,13 @@ fun MarketScreen(
                 sheetState = sheetState,
                 coroutineScope = coroutineScope,
                 onConfirmAction = {
-                    viewModel.onIntent(MarketIntent.MakeOffer(selectedOrder!!, it as Offer, selectedOrder!!.userId))
+                    viewModel.onIntent(
+                        MarketIntent.MakeOffer(
+                            selectedOrder!!,
+                            it as Offer,
+                            selectedOrder!!.userId
+                        )
+                    )
                 },
                 isSubmitting = viewModel.state.isSubmitting,
                 isRtl = isRtl,

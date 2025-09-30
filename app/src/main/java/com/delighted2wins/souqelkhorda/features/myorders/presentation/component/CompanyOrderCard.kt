@@ -95,6 +95,19 @@ fun CompanyOrderCard(
                 overflow = TextOverflow.Ellipsis,
             )
 
+            if (order.description.trim().isNotBlank()) {
+                Spacer(modifier = Modifier.height(8.dp))
+                DirectionalText(
+                    text = order.description,
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                    color = MaterialTheme.colorScheme.onSurface.copy(0.5f),
+                    contentIsRtl = false,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
             Spacer(modifier = Modifier.height(8.dp))
 
             Row(
