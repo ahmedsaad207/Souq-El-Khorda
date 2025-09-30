@@ -32,6 +32,7 @@ fun MarketOrdersScreen(
     onChipSelected: (String) -> Unit,
     onSaleDetailsClick: (String) -> Unit,
     onOfferDetailsClick: (String) -> Unit,
+    onSaleOrderCancelClick: (String) -> Unit,
     systemIsRtl: Boolean
 ) {
     var selectedFilter by remember { mutableStateOf("Sells") }
@@ -85,6 +86,9 @@ fun MarketOrdersScreen(
                             onDetailsClick = { order, _ ->
                                 onSaleDetailsClick(order)
                             },
+                            onCancelClick ={ orderId ->
+                                onSaleOrderCancelClick(orderId)
+                            }
                         )
                     }
                 }
@@ -103,6 +107,7 @@ fun MarketOrdersScreen(
                             onDetailsClick = { order, _ ->
                                 onOfferDetailsClick(order)
                             },
+                            onCancelClick ={}
                         )
                     }
                 }

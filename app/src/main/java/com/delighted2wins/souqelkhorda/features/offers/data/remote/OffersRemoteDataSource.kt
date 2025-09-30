@@ -10,4 +10,5 @@ interface OffersRemoteDataSource {
     suspend fun getOfferById(offerId: String): Offer?
     suspend fun getOffersByBuyerId(buyerId: String): List<Offer>
     suspend fun getOffersByOrderId(orderId: String): List<Offer>
+    suspend fun deleteOffersByOrderId(orderId: String) : Boolean
 }

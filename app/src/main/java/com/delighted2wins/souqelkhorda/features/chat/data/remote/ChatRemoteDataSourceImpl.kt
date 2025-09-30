@@ -50,4 +50,28 @@ class ChatRemoteDataSourceImpl @Inject constructor(
         }
     }
 
+    override suspend fun deleteChatsByOrderId(orderId: String, offerIds: List<String>): Boolean {
+        return try {
+            val orderDocRef = firestore.collection("chats").document(orderId)
+
+            offerIds.forEach { offerId ->
+                val subColRef = orderDocRef.collection(offerId)
+                val snapshots = subColRef.get().await()
+                val batch = firestore.batch()
+                snapshots.documents.forEach { doc ->
+                    batch.delete(doc.reference)
+                }
+                batch.commit().await()
+            }
+
+            orderDocRef.delete().await()
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+
+
 }

@@ -14,6 +14,7 @@ enum class NotificationMessagesEnum(
     BUYER_MARKED_RECEIVED("Your offer has been marked as received", "تم تأكيد استلام عرضك"),
 
     // Seller -> Buyer
+    ORDER_DELETE("Seller Delete Order", "تم حذف الطلب من البائع"),
     OFFER_ACCEPTED("Your offer has been accepted", "تم قبول عرضك"),
     OFFER_REJECTED("Your offer has been rejected", "تم رفض عرضك"),
     OFFER_COMPLETED("Your offer has been completed", "تم إتمام عرضك"),

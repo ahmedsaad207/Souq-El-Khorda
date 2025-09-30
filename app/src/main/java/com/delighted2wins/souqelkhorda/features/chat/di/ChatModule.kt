@@ -4,6 +4,7 @@ import com.delighted2wins.souqelkhorda.features.chat.data.remote.ChatRemoteDataS
 import com.delighted2wins.souqelkhorda.features.chat.data.remote.ChatRemoteDataSourceImpl
 import com.delighted2wins.souqelkhorda.features.chat.data.repository.ChatRepositoryImpl
 import com.delighted2wins.souqelkhorda.features.chat.domain.repository.ChatRepository
+import com.delighted2wins.souqelkhorda.features.chat.domain.usecase.DeleteChatsByOrderIdUseCase
 import com.delighted2wins.souqelkhorda.features.chat.domain.usecase.DeleteOfferChatUseCase
 import com.delighted2wins.souqelkhorda.features.chat.domain.usecase.GetMessagesUseCase
 import com.delighted2wins.souqelkhorda.features.chat.domain.usecase.SendMessageUseCase
@@ -55,5 +56,11 @@ object ChatUseCaseModule {
     fun provideDeleteOfferChatUseCase(
         repository: ChatRepository
     ): DeleteOfferChatUseCase = DeleteOfferChatUseCase(repository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideDeleteChatsByOrderIdUseCase(
+        repository: ChatRepository
+    ): DeleteChatsByOrderIdUseCase = DeleteChatsByOrderIdUseCase(repository)
 
 }

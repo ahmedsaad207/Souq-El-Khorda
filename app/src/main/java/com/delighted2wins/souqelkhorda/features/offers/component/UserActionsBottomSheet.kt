@@ -169,6 +169,11 @@ fun UserActionsBottomSheet(
                                 onConfirmAction(Unit)
                             }
                         }
+                        BottomSheetActionType.CANCEL_MARKET_ORDER -> {
+                            coroutineScope.launch {
+                                onConfirmAction(Unit)
+                            }
+                        }
                         BottomSheetActionType.MARK_RECEIVED -> {
                             coroutineScope.launch {
                                 onConfirmAction(Unit)

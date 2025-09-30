@@ -124,5 +124,19 @@ enum class BottomSheetActionType(
             "You cannot undo this action once confirmed." to
                     "لا يمكنك التراجع عن هذا الإجراء بعد التأكيد."
          )
+    ),
+
+    CANCEL_MARKET_ORDER(
+      code = 8,
+      enValue = "Cancel Order",
+        arValue = "إلغاء الطلب",
+        color = Color(0xFFF44336),
+        warningColor = Color(0xFFFFCDD2),
+        warnings = listOf(
+            "Cancelling this order will notify the buyers and prevent further actions on it." to
+                    "إلغاء هذا الطلب سيخطر المشترين ويمنع أي إجراءات إضافية عليه.",
+            "You will not be able to reactivate this order once cancelled." to
+                    "لن تتمكن من إعادة تنشيط هذا الطلب بعد الإلغاء."
+        )
     );
 }
