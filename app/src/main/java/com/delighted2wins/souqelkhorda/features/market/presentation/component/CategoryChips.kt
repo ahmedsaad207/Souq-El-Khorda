@@ -11,10 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.enums.ScrapType
 import com.delighted2wins.souqelkhorda.core.model.Scrap
 
@@ -34,7 +32,7 @@ fun CategoryChips(scraps: List<Scrap>) {
     ) {
         categories.forEach { (scrapType, originalCategory) ->
             Card(
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f)
                 ),
