@@ -18,7 +18,6 @@ import com.delighted2wins.souqelkhorda.features.myorders.presentation.contract.M
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.contract.MyOrdersState
 import com.delighted2wins.souqelkhorda.features.offers.domain.usecase.DeleteOffersByOrderIdUseCase
 import com.delighted2wins.souqelkhorda.features.offers.domain.usecase.GetOffersByOrderIdUseCase
-import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.SalesOrderDetailsEffect
 import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.DeleteCompanyOrderUseCase
 import com.delighted2wins.souqelkhorda.features.sell.domain.usecase.DeleteMarketOrderUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
