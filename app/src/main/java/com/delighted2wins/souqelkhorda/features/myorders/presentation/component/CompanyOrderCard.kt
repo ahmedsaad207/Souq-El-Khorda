@@ -1,5 +1,7 @@
 package com.delighted2wins.souqelkhorda.features.myorders.presentation.screen
 
+import android.graphics.drawable.Icon
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,12 +9,16 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -24,6 +30,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,7 +45,7 @@ import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.compon
 fun CompanyOrderCard(
     order: Order,
     onDetailsClick: (String, String) -> Unit,
-    onDeclineClick: (String) -> Unit,
+    onCancelClick: (String) -> Unit,
     systemIsRtl: Boolean
 ) {
     Card(
@@ -46,70 +53,88 @@ fun CompanyOrderCard(
             .fillMaxWidth()
             .padding(horizontal = 12.dp, vertical = 8.dp),
         shape = RoundedCornerShape(12.dp),
+        border = BorderStroke(
+            width = 1.dp,
+            color = MaterialTheme.colorScheme.outline.copy(0.5f)
+        ),
+        elevation = CardDefaults.cardElevation(2.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.Bottom,
             ) {
+                val shortId = if (order.orderId.length > 6) {
+                    order.orderId.takeLast(6)
+                } else {
+                    order.orderId
+                }
                 Text(
-                    text = stringResource(
+                    modifier = Modifier.weight(1f),
+                    text = "Order #12345",/*stringResource(
+                        ,
                         R.string.order_id,
-                        order.orderId
-                    ),
-                    style = AppTypography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface
+                        shortId
+                    ),*/
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSurface.copy(0.5f)
                 )
                 StatusChip(status = order.status.toString())
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(4.dp))
 
             DirectionalText(
-                text = order.title,
-                style = AppTypography.titleLarge,
+                text = "Wireless Bluetooth Headphones Headphones"/*order.title*/,
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
                 color = MaterialTheme.colorScheme.onSurface,
-                contentIsRtl = false
+                contentIsRtl = false,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                Text(
-                    text = stringResource(R.string.price_label, order.price),
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.secondary
+                Icon(
+                    imageVector = Icons.Default.AccessTime,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp),
+                    tint = MaterialTheme.colorScheme.onSurface.copy(0.4f)
                 )
 
                 Text(
-                    text = getTimeAgoFromMillis(
+                    text = "2 hours ago"/*getTimeAgoFromMillis(
                         LocalContext.current,
                         order.date
+                    )*/,
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        fontWeight = FontWeight.Bold
                     ),
-                    fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            Spacer(modifier = Modifier.height(16.dp))
+//            Spacer(modifier = Modifier.height(16.dp))
 
-            HorizontalDivider(
-                modifier = Modifier.fillMaxWidth(),
-                thickness = 1.dp,
-                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
-            )
+//            HorizontalDivider(
+//                modifier = Modifier.fillMaxWidth(),
+//                thickness = 1.dp,
+//                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
+//            )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(4.dp))
 
             CompositionLocalProvider(
                 LocalLayoutDirection provides if (systemIsRtl) LayoutDirection.Rtl else LayoutDirection.Ltr
@@ -121,7 +146,7 @@ fun CompanyOrderCard(
                         .padding(top = 4.dp)
                 ) {
                     OutlinedButton(
-                        onClick = { onDeclineClick(order.orderId) },
+                        onClick = { onCancelClick(order.orderId) },
                         shape = RoundedCornerShape(8.dp),
                         modifier = Modifier.weight(1f),
                     ) {
@@ -139,7 +164,7 @@ fun CompanyOrderCard(
                         shape = RoundedCornerShape(8.dp),
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = MaterialTheme.colorScheme.secondary,
+                            containerColor = MaterialTheme.colorScheme.primary,
                             contentColor = MaterialTheme.colorScheme.onPrimary
                         )
                     ) {

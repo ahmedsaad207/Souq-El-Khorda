@@ -200,7 +200,7 @@
     <string name="offers_label">Offers</string>
     <string name="sales_label">Sales</string>
     <string name="order_items_label">Order Items</string>
-    <string name="order_id">ID #%1$s</string>
+    <string name="order_id">Order #%1$s</string>
     <string name="cancel_button">Cancel</string>
     <string name="no_orders_found">No orders found</string>
     <string name="order_source_market">Market</string>

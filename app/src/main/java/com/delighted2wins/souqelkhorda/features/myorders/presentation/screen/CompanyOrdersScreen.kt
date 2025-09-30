@@ -57,7 +57,7 @@ fun CompanyOrdersScreen(
                         CompanyOrderCard(
                             order = order,
                             onDetailsClick = { orderId, userId, -> onCompanyDetailsClick(orderId, userId) },
-                            onDeclineClick = { orderId -> onDeclineClick(orderId) },
+                            onCancelClick = { orderId -> onDeclineClick(orderId) },
                             systemIsRtl = systemIsRtl
                         )
                     }
