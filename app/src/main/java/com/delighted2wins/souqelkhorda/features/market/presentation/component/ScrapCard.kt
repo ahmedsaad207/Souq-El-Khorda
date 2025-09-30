@@ -30,7 +30,6 @@ import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.core.utils.isArabic
 import com.delighted2wins.souqelkhorda.core.utils.toSinceString
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
-import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.StatusChip
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.UserSection
 
 @Composable

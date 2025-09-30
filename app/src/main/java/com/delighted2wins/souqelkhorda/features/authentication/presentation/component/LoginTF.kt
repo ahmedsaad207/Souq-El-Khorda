@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -27,7 +28,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
@@ -47,6 +51,8 @@ fun LoginPasswordTF(
     var text by remember { mutableStateOf(TextFieldValue("")) }
     var passwordHidden by rememberSaveable { mutableStateOf(true) }
 
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
     val colors = MaterialTheme.colorScheme
     Column(
         modifier = Modifier
@@ -73,7 +79,14 @@ fun LoginPasswordTF(
                 )
             },
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    focusManager.clearFocus(force = true)
+                    keyboardController?.hide()
+                }
             ),
             onValueChange = { it ->
                 text = it
@@ -119,6 +132,9 @@ fun LoginTF(
 ) {
     val textFieldColor = Color(0xFFF2F2F2)
     val primaryColor = Color(0xFF179C92)
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+
 
     var text by remember { mutableStateOf(TextFieldValue("")) }
     var changeIcon by rememberSaveable { mutableStateOf(true) }
@@ -153,7 +169,14 @@ fun LoginTF(
             singleLine = true,
             maxLines = 1,
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email
+                keyboardType = KeyboardType.Email,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    focusManager.clearFocus(force = true)
+                    keyboardController?.hide()
+                }
             ),
             onValueChange = { it ->
                 text = it

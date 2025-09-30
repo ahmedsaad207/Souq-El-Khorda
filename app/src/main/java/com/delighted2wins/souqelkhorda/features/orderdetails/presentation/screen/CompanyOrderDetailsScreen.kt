@@ -260,14 +260,16 @@ private fun CompanyOrderDetailsUI(
         item {
             SectionTitle(
                 icon = Icons.Outlined.Inventory2,
-                title = "Scraps",
+                title = context.getString(R.string.scraps),
                 count = order.scraps.size,
                 modifier = Modifier.padding(horizontal = 12.dp)
             )
         }
 
         if (order.scraps.isNotEmpty()) {
-            items(order.scraps) { scrap -> ScrapItemCard(scrap = scrap) }
+            items(order.scraps) { scrap ->
+                ScrapItemCard(scrap = scrap)
+            }
         } else {
             item {
                 Box(

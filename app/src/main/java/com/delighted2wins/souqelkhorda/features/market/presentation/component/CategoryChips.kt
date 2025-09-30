@@ -11,8 +11,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.enums.ScrapType
 import com.delighted2wins.souqelkhorda.core.model.Scrap
 
@@ -20,21 +22,17 @@ import com.delighted2wins.souqelkhorda.core.model.Scrap
 fun CategoryChips(scraps: List<Scrap>) {
     val context = LocalContext.current
 
-    val categories: List<ScrapType> = scraps
-        .mapNotNull { scrap ->
-            ScrapType.entries.firstOrNull {
-                it.name.equals(scrap.category, ignoreCase = true)
-            }
-        }
-        .distinct()
-
+    val categories: List<Pair<ScrapType, String?>> = scraps.map { scrap ->
+        val type = ScrapType.fromCategory(scrap.category)
+        type to scrap.category
+    }.distinct()
 
     if (categories.isEmpty()) return
 
     Row(
         modifier = Modifier.fillMaxWidth()
     ) {
-        categories.forEach { scrapType ->
+        categories.forEach { (scrapType, originalCategory) ->
             Card(
                 shape = RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors(
@@ -43,7 +41,11 @@ fun CategoryChips(scraps: List<Scrap>) {
                 modifier = Modifier.padding(end = 8.dp)
             ) {
                 Text(
-                    text =  scrapType.getLabel(context) ,
+                    text = if (scrapType == ScrapType.CustomScrap && !originalCategory.isNullOrBlank()) {
+                        originalCategory  
+                    } else {
+                        scrapType.getLabel(context)
+                    },
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)

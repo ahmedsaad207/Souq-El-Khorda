@@ -100,7 +100,7 @@ fun ChatScreen(
                         if (state.otherUser != null) {
                             CachedUserImage(
                                 imageUrl = state.otherUser!!.imageUrl,
-                                modifier = Modifier.size(54.dp)
+                                modifier = Modifier.size(36.dp)
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(state.otherUser!!.name, style = MaterialTheme.typography.titleLarge)

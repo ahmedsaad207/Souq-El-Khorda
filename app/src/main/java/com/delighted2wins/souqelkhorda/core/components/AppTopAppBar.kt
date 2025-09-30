@@ -49,7 +49,7 @@ fun AppTopAppBar(
     val waveShape = GenericShape { size, _ ->
         moveTo(0f, 0f)
         lineTo(0f, size.height - 40f)
-        quadraticBezierTo(
+        quadraticTo(
             size.width / 2, size.height + 40f,
             size.width, size.height - 40f
         )
@@ -64,11 +64,15 @@ fun AppTopAppBar(
             ) {
                 Text(
                     text = screenName,
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.titleLarge,
+                    color = Color.White
+
                 )
                 Text(
                     text = userName,
-                    style = MaterialTheme.typography.bodySmall
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color.White
+
                 )
             }
         },
@@ -89,7 +93,7 @@ fun AppTopAppBar(
                     Icon(
                         painter = painterResource(id = R.drawable.notification),
                         contentDescription = "Notifications",
-                        tint = colorScheme.background
+                        tint = Color.White
                     )
                 }
             }

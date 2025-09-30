@@ -32,93 +32,111 @@ import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.enums.MeasurementType
 import com.delighted2wins.souqelkhorda.core.enums.ScrapType
 import com.delighted2wins.souqelkhorda.core.model.Scrap
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.ZoomableImageList
 
 @Composable
 fun ScrapItem(
     scrap: Scrap,
-    onEdit: () -> Unit,
-    onDelete: () -> Unit,
-    isLoading: MutableState<Boolean>,
-
-    ) {
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp, horizontal = 12.dp)
-            .border(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
-                shape = RoundedCornerShape(12.dp)
-            )
-            .background(
-                color = MaterialTheme.colorScheme.surface,
-                shape = RoundedCornerShape(12.dp),
-            )
-            .padding(12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-
-    ) {
-        val scrapType = ScrapType.entries.find { it.name.equals(scrap.category, ignoreCase = true) }
-        Icon(
-            painter = painterResource(scrapType?.iconRes ?: ScrapType.CustomScrap.iconRes),
-            contentDescription = scrap.category,
-            modifier = Modifier
-                .size(36.dp),
-            tint = scrapType?.tint ?: ScrapType.CustomScrap.tint
+    onEdit: () -> Unit = {},
+    onDelete: () -> Unit = {},
+    isLoading: MutableState<Boolean>?,
+    isMyOrderScreen: Boolean = false,
+    description: String = "",
+    urls: List<String> = emptyList()
+) {
+    Column (   modifier = Modifier
+        .fillMaxWidth()
+        .padding(vertical = 8.dp, horizontal = 12.dp)
+        .border(
+            width = 1.dp,
+            color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
+            shape = RoundedCornerShape(12.dp)
         )
-        Spacer(Modifier.width(12.dp))
-        Column(
-            modifier = Modifier.weight(1f)
+        .background(
+            color = MaterialTheme.colorScheme.surface,
+            shape = RoundedCornerShape(12.dp),
+        )
+        .padding(12.dp),){
+        Row(
+
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+
         ) {
-            Text(
-                text = ScrapType.entries.find { it.name == scrap.category }.run {
-                    if (this != null) {
-                        ScrapType.valueOf(scrap.category).getLabel(LocalContext.current)
-                    } else scrap.category
-                },
-                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Black),
-                color = MaterialTheme.colorScheme.onSurface
+            val scrapType =
+                ScrapType.entries.find { it.name.equals(scrap.category, ignoreCase = true) }
+            Icon(
+                painter = painterResource(scrapType?.iconRes ?: ScrapType.CustomScrap.iconRes),
+                contentDescription = scrap.category,
+                modifier = Modifier
+                    .size(36.dp),
+                tint = scrapType?.tint ?: ScrapType.CustomScrap.tint
             )
-            Spacer(modifier = Modifier.height(4.dp))
-            Row {
+            Spacer(Modifier.width(12.dp))
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
                 Text(
-                    text = scrap.amount.toString(),
+                    text = ScrapType.entries.find { it.name == scrap.category }.run {
+                        if (this != null) {
+                            ScrapType.valueOf(scrap.category).getLabel(LocalContext.current)
+                        } else scrap.category
+                    },
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Black),
                     color = MaterialTheme.colorScheme.onSurface
                 )
-                Spacer(modifier = Modifier.width(4.dp))
+                Spacer(modifier = Modifier.height(4.dp))
+                Row {
+                    Text(
+                        text = scrap.amount.toString(),
+                        style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Black),
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = MeasurementType.valueOf(scrap.unit).getLabel(LocalContext.current),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+
+            }
+            if (!isMyOrderScreen) {
+                Row {
+                    IconButton(
+                        onClick = onEdit,
+                        enabled = !(isLoading?.value ?: false)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = stringResource(R.string.edit),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    IconButton(
+                        onClick = onDelete,
+                        enabled = !(isLoading?.value ?: false)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = stringResource(R.string.delete),
+                            tint = MaterialTheme.colorScheme.error
+                        )
+                    }
+                }
+
+            }
+        }
+        if(isMyOrderScreen){
+            if(description.isNotEmpty()) {
                 Text(
-                    text = MeasurementType.valueOf(scrap.unit).getLabel(LocalContext.current),
+                    text = description,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+                Spacer(Modifier.height(8.dp))
             }
-
+            ZoomableImageList(urls)
         }
-        Row {
-            IconButton(
-                onClick = onEdit,
-                enabled = !isLoading.value
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Edit,
-                    contentDescription = stringResource(R.string.edit),
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-            IconButton(
-                onClick = onDelete,
-                enabled = !isLoading.value
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = stringResource(R.string.delete),
-                    tint = MaterialTheme.colorScheme.error
-                )
-            }
-        }
-
     }
 }

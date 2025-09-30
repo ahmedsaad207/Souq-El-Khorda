@@ -3,8 +3,10 @@ package com.delighted2wins.souqelkhorda.features.orderdetails.presentation.compo
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -31,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.components.CachedUserImage
@@ -69,7 +72,7 @@ fun AcceptedOfferItemCard(
                 CachedUserImage(
                     imageUrl = buyer.imageUrl,
                     modifier = Modifier
-                        .size(56.dp)
+                        .size(48.dp)
                         .clip(CircleShape)
                 )
 
@@ -96,7 +99,7 @@ fun AcceptedOfferItemCard(
                             horizontalAlignment = Alignment.End,
                             modifier = Modifier.weight(2f).padding(start = 8.dp)
                         ) {
-                            StatusChip(status = offer.status.name)
+                            //StatusChip(status = offer.status.name)
                             Spacer(modifier = Modifier.height(6.dp))
                             Text(
                                 text = offer.date.toFormattedDate(),
@@ -146,7 +149,10 @@ fun AcceptedOfferItemCard(
             ) {
                 OutlinedButton(
                     onClick = onChat,
-                    modifier = Modifier.weight(1f).height(42.dp)
+                    modifier = Modifier
+                        .defaultMinSize(minWidth = 0.dp)
+                        .height(42.dp),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.ChatBubbleOutline,
@@ -158,8 +164,9 @@ fun AcceptedOfferItemCard(
                         text = stringResource(R.string.chat),
                         style = MaterialTheme.typography.bodyMedium.copy(
                             color = MaterialTheme.colorScheme.secondary,
-                            fontWeight = FontWeight.Bold
-                        )
+                        ),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
 
@@ -169,25 +176,33 @@ fun AcceptedOfferItemCard(
                         containerColor = MaterialTheme.colorScheme.secondary,
                         contentColor = Color.White
                     ),
-                    modifier = Modifier.weight(1.2f).height(42.dp)
+                    modifier = Modifier
+                        .weight(1f)
+                        .defaultMinSize(minWidth = 0.dp)
+                        .height(42.dp),
+                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
                 ) {
                     Text(
                         text = stringResource(R.string.completed),
-                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
+                        style = MaterialTheme.typography.bodyMedium,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
 
                 OutlinedButton(
                     onClick = onCancel,
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Red),
-                    modifier = Modifier.weight(1f).height(42.dp)
+                    modifier = Modifier
+                        .defaultMinSize(minWidth = 0.dp)
+                        .height(42.dp),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
                 ) {
                     Text(
                         text = stringResource(R.string.cancel),
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Red
-                        )
+                        style = MaterialTheme.typography.bodyMedium.copy(color = Color.Red),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
             }
