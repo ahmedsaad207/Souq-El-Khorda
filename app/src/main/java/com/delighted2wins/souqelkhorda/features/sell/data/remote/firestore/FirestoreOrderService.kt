@@ -32,7 +32,9 @@ class FirestoreOrderService @Inject constructor(
         firestore.collection("history")
             .document(auth.uid.toString())
             .collection("orders")
-            .add(order.copy(orderId = orderId))
+            .document(orderId)
+            .set(order.copy(orderId = orderId))
+            .await()
     }
 
     suspend fun deleteCompanyOrder(orderId: String): Boolean {

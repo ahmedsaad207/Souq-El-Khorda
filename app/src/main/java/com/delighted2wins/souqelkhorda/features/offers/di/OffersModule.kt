@@ -5,6 +5,7 @@ import com.delighted2wins.souqelkhorda.features.offers.data.remote.OffersRemoteD
 import com.delighted2wins.souqelkhorda.features.offers.data.repository.OffersRepositoryImpl
 import com.delighted2wins.souqelkhorda.features.offers.domain.repository.OffersRepository
 import com.delighted2wins.souqelkhorda.features.offers.domain.usecase.DeleteOfferUseCase
+import com.delighted2wins.souqelkhorda.features.offers.domain.usecase.DeleteOffersByOrderIdUseCase
 import com.delighted2wins.souqelkhorda.features.offers.domain.usecase.GetOfferDetailsByIdUseCase
 import com.delighted2wins.souqelkhorda.features.offers.domain.usecase.GetOffersByBuyerUseCase
 import com.delighted2wins.souqelkhorda.features.offers.domain.usecase.GetOffersByOrderIdUseCase
@@ -75,5 +76,12 @@ object OffersUseCaseModule {
     fun provideGetOffersByOrderIdUseCase(
         repository: OffersRepository
     ): GetOffersByOrderIdUseCase = GetOffersByOrderIdUseCase(repository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideDeleteOffersByOrderIdUseCase(
+        repository: OffersRepository
+    ): DeleteOffersByOrderIdUseCase = DeleteOffersByOrderIdUseCase(repository)
+
 
 }

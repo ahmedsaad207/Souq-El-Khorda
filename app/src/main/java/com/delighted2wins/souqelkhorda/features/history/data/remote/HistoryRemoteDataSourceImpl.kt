@@ -4,6 +4,7 @@ import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
 import com.delighted2wins.souqelkhorda.core.model.Order
 import com.delighted2wins.souqelkhorda.features.history.data.model.HistoryDto
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -72,10 +73,7 @@ class HistoryRemoteDataSourceImpl @Inject constructor(
                 .collection(orderType)
                 .document(orderId)
 
-            val snapshot = orderRef.get().await()
-            if (!snapshot.exists()) return false
-
-            orderRef.update("status", status.name).await()
+            orderRef.set(mapOf("status" to status.name), SetOptions.merge()).await()
             true
         } catch (e: Exception) {
             e.printStackTrace()

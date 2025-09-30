@@ -19,4 +19,8 @@ class ChatRepositoryImpl @Inject constructor(
     override suspend fun deleteChat(orderId: String, offerId: String): Boolean {
         return remoteDataSource.deleteChat(orderId, offerId)
     }
+
+    override suspend fun deleteChatsByOrderId(orderId: String, offerIds: List<String>): Boolean {
+        return remoteDataSource.deleteChatsByOrderId(orderId, offerIds)
+    }
 }

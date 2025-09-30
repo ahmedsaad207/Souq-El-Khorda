@@ -96,49 +96,51 @@ fun NotificationsScreen(
                     }
 
                     else -> {
-                        items(state.notifications, key = { it.id }) { item ->
-                            when (state.notifications.isEmpty()) {
-                                true -> {
-                                    EmptyCart(R.raw.no_data,
-                                        context.getString(R.string.nothing_to_see_here_yet))
-                                }
-                                false -> {
-                                    Column {
-                                        NotificationCard(
-                                            imageUrl = item.imageUrl,
-                                            title = item.title,
-                                            description = item.message,
-                                            time = item.createdAt.toRelativeTime(context),
-                                            unread = item.read.not(),
-                                            onDismiss = {
-                                                viewModel.handleIntent(
-                                                    NotificationsContract.Intent.Dismiss(
-                                                        item.id
-                                                    )
+                        if (state.notifications.isEmpty()) {
+                            item {
+                                EmptyCart(
+                                    messageInfo = context.getString(R.string.nothing_to_see_here_yet)
+                                )
+                            }
+                        } else {
+                            items(state.notifications, key = { it.id }) { item ->
+                                Column {
+                                    NotificationCard(
+                                        imageUrl = item.imageUrl,
+                                        title = item.title,
+                                        description = item.message,
+                                        time = item.createdAt.toRelativeTime(context),
+                                        unread = item.read.not(),
+                                        onDismiss = {
+                                            viewModel.handleIntent(
+                                                NotificationsContract.Intent.Dismiss(
+                                                    item.id
                                                 )
-                                            },
-                                            onItemClick = {
-                                                viewModel.handleIntent(
-                                                    NotificationsContract.Intent.MarkAsRead(
-                                                        item.id
-                                                    )
+                                            )
+                                        },
+                                        onItemClick = {
+                                            viewModel.handleIntent(
+                                                NotificationsContract.Intent.MarkAsRead(
+                                                    item.id
                                                 )
-                                                onItemClick(item.id)
-                                            }
-                                        )
-                                    }
-                                    HorizontalDivider(
-                                        thickness = 1.dp,
-                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
+                                            )
+                                            onItemClick(item.id)
+                                        }
                                     )
                                 }
+                                HorizontalDivider(
+                                    thickness = 1.dp,
+                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
+                                )
                             }
-
                         }
+
                     }
                 }
             }
         }
     }
+
+
 }
 

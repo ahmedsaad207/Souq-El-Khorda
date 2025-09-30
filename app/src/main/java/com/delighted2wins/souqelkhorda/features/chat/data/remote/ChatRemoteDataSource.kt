@@ -6,4 +6,5 @@ interface ChatRemoteDataSource {
     suspend fun sendMessage(message: Message)
     fun getMessages(orderId: String, offerId: String, onMessage: (Message) -> Unit)
     suspend fun deleteChat(orderId: String, offerId: String): Boolean
+    suspend fun deleteChatsByOrderId(orderId: String, offerIds: List<String>): Boolean
 }

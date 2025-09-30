@@ -91,4 +91,30 @@ class OffersRemoteDataSourceImpl @Inject constructor(
         Log.d("OffersRemoteDataSource", "Fetched offers Count: ${snapshot.documents.size}")
         return snapshot.documents.mapNotNull { it.toObject(Offer::class.java) }
     }
+
+    override suspend fun deleteOffersByOrderId(orderId: String): Boolean {
+        return try {
+            val snapshot = offersCollection
+                .whereEqualTo("orderId", orderId)
+                .get()
+                .await()
+
+            if (snapshot.isEmpty) return true
+
+            val batch = firestore.batch()
+
+            snapshot.documents.forEach { doc ->
+                batch.delete(doc.reference)
+            }
+
+            batch.commit().await()
+            Log.d("OffersRemoteDataSource", "Deleted ${snapshot.documents.size} offers for order $orderId")
+            true
+        } catch (e: Exception) {
+            Log.e("OffersRemoteDataSource", "Failed to delete offers for order $orderId", e)
+            false
+        }
+    }
+
+
 }

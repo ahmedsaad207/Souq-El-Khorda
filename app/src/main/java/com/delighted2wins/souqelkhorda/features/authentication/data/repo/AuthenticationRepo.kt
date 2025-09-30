@@ -19,7 +19,12 @@ class AuthenticationRepoImp @Inject constructor(
 
     private val _userFlow = MutableStateFlow<AuthUser?>(null)
     override val userFlow = _userFlow.asStateFlow()
-
+    init {
+        val cachedUser = localDataSource.getCashedUser()
+        if (cachedUser.email.isNotEmpty()) {
+            _userFlow.value = cachedUser
+        }
+    }
     override suspend fun login(email: String, password: String): Flow<AuthenticationState> {
         return remoteDataSource.loginWithEmail(email, password).onEach { state ->
             if (state is AuthenticationState.Success) {
@@ -43,14 +48,17 @@ class AuthenticationRepoImp @Inject constructor(
         remoteDataSource.logout()
         localDataSource.freeUserData()
         _userFlow.value = null
+
     }
 
     override fun cashUserData( user: AuthUser){
-        localDataSource.cashUserData(user);
+        localDataSource.cashUserData(user)
+        _userFlow.value = user
     }
     override fun getCashedUserData() = localDataSource.getCashedUser()
     override fun freeUserCash() {
         localDataSource.freeUserData()
         _userFlow.value = null
+
     }
 }

@@ -226,6 +226,7 @@ private fun MarketOrderDetailsUI(
                     onMakeOfferClick = onMakeOfferClick,
                     onProfileClick = navToSellerProfile
                 )
+
             }
             item {
                 DirectionalText(

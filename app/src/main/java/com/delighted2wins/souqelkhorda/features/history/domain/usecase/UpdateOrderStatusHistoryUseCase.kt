@@ -8,6 +8,6 @@ class UpdateOrderStatusHistoryUseCase @Inject constructor(
     private val repository: HistoryRepository
 ) {
     suspend operator fun invoke(orderId: String, userId: String,orderType: String, status: OrderStatus): Boolean {
-        return repository.updateOrderStatus(orderId, userId,orderType, status)
+        return repository.updateOrderStatus(orderId, userId, orderType, status)
     }
 }

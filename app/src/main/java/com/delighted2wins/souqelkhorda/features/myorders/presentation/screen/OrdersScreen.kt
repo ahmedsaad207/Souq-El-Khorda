@@ -48,7 +48,6 @@ import com.delighted2wins.souqelkhorda.features.myorders.presentation.contract.M
 import com.delighted2wins.souqelkhorda.features.myorders.presentation.viewmodel.MyOrdersViewModel
 import com.delighted2wins.souqelkhorda.features.offers.UserActionsBottomSheet
 import kotlinx.coroutines.launch
-import java.nio.file.WatchEvent
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -75,8 +74,15 @@ fun OrdersScreen(
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var selectedOrderId by remember { mutableStateOf("") }
+    var currentActionType by remember { mutableStateOf<BottomSheetActionType?>(null) }
     var isBottomSheetVisible by remember { mutableStateOf(false) }
 
+    fun showOrderAction(orderId: String, actionType: BottomSheetActionType) {
+        selectedOrderId = orderId
+        currentActionType = actionType
+        isBottomSheetVisible = true
+        coroutineScope.launch { sheetState.show() }
+    }
 
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
@@ -183,9 +189,8 @@ fun OrdersScreen(
                         onCompanyDetailsClick(orderId, ownerId)
                     },
                     onDeclineClick = { orderId ->
-                        selectedOrderId = orderId
-                        isBottomSheetVisible = true
-                        coroutineScope.launch { sheetState.show() }
+                        showOrderAction(orderId, BottomSheetActionType.CANCEL_COMPANY_ORDER)
+
                     },
                     systemIsRtl
                 )
@@ -200,15 +205,19 @@ fun OrdersScreen(
                     },
                     onSaleDetailsClick = onSaleDetailsClick,
                     onOfferDetailsClick = onOfferDetailsClick,
+                    onSaleOrderCancelClick = { orderId ->
+                        showOrderAction(orderId, BottomSheetActionType.CANCEL_MARKET_ORDER)
+                    },
                     systemIsRtl
                 )
             }
         }
-        if (isBottomSheetVisible && selectedOrderId.isNotEmpty()) {
+        if (isBottomSheetVisible && selectedOrderId.isNotEmpty() && currentActionType != null) {
             ModalBottomSheet(
                 onDismissRequest = {
                     coroutineScope.launch { sheetState.hide() }
                     selectedOrderId = ""
+                    currentActionType = null
                     isBottomSheetVisible = false
                 },
                 sheetState = sheetState,
@@ -223,7 +232,11 @@ fun OrdersScreen(
                     isSubmitting = false,
                     isRtl = systemIsRtl,
                     onConfirmAction = {
-                        viewModel.onIntent(MyOrdersIntents.DeleteCompanyOrder(selectedOrderId))
+                        when (currentActionType) {
+                            BottomSheetActionType.CANCEL_COMPANY_ORDER -> viewModel.onIntent(MyOrdersIntents.DeleteCompanyOrder(selectedOrderId))
+                            BottomSheetActionType.CANCEL_MARKET_ORDER -> viewModel.onIntent(MyOrdersIntents.DeleteMarketOrder(selectedOrderId))
+                            else -> {}
+                        }
                     }
                 )
             }

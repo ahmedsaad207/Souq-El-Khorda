@@ -33,4 +33,8 @@ class OffersRepositoryImpl @Inject constructor(
     override suspend fun getOffersByOrderId(orderId: String): List<Offer> {
         return remoteDataSource.getOffersByOrderId(orderId)
     }
+
+    override suspend fun deleteOffersByOrderId(orderId: String): Boolean {
+       return remoteDataSource.deleteOffersByOrderId(orderId)
+    }
 }

@@ -1,7 +1,6 @@
 package com.delighted2wins.souqelkhorda.features.myorders.presentation.screen
 
 
-import android.R.attr.order
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,6 +31,7 @@ fun MarketOrdersScreen(
     onChipSelected: (String) -> Unit,
     onSaleDetailsClick: (String) -> Unit,
     onOfferDetailsClick: (String) -> Unit,
+    onSaleOrderCancelClick: (String) -> Unit,
     systemIsRtl: Boolean
 ) {
     var selectedFilter by remember { mutableStateOf("Sells") }
@@ -85,6 +85,9 @@ fun MarketOrdersScreen(
                             onDetailsClick = { order, _ ->
                                 onSaleDetailsClick(order)
                             },
+                            onCancelClick ={ orderId ->
+                                onSaleOrderCancelClick(orderId)
+                            }
                         )
                     }
                 }
@@ -103,6 +106,7 @@ fun MarketOrdersScreen(
                             onDetailsClick = { order, _ ->
                                 onOfferDetailsClick(order)
                             },
+                            onCancelClick ={}
                         )
                     }
                 }
