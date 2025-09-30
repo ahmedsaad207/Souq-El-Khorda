@@ -36,7 +36,8 @@ fun OrderItemCard(
     val contentIsRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
     val scrapType = ScrapType.fromCategory(item.category)
-    val categoryLabel = scrapType.getLabel(context = LocalContext.current)
+    val context = LocalContext.current
+    val categoryLabel = if (scrapType == ScrapType.CustomScrap && !item.category.isNullOrBlank()) item.category else scrapType.getLabel(context)
     val measurementEnum = MeasurementType.entries.firstOrNull { it.name.equals(item.unit, true) }
     val measurementLabel = measurementEnum?.getLabel(LocalContext.current) ?: ""
 

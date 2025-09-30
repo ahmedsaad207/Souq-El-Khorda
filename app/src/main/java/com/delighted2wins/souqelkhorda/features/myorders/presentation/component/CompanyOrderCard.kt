@@ -66,7 +66,7 @@ fun CompanyOrderCard(
                     style = AppTypography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
-                StatusChip(status = order.status.toString())
+              //  StatusChip(status = order.status.toString())
             }
 
             Spacer(modifier = Modifier.height(8.dp))
