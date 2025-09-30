@@ -55,7 +55,7 @@ class SignUpViewModel @Inject constructor(
                 emitError(AuthMsgEnum.GOVERNORATEVALIDATE.getMsg())
                 return@launch
             }
-            if (signUpRequestDto.area.isEmpty() || signUpRequestDto.area.length < 7) {
+            if (signUpRequestDto.area.isEmpty() || signUpRequestDto.area.length < 3) {
                 emitError(AuthMsgEnum.AREA.getMsg())
                 return@launch
             }
