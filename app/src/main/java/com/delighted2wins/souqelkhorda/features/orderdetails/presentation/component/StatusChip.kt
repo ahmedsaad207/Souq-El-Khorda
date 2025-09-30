@@ -29,7 +29,7 @@ fun StatusChip(status: String?) {
     if (status.isNullOrBlank()) return
 
     Surface(
-        shape = RoundedCornerShape(50),
+        shape = RoundedCornerShape(8.dp),
         tonalElevation = 2.dp,
         shadowElevation = 0.dp,
         color = when (status) {

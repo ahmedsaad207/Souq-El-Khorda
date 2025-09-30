@@ -1,6 +1,7 @@
 package com.delighted2wins.souqelkhorda.features.myorders.presentation.screen
 
 
+import android.R.attr.order
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,11 +44,11 @@ fun MarketOrdersScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(horizontal = 16.dp)
         ) {
             FilterWithBadge(
                 label = stringResource(R.string.sales_label),
@@ -64,11 +65,10 @@ fun MarketOrdersScreen(
             )
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         Box(
             modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
         ) {
             when (selectedFilter) {
                 "Sells" -> {
@@ -82,7 +82,9 @@ fun MarketOrdersScreen(
                             orders = state.sells,
                             isLoading = state.isLoading,
                             error = state.error,
-                            onDetailsClick = onSaleDetailsClick,
+                            onDetailsClick = { order, _ ->
+                                onSaleDetailsClick(order)
+                            },
                         )
                     }
                 }
@@ -98,7 +100,9 @@ fun MarketOrdersScreen(
                             orders = state.offers,
                             isLoading = state.isLoading,
                             error = state.error,
-                            onDetailsClick = onOfferDetailsClick,
+                            onDetailsClick = { order, _ ->
+                                onOfferDetailsClick(order)
+                            },
                         )
                     }
                 }

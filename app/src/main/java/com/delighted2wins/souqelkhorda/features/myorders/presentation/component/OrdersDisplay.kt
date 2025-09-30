@@ -8,19 +8,23 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.components.EmptyCart
 import com.delighted2wins.souqelkhorda.core.model.Order
+import com.delighted2wins.souqelkhorda.features.myorders.presentation.screen.CompanyOrderCard
 
 @Composable
 fun OrdersDisplay(
     orders: List<Order>,
     isLoading: Boolean,
     error: String?,
-    onDetailsClick: (String) -> Unit,
+    onDetailsClick: (String, String) -> Unit,
 ) {
+    val systemIsRtl = LocalConfiguration.current.layoutDirection == LayoutDirection.Rtl.ordinal
     when {
         isLoading -> {
             LazyColumn(
@@ -54,12 +58,20 @@ fun OrdersDisplay(
         else -> {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
+//                verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 items(orders) { order ->
-                    OrderItem(
+//                    OrderItem(
+//                        order = order,
+//                        onDetailsClick = onDetailsClick,
+//                    )
+                    CompanyOrderCard(
                         order = order,
                         onDetailsClick = onDetailsClick,
+                        onCancelClick = {
+                            // TODO Fayad
+                        },
+                        systemIsRtl = systemIsRtl
                     )
                 }
             }
