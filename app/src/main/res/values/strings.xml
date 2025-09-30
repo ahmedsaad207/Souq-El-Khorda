@@ -276,6 +276,7 @@
     <string name="order_items">Order Items (%1$d)</string>
     <string name="no_internet_message">no internet</string>
     <string name="nearest_buyers">Nearest Buyers</string>
+    <string name="browse_and_purchase_scrap_materials_from_sellers">Browse and purchase scrap materials from sellers</string>
 
 
 </resources>

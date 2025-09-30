@@ -46,8 +46,8 @@ enum class BottomSheetActionType(
         code = 2,
         enValue = "Confirm Delete",
         arValue = "تأكيد الحذف",
-        color = Color(0xFFF44336),
-        warningColor = Color(0xFFFFCDD2),
+        color = Color(0xFFB3261E),
+        warningColor = Color(0xFFF9DEDC),
         warnings = listOf(
             "Deleting this order will permanently remove all related data including offers and messages." to
                     "حذف هذا الطلب سيؤدي إلى إزالة جميع البيانات المتعلقة به نهائيًا بما في ذلك العروض والرسائل.",

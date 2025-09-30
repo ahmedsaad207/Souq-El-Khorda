@@ -3,12 +3,14 @@ package com.delighted2wins.souqelkhorda.features.offers
 import WarningCard
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -184,9 +186,11 @@ fun UserActionsBottomSheet(
             },
             modifier = Modifier.fillMaxWidth(),
             enabled = !isSubmitting,
+            shape = RoundedCornerShape(12.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = actionType.color
-            )
+            ),
+            contentPadding = PaddingValues(vertical = 16.dp)
         ) {
             if (isSubmitting) {
                 DotLoadingIndicator()

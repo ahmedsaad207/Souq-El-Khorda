@@ -197,7 +197,7 @@
     <string name="no_offers_available">لا يوجد عروض متاحة</string>
     <string name="no_orders_available">لا توجد طلبات متاحة</string>
     <string name="offers_label">عروضي</string>
-    <string name="sales_label">معروضاتي</string>
+    <string name="sales_label">طلباتى</string>
     <string name="order_items_label">تفاصيل الأصناف</string>
     <string name="order_id">رقم الطلب #%1$s</string>
     <string name="cancel_button">الغاء الطلب</string>
@@ -304,5 +304,6 @@
     <string name="order_items">عناصر الطلب (%1$d)</string>
     <string name="no_internet_message">لا يوجد إتصال بالانترنت</string>
     <string name="nearest_buyers">التجار القريبين</string>
+    <string name="browse_and_purchase_scrap_materials_from_sellers">تصفح واشترِ مواد الخردة من البائعين</string>
 
 </resources>

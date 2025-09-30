@@ -45,6 +45,8 @@ import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.compon
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.OrderDetailsTopBar
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.OrderItemCard
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.OrderSummaryCard
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.ScrapItem
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.ScrapItemCard
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.SellerInfoSection
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.MarketOrderDetailsEffect
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.MarketOrderDetailsIntent
@@ -201,11 +203,6 @@ private fun MarketOrderDetailsUI(
     onMakeOfferClick: () -> Unit = {},
     navToSellerProfile: () -> Unit = {}
 ) {
-    Surface(
-        modifier = Modifier
-            .fillMaxSize(),
-        color = Color.Transparent,
-    ) {
         LazyColumn(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -262,15 +259,16 @@ private fun MarketOrderDetailsUI(
             }
 
             items(order.scraps) { item ->
-                OrderItemCard(
-                    item = item,
-                    modifier = Modifier.padding(horizontal = 4.dp)
-                )
+                ScrapItemCard(item)
+
+//                OrderItemCard(
+//                    item = item,
+//                    modifier = Modifier.padding(horizontal = 4.dp)
+//                )
             }
 
             item {
                 Spacer(modifier = Modifier.height(30.dp))
             }
         }
-    }
 }
