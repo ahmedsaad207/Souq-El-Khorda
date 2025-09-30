@@ -36,9 +36,10 @@ import com.delighted2wins.souqelkhorda.core.model.Scrap
 @Composable
 fun ScrapItem(
     scrap: Scrap,
-    onEdit: () -> Unit,
-    onDelete: () -> Unit,
-    isLoading: MutableState<Boolean>,
+    onEdit: () -> Unit={},
+    onDelete: () -> Unit={},
+    isLoading: MutableState<Boolean>?,
+    isMyOrderScreen: Boolean = false
 
     ) {
 
@@ -97,28 +98,30 @@ fun ScrapItem(
             }
 
         }
-        Row {
-            IconButton(
-                onClick = onEdit,
-                enabled = !isLoading.value
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Edit,
-                    contentDescription = stringResource(R.string.edit),
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+        if (!isMyOrderScreen) {
+            Row {
+                IconButton(
+                    onClick = onEdit,
+                    enabled = !(isLoading?.value?:false)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = stringResource(R.string.edit),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                IconButton(
+                    onClick = onDelete,
+                    enabled = !(isLoading?.value?:false)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = stringResource(R.string.delete),
+                        tint = MaterialTheme.colorScheme.error
+                    )
+                }
             }
-            IconButton(
-                onClick = onDelete,
-                enabled = !isLoading.value
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = stringResource(R.string.delete),
-                    tint = MaterialTheme.colorScheme.error
-                )
-            }
-        }
 
+        }
     }
 }

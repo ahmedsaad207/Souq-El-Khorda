@@ -25,6 +25,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -34,6 +35,7 @@ import com.delighted2wins.souqelkhorda.core.components.DirectionalText
 import com.delighted2wins.souqelkhorda.core.enums.MeasurementType
 import com.delighted2wins.souqelkhorda.core.enums.ScrapType
 import com.delighted2wins.souqelkhorda.core.model.Scrap
+import com.delighted2wins.souqelkhorda.features.sell.presentation.components.ScrapItem
 
 @Composable
 fun ScrapItemCard(
@@ -68,35 +70,17 @@ fun ScrapItemCard(
                     .size(100.dp)
                     .aspectRatio(1f)
                     .clip(RoundedCornerShape(8.dp)),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Crop,
+                placeholder = painterResource(R.drawable.empty),
+                error = painterResource(R.drawable.empty),
+                fallback = painterResource(R.drawable.empty)
+            )
+            ScrapItem(
+                scrap = scrap,
+                isMyOrderScreen = true,
+                isLoading = null,
             )
 
-            Column(modifier = Modifier.fillMaxWidth()) {
-                AssistChip(
-                    onClick = {},
-                    label = { Text(categoryLabel) },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.Category,
-                            contentDescription = null,
-                            tint = scrapType.tint
-                        )
-                    },
-                    enabled = false
-                )
-                AssistChip(
-                    onClick = {},
-                    label = { Text("${scrap.amount} $measurementLabel") },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.Scale,
-                            contentDescription = null,
-                            tint = Color.Blue.copy(alpha = 0.8f),
-                        )
-                    },
-                    enabled = false
-                )
-            }
         }
 
         Column(
