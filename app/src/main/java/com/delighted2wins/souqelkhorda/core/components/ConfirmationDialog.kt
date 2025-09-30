@@ -8,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.R
 
@@ -23,25 +24,40 @@ fun ConfirmationDialog(
         onDismissRequest = onDismiss,
         shape = RoundedCornerShape(16.dp),
         tonalElevation = 6.dp,
-        title = { Text(text = title) },
+        title = {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold),
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        },
         text = {
             Text(
                 text = message,
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         },
         confirmButton = {
-            TextButton(onConfirm) {
-                Text(text = confirmLabel,style = MaterialTheme.typography.labelLarge)
+            TextButton(
+                onConfirm,
+                colors = ButtonDefaults.textButtonColors(
+                    contentColor = MaterialTheme.colorScheme.error
+                )
+            ) {
+                Text(text = confirmLabel, style = MaterialTheme.typography.labelLarge)
             }
         },
         dismissButton = {
-            TextButton(onDismiss,colors = ButtonDefaults.textButtonColors(
-                contentColor = MaterialTheme.colorScheme.error
-            )) {
-                Text(text = stringResource(R.string.cancel), style = MaterialTheme.typography.labelLarge)
+            TextButton(
+                onDismiss, colors = ButtonDefaults.textButtonColors(
+                )
+            ) {
+                Text(
+                    text = stringResource(R.string.cancel),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
             }
         }
     )

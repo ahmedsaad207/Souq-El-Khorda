@@ -126,7 +126,7 @@
     <string name="glass">زجاج</string>
     <string name="plastic">بلاستيك</string>
     <string name="custom_item">اخرى</string>
-    <string name="weight_kg">الوزن (كجم)</string>
+    <string name="weight_kg">كجم</string>
     <string name="pieces">قطع(ه)</string>
     <string name="order_submitted_successfully">تم إرسال الطلب بنجاح</string>
 
