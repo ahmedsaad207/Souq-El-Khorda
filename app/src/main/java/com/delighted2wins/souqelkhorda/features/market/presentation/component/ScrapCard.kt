@@ -117,7 +117,7 @@ fun ScrapCard(
     }
 }
 @Composable
-private fun ScrapMetaInfo( price: Int) {
+private fun ScrapMetaInfo( status: String, price: Int) {
     val context = LocalContext.current
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
