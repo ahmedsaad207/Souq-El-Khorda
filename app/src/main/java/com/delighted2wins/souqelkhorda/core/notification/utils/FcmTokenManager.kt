@@ -6,6 +6,7 @@ import androidx.core.content.edit
 import com.delighted2wins.souqelkhorda.core.AppConstant
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -28,8 +29,9 @@ class FcmTokenManager @Inject constructor(
     }
 
     suspend fun syncTokenToFirestore(uid: String) {
-        val token = getCachedToken() ?: return
+
         try {
+            val token = FirebaseMessaging.getInstance().token.await()
             FirebaseFirestore.getInstance()
                 .collection("users")
                 .document(uid)
@@ -40,4 +42,8 @@ class FcmTokenManager @Inject constructor(
             Log.e("FcmTokenManager", "Failed to sync FCM token: ${e.message}", e)
         }
     }
+
+
+
 }
+
