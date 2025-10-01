@@ -1,29 +1,46 @@
 package com.delighted2wins.souqelkhorda.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavEntry
-import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
+import com.delighted2wins.souqelkhorda.R
+import com.delighted2wins.souqelkhorda.core.components.NoInternetScreen
+import com.delighted2wins.souqelkhorda.features.authentication.presentation.screen.LoginScreen
+import com.delighted2wins.souqelkhorda.features.authentication.presentation.screen.SignUpScreen
+import com.delighted2wins.souqelkhorda.features.buyers.presentation.screen.BuyerRegistrationScreen
 import com.delighted2wins.souqelkhorda.features.buyers.presentation.screen.NearestBuyersScreen
+import com.delighted2wins.souqelkhorda.features.chat.presentation.screen.ChatScreen
+import com.delighted2wins.souqelkhorda.features.history.presentation.screen.HistoryScreen
 import com.delighted2wins.souqelkhorda.features.market.presentation.screen.MarketScreen
-import com.delighted2wins.souqelkhorda.features.sale.presentation.screen.DirectSaleScreen
-import com.delighted2wins.souqelkhorda.features.sign_up.presentation.screen.SignUpScreen
+import com.delighted2wins.souqelkhorda.features.myorders.presentation.screen.OrdersScreen
+import com.delighted2wins.souqelkhorda.features.notification.presentation.screen.NotificationsScreen
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.screen.CompanyOrderDetailsScreen
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.screen.MarketOrderDetailsScreen
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.screen.OffersOrderDetailsScreen
+import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.screen.SalesOrderDetailsScreen
+import com.delighted2wins.souqelkhorda.features.profile.presentation.screen.ProfileScreen
+import com.delighted2wins.souqelkhorda.features.sell.presentation.screen.SellScreen
 import com.delighted2wins.souqelkhorda.features.splash.SplashScreen
-import com.delighted2wins.souqelkhorda.login.presentation.screen.LoginScreen
 
 @Composable
 fun NavigationRoot(
     modifier: Modifier = Modifier,
     bottomBarState: MutableState<Boolean>,
     snackBarState: SnackbarHostState,
-    backStack: NavBackStack
+    backStack: NavBackStack,
+    innerPadding: PaddingValues,
+    navState: MutableState<Boolean>,
+    screenNameState: MutableState<String>,
+    isOnline: Boolean
 ) {
     NavDisplay(
         modifier = modifier, backStack = backStack, entryDecorators = listOf(
@@ -31,79 +48,309 @@ fun NavigationRoot(
             rememberViewModelStoreNavEntryDecorator(),
             rememberSceneSetupNavEntryDecorator()
         ),
-        onBack ={
+        onBack = {
             if (backStack.size > 1) {
                 backStack.removeLastOrNull()
             }
         },
         entryProvider = { key ->
             when (key) {
-                DirectSaleScreen -> {
+                is DirectSaleScreen -> {
+                    navState.value = false
+                    screenNameState.value = "Sell"
                     NavEntry(key) {
                         bottomBarState.value = true
-                        DirectSaleScreen()
+                        SellScreen(
+                            innerPadding = innerPadding,
+                            snackBarState = snackBarState,
+                            isOnline = isOnline
+                        )
                     }
                 }
 
-                MarketScreen -> {
+                is MarketScreen -> {
                     NavEntry(key) {
                         bottomBarState.value = true
-                        MarketScreen()
-                    }
-                }
-
-                NearestBuyersScreen -> {
-                    NavEntry(key) {
-                        bottomBarState.value = true
-                        NearestBuyersScreen()
-                    }
-                }
-
-                SplashScreen -> {
-                    NavEntry(key) {
-                        SplashScreen {
-                            bottomBarState.value = false
-                            backStack.set(
-                                element = LoginScreen, index = 0
+                        screenNameState.value = stringResource(R.string.market)
+                        if (isOnline) {
+                            MarketScreen(
+                                innerPadding,
+                                snackBarHostState = snackBarState,
+                                onDetailsClick = { orderId, ownerId ->
+                                    backStack.add(
+                                        MarketOrderDetailsKey(
+                                            orderId,
+                                            ownerId,
+                                        )
+                                    )
+                                },
                             )
+                        } else {
+                            NoInternetScreen()
                         }
                     }
                 }
 
-                LoginScreen -> {
+                is MarketOrderDetailsKey -> {
+                    NavEntry(key) {
+                        bottomBarState.value = false
+                        if (isOnline) {
+                            MarketOrderDetailsScreen(
+                                snackBarHostState = snackBarState,
+                                orderId = key.orderId,
+                                orderOwnerId = key.orderOwnerId,
+                                onBackClick = { backStack.remove(key) },
+                                navToSellerProfile = {
+                                    backStack.add(ProfileScreen)
+                                }
+                            )
+                        } else {
+                            NoInternetScreen()
+                        }
+                    }
+                }
+
+                is CompanyOrderDetailsKey -> {
+                    NavEntry(key) {
+                        bottomBarState.value = false
+                        if (isOnline) {
+                            CompanyOrderDetailsScreen(
+                                orderId = key.orderId,
+                                orderOwnerId = key.orderOwnerId,
+                                onBackClick = { backStack.remove(key) }
+                            )
+                        } else {
+                            NoInternetScreen()
+                        }
+                    }
+                }
+
+                is SalesOrderDetailsKey -> {
+                    NavEntry(key) {
+                        bottomBarState.value = false
+                        if (isOnline) {
+                            SalesOrderDetailsScreen(
+                                orderId = key.orderId,
+                                snackBarHostState = snackBarState,
+                                onChatClick = { orderId, sellerId, buyerId, offerId ->
+                                    backStack.add(ChatKey(orderId, sellerId, buyerId, offerId))
+                                },
+                                onBackClick = { backStack.remove(key) }
+                            )
+                        } else {
+                            NoInternetScreen()
+                        }
+                    }
+                }
+
+                is OffersOrderDetailsKey -> {
+                    NavEntry(key) {
+                        bottomBarState.value = false
+                        if (isOnline) {
+                            OffersOrderDetailsScreen(
+                                snackBarHostState = snackBarState,
+                                orderId = key.orderId,
+                                onChatClick = { orderId, sellerId, buyerId, offerId ->
+                                    backStack.add(ChatKey(orderId, sellerId, buyerId, offerId))
+                                },
+                                onBackClick = { backStack.remove(key) }
+                            )
+                        } else {
+                            NoInternetScreen()
+                        }
+                    }
+                }
+
+                is ChatKey -> {
+                    NavEntry(key) {
+                        bottomBarState.value = false
+                        if (isOnline) {
+                            ChatScreen(
+                                orderId = key.orderId,
+                                sellerId = key.sellerId,
+                                buyerId = key.buyerId,
+                                offerId = key.offerId,
+                                onBack = { backStack.remove(key) }
+                            )
+                        } else {
+                            NoInternetScreen()
+                        }
+                    }
+                }
+
+                is NearestBuyersScreen -> {
+                    NavEntry(key) {
+                        bottomBarState.value = true
+                        screenNameState.value = stringResource(R.string.nearest_buyers)
+
+                        if (isOnline) {
+                            NearestBuyersScreen(
+                                innerPadding = innerPadding,
+                                onBuyerClick = {
+                                    backStack.add(element = BuyerRegistration)
+                                },
+                                snackBarHostState = snackBarState,
+                            )
+                        } else {
+                            NoInternetScreen()
+                        }
+                    }
+                }
+
+                is SplashScreen -> {
+                    NavEntry(key) {
+                        SplashScreen(
+                            navToLogin = {
+                                bottomBarState.value = false
+                                backStack.set(
+                                    element = LoginScreen, index = 0
+                                )
+                            },
+                            navToHome = {
+                                bottomBarState.value = true
+                                backStack.set(
+                                    element = DirectSaleScreen, index = 0
+                                )
+
+                            }
+                        )
+                    }
+                }
+
+                is LoginScreen -> {
                     NavEntry(key) {
                         bottomBarState.value = false
                         LoginScreen(
+                            onRegisterClick = {
+                                backStack.add(SignUpScreen)
+                            },
                             onLoginClick = {
                                 backStack.set(
                                     element = DirectSaleScreen, index = 0
                                 )
                             },
-                            onRegisterClick = {
-                                backStack.add(SignUpScreen)
-                            },
                             snackBarHostState = snackBarState,
+                            innerPadding = innerPadding,
                         )
 
                     }
                 }
 
-                SignUpScreen -> {
+                is SignUpScreen -> {
                     NavEntry(key) {
                         bottomBarState.value = false
-                        SignUpScreen(onBackClick = {
-                            backStack.remove(SignUpScreen)
-                            backStack.add(LoginScreen)
-                        }, snackBarHostState = snackBarState, onRegisterClick = {
-                            backStack.remove(SignUpScreen)
-                            backStack.add(LoginScreen)
-                        })
+                        SignUpScreen(
+                            onBackClick = {
+                                backStack.remove(SignUpScreen)
+                                backStack.set(element = LoginScreen, index = 0)
+                            },
+                            onRegisterClick = {
+                                backStack.remove(SignUpScreen)
+                                backStack.set(element = LoginScreen, index = 0)
+                            },
+                            snackBarHostState = snackBarState,
+                            innerPadding = innerPadding
+                        )
+                    }
+                }
 
+                is ProfileScreen -> {
+                    NavEntry(key) {
+                        bottomBarState.value = false
+                        ProfileScreen(
+                            snackBarState = snackBarState,
+                            onBackClick = { backStack.remove(key) },
+                            onLogoutClick = {
+                                backStack.clear()
+                                backStack.add(LoginScreen)
+                            },
+                            onHistoryClick = { backStack.add(HistoryScreen) },
+                            isOnline = isOnline
+                        )
+                    }
+                }
+
+                is OrdersScreen -> {
+                    NavEntry(key) {
+                        bottomBarState.value = true
+                        screenNameState.value = stringResource(R.string.my_orders)
+                        if (isOnline) {
+                            OrdersScreen(
+                                innerPadding = innerPadding,
+                                snackBarHostState = snackBarState,
+                                onCompanyDetailsClick = { orderId, ownerId ->
+                                    backStack.add(
+                                        CompanyOrderDetailsKey(orderId, ownerId)
+                                    )
+                                },
+                                onSaleDetailsClick = { orderId ->
+                                    backStack.add(
+                                        SalesOrderDetailsKey(orderId)
+                                    )
+                                },
+                                onOfferDetailsClick = { orderId ->
+                                    backStack.add(
+                                        OffersOrderDetailsKey(orderId)
+                                    )
+                                }
+                            )
+                        } else {
+                            NoInternetScreen()
+                        }
+                    }
+                }
+
+                is NotificationsScreen -> {
+                    NavEntry(key) {
+                        bottomBarState.value = false
+                        if (isOnline) {
+                            NotificationsScreen(
+                                onBackClick = { backStack.remove(key) },
+                            )
+                        } else {
+                            NoInternetScreen()
+                        }
+                    }
+                }
+
+                is HistoryScreen -> {
+                    NavEntry(key) {
+                        bottomBarState.value = false
+                        if (isOnline) {
+
+                            HistoryScreen(
+                                onViewDetailsClick = { orderId, orderOwnerId, typeFlag ->
+                                    backStack.add(
+                                        when (typeFlag) {
+                                            "SALE" -> CompanyOrderDetailsKey(orderId, orderOwnerId)
+                                            "MY_ORDER" -> SalesOrderDetailsKey(orderId)
+                                            else -> OffersOrderDetailsKey(orderId)
+                                        }
+                                    )
+                                },
+                                onBackClick = { backStack.remove(key) }
+                            )
+                        } else {
+                            NoInternetScreen()
+                        }
+                    }
+                }
+
+                is BuyerRegistration -> {
+                    NavEntry(key) {
+                        bottomBarState.value = false
+                        BuyerRegistrationScreen(
+                            innerPadding = innerPadding,
+                            snackBarHostState = snackBarState,
+                            onBackClick = {
+                                backStack.remove(key)
+                            },
+                            isOnline = isOnline
+                        )
                     }
                 }
 
                 else -> error("Unknown screen $key")
             }
-
         })
 }

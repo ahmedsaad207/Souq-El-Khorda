@@ -1,0 +1,245 @@
+package com.delighted2wins.souqelkhorda.features.myorders.presentation.screen
+
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.delighted2wins.souqelkhorda.R
+import com.delighted2wins.souqelkhorda.core.enums.BottomSheetActionType
+import com.delighted2wins.souqelkhorda.core.enums.OrderSource
+import com.delighted2wins.souqelkhorda.features.myorders.presentation.contract.MyOrdersEffect
+import com.delighted2wins.souqelkhorda.features.myorders.presentation.contract.MyOrdersIntents
+import com.delighted2wins.souqelkhorda.features.myorders.presentation.viewmodel.MyOrdersViewModel
+import com.delighted2wins.souqelkhorda.features.offers.UserActionsBottomSheet
+import kotlinx.coroutines.launch
+
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@Composable
+fun OrdersScreen(
+    innerPadding: PaddingValues = PaddingValues(),
+    snackBarHostState: SnackbarHostState,
+    viewModel: MyOrdersViewModel = hiltViewModel(),
+    onCompanyDetailsClick: (orderId: String, ownerId: String) -> Unit,
+    onSaleDetailsClick: (orderId: String) -> Unit,
+    onOfferDetailsClick: (orderId: String) -> Unit,
+) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val systemIsRtl = LocalConfiguration.current.layoutDirection == LayoutDirection.Rtl.ordinal
+    val tabs = listOf(
+        OrderSource.COMPANY to 0,
+        OrderSource.MARKET to 0
+    )
+
+    val pagerState = rememberPagerState(initialPage = 0, pageCount = { tabs.size })
+    val scope = rememberCoroutineScope()
+    val coroutineScope = rememberCoroutineScope()
+    val isRtl: Boolean = LocalLayoutDirection.current == LayoutDirection.Rtl
+    val retry = stringResource(R.string.retry)
+
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var selectedOrderId by remember { mutableStateOf("") }
+    var currentActionType by remember { mutableStateOf<BottomSheetActionType?>(null) }
+    var isBottomSheetVisible by remember { mutableStateOf(false) }
+
+    fun showOrderAction(orderId: String, actionType: BottomSheetActionType) {
+        selectedOrderId = orderId
+        currentActionType = actionType
+        isBottomSheetVisible = true
+        coroutineScope.launch { sheetState.show() }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                is MyOrdersEffect.ShowSuccess -> {
+                    if (isBottomSheetVisible) {
+                        sheetState.hide()
+                        isBottomSheetVisible = false
+                        selectedOrderId = ""
+                    }
+                    coroutineScope.launch { snackBarHostState.showSnackbar(message = effect.message) }
+                }
+
+                is MyOrdersEffect.ShowError -> {
+                    coroutineScope.launch {
+                        snackBarHostState.showSnackbar(
+                            message = effect.message,
+                            actionLabel = retry
+                        ).let { result ->
+                            if (result == SnackbarResult.ActionPerformed) {
+                                viewModel.onIntent(MyOrdersIntents.LoadSaleOrders)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(pagerState.currentPage) {
+        when (pagerState.currentPage) {
+            0 -> viewModel.onIntent(MyOrdersIntents.LoadSaleOrders)
+            1 -> viewModel.onIntent(MyOrdersIntents.LoadSells)
+        }
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Transparent)
+            .padding(innerPadding)
+    ) {
+        TabRow(
+            selectedTabIndex = pagerState.currentPage,
+            containerColor = Color.Transparent,
+            contentColor = Color.Black,
+            indicator = {}
+        ) {
+            tabs.forEachIndexed { index, (title, count) ->
+                val isSelected = pagerState.currentPage == index
+                Tab(
+                    selected = isSelected,
+                    onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
+                    text = {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                            modifier = Modifier
+                                .background(
+                                    if (isSelected) MaterialTheme.colorScheme.secondary.copy(alpha = 0.1f)
+                                    else Color.Transparent,
+                                    shape = MaterialTheme.shapes.medium
+                                )
+                                .padding(horizontal = 12.dp, vertical = 6.dp)
+                        ) {
+                            Text(
+                                text = stringResource(id = title.labelRes),
+                                fontSize = 20.sp,
+                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                                color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Gray
+                            )
+
+//                            Badge(
+//                                containerColor = Color.Red,
+//                                contentColor = Color.White
+//                            ) {
+//                                Text(
+//                                    text = count.toString(),
+//                                    fontSize = 16.sp
+//                                )
+//                            }
+                        }
+                    }
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    if (isRtl) MaterialTheme.colorScheme.background else Color.Transparent
+                )
+        ) { page ->
+            when (page) {
+                0 -> CompanyOrdersScreen(
+                    state.saleOrders,
+                    state.isLoading,
+                    state.error,
+                    onCompanyDetailsClick = { orderId, ownerId ->
+                        onCompanyDetailsClick(orderId, ownerId)
+                    },
+                    onDeclineClick = { orderId ->
+                        showOrderAction(orderId, BottomSheetActionType.CANCEL_COMPANY_ORDER)
+
+                    },
+                    systemIsRtl
+                )
+
+                1 -> MarketOrdersScreen(
+                    state = state,
+                    onChipSelected = { chip ->
+                        when (chip) {
+                            "Sells" -> viewModel.onIntent(MyOrdersIntents.LoadSells)
+                            "Offers" -> viewModel.onIntent(MyOrdersIntents.LoadOffers)
+                        }
+                    },
+                    onSaleDetailsClick = onSaleDetailsClick,
+                    onOfferDetailsClick = onOfferDetailsClick,
+                    onSaleOrderCancelClick = { orderId ->
+                        showOrderAction(orderId, BottomSheetActionType.CANCEL_MARKET_ORDER)
+                    },
+                    systemIsRtl
+                )
+            }
+        }
+        if (isBottomSheetVisible && selectedOrderId.isNotEmpty() && currentActionType != null) {
+            ModalBottomSheet(
+                onDismissRequest = {
+                    coroutineScope.launch { sheetState.hide() }
+                    selectedOrderId = ""
+                    currentActionType = null
+                    isBottomSheetVisible = false
+                },
+                sheetState = sheetState,
+                containerColor = MaterialTheme.colorScheme.surface
+            ) {
+                UserActionsBottomSheet(
+                    orderId = selectedOrderId,
+                    offerMaker = null,
+                    sheetState = sheetState,
+                    coroutineScope = coroutineScope,
+                    actionType = BottomSheetActionType.CANCEL_COMPANY_ORDER,
+                    isSubmitting = false,
+                    isRtl = systemIsRtl,
+                    onConfirmAction = {
+                        when (currentActionType) {
+                            BottomSheetActionType.CANCEL_COMPANY_ORDER -> viewModel.onIntent(MyOrdersIntents.DeleteCompanyOrder(selectedOrderId))
+                            BottomSheetActionType.CANCEL_MARKET_ORDER -> viewModel.onIntent(MyOrdersIntents.DeleteMarketOrder(selectedOrderId))
+                            else -> {}
+                        }
+                    }
+                )
+            }
+        }
+    }
+}

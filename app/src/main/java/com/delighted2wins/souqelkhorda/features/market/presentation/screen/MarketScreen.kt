@@ -1,106 +1,295 @@
 package com.delighted2wins.souqelkhorda.features.market.presentation.screen
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import com.delighted2wins.souqelkhorda.app.theme.Til
-import com.delighted2wins.souqelkhorda.features.market.data.ScrapItem
-import com.delighted2wins.souqelkhorda.features.market.data.ScrapStatus
-import com.delighted2wins.souqelkhorda.features.market.data.User
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.delighted2wins.souqelkhorda.R
+import com.delighted2wins.souqelkhorda.core.components.EmptyCart
+import com.delighted2wins.souqelkhorda.core.enums.BottomSheetActionType
+import com.delighted2wins.souqelkhorda.core.model.Offer
+import com.delighted2wins.souqelkhorda.core.model.Order
+import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.ScrapCard
 import com.delighted2wins.souqelkhorda.features.market.presentation.component.SearchBar
+import com.delighted2wins.souqelkhorda.features.market.presentation.component.ShimmerScrapCard
+import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketEffect
+import com.delighted2wins.souqelkhorda.features.market.presentation.contract.MarketIntent
+import com.delighted2wins.souqelkhorda.features.offers.UserActionsBottomSheet
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MarketScreen(
-    onBuyClick: () -> Unit = {},
-    onDetailsClick: () -> Unit = {}
+    innerPadding: PaddingValues = PaddingValues(),
+    snackBarHostState: SnackbarHostState,
+    viewModel: MarketViewModel = hiltViewModel(),
+    onDetailsClick: (String, String) -> Unit,
 ) {
-    var query by remember { mutableStateOf("") }
+    val state = viewModel.state
     val isRtl: Boolean = LocalLayoutDirection.current == LayoutDirection.Rtl
-    val users = sampleUser()
+    val pullToRefreshState = rememberPullToRefreshState()
+    val coroutineScope = rememberCoroutineScope()
 
-    LazyColumn(
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var selectedOrder by remember { mutableStateOf<Order?>(null) }
+    var isBottomSheetVisible by remember { mutableStateOf(false) }
+
+    val retryLabel = stringResource(R.string.retry)
+
+    LaunchedEffect(Unit) {
+        viewModel.loadCurrentUser()
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                is MarketEffect.NavigateToOrderDetails -> onDetailsClick(
+                    effect.orderId,
+                    effect.ownerId
+                )
+
+                is MarketEffect.ShowSuccess -> {
+                    if (isBottomSheetVisible) {
+                        sheetState.hide()
+                        isBottomSheetVisible = false
+                        selectedOrder = null
+                    }
+                    coroutineScope.launch { snackBarHostState.showSnackbar(effect.message) }
+                }
+
+                is MarketEffect.ShowError -> {
+                    coroutineScope.launch {
+                        snackBarHostState.showSnackbar(
+                            message = effect.message,
+                            actionLabel = retryLabel
+                        ).let { result ->
+                            if (result == SnackbarResult.ActionPerformed) {
+                                viewModel.onIntent(MarketIntent.Refresh)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    PullToRefreshBox(
+        state = pullToRefreshState,
+        isRefreshing = state.isRefreshing,
+        onRefresh = { viewModel.onIntent(MarketIntent.Refresh) },
         modifier = Modifier
             .fillMaxSize()
-            .padding(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+            .padding(innerPadding)
     ) {
-        item {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                SearchBar(
-                    query = query,
-                    onQueryChange = { query = it },
-                    modifier = Modifier.fillMaxWidth()
-                )
+        when {
+            state.isLoading -> {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    items(10) { ShimmerScrapCard(systemIsRtl = isRtl) }
+                }
+            }
+
+            state.error != null -> {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(16.dp)
+                ) {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(400.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = state.error,
+                                style = MaterialTheme.typography.titleLarge,
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    }
+                }
+            }
+
+            state.isEmpty -> {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(16.dp)
+                ) {
+                    item {
+                        EmptyCart(
+                            messageInfo = stringResource(R.string.no_market_data)
+                        )
+                    }
+                }
+            }
+
+            else -> {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    item {
+                        SearchBar(
+                            query = state.query,
+                            onQueryChange = {
+                                viewModel.onIntent(MarketIntent.SearchQueryChanged(it))
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                    }
+
+                    item {
+                        Column {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+//                                AsyncImage(
+//                                    model = R.drawable.recycle,
+//                                    contentDescription = null,
+//                                    modifier = Modifier.size(48.dp),
+//                                )
+                                Text(
+                                    text = stringResource(R.string.available_offers),
+                                    style = MaterialTheme.typography.headlineLarge.copy(
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = MaterialTheme.colorScheme.primary,
+                                    ),
+                                    modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
+                                )
+                            }
+                            Spacer(Modifier.height(8.dp))
+                            Text(
+                                text = stringResource(R.string.browse_and_purchase_scrap_materials_from_sellers),
+                                textAlign = TextAlign.Start,
+                                style = MaterialTheme.typography.bodyLarge.copy(
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                            )
+                            Spacer(Modifier.height(8.dp))
+                        }
+                    }
+
+                    items(
+                        state.successfulOrders.filter {
+                            it.title.contains(
+                                state.query,
+                                ignoreCase = true
+                            ) || state.query.isBlank()
+                        }
+                    ) { scrapData ->
+                        if (state.successfulOrders.isEmpty()) {
+                            Box {
+                                EmptyCart(
+                                    messageInfo = stringResource(R.string.u_have_no_buyer)
+                                )
+                            }
+                        }
+
+                        var user by remember { mutableStateOf<MarketUser?>(null) }
+
+                        LaunchedEffect(scrapData) {
+                            viewModel.getUserData(scrapData.userId) { loadedUser ->
+                                user = loadedUser
+                            }
+                        }
+
+                        user?.let { loadedUser ->
+                            ScrapCard(
+                                currentUserId = viewModel.currentUser?.id.toString(),
+                                marketUser = loadedUser,
+                                order = scrapData,
+                                onMakeOfferClick = {
+                                    selectedOrder = scrapData
+                                    isBottomSheetVisible = true
+                                    coroutineScope.launch { sheetState.show() }
+                                },
+                                onDetailsClick = { orderId, ownerId ->
+                                    onDetailsClick(
+                                        orderId,
+                                        ownerId
+                                    )
+                                },
+                            )
+                        } ?: ShimmerScrapCard(systemIsRtl = isRtl)
+                    }
+
+                    item { Spacer(modifier = Modifier.padding(60.dp)) }
+                }
             }
         }
+    }
 
-        item {
-            Text(
-                text = if (isRtl) "العروض المتاحة" else "Available Offers",
-                style = MaterialTheme.typography.titleMedium,
-                color = Til,
-                modifier = Modifier.padding(vertical = 16.dp)
-            )
-        }
-
-        items(
-            sampleData().filter {
-                it.title.contains(query, ignoreCase = true) || query.isBlank()
-            }
-        ) { scrapData ->
-            val user = users.firstOrNull { it.id == scrapData.userId }
-
-            ScrapCard(
-                user = user ?: User(0, "مستخدم مجهول", "غير معروف"),
-                scrapData,
-                onBuyClick = { /* Handle buy action */ },
-                onDetailsClick = { /* Handle details action */ },
+    if (isBottomSheetVisible && viewModel.currentUser != null) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                coroutineScope.launch {
+                    sheetState.hide()
+                    isBottomSheetVisible = false
+                    selectedOrder = null
+                }
+            },
+            sheetState = sheetState,
+            containerColor = MaterialTheme.colorScheme.surface,
+        ) {
+            UserActionsBottomSheet(
+                orderId = selectedOrder!!.orderId,
+                offerMaker = viewModel.currentUser,
+                sheetState = sheetState,
+                coroutineScope = coroutineScope,
+                onConfirmAction = {
+                    viewModel.onIntent(
+                        MarketIntent.MakeOffer(
+                            selectedOrder!!,
+                            it as Offer,
+                            selectedOrder!!.userId
+                        )
+                    )
+                },
+                isSubmitting = viewModel.state.isSubmitting,
                 isRtl = isRtl,
+                actionType = BottomSheetActionType.MAKE_OFFER
             )
         }
     }
-}
-
-
-fun sampleData() = listOf(
-    ScrapItem(1, "بلاستيك وألومنيوم", "مجموعة متنوعة...", "القاهرة - المعادي", 25,status = ScrapStatus.Available, date = "2025-09-10", userId = 100),
-    ScrapItem(2, "ورق وكرتون مكتبي", "أوراق مكتبية...", "الجيزة - الدقي", 30,status = ScrapStatus.Sold, date = "2025-09-5", userId = 101),
-    ScrapItem(3, "حديد خردة", "قطع حديد...", "الإسكندرية", 50,status = ScrapStatus.Waiting, date = "2025-09-12", userId = 102),
-    ScrapItem(4, "نحاس وأسلاك", "أسلاك نحاس...", "طنطا", 15,status = ScrapStatus.Available, date = "2025-09-1", userId = 103),
-    ScrapItem(5, "زجاج مستعمل", "زجاج معاد...", "المنصورة", 20,status = ScrapStatus.Reserved, date = "2025-09-2", userId = 100)
-)
-
-fun sampleUser() = listOf(
-    User(100, "أحمد محمد", "القاهرة - المعادي", "https://avatar.iran.liara.run/public/boy?username=Scott"),
-    User(101, "فاطمة أحمد", "الجيزة - الدقي", "https://avatar.iran.liara.run/public/girl?username=Maria"),
-    User(102, "محمد علي", "الإسكندرية", "https://avatar.iran.liara.run/public/boy?username=Scott"),
-    User(103, "سارة محمود", "طنطا", "https://avatar.iran.liara.run/public/girl?username=Maria")
-)
-
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun MarketScreenPreview() {
-    MarketScreen()
 }

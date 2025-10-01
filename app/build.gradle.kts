@@ -4,7 +4,10 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
+    id("com.google.gms.google-services")
+
     alias(libs.plugins.jetbrains.kotlin.serialization)
+    id("kotlin-parcelize")
 
 }
 
@@ -41,6 +44,7 @@ android {
     buildFeatures {
         compose = true
     }
+    ndkVersion = "29.0.14033849 rc4"
 }
 
 dependencies {
@@ -62,27 +66,62 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     //navigation3
-
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
     implementation(libs.kotlinx.serialization.core)
 
+
+    //lotti
+    implementation("com.airbnb.android:lottie-compose:6.6.9")
+
     //icon
-    implementation ("androidx.compose.material:material-icons-extended")
+    implementation("androidx.compose.material:material-icons-extended")
+    implementation ("androidx.compose.material3:material3:1.4.0")
+
+    //scoped api
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose-android:2.9.4")
 
 
     // hilt
-    implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.3.0")
     implementation("com.google.dagger:hilt-android:2.56.2")
     ksp("com.google.dagger:hilt-android-compiler:2.56.2")
 
     // firebase
-    implementation(platform("com.google.firebase:firebase-bom:34.2.0"))
+    implementation(platform("com.google.firebase:firebase-bom:34.3.0"))
+    implementation("com.google.firebase:firebase-firestore:26.0.1")
+    implementation("com.google.firebase:firebase-auth:24.0.1")
+    implementation("com.google.firebase:firebase-messaging")
 
-    //extended icons
-    implementation (libs.androidx.compose.material.icons.extended)
+    // retrofit
+    implementation ("com.squareup.retrofit2:retrofit:3.0.0")
+    implementation ("com.squareup.retrofit2:converter-gson:3.0.0")
+
+    //live data
+    implementation("androidx.compose.runtime:runtime-livedata:1.9.2")
+
 
     // coil
     implementation("io.coil-kt:coil-compose:2.7.0")
+
+    // room
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+
+    // accompanist placeholder (shimmer)
+    implementation("com.google.accompanist:accompanist-placeholder-material3:0.36.0")
+
+    // cloudinary
+    implementation("com.cloudinary:cloudinary-android:3.1.2")
+
+    // gson
+    implementation("com.google.code.gson:gson:2.13.2")
+
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.36.0")
+//location services
+    implementation("com.google.android.gms:play-services-location:21.3.0")
+
 }
+
