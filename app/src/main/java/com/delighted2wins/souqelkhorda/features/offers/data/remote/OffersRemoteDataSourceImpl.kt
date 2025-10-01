@@ -1,6 +1,5 @@
 package com.delighted2wins.souqelkhorda.features.offers.data.remote
 
-import android.util.Log
 import com.delighted2wins.souqelkhorda.core.enums.OfferStatus
 import com.delighted2wins.souqelkhorda.core.model.Offer
 import com.google.firebase.firestore.FirebaseFirestore
@@ -54,7 +53,7 @@ class OffersRemoteDataSourceImpl @Inject constructor(
                 .await()
             true
         } catch (e: Exception) {
-            Log.e("OffersRemoteDataSource", "Error updating offer status", e)
+            
             false
         }
     }
@@ -64,7 +63,7 @@ class OffersRemoteDataSourceImpl @Inject constructor(
             offersCollection.document(offerId).delete().await()
             true
         } catch (e: Exception) {
-            Log.e("OffersRemoteDataSource", "Error deleting offer", e)
+            
             false
         }
     }
@@ -88,7 +87,7 @@ class OffersRemoteDataSourceImpl @Inject constructor(
             .whereEqualTo("orderId", orderId)
             .get()
             .await()
-        Log.d("OffersRemoteDataSource", "Fetched offers Count: ${snapshot.documents.size}")
+        
         return snapshot.documents.mapNotNull { it.toObject(Offer::class.java) }
     }
 
@@ -108,10 +107,10 @@ class OffersRemoteDataSourceImpl @Inject constructor(
             }
 
             batch.commit().await()
-            Log.d("OffersRemoteDataSource", "Deleted ${snapshot.documents.size} offers for order $orderId")
+            
             true
         } catch (e: Exception) {
-            Log.e("OffersRemoteDataSource", "Failed to delete offers for order $orderId", e)
+            
             false
         }
     }

@@ -1,6 +1,5 @@
 package com.delighted2wins.souqelkhorda.features.orderdetails.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.delighted2wins.souqelkhorda.core.enums.NotificationMessagesEnum
@@ -107,7 +106,7 @@ class MarketOrderDetailsViewModel @Inject constructor(
                                 )
                             )
                         } catch (e: Exception) {
-                            Log.e("OffersViewModel", "Notification failed: ${e.message}")
+                            
                         }
                     }
                     emitEffect(MarketOrderDetailsEffect.ShowSuccess("Offer made successfully"))                }

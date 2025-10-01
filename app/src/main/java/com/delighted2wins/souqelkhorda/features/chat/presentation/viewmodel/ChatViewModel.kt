@@ -1,6 +1,5 @@
 package com.delighted2wins.souqelkhorda.features.chat.presentation.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -35,7 +34,6 @@ class ChatViewModel @Inject constructor(
 
     fun init(orderId: String, buyerId: String, sellerId: String, offerId: String) {
         if (initialized) {
-            Log.d("ChatViewModel", "init skipped (already initialized)")
             return
         }
         initialized = true
@@ -43,10 +41,10 @@ class ChatViewModel @Inject constructor(
         this.orderId = orderId
         this.offerId = offerId
 
-        Log.d("ChatViewModel", "init: $orderId")
-        Log.d("ChatViewModel", "init: $offerId")
-        Log.d("ChatViewModel", "init: $buyerId")
-        Log.d("ChatViewModel", "init: $sellerId")
+        
+        
+        
+        
 
         viewModelScope.launch {
             val currentUser = getCurrentUserUseCase()

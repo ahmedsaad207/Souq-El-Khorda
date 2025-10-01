@@ -1,7 +1,6 @@
 package com.delighted2wins.souqelkhorda.features.orderdetails.data
 
 import android.annotation.SuppressLint
-import android.util.Log
 import com.delighted2wins.souqelkhorda.core.enums.OrderSource
 import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
 import com.delighted2wins.souqelkhorda.core.enums.OrderType
@@ -38,7 +37,7 @@ class OrderDetailsRemoteDataSourceImpl @Inject constructor(
                 .await()
 
             val data = snapshot.data ?: return null
-            Log.d("Order_Details-Debug", "Fetched order details: $data")
+            
 
             val scrapsList: List<Scrap> =
                 (data["scraps"] as? List<Map<String, Any>>)?.mapNotNull { scrapMap ->
@@ -56,9 +55,9 @@ class OrderDetailsRemoteDataSourceImpl @Inject constructor(
                             amount = scrapMap["amount"]?.toString() ?: "0",
                             description = scrapMap["description"] as? String ?: "",
                             images = images
-                        ).also { Log.d("Order_Details-Debug", "Mapped scrap: $it") }
+                        ).also {  }
                     } catch (e: Exception) {
-                        Log.e("Order_Details-Debug", "Error mapping scrap: $scrapMap", e)
+                        
                         null
                     }
                 } ?: emptyList()
@@ -77,7 +76,7 @@ class OrderDetailsRemoteDataSourceImpl @Inject constructor(
                 price = (data["price"] as? Long)?.toInt() ?: 0
             )
         } catch (e: Exception) {
-            Log.e("Order_Details-Debug", "Error fetching order details:", e)
+            
             null
         }
     }

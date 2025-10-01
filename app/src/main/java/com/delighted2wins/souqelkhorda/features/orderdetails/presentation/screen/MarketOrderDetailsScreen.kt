@@ -14,7 +14,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -26,7 +25,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -43,9 +41,7 @@ import com.delighted2wins.souqelkhorda.features.market.presentation.component.Sh
 import com.delighted2wins.souqelkhorda.features.offers.UserActionsBottomSheet
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.DescriptionSection
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.OrderDetailsTopBar
-import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.OrderItemCard
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.OrderSummaryCard
-import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.ScrapItem
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.ScrapItemCard
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.SellerInfoSection
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.contract.MarketOrderDetailsEffect

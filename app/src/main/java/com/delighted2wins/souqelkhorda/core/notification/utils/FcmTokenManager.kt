@@ -1,7 +1,6 @@
 package com.delighted2wins.souqelkhorda.core.notification.utils
 
 import android.content.Context
-import android.util.Log
 import androidx.core.content.edit
 import com.delighted2wins.souqelkhorda.core.AppConstant
 import com.google.firebase.firestore.FirebaseFirestore
@@ -22,8 +21,6 @@ class FcmTokenManager @Inject constructor(
         prefs.edit { putString("fcm_token", token) }
     }
 
-    fun getCachedToken(): String? = prefs.getString("fcm_token", null)
-
     fun clearCachedToken() {
         prefs.edit { remove("fcm_token") }
     }
@@ -39,7 +36,7 @@ class FcmTokenManager @Inject constructor(
                 .await()
             clearCachedToken()
         } catch (e: Exception) {
-            Log.e("FcmTokenManager", "Failed to sync FCM token: ${e.message}", e)
+            
         }
     }
 

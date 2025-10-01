@@ -1,6 +1,5 @@
 package com.delighted2wins.souqelkhorda.features.market.presentation.screen
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -98,7 +97,7 @@ class MarketViewModel @Inject constructor(
         _currentUser = try {
             getCurrentUserUseCase()
         } catch (e: Exception) {
-            Log.e("MarketViewModel", "Error loading current user", e)
+            
             MarketUser(id = "", name = "User", location = "Unknown")
         }
     }
@@ -152,7 +151,7 @@ class MarketViewModel @Inject constructor(
                                 )
                             )
                         } catch (e: Exception) {
-                            Log.e("OffersViewModel", "Notification failed: ${e.message}")
+                            
                         }
                     }
                     emitEffect(MarketEffect.ShowSuccess("Offer made successfully"))

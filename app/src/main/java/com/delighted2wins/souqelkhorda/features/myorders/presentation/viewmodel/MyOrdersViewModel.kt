@@ -1,6 +1,5 @@
 package com.delighted2wins.souqelkhorda.features.myorders.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.delighted2wins.souqelkhorda.core.enums.NotificationMessagesEnum
@@ -106,7 +105,7 @@ class MyOrdersViewModel @Inject constructor(
             _state.value = _state.value.copy(isLoading = true, error = null)
             try {
                 val result = loadOffersUseCase()
-                Log.d("MyOrdersViewModel", "loadOffers: $result")
+                
                 _state.value = _state.value.copy(
                     isLoading = false,
                     offers = result,
@@ -182,7 +181,7 @@ class MyOrdersViewModel @Inject constructor(
                                 )
                             }
                         }catch (e : Exception){
-                            Log.e("OffersViewModel", "Notification failed: ${e.message}")
+                            
                         }
                     }
                     emitEffect(MyOrdersEffect.ShowSuccess("Order declined successfully"))

@@ -1,6 +1,5 @@
 package com.delighted2wins.souqelkhorda.features.orderdetails.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.delighted2wins.souqelkhorda.core.enums.NotificationMessagesEnum
@@ -120,7 +119,7 @@ class OffersOrderDetailsViewModel @Inject constructor(
                                 )
                             )
                         } catch (e: Exception) {
-                            Log.e("OffersViewModel", "Notification failed: ${e.message}")
+                            
                         }
                     }
                     _effect.emit(OffersOrderDetailsEffect.ShowSuccess("Offer updated successfully"))
@@ -152,9 +151,9 @@ class OffersOrderDetailsViewModel @Inject constructor(
                 )
                 val resultDeleteOrder = deleteOfferChatUseCase(orderId, offerId)
                 val resultDeleteOffer = deleteOfferUseCase(offerId)
-                Log.e("OffersViewModel", "resultDeleteOffer: $resultDeleteOffer")
-                Log.e("OffersViewModel", "resultDeleteOrder: $resultDeleteOrder")
-                Log.e("OffersViewModel", "resultUpdatedHistoryBuyer: $resultUpdatedHistoryBuyer")
+                
+                
+                
                 if (resultDeleteOffer && resultDeleteOrder && resultUpdatedHistoryBuyer) {
                     launch {
                         try {
@@ -165,7 +164,7 @@ class OffersOrderDetailsViewModel @Inject constructor(
                                 )
                             )
                         } catch (e: Exception) {
-                            Log.e("OffersViewModel", "Notification failed: ${e.message}")
+                            
                         }
                     }
                     _effect.emit(OffersOrderDetailsEffect.ShowSuccess("Offer canceled successfully"))
@@ -215,7 +214,7 @@ class OffersOrderDetailsViewModel @Inject constructor(
                                 )
                             )
                         } catch (e: Exception) {
-                            Log.e("OffersViewModel", "Notification failed: ${e.message}")
+                            
                         }
                     }
                     _effect.emit(OffersOrderDetailsEffect.ShowSuccess("Order marked as received"))

@@ -1,6 +1,5 @@
 package com.delighted2wins.souqelkhorda.features.myorders.data.remote
 
-import android.util.Log
 import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
 import com.delighted2wins.souqelkhorda.core.enums.OrderType
 import com.delighted2wins.souqelkhorda.core.enums.UserRole
@@ -12,6 +11,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
+
+
 
 class MyOrdersRemoteDataSourceImpl @Inject constructor(
     private val firestore: FirebaseFirestore,
@@ -64,7 +65,7 @@ class MyOrdersRemoteDataSourceImpl @Inject constructor(
                 )
             }
         } catch (e: Exception) {
-            Log.e("MyOrdersRemoteDataSource", "Error fetching company orders", e)
+            
             emptyList()
         }
     }
@@ -104,25 +105,24 @@ class MyOrdersRemoteDataSourceImpl @Inject constructor(
                 )
             }
         } catch (e: Exception) {
-            Log.e("MyOrdersRemoteDataSource", "Error fetching sells", e)
+            
             emptyList()
         }
     }
 
     override suspend fun fetchOffers(): List<Order> {
-        Log.d("MyOrdersRemoteDataSource", "fetchOffers() called, currentUserId: $myUserId")
         if (myUserId.isEmpty()) return emptyList()
 
         return try {
             val orderIds = fetchMyOfferOrderIds(myUserId)
-            Log.d("MyOrdersRemoteDataSource", "Order IDs with my offers: $orderIds")
+            
             if (orderIds.isEmpty()) return emptyList()
 
             val orders = fetchOrdersByIds(orderIds)
-            Log.d("MyOrdersRemoteDataSource", "Orders fetched: ${orders.size}")
+            
             orders
         } catch (e: Exception) {
-            Log.e("MyOrdersRemoteDataSource", "Error fetching offers", e)
+            
             emptyList()
         }
     }
@@ -134,10 +134,9 @@ class MyOrdersRemoteDataSourceImpl @Inject constructor(
                 .get()
                 .await()
 
-            Log.d("MyOrdersRemoteDataSource", "Offers snapshot size: ${offersSnapshot.size()}")
             offersSnapshot.documents.mapNotNull { it.getString("orderId") }
         } catch (e: Exception) {
-            Log.e("MyOrdersRemoteDataSource", "Error fetching offer IDs", e)
+            
             emptyList()
         }
     }
@@ -147,7 +146,7 @@ class MyOrdersRemoteDataSourceImpl @Inject constructor(
             val ordersList = mutableListOf<Order>()
             val chunks = orderIds.chunked(10)
             for (chunk in chunks) {
-                Log.d("MyOrdersRemoteDataSource", "Fetching orders for chunk: $chunk")
+                
                 val snapshot = marketOrdersRef
                     .whereIn(FieldPath.documentId(), chunk)
                     .get()
@@ -159,7 +158,7 @@ class MyOrdersRemoteDataSourceImpl @Inject constructor(
                     val scrapsList = (data["scraps"] as? List<Map<String, Any>>)?.map { scrapMap ->
                         Scrap(
                             amount = scrapMap["amount"]?.toString() ?: "",
-                            images = emptyList() // TODO
+                            images = emptyList()
                         )
                     } ?: emptyList()
 
@@ -183,7 +182,7 @@ class MyOrdersRemoteDataSourceImpl @Inject constructor(
             }
             ordersList
         } catch (e: Exception) {
-            Log.e("MyOrdersRemoteDataSource", "Error fetching orders by IDs", e)
+            
             emptyList()
         }
     }

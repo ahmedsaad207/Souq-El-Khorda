@@ -1,6 +1,5 @@
 package com.delighted2wins.souqelkhorda.features.market.data.remote
 
-import android.util.Log
 import com.delighted2wins.souqelkhorda.core.enums.OrderSource
 import com.delighted2wins.souqelkhorda.core.enums.OrderStatus
 import com.delighted2wins.souqelkhorda.core.enums.OrderType
@@ -58,7 +57,7 @@ class MarketRemoteDataSourceImpl @Inject constructor(
 
 
         } catch (e: Exception) {
-            Log.e("Market-Debug", "Error fetching market orders:", e)
+            
             emptyList()
         }
     }
