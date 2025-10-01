@@ -19,7 +19,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -28,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.components.DirectionalText
 import com.delighted2wins.souqelkhorda.core.model.Order
-import com.delighted2wins.souqelkhorda.core.utils.isArabic
 import com.delighted2wins.souqelkhorda.core.utils.toSinceString
 import com.delighted2wins.souqelkhorda.features.market.domain.entities.MarketUser
 import com.delighted2wins.souqelkhorda.features.orderdetails.presentation.component.UserSection
@@ -41,16 +39,6 @@ fun ScrapCard(
     onMakeOfferClick: () -> Unit = {},
     onDetailsClick: (String, String) -> Unit,
 ) {
-    val cornerRadius = RoundedCornerShape(16.dp)
-
-    val gradientBrush = Brush.horizontalGradient(
-        colors = listOf(
-            MaterialTheme.colorScheme.secondary.copy(alpha = 0.4f),
-            MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
-            MaterialTheme.colorScheme.secondary.copy(alpha = 0.4f),
-        )
-    )
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -77,8 +65,6 @@ fun ScrapCard(
                     color = MaterialTheme.colorScheme.primary.copy(0.3f))
                 Spacer(Modifier.height(12.dp))
             }
-
-//            ScrapTitle(order.title)
             DirectionalText(
                 text = order.title,
                 style = MaterialTheme.typography.titleLarge.copy(
@@ -130,35 +116,8 @@ fun ScrapCard(
         }
     }
 }
-
 @Composable
-private fun ScrapTitle(title: String) {
-    DirectionalText(
-        text = title,
-        contentIsRtl = isArabic(title),
-        style = MaterialTheme.typography.titleLarge,
-        color = MaterialTheme.colorScheme.onSurface,
-        maxLines = 1,
-        overflow = TextOverflow.Ellipsis,
-        textAlign = TextAlign.Start
-    )
-}
-
-@Composable
-private fun ScrapDescription(description: String) {
-    DirectionalText(
-        text = description,
-        contentIsRtl = isArabic(description),
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
-        maxLines = 3,
-        overflow = TextOverflow.Ellipsis,
-        textAlign = TextAlign.Start
-    )
-}
-
-@Composable
-private fun ScrapMetaInfo(status: String, price: Int) {
+private fun ScrapMetaInfo( price: Int) {
     val context = LocalContext.current
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -173,7 +132,6 @@ private fun ScrapMetaInfo(status: String, price: Int) {
             textAlign = TextAlign.Start,
             modifier = Modifier.weight(1f)
         )
-//        StatusChip(status = status)
     }
 }
 

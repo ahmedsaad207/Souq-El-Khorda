@@ -58,7 +58,7 @@ class ChatViewModel @Inject constructor(
                 otherUser = otherUser,
             )
         }
-        loadMessages(orderId!!, offerId!!)
+        loadMessages(orderId, offerId)
     }
 
     fun onIntent(intent: ChatIntent) {
