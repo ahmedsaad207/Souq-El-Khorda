@@ -13,9 +13,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -36,8 +37,7 @@ fun CustomTextField(
     singleLine: Boolean = true
 ) {
 
-    val textFieldColor = Color(0xFFF2F2F2)
-    val primaryColor = Color(0xFF179C92)
+   val colors = MaterialTheme.colorScheme
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
 
@@ -46,7 +46,7 @@ fun CustomTextField(
         animationSpec = tween(durationMillis = 300)
     )
     val borderColor by animateColorAsState(
-        targetValue = if (isFocused) primaryColor else textFieldColor,
+        targetValue = if (isFocused) colors.primary else colors.outline.copy(alpha = 0.5f),
         animationSpec = tween(durationMillis = 300)
     )
 
@@ -73,18 +73,14 @@ fun CustomTextField(
                     fontSize = 14.sp,
                 )
             },
-            colors = OutlinedTextFieldDefaults.colors(
-                unfocusedBorderColor = Color.Transparent,
-                focusedBorderColor = primaryColor,
-                disabledBorderColor = Color.Transparent,
-                errorBorderColor = Color.Transparent,
-                cursorColor = Color.Black,
-                focusedContainerColor = Color(0xFFF5F5F5),
-                unfocusedContainerColor = textFieldColor,
-                disabledContainerColor = Color(0xFFF5F5F5),
-                errorContainerColor = Color(0xFFF5F5F5),
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = colors.surface,
+                unfocusedContainerColor = colors.surface,
+                cursorColor = colors.primary,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                focusedTextColor = colors.onBackground,
+                unfocusedTextColor = colors.onBackground
             ),
             textStyle = LocalTextStyle.current.copy(
                 fontSize = 14.sp
