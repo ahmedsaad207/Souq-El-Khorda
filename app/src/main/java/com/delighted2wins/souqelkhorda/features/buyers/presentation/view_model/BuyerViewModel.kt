@@ -8,7 +8,8 @@ import com.delighted2wins.souqelkhorda.features.buyers.data.model.toBuyerDto
 import com.delighted2wins.souqelkhorda.features.buyers.domain.use_case.GetBuyersCase
 import com.delighted2wins.souqelkhorda.features.buyers.domain.use_case.IsBuyersCase
 import com.delighted2wins.souqelkhorda.features.buyers.domain.use_case.RegisterBuyersCase
-import com.delighted2wins.souqelkhorda.features.buyers.presentation.state.BuyerState
+import com.delighted2wins.souqelkhorda.features.buyers.presentation.contract.BuyerIntent
+import com.delighted2wins.souqelkhorda.features.buyers.presentation.contract.BuyerState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -35,7 +36,31 @@ class BuyerViewModel @Inject constructor(
     val isBuyerState = _isBuyerState.asStateFlow()
     private val _message = MutableSharedFlow<String>()
     val message = _message.asSharedFlow()
-    fun registerBuyer(latitude: Double, longitude: Double, scrapTypes: List<String>) {
+    private val _intents = MutableSharedFlow<BuyerIntent>()
+
+
+    init {
+        viewModelScope.launch {
+            _intents.collect { intent ->
+                handleIntent(intent)
+            }
+        }
+    }
+
+    fun processIntent(intent: BuyerIntent) {
+        viewModelScope.launch {
+            _intents.emit(intent)
+        }
+    }
+
+    private fun handleIntent(intent: BuyerIntent) {
+        when (intent) {
+            is BuyerIntent.GetAllBuyerIntent -> getNearstBuyers()
+            is BuyerIntent.RegisterBuyer -> registerBuyer(intent.latitude, intent.longitude, intent.scrapTypes)
+            BuyerIntent.CheckIfBuyer -> isBuyer()
+        }
+    }
+    private fun registerBuyer(latitude: Double, longitude: Double, scrapTypes: List<String>) {
         viewModelScope.launch(Dispatchers.IO) {
             if (latitude == 0.0 || longitude == 0.0) {
                 _message.emit(AuthMsgEnum.LOCATIONEMPTY.getMsg())
@@ -60,16 +85,18 @@ class BuyerViewModel @Inject constructor(
                         val user = state.buyerDto
                         _message.emit(AuthMsgEnum.SIGNUPSUCCESS.getMsg())
                     }
+
                     is BuyerState.Error -> {
                         _message.emit(AuthMsgEnum.UNAUTHORIZED.getMsg())
                     }
+
                     else -> Unit
                 }
             }
         }
     }
 
-    fun getNearstBuyers() {
+    private fun getNearstBuyers() {
         viewModelScope.launch(Dispatchers.IO) {
             getBuyersCase().catch {
                 _message.emit(AuthMsgEnum.UNAUTHORIZED.getMsg())
@@ -78,14 +105,16 @@ class BuyerViewModel @Inject constructor(
                     is BuyerState.SuccessLoading -> {
                         val user = getUserCase()
                         val filteredBuyers = state.list.filter { buyer ->
-                            buyer.governorate == user.governorate && buyer.buyerID!=user.id
+                            buyer.governorate == user.governorate && buyer.buyerID != user.id
                         }
                         _nearestBuyers.emit(BuyerState.SuccessLoading(filteredBuyers))
                     }
+
                     is BuyerState.Error -> {
                         _nearestBuyers.emit(state)
                         _message.emit(AuthMsgEnum.UNAUTHORIZED.getMsg())
                     }
+
                     else -> {
                         _nearestBuyers.emit(state)
                     }
@@ -93,7 +122,8 @@ class BuyerViewModel @Inject constructor(
             }
         }
     }
-    fun isBuyer() {
+
+    private fun isBuyer() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _isBuyerState.value = isBuyersCase(getUserCase().id)

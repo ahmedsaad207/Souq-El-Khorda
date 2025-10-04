@@ -38,7 +38,8 @@ import com.delighted2wins.souqelkhorda.core.enums.GovernorateEnum
 import com.delighted2wins.souqelkhorda.features.authentication.data.model.SignUpRequestDto
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.component.CustomDropdownMenu
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.component.CustomTextField
-import com.delighted2wins.souqelkhorda.features.authentication.presentation.state.AuthenticationState
+import com.delighted2wins.souqelkhorda.features.authentication.presentation.contract.AuthenticationIntent
+import com.delighted2wins.souqelkhorda.features.authentication.presentation.contract.AuthenticationState
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.viewmodel.SignUpViewModel
 import com.delighted2wins.souqelkhorda.features.login.presentation.component.LoginPasswordTF
 
@@ -77,108 +78,109 @@ fun SignUpScreen(
     }
 
 
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    top = innerPadding.calculateTopPadding(),
-                    bottom = innerPadding.calculateBottomPadding()
-                )
-                .padding(horizontal = 16.dp)
-                .verticalScroll(rememberScrollState())
-        ) {
-            OneIconCard(
-                icon = Icons.AutoMirrored.Filled.ArrowBack,
-                headerTxt = stringResource(R.string.register_new_account),
-                onClick = {
-                    onBackClick()
-                },
-                titleSize = 14
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                top = innerPadding.calculateTopPadding(),
+                bottom = innerPadding.calculateBottomPadding()
             )
-            CustomTextField(
-                value = username,
-                onValueChange = { username = it },
-                label = stringResource(R.string.username),
-                placeholder = stringResource(R.string.enter_your_username)
-            )
+            .padding(horizontal = 16.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
+        OneIconCard(
+            icon = Icons.AutoMirrored.Filled.ArrowBack,
+            headerTxt = stringResource(R.string.register_new_account),
+            onClick = {
+                onBackClick()
+            },
+            titleSize = 14
+        )
+        CustomTextField(
+            value = username,
+            onValueChange = { username = it },
+            label = stringResource(R.string.username),
+            placeholder = stringResource(R.string.enter_your_username)
+        )
 
-            Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-            CustomTextField(
-                value = email,
-                onValueChange = { email = it },
-                label = stringResource(R.string.email_signup),
-                placeholder = stringResource(R.string.enter_your_email),
-                keyboardType = KeyboardType.Email
-            )
+        CustomTextField(
+            value = email,
+            onValueChange = { email = it },
+            label = stringResource(R.string.email_signup),
+            placeholder = stringResource(R.string.enter_your_email),
+            keyboardType = KeyboardType.Email
+        )
 
-            Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-            LoginPasswordTF(
-                onValueChange = {
-                    password = it
-                },
-                horizentalPading = 0
-            )
+        LoginPasswordTF(
+            onValueChange = {
+                password = it
+            },
+            horizentalPading = 0
+        )
 
-            Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-            LoginPasswordTF(
-                txt = stringResource(R.string.confirm_password),
-                onValueChange = {
-                    confirmPassword = it
-                },
-                horizentalPading = 0
-            )
+        LoginPasswordTF(
+            txt = stringResource(R.string.confirm_password),
+            onValueChange = {
+                confirmPassword = it
+            },
+            horizentalPading = 0
+        )
 
-            Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-            CustomTextField(
-                value = phone,
-                onValueChange = { phone = it },
-                label = stringResource(R.string.phone),
-                placeholder = stringResource(R.string.enter_phone_number),
-                keyboardType = KeyboardType.Phone
-            )
+        CustomTextField(
+            value = phone,
+            onValueChange = { phone = it },
+            label = stringResource(R.string.phone),
+            placeholder = stringResource(R.string.enter_phone_number),
+            keyboardType = KeyboardType.Phone
+        )
 
-            Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-            CustomDropdownMenu(
-                value = governorate,
-                onValueChange = {
-                    governorate = it
-                },
-                label = stringResource(R.string.governorate),
-                options = governorates,
-                expanded = governorateExpanded,
-                onExpandedChange = { governorateExpanded = it }
-            )
+        CustomDropdownMenu(
+            value = governorate,
+            onValueChange = {
+                governorate = it
+            },
+            label = stringResource(R.string.governorate),
+            options = governorates,
+            expanded = governorateExpanded,
+            onExpandedChange = { governorateExpanded = it }
+        )
 
-            Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-            CustomTextField(
-                value = area,
-                onValueChange = { area = it },
-                label = stringResource(R.string.area),
-                placeholder = stringResource(R.string.enter_your_area),
-            )
+        CustomTextField(
+            value = area,
+            onValueChange = { area = it },
+            label = stringResource(R.string.area),
+            placeholder = stringResource(R.string.enter_your_area),
+        )
 
-            Spacer(modifier = Modifier.height(16.dp))
-            CustomTextField(
-                value = addressDetails,
-                onValueChange = { addressDetails = it },
-                label = stringResource(R.string.address_details),
-                placeholder = stringResource(R.string.enter_full_address_details),
-                singleLine = false
-            )
+        Spacer(modifier = Modifier.height(16.dp))
+        CustomTextField(
+            value = addressDetails,
+            onValueChange = { addressDetails = it },
+            label = stringResource(R.string.address_details),
+            placeholder = stringResource(R.string.enter_full_address_details),
+            singleLine = false
+        )
 
 
-            Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
-            Button(
-                onClick = {
-                    focusManager.clearFocus()
-                    viewModel.signUp(
+        Button(
+            onClick = {
+                focusManager.clearFocus()
+                viewModel.processIntent(
+                    AuthenticationIntent.SignUp(
                         SignUpRequestDto(
                             name = username,
                             email = email,
@@ -190,38 +192,42 @@ fun SignUpScreen(
                             area = area
                         )
                     )
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = primaryColor,
-                    contentColor = Color.White
-                ),
-                enabled = !isLoading
-            ) {
-                if (isLoading) {
-                    CircularProgressIndicator(
-                        color = Color.White,
-                        strokeWidth = 2.dp,
-                        modifier = Modifier.size(20.dp)
-                    )
-                } else {
-                    Text(text = stringResource(R.string.register), fontSize = 16.sp)
-                }
+                )
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp),
+            shape = RoundedCornerShape(12.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = primaryColor,
+                contentColor = Color.White
+            ),
+            enabled = !isLoading
+        ) {
+            if (isLoading) {
+                CircularProgressIndicator(
+                    color = Color.White,
+                    strokeWidth = 2.dp,
+                    modifier = Modifier.size(20.dp)
+                )
+            } else {
+                Text(text = stringResource(R.string.register), fontSize = 16.sp)
             }
-            Spacer(modifier = Modifier
-                .height(48.dp))
+        }
+        Spacer(
+            modifier = Modifier
+                .height(48.dp)
+        )
 
+    }
+
+    when (registerState) {
+        is AuthenticationState.Success -> {
+            onRegisterClick()
         }
 
-        when (registerState) {
-            is AuthenticationState.Success -> {
-                onRegisterClick()
-            }
-            else ->{}
-        }
+        else -> {}
+    }
 
 }
 

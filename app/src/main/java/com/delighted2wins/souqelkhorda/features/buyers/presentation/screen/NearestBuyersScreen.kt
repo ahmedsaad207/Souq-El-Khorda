@@ -24,7 +24,8 @@ import com.delighted2wins.souqelkhorda.features.buyers.presentation.components.B
 import com.delighted2wins.souqelkhorda.features.buyers.presentation.components.BuyerMainScreenCard
 import com.delighted2wins.souqelkhorda.features.buyers.presentation.components.ShimmerBuyerCard
 import com.delighted2wins.souqelkhorda.features.buyers.presentation.components.ShimmerBuyerMainScreenCard
-import com.delighted2wins.souqelkhorda.features.buyers.presentation.state.BuyerState
+import com.delighted2wins.souqelkhorda.features.buyers.presentation.contract.BuyerIntent
+import com.delighted2wins.souqelkhorda.features.buyers.presentation.contract.BuyerState
 import com.delighted2wins.souqelkhorda.features.buyers.presentation.view_model.BuyerViewModel
 
 @Composable
@@ -38,8 +39,8 @@ fun NearestBuyersScreen(
     val isBuyer by viewModel.isBuyerState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.getNearstBuyers()
-        viewModel.isBuyer()
+            viewModel.processIntent(BuyerIntent.GetAllBuyerIntent)
+            viewModel.processIntent(BuyerIntent.CheckIfBuyer)
         viewModel.message.collect { message ->
             snackBarHostState.showSnackbar(message)
         }

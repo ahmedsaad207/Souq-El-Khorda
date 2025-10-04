@@ -1,6 +1,14 @@
-package com.delighted2wins.souqelkhorda.features.buyers.presentation.state
+package com.delighted2wins.souqelkhorda.features.buyers.presentation.contract
 
 import com.delighted2wins.souqelkhorda.features.buyers.data.model.BuyerDto
+
+
+sealed class BuyerIntent {
+    data object GetAllBuyerIntent: BuyerIntent()
+    data class RegisterBuyer(val latitude: Double, val longitude: Double, val scrapTypes: List<String>) : BuyerIntent()
+    data object CheckIfBuyer : BuyerIntent()
+
+}
 
 sealed class BuyerState {
     data object Loading : BuyerState()

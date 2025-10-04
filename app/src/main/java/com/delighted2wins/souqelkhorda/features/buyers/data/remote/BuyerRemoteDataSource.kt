@@ -2,7 +2,7 @@ package com.delighted2wins.souqelkhorda.features.buyers.data.remote
 
 import com.delighted2wins.souqelkhorda.core.AppConstant
 import com.delighted2wins.souqelkhorda.features.buyers.data.model.BuyerDto
-import com.delighted2wins.souqelkhorda.features.buyers.presentation.state.BuyerState
+import com.delighted2wins.souqelkhorda.features.buyers.presentation.contract.BuyerState
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow

@@ -44,7 +44,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.component.DotLoadingIndicator
-import com.delighted2wins.souqelkhorda.features.authentication.presentation.state.AuthenticationState
+import com.delighted2wins.souqelkhorda.features.authentication.presentation.contract.AuthenticationIntent
+import com.delighted2wins.souqelkhorda.features.authentication.presentation.contract.AuthenticationState
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.viewmodel.LoginViewModel
 import com.delighted2wins.souqelkhorda.features.login.presentation.component.LoginPasswordTF
 import com.delighted2wins.souqelkhorda.features.login.presentation.component.LoginTF
@@ -139,7 +140,7 @@ fun LoginScreen(
             onClick = {
                 focusManager.clearFocus(force = true)
                 keyboardController?.hide()
-                viewModel.login(email, password)
+                viewModel.processIntent(AuthenticationIntent.Login(email,password))
             },
             modifier = Modifier
                 .fillMaxWidth()

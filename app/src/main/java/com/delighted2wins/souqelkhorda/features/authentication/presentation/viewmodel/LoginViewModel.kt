@@ -6,7 +6,8 @@ import com.delighted2wins.souqelkhorda.core.enums.AuthMsgEnum
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.CashUserCase
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.GetCashUserCase
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.LoginUseCase
-import com.delighted2wins.souqelkhorda.features.authentication.presentation.state.AuthenticationState
+import com.delighted2wins.souqelkhorda.features.authentication.presentation.contract.AuthenticationIntent
+import com.delighted2wins.souqelkhorda.features.authentication.presentation.contract.AuthenticationState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -25,10 +26,21 @@ class LoginViewModel @Inject constructor(
 ) : ViewModel() {
     private val _loginState = MutableStateFlow<AuthenticationState>(AuthenticationState.Idle)
     val loginState = _loginState.asStateFlow()
+
+    private val _state = MutableStateFlow<AuthenticationState>(AuthenticationState.Idle)
+    val state = _state.asStateFlow()
     private val _message = MutableSharedFlow<String>()
     val message = _message.asSharedFlow()
 
-    fun login(email: String, password: String) {
+    fun processIntent(intent: AuthenticationIntent) {
+        when (intent) {
+            is AuthenticationIntent.IsLogedOut -> checkLoginStatus()
+            is AuthenticationIntent.Login -> login(intent.email, intent.password)
+            is AuthenticationIntent.SignUp -> { }
+        }
+    }
+
+    private fun login(email: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
             if (email.isEmpty() || password.isEmpty()) {
                 _message.emit(AuthMsgEnum.EMPTYFILDES.getMsg())
@@ -57,7 +69,15 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-   suspend fun isLoggedIn() : Boolean{
-        return getCashUserCase().email != ""
+    private fun checkLoginStatus() {
+        viewModelScope.launch {
+            _state.emit(AuthenticationState.Loading)
+            val user = getCashUserCase()
+            if (user.email.isNotEmpty()) {
+                _state.emit(AuthenticationState.LoggedIn)
+            } else {
+                _state.emit(AuthenticationState.LoggedOut)
+            }
+        }
     }
 }
