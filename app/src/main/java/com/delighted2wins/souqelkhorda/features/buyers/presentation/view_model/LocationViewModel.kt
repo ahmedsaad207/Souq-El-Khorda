@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.delighted2wins.souqelkhorda.core.utils.GPSLocation
-import com.delighted2wins.souqelkhorda.features.buyers.presentation.state.LocationUiState
+import com.delighted2wins.souqelkhorda.features.buyers.presentation.contract.LocationUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

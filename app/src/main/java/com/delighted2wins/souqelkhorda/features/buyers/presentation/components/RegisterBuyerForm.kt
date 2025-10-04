@@ -54,7 +54,8 @@ import com.delighted2wins.souqelkhorda.R
 import com.delighted2wins.souqelkhorda.core.enums.AuthMsgEnum
 import com.delighted2wins.souqelkhorda.core.enums.ScrapTypeEnum
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.component.DotLoadingIndicator
-import com.delighted2wins.souqelkhorda.features.buyers.presentation.state.BuyerState
+import com.delighted2wins.souqelkhorda.features.buyers.presentation.contract.BuyerIntent
+import com.delighted2wins.souqelkhorda.features.buyers.presentation.contract.BuyerState
 import com.delighted2wins.souqelkhorda.features.buyers.presentation.view_model.BuyerViewModel
 import kotlinx.coroutines.launch
 
@@ -75,7 +76,7 @@ fun RegisterBuyerForm(
     val valuesForApi = selected.map { ScrapTypeEnum.getValue(it) }
     var latitude by remember { mutableDoubleStateOf(0.0) }
     var longitude by remember { mutableDoubleStateOf(0.0) }
-    val scope = rememberCoroutineScope ()
+    val scope = rememberCoroutineScope()
 
     val state by viewModel.registerState.collectAsStateWithLifecycle()
     val isLoading = state is BuyerState.Loading
@@ -262,10 +263,12 @@ fun RegisterBuyerForm(
                     Button(
                         onClick = {
                             if (isOnline) {
-                                viewModel.registerBuyer(
-                                    latitude,
-                                    longitude,
-                                    valuesForApi
+                                viewModel.processIntent(
+                                    BuyerIntent.RegisterBuyer(
+                                        latitude,
+                                        longitude,
+                                        valuesForApi
+                                    )
                                 )
                             } else {
                                 scope.launch {

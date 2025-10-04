@@ -5,7 +5,7 @@ import com.delighted2wins.souqelkhorda.features.authentication.data.model.AuthUs
 import com.delighted2wins.souqelkhorda.features.authentication.data.model.SignUpRequestDto
 import com.delighted2wins.souqelkhorda.features.authentication.data.remote.IAuthenticationRemoteDataSource
 import com.delighted2wins.souqelkhorda.features.authentication.domain.repo.IAuthenticationRepo
-import com.delighted2wins.souqelkhorda.features.authentication.presentation.state.AuthenticationState
+import com.delighted2wins.souqelkhorda.features.authentication.presentation.contract.AuthenticationState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

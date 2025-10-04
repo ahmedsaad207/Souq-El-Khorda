@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,6 +35,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.delighted2wins.souqelkhorda.R
+import com.delighted2wins.souqelkhorda.features.authentication.presentation.contract.AuthenticationIntent
+import com.delighted2wins.souqelkhorda.features.authentication.presentation.contract.AuthenticationState
 import com.delighted2wins.souqelkhorda.features.authentication.presentation.viewmodel.LoginViewModel
 import kotlinx.coroutines.delay
 
@@ -44,12 +47,17 @@ fun SplashScreen(
     navToHome: () -> Unit,
     navToLogin: () -> Unit,
 ) {
+    val state by viewModel.state.collectAsState()
+
     LaunchedEffect(Unit) {
         delay(2000)
-        if (viewModel.isLoggedIn()) {
-            navToHome()
-        } else {
-            navToLogin()
+        viewModel.processIntent(AuthenticationIntent.IsLogedOut)
+    }
+
+    when (state) {
+        is AuthenticationState.LoggedIn -> navToHome()
+        is AuthenticationState.LoggedOut -> navToLogin()
+        else -> {
         }
     }
 

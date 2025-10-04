@@ -1,4 +1,4 @@
-package com.delighted2wins.souqelkhorda.features.buyers.presentation.state
+package com.delighted2wins.souqelkhorda.features.buyers.presentation.contract
 
 data class LocationUiState(
     val locationText: String = "—",

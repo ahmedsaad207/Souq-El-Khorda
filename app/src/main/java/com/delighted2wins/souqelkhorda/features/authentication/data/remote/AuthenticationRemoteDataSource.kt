@@ -3,7 +3,7 @@ package com.delighted2wins.souqelkhorda.features.authentication.data.remote
 import com.delighted2wins.souqelkhorda.core.AppConstant
 import com.delighted2wins.souqelkhorda.features.authentication.data.model.AuthUser
 import com.delighted2wins.souqelkhorda.features.authentication.data.model.SignUpRequestDto
-import com.delighted2wins.souqelkhorda.features.authentication.presentation.state.AuthenticationState
+import com.delighted2wins.souqelkhorda.features.authentication.presentation.contract.AuthenticationState
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.firestore.FirebaseFirestore

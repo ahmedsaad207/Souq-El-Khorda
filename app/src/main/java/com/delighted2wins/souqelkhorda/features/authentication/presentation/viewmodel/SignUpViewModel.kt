@@ -10,7 +10,8 @@ import com.delighted2wins.souqelkhorda.core.extensions.isPhoneNumber
 import com.delighted2wins.souqelkhorda.core.extensions.isUserName
 import com.delighted2wins.souqelkhorda.features.authentication.data.model.SignUpRequestDto
 import com.delighted2wins.souqelkhorda.features.authentication.domain.useCase.SignUpUseCase
-import com.delighted2wins.souqelkhorda.features.authentication.presentation.state.AuthenticationState
+import com.delighted2wins.souqelkhorda.features.authentication.presentation.contract.AuthenticationIntent
+import com.delighted2wins.souqelkhorda.features.authentication.presentation.contract.AuthenticationState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -29,7 +30,18 @@ class SignUpViewModel @Inject constructor(
     val registerState = _registerState.asStateFlow()
     private val _message = MutableSharedFlow<String>()
     val message = _message.asSharedFlow()
-    fun signUp(signUpRequestDto: SignUpRequestDto) {
+
+
+    fun processIntent(intent: AuthenticationIntent) {
+        when (intent) {
+            is AuthenticationIntent.IsLogedOut ->{}
+            is AuthenticationIntent.Login -> {}
+            is AuthenticationIntent.SignUp -> {
+                signUp(intent.signUpRequestDto)
+            }
+        }
+    }
+    private fun signUp(signUpRequestDto: SignUpRequestDto) {
         viewModelScope.launch(Dispatchers.IO) {
             if (!signUpRequestDto.name.isUserName()) {
                 emitError(AuthMsgEnum.USERNAMEVALIDATE.getMsg())
