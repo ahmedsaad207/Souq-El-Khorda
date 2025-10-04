@@ -1,6 +1,12 @@
 package com.delighted2wins.souqelkhorda.features.login.presentation.component
 
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.border
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,8 +22,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,14 +52,23 @@ fun LoginPasswordTF(
     onValueChange: (String) -> Unit = {},
     horizentalPading : Int = 16
 ) {
-    val textFieldColor = Color(0xFFF2F2F2)
-    val primaryColor = Color(0xFF179C92)
     var text by remember { mutableStateOf(TextFieldValue("")) }
     var passwordHidden by rememberSaveable { mutableStateOf(true) }
 
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
     val colors = MaterialTheme.colorScheme
+
+    val interactionSource = remember { MutableInteractionSource() }
+    val isFocused by interactionSource.collectIsFocusedAsState()
+    val borderWidth by animateDpAsState(
+        targetValue = if (isFocused) 2.dp else 1.dp,
+        animationSpec = tween(durationMillis = 300)
+    )
+    val borderColor by animateColorAsState(
+        targetValue = if (isFocused) colors.primary else colors.outline.copy(alpha = 0.5f),
+        animationSpec = tween(durationMillis = 300)
+    )
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -69,7 +84,12 @@ fun LoginPasswordTF(
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 8.dp),
+                .padding(bottom = 8.dp)
+                .border(
+                    width = borderWidth,
+                    color = borderColor,
+                    shape = RoundedCornerShape(12.dp)
+                ),
             value = text,
             visualTransformation = if (passwordHidden) PasswordVisualTransformation() else VisualTransformation.None,
             placeholder = {
@@ -95,20 +115,18 @@ fun LoginPasswordTF(
             singleLine = true,
             maxLines = 1,
             shape = RoundedCornerShape(8.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                unfocusedBorderColor = Color.Transparent,
-                focusedBorderColor = primaryColor,
-                disabledBorderColor = Color.Transparent,
-                errorBorderColor = Color.Transparent,
-                cursorColor = Color.Black,
-                focusedContainerColor = Color(0xFFF5F5F5),
-                unfocusedContainerColor = textFieldColor,
-                disabledContainerColor = Color(0xFFF5F5F5),
-                errorContainerColor = Color(0xFFF5F5F5),
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = colors.surface,
+                unfocusedContainerColor = colors.surface,
+                cursorColor = colors.primary,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                focusedTextColor = colors.onBackground,
+                unfocusedTextColor = colors.onBackground
             ),
-            trailingIcon = {
+            interactionSource = interactionSource
+,
+                    trailingIcon = {
                 IconButton(onClick = { passwordHidden = !passwordHidden }) {
                     Icon(
                         imageVector = if (passwordHidden) Icons.Filled.VisibilityOff else Icons.Filled.Visibility,
@@ -130,8 +148,6 @@ fun LoginTF(
     secondIcon: ImageVector = Icons.Filled.ArrowDropUp,
     onIconClick: () -> Unit = {}
 ) {
-    val textFieldColor = Color(0xFFF2F2F2)
-    val primaryColor = Color(0xFF179C92)
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -139,6 +155,16 @@ fun LoginTF(
     var text by remember { mutableStateOf(TextFieldValue("")) }
     var changeIcon by rememberSaveable { mutableStateOf(true) }
     val colors = MaterialTheme.colorScheme
+    val interactionSource = remember { MutableInteractionSource() }
+    val isFocused by interactionSource.collectIsFocusedAsState()
+    val borderWidth by animateDpAsState(
+        targetValue = if (isFocused) 2.dp else 1.dp,
+        animationSpec = tween(durationMillis = 300)
+    )
+    val borderColor by animateColorAsState(
+        targetValue = if (isFocused) colors.primary else colors.outline.copy(alpha = 0.5f),
+        animationSpec = tween(durationMillis = 300)
+    )
 
     Column(
         modifier = Modifier
@@ -157,7 +183,12 @@ fun LoginTF(
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 8.dp),
+                .padding(bottom = 8.dp)
+                .border(
+                    width = borderWidth,
+                    color = borderColor,
+                    shape = RoundedCornerShape(12.dp)
+                ),
             value = text,
             placeholder = {
                 Text(
@@ -184,19 +215,16 @@ fun LoginTF(
             },
 
             shape = RoundedCornerShape(8.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                unfocusedBorderColor = Color.Transparent,
-                focusedBorderColor = primaryColor,
-                disabledBorderColor = Color.Transparent,
-                errorBorderColor = Color.Transparent,
-                cursorColor = Color.Black,
-                focusedContainerColor = Color(0xFFF5F5F5),
-                unfocusedContainerColor = textFieldColor,
-                disabledContainerColor = Color(0xFFF5F5F5),
-                errorContainerColor = Color(0xFFF5F5F5),
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = colors.surface,
+                unfocusedContainerColor = colors.surface,
+                cursorColor = colors.primary,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                focusedTextColor = colors.onBackground,
+                unfocusedTextColor = colors.onBackground
             ),
+            interactionSource = interactionSource,
 
             trailingIcon = {
                 if (isIcon) {

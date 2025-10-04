@@ -83,8 +83,8 @@ fun CustomDropdownMenu(
                     ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
                 },
                 colors = TextFieldDefaults.colors(
-                    focusedContainerColor = colors.onPrimary,
-                    unfocusedContainerColor = colors.onPrimary,
+                    focusedContainerColor = colors.surface,
+                    unfocusedContainerColor = colors.surface,
                     cursorColor = colors.primary,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
@@ -101,10 +101,10 @@ fun CustomDropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { onExpandedChange(false) },
                 modifier = Modifier
-                    .background(colors.onTertiary)
+                    .background(colors.surface)
                     .border(
-                        width = 1.dp,
-                        color = colors.onSurfaceVariant,
+                        width = borderWidth,
+                        color = borderColor,
                         shape = RoundedCornerShape(12.dp)
                     )
             ) {
