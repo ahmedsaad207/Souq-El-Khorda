@@ -175,6 +175,17 @@ class ProfileViewModel @Inject constructor(
         successMessage: ProfileMessagesEnum
     ) {
         _state.update { setFieldValue(it, current.copy(isLoading = true)) }
+        if (current.value.trim() == current.originalValue.trim()) {
+            _state.update { setFieldValue(
+                it,
+                current.copy(
+                    isLoading = false,
+                    error = ProfileMessagesEnum.NO_CHANGES.getMsg()
+                )
+            )
+            }
+            return
+        }
         viewModelScope.launch(Dispatchers.IO) {
             val result = update()
             result.onSuccess {

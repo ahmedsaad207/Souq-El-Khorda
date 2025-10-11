@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
+import kotlin.coroutines.cancellation.CancellationException
 
 class NotificationRemoteDataSourceImpl @Inject constructor(
     private val firestore: FirebaseFirestore,
@@ -34,6 +35,7 @@ class NotificationRemoteDataSourceImpl @Inject constructor(
                 }
             Result.success(list)
         } catch (e: Exception) {
+            if (e is CancellationException) throw e
             Result.failure(e)
         }
     }
@@ -50,6 +52,7 @@ class NotificationRemoteDataSourceImpl @Inject constructor(
                 .size()
             Result.success(count)
         } catch (e: Exception) {
+            if (e is CancellationException) throw e
             Result.failure(e)
         }
     }
@@ -67,6 +70,7 @@ class NotificationRemoteDataSourceImpl @Inject constructor(
                 .await()
             Result.success(Unit)
         } catch (e: Exception) {
+            if (e is CancellationException) throw e
             Result.failure(e)
         }
     }
@@ -84,6 +88,7 @@ class NotificationRemoteDataSourceImpl @Inject constructor(
                 .await()
             Result.success(Unit)
         } catch (e: Exception) {
+            if (e is CancellationException) throw e
             Result.failure(e)
         }
     }

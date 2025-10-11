@@ -10,6 +10,7 @@ enum class ProfileMessagesEnum(
     UNAUTHORIZED("Unauthorized action", "غير مصرح"),
     USER_NOT_FOUND("User not found", "المستخدم غير موجود"),
     UNKNOWN("Unknown error", "خطأ غير معروف"),
+    NO_CHANGES("No changes made","لا توجد تغييرات لتحديثها"),
 
     NAME_INVALID("Enter a valid name", "أدخل اسمًا صالحًا"),
     EMAIL_INVALID("Enter a valid email", "أدخل بريدًا إلكترونيًا صالحًا"),

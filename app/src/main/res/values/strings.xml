@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Souq El Khorda</string>
 
+    <string name="forgot_password">Did you forgot your password?</string>
     <string name="sell_screen_title">Sell</string>
     <string name="shop_screen_title">Market</string>
     <string name="orders_screen_title">Orders</string>
@@ -259,6 +260,7 @@
     <string name="order_items">Order Items (%1$d)</string>
     <string name="nearest_buyers">Nearest Buyers</string>
     <string name="browse_and_purchase_scrap_materials_from_sellers">Browse and purchase scrap materials from sellers</string>
+    <string name="buyer">Buyer</string>
 
 
 </resources>

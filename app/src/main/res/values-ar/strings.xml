@@ -305,5 +305,6 @@
     <string name="no_internet_message">لا يوجد إتصال بالانترنت</string>
     <string name="nearest_buyers">التجار القريبين</string>
     <string name="browse_and_purchase_scrap_materials_from_sellers">تصفح واشترِ مواد الخردة من البائعين</string>
+    <string name="buyer">بائع</string>
 
 </resources>

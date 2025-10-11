@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -66,13 +67,17 @@ fun ProfileHeader(
                     modifier = Modifier
                         .align(Alignment.TopStart)
                         .clip(RoundedCornerShape(bottomEnd = 8.dp))
-                        .background(if (isSystemInDarkTheme()) Color(0xFFFFD54F) else Color(0xFFFFF176))
+                        .background(
+                            if (isSystemInDarkTheme()) Color(0xFFFFD54F) else Color(
+                                0xFFFFF176
+                            )
+                        )
                         .clickable { onBuyerClick() }
                         .padding(horizontal = 10.dp, vertical = 2.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "Buyer",
+                        text = stringResource(R.string.buyer),
                         color = Color.Black,
                         style = AppTypography.labelSmall.copy(
                             fontWeight = FontWeight.Bold
