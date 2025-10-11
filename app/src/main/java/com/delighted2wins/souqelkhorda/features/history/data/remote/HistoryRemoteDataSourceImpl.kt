@@ -7,6 +7,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
+import kotlin.coroutines.cancellation.CancellationException
 
 class HistoryRemoteDataSourceImpl @Inject constructor(
     private val firebaseFirestore: FirebaseFirestore,
@@ -23,6 +24,7 @@ class HistoryRemoteDataSourceImpl @Inject constructor(
             val orders = snapshot.documents.mapNotNull { it.toObject(Order::class.java) }
             Result.success(HistoryDto(orders))
         } catch (e: Exception) {
+            if (e is CancellationException) throw e
             Result.failure(e)
         }
 
@@ -39,6 +41,7 @@ class HistoryRemoteDataSourceImpl @Inject constructor(
                 .await()
             true
         } catch (e: Exception) {
+            if (e is CancellationException) throw e
             e.printStackTrace()
             false
         }
@@ -55,6 +58,7 @@ class HistoryRemoteDataSourceImpl @Inject constructor(
                 .await()
             true
         } catch (e: Exception) {
+            if (e is CancellationException) throw e
             e.printStackTrace()
             false
         }
@@ -76,6 +80,7 @@ class HistoryRemoteDataSourceImpl @Inject constructor(
             orderRef.set(mapOf("status" to status.name), SetOptions.merge()).await()
             true
         } catch (e: Exception) {
+            if (e is CancellationException) throw e
             e.printStackTrace()
             false
         }
